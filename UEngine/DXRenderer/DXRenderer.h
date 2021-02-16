@@ -32,7 +32,11 @@ namespace UEngine
 		void Begin(ID3D11DeviceContext* const deviceContext = nullptr);
 		void End();
 
+		void ResizeMainRenderTarget(UINT width, UINT height);
+
 		D3D_FEATURE_LEVEL GetFeatureLevel() { return featureLevel; }
+		ID3D11Device* const GetDevice() { return device.Get(); }
+		ID3D11DeviceContext* const GetImmediateDeviceContext() { return immediateDeviceContext.Get(); }
 
 	private:
 		void InitConstBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);

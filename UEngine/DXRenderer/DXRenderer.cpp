@@ -1,4 +1,5 @@
 #include "dxrframework.h"
+#include "../WinApplication/WinApplication.h"
 #include "DXRenderer.h"
 
 UEngine::DXRenderer UEngine::DXRenderer::instance;
@@ -7,10 +8,12 @@ void UEngine::DXRenderer::Init(const DXRenderingDesc& desc)
 {
 	RECT clientSize;
 	rendering_desc = desc;
+	if (desc.OutputWindow == nullptr)
+		rendering_desc.OutputWindow = UEngine::WinApplication::Get()->GetHandler();
 	featureLevel = static_cast<D3D_FEATURE_LEVEL>(0);
-	GetClientRect(desc.OutputWindow, &clientSize);
+	GetClientRect(rendering_desc.OutputWindow, &clientSize);
 	InitViewport(default_render_view_resource.viewport, clientSize);
-	InitDeviceContextSwapchain(clientSize, desc.IsDebuggable);
+	InitDeviceContextSwapchain(clientSize, rendering_desc.IsDebuggable);
 
 	// TODO: initialize resources in multi-threading environment
 	// multi-thread safe processes
@@ -62,6 +65,13 @@ void UEngine::DXRenderer::End()
 {
 	swapchain->Present(0, 0);
 }
+
+void UEngine::DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)
+{
+	swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	InitRenderTargetView(default_render_view_resource.render_target_view.GetAddressOf());
+}
+
 
 void UEngine::DXRenderer::InitConstBuffer(UINT byteWidth, ID3D11Buffer** constBuffer)
 {

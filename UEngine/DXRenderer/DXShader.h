@@ -6,7 +6,7 @@ namespace UEngine
 	class DXShader final
 	{
 		// only DXRenderer can instantiate this
-		friend class UEngine::DXRenderer;
+		//friend class UEngine::DXRenderer;
 	private:
 		DXShader() = default;
 		~DXShader() = default;

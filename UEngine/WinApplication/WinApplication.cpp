@@ -52,7 +52,7 @@ namespace UEngine
         desc.NCmdShow = nCmdShow;
         desc.WindowSize = windowSize;
         desc.Resizable = resizable;
-        desc.WndProc = nullptr;
+        desc.WndProc = WndProc;
 
         Create(desc);
     }
@@ -126,15 +126,18 @@ namespace UEngine
 
     LRESULT CALLBACK WinApplication::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
+        if (WinApplication::Get()->customWndProc != nullptr)
+        {
+            auto ok = WinApplication::Get()->customWndProc(hWnd, message, wParam, lParam);
+            if (ok) return true;
+        }
+
         //어떤 메세지가 발생되었는가를 통해 처리할 조건문
         if (message == WM_DESTROY || message == WM_CLOSE)
         {
             PostQuitMessage(0);
             return (DefWindowProc(hWnd, message, wParam, lParam));
         }
-
-        if (WinApplication::Get()->customWndProc != nullptr)
-            return WinApplication::Get()->customWndProc(hWnd, message, wParam, lParam);
 
         return (DefWindowProc(hWnd, message, wParam, lParam));
     }
