@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4b4d66c9-796c-4bc1-84aa-543fb3786f12}</ProjectGuid>
-    <RootNamespace>UEngine</RootNamespace>
+    <ProjectGuid>{1e6e9e7f-5741-42e3-8ba6-8de45e1cf4df}</ProjectGuid>
+    <RootNamespace>Utility</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -143,9 +143,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WinApplication\WinApplication.vcxproj">
-      <Project>{3225e7b8-ec78-42e5-aa5a-5fe133b5d2d8}</Project>
-    </ProjectReference>
+    <ClInclude Include="Definition.h" />
+    <ClInclude Include="UMath.h" />
+    <ClInclude Include="UTime.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="UMath.cpp" />
+    <ClCompile Include="UTime.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

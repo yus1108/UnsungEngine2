@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WinApplication.h">
+    <ClInclude Include="UTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WinInput.h">
+    <ClInclude Include="Definition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WinConsole.h">
+    <ClInclude Include="UMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WinApplication.cpp">
+    <ClCompile Include="UTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WinInput.cpp">
+    <ClCompile Include="UMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
