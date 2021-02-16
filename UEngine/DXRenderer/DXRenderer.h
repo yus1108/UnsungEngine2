@@ -18,6 +18,7 @@ namespace UEngine
 #pragma endregion
 
 	private:
+		HWND hwnd;
 		//com 인터페이스
 		Microsoft::WRL::ComPtr<ID3D11Device> device;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> immediateDeviceContext;
@@ -28,7 +29,7 @@ namespace UEngine
 		D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_1_0_CORE;
 
 	public:
-		void Init(const DXRenderingDesc& desc = DXRenderingDesc());
+		void Init(HWND OutputWindow, const DXRenderingDesc& desc = DXRenderingDesc());
 		void Begin(ID3D11DeviceContext* const deviceContext = nullptr);
 		void End();
 

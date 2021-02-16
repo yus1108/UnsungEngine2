@@ -10,7 +10,6 @@ namespace UEngine
 
 	struct DXRenderingDesc
 	{
-		HWND OutputWindow = nullptr;
 		bool IsDebuggable = false;
 		bool IsFullScreen = false;
 		bool ScissorEnable = false;

@@ -4,14 +4,13 @@
 
 UEngine::DXRenderer UEngine::DXRenderer::instance;
 
-void UEngine::DXRenderer::Init(const DXRenderingDesc& desc)
+void UEngine::DXRenderer::Init(HWND outputWindow, const DXRenderingDesc& desc)
 {
 	RECT clientSize;
+	hwnd = outputWindow;
 	rendering_desc = desc;
-	if (desc.OutputWindow == nullptr)
-		rendering_desc.OutputWindow = UEngine::WinApplication::Get()->GetHandler();
 	featureLevel = static_cast<D3D_FEATURE_LEVEL>(0);
-	GetClientRect(rendering_desc.OutputWindow, &clientSize);
+	GetClientRect(outputWindow, &clientSize);
 	InitViewport(default_render_view_resource.viewport, clientSize);
 	InitDeviceContextSwapchain(clientSize, rendering_desc.IsDebuggable);
 
@@ -116,7 +115,7 @@ void UEngine::DXRenderer::InitDeviceContextSwapchain(const RECT& clientSize, boo
 	desc.BufferDesc.RefreshRate = rendering_desc.RefreshRate;
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	desc.OutputWindow = rendering_desc.OutputWindow;
+	desc.OutputWindow = hwnd;
 	desc.SampleDesc = rendering_desc.MultiSampleDesc.enable ? rendering_desc.MultiSampleDesc.sample_description : DXGI_SAMPLE_DESC{ 1, 0 };
 	desc.Windowed = !rendering_desc.IsFullScreen;
 

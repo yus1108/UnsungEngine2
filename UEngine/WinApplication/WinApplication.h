@@ -5,17 +5,12 @@ namespace UEngine
 {
 	struct WINDOWS_APPLICATION_DESC
 	{
-		HINSTANCE HInstance;
-		HACCEL HAccelTable;
-		LPCTSTR TitleName;
-		LPCTSTR WindowClassName;            // the main window class name
-		HICON Icon;
-		HICON SmallIcon;
-		HCURSOR Cursor;
 		int NCmdShow;
-		bool Resizable;
+		bool HasTitleBar;
 		POINT WindowSize;
-		LRESULT(*WndProc)(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+		LPCTSTR TitleName;
+		WNDCLASSEXW* wcex;
+		HINSTANCE HInstance;
 	};
 
 	class WinApplication final
@@ -29,42 +24,31 @@ namespace UEngine
 		~WinApplication() { instance.Close(); }
 		static WinApplication instance;
 #pragma endregion
-	private:
-		LRESULT(*customWndProc)(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	public:
+		void Create(HINSTANCE hInstance);
 		void Create(const WINDOWS_APPLICATION_DESC& desc);
-		void Create
-		(
-			HINSTANCE hInstance, 
-			int nCmdShow, 
-			POINT windowSize = { 800, 600 },
-			bool resizable = true, 
-			const LPCTSTR titleName = _T("Windows Application"),
-			const LPCTSTR className = _T("WIN_APPLICATION"),
-			LRESULT(*WndProc)(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = nullptr
-		);
 
 		template<typename Lambda>
 		int UpdateLoop(Lambda func = []() {});
 		void Close();
 
-		const HINSTANCE GetInstance() { return hInstance; }
+		const HINSTANCE GetInstance() { return appDesc.HInstance; }
 		const HWND GetHandler() { return hWnd; }
 		const void GetClientSize(LPRECT clientSize) const { GetClientRect(hWnd, clientSize); }
 
+		void SetWindowSize(int x, int y, int width, int height);
+
 	private:
 		//define something for Windows (32-bit and 64-bit, this part is common)
-		HINSTANCE hInstance;                                // current instance
 		HWND hWnd;
-		HACCEL hAccelTable;
-		LPCWSTR className;
+		WINDOWS_APPLICATION_DESC appDesc;
+		bool isDefaultDesc;
 
 		// Forward declarations of functions included in this code module:
 		
-		ATOM MyRegisterClass(HINSTANCE hInstance, HICON icon, HICON smallIcon, HCURSOR cursor, LPCTSTR windowClassName);
-		BOOL InitInstance(HINSTANCE hInstance, int nCmdShow, LPCTSTR titleName, LPCTSTR windowClassName, POINT windowSize, bool resizable);
-		void SetWindowSize(int x, int y, int width, int height);
+		ATOM MyRegisterClass(HINSTANCE hInstance, WNDCLASSEX wcex);
+		BOOL InitInstance(HINSTANCE hInstance, int nCmdShow, LPCTSTR titleName, LPCTSTR windowClassName, POINT windowSize);
 		static LRESULT CALLBACK	WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	};
 
