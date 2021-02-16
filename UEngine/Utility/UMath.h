@@ -10,7 +10,7 @@ namespace UEngine
 			static const float Convert_DegreeToRad(const float& degree);
 			static const double Convert_DegreeToRad(const double& degree);
 
-			static const UEngine::Definition::Coordinate2D ConvertPixelToNDC(const UEngine::Definition::Coordinate2D& mousePos, const UEngine::WinApplication* const window);
+			static const UEngine::Definition::Coordinate2D ConvertPixelToNDC(const UEngine::Definition::Coordinate2D& mousePos, HWND window);
 
 			/*static void CalculateAABB_2D(std::vector<SIMPLE_VERTEX> vertices, const Matrix& worldmat, AABB_2D& out);
 			static void CalculateAABB_2D(const class RenderMesh* const renderMesh, const Matrix& worldmat, AABB_2D& out);

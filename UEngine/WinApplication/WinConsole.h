@@ -11,7 +11,7 @@ namespace UEngine
 {
 	namespace WinConsole
 	{
-        static void ResetMousePos()
+        static void ResetCursorPos()
         {
             #include <Windows.h>
             HANDLE hOut;

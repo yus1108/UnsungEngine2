@@ -20,28 +20,16 @@ namespace UEngine
 			return degree * 0.0174532925199;
 		}
 
-		const UEngine::Definition::Coordinate2D UMath::ConvertPixelToNDC(const UEngine::Definition::Coordinate2D& mousePos, const UEngine::WinApplication* const window)
+		const UEngine::Definition::Coordinate2D UMath::ConvertPixelToNDC(const UEngine::Definition::Coordinate2D& mousePos, HWND window)
 		{
 			UEngine::Definition::Coordinate2D pos = mousePos;
 			RECT clientSize;
-			window->GetClientSize(&clientSize);
+			GetClientRect(window, &clientSize);
 			pos.x /= clientSize.right - 1;
 			pos.y /= clientSize.bottom - 1;
 
 			pos.x = (pos.x - 0.5f) * 2.0f;
 			pos.y = 1.0f - pos.y * 2.0f;
-			/*float offset = (float)((windowSize.right - windowSize.left) - (clientSize.right - clientSize.left)) / 2.0f;
-			float offsetTop = (float)((windowSize.bottom - windowSize.top) - (clientSize.bottom - clientSize.top)) - offset;
-			float horizonStart = (float)windowSize.left + offset;
-			float horizonEnd = (float)windowSize.right - offset;
-			float verticalStart = (float)windowSize.top + offsetTop;
-			float verticalEnd = (float)windowSize.bottom - offset;
-			pos.x = ((float)pos_in.x - horizonStart) / (horizonEnd - horizonStart);
-			pos.x -= 0.5f;
-			pos.x *= 2.0f;
-			pos.y = ((float)pos_in.y - verticalStart) / (verticalEnd - verticalStart);
-			pos.y -= 0.5f;
-			pos.y = -pos.y * 2.0f;*/
 
 			return pos;
 		}

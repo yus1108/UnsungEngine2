@@ -14,3 +14,12 @@
 #include <memory.h>
 #include <tchar.h>
 #include <iostream>
+
+//유니코드 사용
+#ifdef _UNICODE
+#define _tstring wstring
+#define _tcout   wcout
+#else //멀티바이트시 사용
+#define _tstring string
+#define _tcout   cout
+#endif

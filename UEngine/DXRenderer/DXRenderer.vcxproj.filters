@@ -15,24 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WinApplication.h">
+    <ClInclude Include="DXRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WinInput.h">
+    <ClInclude Include="dxrframework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WinConsole.h">
+    <ClInclude Include="DXShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WinMemoryLeak.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Definitions.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WinApplication.cpp">
+    <ClCompile Include="DXRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WinInput.cpp">
+    <ClCompile Include="dxrframework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

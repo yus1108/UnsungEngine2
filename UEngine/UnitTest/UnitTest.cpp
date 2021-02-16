@@ -6,8 +6,10 @@
 #include "../WinApplication/WinApplication.h"
 #include "../WinApplication/WinInput.h"
 #include "../WinApplication/WinConsole.h"
+#include "../WinApplication/WinMemoryLeak.h"
 #include "../Utility/UMath.h"
 #include "../Utility/UTime.h"
+#include "../DXRenderer/DXRenderer.h"
 
 #define MAX_LOADSTRING 100
 
@@ -24,6 +26,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+    UEngine::WinMemoryLeak::Detect();
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -32,14 +35,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto app = UEngine::WinApplication::Get();
     app->Create(hInstance, nCmdShow, { 800, 600 }, false, szTitle, szWindowClass);
 
+    auto renderer = UEngine::DXRenderer::Get();
+    renderer->Init();
+
     auto returnedValue = app->UpdateLoop([&]() 
     {
         //system("cls");
-        UEngine::WinConsole::ResetMousePos();
+        UEngine::WinConsole::ResetCursorPos();
+        std::cout << "\t\t" << std::endl;
+        std::cout << "\t\t" << std::endl;
+        UEngine::WinConsole::ResetCursorPos();
 
         UEngine::Utility::UTime::Get()->Signal();
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
+        //std::cout << UEngine::Utility::UMath::ConvertPixelToNDC(UEngine::WinInput::Get()->GetMousePos(), app->GetHandler()).x << std::endl;
+        //std::cout << UEngine::Utility::UMath::ConvertPixelToNDC(UEngine::WinInput::Get()->GetMousePos(), app->GetHandler()).y << std::endl;
         UEngine::Utility::UTime::Get()->Throttle(200);
     });
 
