@@ -159,7 +159,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Definitions.h" />
+    <ClInclude Include="DXRDefinitions.h" />
     <ClInclude Include="DXRenderer.h" />
     <ClInclude Include="DXRenderMesh.h" />
     <ClInclude Include="dxrframework.h" />

@@ -24,10 +24,10 @@
     <ClInclude Include="DXShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Definitions.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="DXRenderMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

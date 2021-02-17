@@ -38,7 +38,6 @@ void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string&
 	{
 	case ShaderType::VERTEX_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "vs_4_0");
-		InitInputLayout(device, shaderBlob.Get());
 		break;
 	case ShaderType::PIXEL_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ps_4_0");
@@ -120,7 +119,7 @@ HRESULT UEngine::DXShader::CompileShader(_In_ LPCWSTR srcFile, _In_ LPCSTR entry
 	return hr;
 }
 
-UEngine::DXShader* UEngine::DXShader::Init(ID3D11Device* const device, const std::string& vertex_shader_file, const std::string& pixel_shader_file)
+UEngine::DXShader* UEngine::DXShader::Instantiate(ID3D11Device* const device, const std::string& vertex_shader_file, const std::string& pixel_shader_file)
 {
 	UEngine::DXShader* instnace = new UEngine::DXShader;
 	instnace->SetShader(device, vertex_shader_file, UEngine::ShaderType::VERTEX_SHADER);

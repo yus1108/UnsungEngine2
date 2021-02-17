@@ -18,10 +18,10 @@
     <ClInclude Include="UTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Definition.h">
+    <ClInclude Include="UMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UMath.h">
+    <ClInclude Include="UtilityDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

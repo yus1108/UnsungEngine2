@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "Definition.h"
+#include "UtilityDefinitions.h"
 #include "..\WinApplication\WinApplication.h"
 #include "UMath.h"
 

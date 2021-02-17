@@ -25,7 +25,7 @@ namespace UEngine
 			_Outptr_ ID3DBlob** blob, LPCSTR shader_version, bool isDebuggable = false);
 		
 		// init DXShader with minimum requirements (Setting VS and PS with entrypoint = "main")
-		static DXShader* Init(ID3D11Device* const device, const std::string& vertex_shader_file, const std::string& pixel_shader_file);
+		static DXShader* Instantiate(ID3D11Device* const device, const std::string& vertex_shader_file, const std::string& pixel_shader_file);
 		static void Release(DXShader** const shader);
 		void Render(ID3D11DeviceContext* const deviceContext);
 	};

@@ -68,9 +68,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto renderer = UEngine::DXRenderer::Get();
     renderer->Init(app->GetHandler());
 
-    auto shader = UEngine::DXShader::Init(renderer->GetDevice(), "../_Shaders/DefaultVS.hlsl", "../_Shaders/DefaultPS.hlsl");
-
-    auto renderMesh = UEngine::RenderMesh<UEngine::SIMPLE_VERTEX>::Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
+    auto shader = UEngine::DXShader::Instantiate(renderer->GetDevice(), "../_Shaders/DefaultVS.hlsl", "../_Shaders/DefaultPS.hlsl");
 
     std::vector<UEngine::SIMPLE_VERTEX> vertices
     {
@@ -79,10 +77,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
        UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
     };
     std::vector<unsigned> indices{ 0 ,1, 2 };
-
-    renderMesh->SetVertices(vertices);
-    renderMesh->SetIndices(indices);
-    renderMesh->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    auto renderMesh = UEngine::RenderMesh<UEngine::SIMPLE_VERTEX>::Instantiate(renderer->GetDevice(), vertices, indices);
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
@@ -97,7 +92,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
 
         renderer->Begin();
-        renderMesh->Render();
+        renderMesh->Render(renderer->GetImmediateDeviceContext());
         shader->Render(renderer->GetImmediateDeviceContext());
         renderer->GetImmediateDeviceContext()->DrawIndexed(renderMesh->GetIndicesCount(), 0, 0);
         renderer->End();

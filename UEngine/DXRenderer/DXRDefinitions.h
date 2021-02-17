@@ -22,21 +22,22 @@ namespace UEngine
 		UINT FeatureLevelsCount = 0;
 	};
 
-	struct DXRenderViewResource
+	struct DXRenderViewContext
 	{
-		D3D11_VIEWPORT viewport{};
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depth_stencil_state;
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view;
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target_view;
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> render_target_texture_map;
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target_view_map;
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shader_resource_view;
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> output_texture;
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> output_shader_resource_view;
+		D3D11_VIEWPORT Viewport{};
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> DepthStencilTexture2D;
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> DepthStencilState;
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DepthStencilView;
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RenderTargetView;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> RenderTargetViewTexture2D;
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RenderTargetViewMap;
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> ShaderResourceView;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> OutputTexture2D;
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> OutputShaderResourceView;
+		Microsoft::WRL::ComPtr<ID3D11DeviceContext> DeviceContext;
+		Microsoft::WRL::ComPtr<ID3D11CommandList> CommandList;
 		UINT width{};
 		UINT height{};
-
-		DXRenderViewResource() {}
 	};
 
 	struct DXRPipeline

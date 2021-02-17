@@ -1,5 +1,5 @@
 #pragma once
-#include "../Utility/Definition.h"
+#include "../Utility/UtilityDefinitions.h"
 
 namespace UEngine
 {

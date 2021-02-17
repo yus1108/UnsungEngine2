@@ -4,6 +4,7 @@
 #include <tchar.h>
 #include <wrl.h>
 #include <string>
+#include <stdexcept>
 
 // DX111 라이브러리 추가
 // D2D1
@@ -23,7 +24,7 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 
-#include "Definitions.h"
+#include "DXRDefinitions.h"
 #include "DXRenderer.h"
 #include "DXShader.h"
 #include "DXRenderMesh.h"

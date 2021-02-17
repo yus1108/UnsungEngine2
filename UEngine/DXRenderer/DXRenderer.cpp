@@ -12,58 +12,59 @@ void UEngine::DXRenderer::Init(HWND outputWindow, const DXRenderingDesc& desc)
 	rendering_desc = desc;
 	featureLevel = static_cast<D3D_FEATURE_LEVEL>(0);
 	GetClientRect(outputWindow, &clientSize);
-	InitViewport(default_render_view_resource.viewport, clientSize);
+	InitViewport(&immediate.Viewport, clientSize);
 	InitDeviceContextSwapchain(clientSize, rendering_desc.IsDebuggable);
 
 	// TODO: initialize resources in multi-threading environment
 	// multi-thread safe processes
 	{
 		// Render Target View
-		InitRenderTargetView(default_render_view_resource.render_target_view.GetAddressOf());
+		InitRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 
-		// Disable DepthStencil
-		{
-			//해당 뎁스스텐실 기능관련부분은 꺼두는 옵션으로 설정
-			D3D11_DEPTH_STENCIL_DESC desc = { 0 };
-			desc.DepthEnable = false;
-			desc.StencilEnable = false;
-
-			device->CreateDepthStencilState(&desc, default_render_view_resource.depth_stencil_state.GetAddressOf());
-		}
-		default_render_view_resource.depth_stencil_view = nullptr;
+		// Depth Stencil Texture, View, State
+		InitDepthStencil
+		(
+			immediate.DepthStencilTexture2D.GetAddressOf(),
+			immediate.DepthStencilView.GetAddressOf(),
+			immediate.DepthStencilState.GetAddressOf(),
+			clientSize,
+			DSSCreateDesc(),
+			DSVCreateDesc()
+		);
 
 		// Rasterizer State
-		{
-			D3D11_RASTERIZER_DESC desc;
-			ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
-			desc.FillMode = rendering_desc.FillMode; // D3D11_FILL_WIREFRAME은 테두리만나옴
-			desc.CullMode = rendering_desc.CullMode; //컬링할때 앞면,뒷면 추려내기 할건지
-			desc.DepthBias = 0;
-			desc.FrontCounterClockwise = false; //cw ccw 값 정하기
-			desc.DepthBiasClamp = 0;
-			desc.SlopeScaledDepthBias = 0;
-			desc.DepthClipEnable = default_render_view_resource.depth_stencil_view ? true : false; //깊이클리핑 끄기
-			desc.ScissorEnable = rendering_desc.ScissorEnable; //시저테스트 하지 않음
-			desc.MultisampleEnable = rendering_desc.MultiSampleDesc.enable; //멀티 샘플링 하지않음
-			desc.AntialiasedLineEnable = rendering_desc.AntialiasedLineEnable; //라인안티앨리어싱 없음
-			device->CreateRasterizerState(&desc, default_pipeline.rasterizerState.GetAddressOf());
-		}
+		InitRasterizerState
+		(
+			default_pipeline.rasterizerState.GetAddressOf(),
+			immediate.DepthStencilView.Get(),
+			rendering_desc.FillMode,
+			rendering_desc.CullMode,
+			rendering_desc.MultiSampleDesc.enable,
+			rendering_desc.AntialiasedLineEnable,
+			rendering_desc.ScissorEnable
+		);
+
+		// Sampler State
+		auto ssDesc = SSCreateDesc();
+		device->CreateSamplerState(&ssDesc, &default_pipeline.samplerState);
+
+		// Blending State
+		auto bsDesc = BSCreateDesc();
+		device->CreateBlendState(&bsDesc, &default_pipeline.blendingState);
 	}
 }
 
-void UEngine::DXRenderer::Begin(ID3D11DeviceContext* const deviceContext)
+void UEngine::DXRenderer::Begin(const float clearRGBA[4])
 {
 	// clearing depth buffer and render target
-	immediateDeviceContext->ClearRenderTargetView(default_render_view_resource.render_target_view.Get(), DirectX::Colors::Gray);
-
-	immediateDeviceContext->RSSetViewports(1, &default_render_view_resource.viewport);
+	immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
+	immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
 }
 
 void UEngine::DXRenderer::End()
 {
-	immediateDeviceContext->OMSetDepthStencilState(default_render_view_resource.depth_stencil_state.Get(), 1);
-	immediateDeviceContext->OMSetRenderTargets(1, default_render_view_resource.render_target_view.GetAddressOf(),
-		default_render_view_resource.depth_stencil_view.Get());
+	immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
+	immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
 
 	swapchain->Present(0, 0);
 }
@@ -71,9 +72,83 @@ void UEngine::DXRenderer::End()
 void UEngine::DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)
 {
 	swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
-	InitRenderTargetView(default_render_view_resource.render_target_view.GetAddressOf());
+	InitRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 }
 
+D3D11_DEPTH_STENCIL_DESC UEngine::DXRenderer::DSSCreateDesc() const
+{
+	D3D11_DEPTH_STENCIL_DESC depthState;
+
+	// Depth test parameters
+	depthState.DepthEnable = true;
+	depthState.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthState.DepthFunc = D3D11_COMPARISON_LESS;
+
+	// Stencil test parameters
+	depthState.StencilEnable = true;
+	depthState.StencilReadMask = 0xFF;
+	depthState.StencilWriteMask = 0xFF;
+
+	// Stencil operations if pixel is front-facing
+	depthState.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthState.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthState.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthState.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Stencil operations if pixel is back-facing
+	depthState.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthState.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthState.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthState.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	return depthState;
+}
+
+D3D11_DEPTH_STENCIL_VIEW_DESC UEngine::DXRenderer::DSVCreateDesc() const
+{
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+	descDSV.Flags = NULL;
+	descDSV.Texture2D.MipSlice = NULL;
+
+	return descDSV;
+}
+
+D3D11_SAMPLER_DESC UEngine::DXRenderer::SSCreateDesc() const
+{
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.MaxLOD = FLT_MAX;
+	samplerDesc.MinLOD = -FLT_MAX;
+	samplerDesc.MipLODBias = 0;
+
+	return samplerDesc;
+}
+
+D3D11_BLEND_DESC UEngine::DXRenderer::BSCreateDesc() const
+{
+	D3D11_BLEND_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_BLEND_DESC));
+	desc.AlphaToCoverageEnable = true;
+	desc.IndependentBlendEnable = false;
+	desc.RenderTarget[0].BlendEnable = true;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	return desc;
+}
 
 void UEngine::DXRenderer::InitConstBuffer(UINT byteWidth, ID3D11Buffer** constBuffer)
 {
@@ -87,15 +162,15 @@ void UEngine::DXRenderer::InitConstBuffer(UINT byteWidth, ID3D11Buffer** constBu
 	device->CreateBuffer(&constBufferDesc, nullptr, constBuffer);
 }
 
-void UEngine::DXRenderer::InitViewport(D3D11_VIEWPORT& _viewport, const RECT& clientSize)
+void UEngine::DXRenderer::InitViewport(D3D11_VIEWPORT* const _viewport, const RECT& clientSize)
 {
 	// viewport setting
-	_viewport.Width = (float)(clientSize.right - clientSize.left);
-	_viewport.Height = (float)(clientSize.bottom - clientSize.top);
-	_viewport.MinDepth = 0;
-	_viewport.MaxDepth = 1;
-	_viewport.TopLeftX = (float)clientSize.left;
-	_viewport.TopLeftY = (float)clientSize.top;
+	_viewport->Width = (float)(clientSize.right - clientSize.left);
+	_viewport->Height = (float)(clientSize.bottom - clientSize.top);
+	_viewport->MinDepth = 0;
+	_viewport->MaxDepth = 1;
+	_viewport->TopLeftX = (float)clientSize.left;
+	_viewport->TopLeftY = (float)clientSize.top;
 }
 
 void UEngine::DXRenderer::InitDeviceContextSwapchain(const RECT& clientSize, bool isDebuggable)
@@ -136,12 +211,12 @@ void UEngine::DXRenderer::InitDeviceContextSwapchain(const RECT& clientSize, boo
 		swapchain.GetAddressOf(),
 		device.GetAddressOf(),
 		&featureLevel,
-		immediateDeviceContext.GetAddressOf());
+		immediate.DeviceContext.GetAddressOf());
 
 	assert(SUCCEEDED(hr) && "Not able to create Device and Swapchain");
 }
 
-void UEngine::DXRenderer::InitRenderTargetView(ID3D11RenderTargetView** rtv)
+void UEngine::DXRenderer::InitRenderTargetView(ID3D11RenderTargetView** const rtv)
 {
 	Microsoft::WRL::ComPtr<ID3D11Debug> pDebugger;
 
@@ -149,6 +224,60 @@ void UEngine::DXRenderer::InitRenderTargetView(ID3D11RenderTargetView** rtv)
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pSwapChainBuffer;
 	swapchain->GetBuffer(0, __uuidof(pSwapChainBuffer), (void**)&pSwapChainBuffer);
 	device->CreateRenderTargetView(pSwapChainBuffer.Get(), nullptr, rtv);
+}
+
+void UEngine::DXRenderer::InitDepthStencil
+(
+	ID3D11Texture2D** const depth_stencil_texture,
+	ID3D11DepthStencilView** const depth_stencil_view,
+	ID3D11DepthStencilState** const depth_stencil_state,
+	RECT clientSize,
+	D3D11_DEPTH_STENCIL_DESC dss_desc,
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc
+)
+{
+	D3D11_TEXTURE2D_DESC depthBuffer;
+	depthBuffer.Width = (UINT)(clientSize.right - clientSize.left);
+	depthBuffer.Height = (UINT)(clientSize.bottom - clientSize.top);
+	depthBuffer.MipLevels = 1;
+	depthBuffer.ArraySize = 1;
+	depthBuffer.Format = DXGI_FORMAT_D32_FLOAT;
+	depthBuffer.SampleDesc.Count = 1;
+	depthBuffer.SampleDesc.Quality = 0;
+	depthBuffer.Usage = D3D11_USAGE_DEFAULT;
+	depthBuffer.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthBuffer.CPUAccessFlags = NULL;
+	depthBuffer.MiscFlags = NULL;
+
+	if (device->CreateTexture2D(&depthBuffer, nullptr, depth_stencil_texture) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+	if (device->CreateDepthStencilState(&dss_desc, depth_stencil_state) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+	if (device->CreateDepthStencilView(*depth_stencil_texture, &dsv_desc, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+}
+
+void UEngine::DXRenderer::InitRasterizerState
+(
+	ID3D11RasterizerState** const rasterizerState,
+	const ID3D11DepthStencilView* const dsv,
+	const D3D11_FILL_MODE& fillMode,
+	const D3D11_CULL_MODE& cullMode,
+	const BOOL& multisampleEnable,
+	const BOOL& antialisedEnable,
+	const BOOL& scissorEnable
+)
+{
+	D3D11_RASTERIZER_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
+	desc.FillMode = fillMode; // D3D11_FILL_WIREFRAME은 테두리만나옴
+	desc.CullMode = cullMode; //컬링할때 앞면,뒷면 추려내기 할건지
+	desc.DepthBias = 0;
+	desc.FrontCounterClockwise = false; //cw ccw 값 정하기
+	desc.DepthBiasClamp = 0;
+	desc.SlopeScaledDepthBias = 0;
+	desc.DepthClipEnable = dsv ? true : false; //깊이클리핑 끄기
+	desc.ScissorEnable = scissorEnable; //시저테스트 하지 않음
+	desc.MultisampleEnable = multisampleEnable; //멀티 샘플링 하지않음
+	desc.AntialiasedLineEnable = antialisedEnable; //라인안티앨리어싱 없음
+	device->CreateRasterizerState(&desc, rasterizerState);
 }
 
 void UEngine::DXRenderer::VSSetConstantBuffers
@@ -162,7 +291,7 @@ void UEngine::DXRenderer::VSSetConstantBuffers
 {
 	if (deviceContext == nullptr)
 	{
-		VSSetConstantBuffers(constBuffer, data, _Size, startSlot, immediateDeviceContext.Get(), numBuffers);
+		VSSetConstantBuffers(constBuffer, data, _Size, startSlot, immediate.DeviceContext.Get(), numBuffers);
 		return;
 	}
 
@@ -187,7 +316,7 @@ void UEngine::DXRenderer::PSSetConstantBuffers
 {
 	if (deviceContext == nullptr)
 	{
-		PSSetConstantBuffers(constBuffer, data, _Size, startSlot, immediateDeviceContext.Get(), numBuffers);
+		PSSetConstantBuffers(constBuffer, data, _Size, startSlot, immediate.DeviceContext.Get(), numBuffers);
 		return;
 	}
 
