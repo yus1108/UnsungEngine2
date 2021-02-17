@@ -68,10 +68,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto renderer = UEngine::DXRenderer::Get();
     renderer->Init(app->GetHandler());
 
-    auto shader = UEngine::DXShader::Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
-    shader->SetShader("../_Shaders/DefaultVS.hlsl", UEngine::ShaderType::VERTEX_SHADER);
-    shader->SetShader("../_Shaders/DefaultPS.hlsl", UEngine::ShaderType::PIXEL_SHADER);
-    shader->InitInputLayout();
+    auto shader = UEngine::DXShader::Init(renderer->GetDevice(), "../_Shaders/DefaultVS.hlsl", "../_Shaders/DefaultPS.hlsl");
 
     auto renderMesh = UEngine::RenderMesh<UEngine::SIMPLE_VERTEX>::Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
 
@@ -101,7 +98,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         renderer->Begin();
         renderMesh->Render();
-        shader->Render();
+        shader->Render(renderer->GetImmediateDeviceContext());
         renderer->GetImmediateDeviceContext()->DrawIndexed(renderMesh->GetIndicesCount(), 0, 0);
         renderer->End();
         

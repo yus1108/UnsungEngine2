@@ -6,6 +6,7 @@ UEngine::DXRenderer UEngine::DXRenderer::instance;
 
 void UEngine::DXRenderer::Init(HWND outputWindow, const DXRenderingDesc& desc)
 {
+
 	RECT clientSize;
 	hwnd = outputWindow;
 	rendering_desc = desc;

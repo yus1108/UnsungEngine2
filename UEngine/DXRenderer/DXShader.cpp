@@ -1,12 +1,13 @@
 #include "dxrframework.h"
 #include "DXShader.h"
 
-void UEngine::DXShader::SetShader(ID3DBlob* const shaderBlob, const ShaderType& shader_type)
+void UEngine::DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const ShaderType& shader_type)
 {
 	switch (shader_type)
 	{
 	case ShaderType::VERTEX_SHADER:
 		device->CreateVertexShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.vertexShader.GetAddressOf());
+		InitInputLayout(device, shaderBlob);
 		break;
 	case ShaderType::PIXEL_SHADER:
 		device->CreatePixelShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.pixelShader.GetAddressOf());
@@ -26,12 +27,7 @@ void UEngine::DXShader::SetShader(ID3DBlob* const shaderBlob, const ShaderType& 
 	}
 }
 
-void UEngine::DXShader::SetShader(const std::string& shader_file, const ShaderType& shader_type)
-{
-	SetShader(shader_file, "main", shader_type);
-}
-
-void UEngine::DXShader::SetShader(const std::string& shader_file, const std::string& entry_point, const ShaderType& shader_type)
+void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const ShaderType& shader_type, const std::string& entry_point)
 {
 	Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
 	shader_files[static_cast<unsigned>(shader_type)] = shader_file;
@@ -42,7 +38,7 @@ void UEngine::DXShader::SetShader(const std::string& shader_file, const std::str
 	{
 	case ShaderType::VERTEX_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "vs_4_0");
-		vsShaderBlob = shaderBlob;
+		InitInputLayout(device, shaderBlob.Get());
 		break;
 	case ShaderType::PIXEL_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ps_4_0");
@@ -62,18 +58,10 @@ void UEngine::DXShader::SetShader(const std::string& shader_file, const std::str
 	}
 
 	assert(hr == S_OK && "Failed to compile shader");
-	SetShader(shaderBlob.Get(), shader_type);
+	SetShader(device, shaderBlob.Get(), shader_type);
 }
 
-void UEngine::DXShader::SetShaders(const std::string shader_files[static_cast<unsigned>(ShaderType::COUNT)])
-{
-	for (unsigned i = 0; i < static_cast<unsigned>(ShaderType::COUNT); i++)
-	{
-		if (shader_files[i].empty() == false) SetShader(shader_files[i], static_cast<ShaderType>(i));
-	}
-}
-
-void UEngine::DXShader::InitInputLayout()
+void UEngine::DXShader::InitInputLayout(ID3D11Device* const device, ID3DBlob* const vsShaderBlob)
 {
 	assert(pipeline.vertexShader.Get() != nullptr && "Vertex Shader must be set");
 
@@ -132,11 +120,11 @@ HRESULT UEngine::DXShader::CompileShader(_In_ LPCWSTR srcFile, _In_ LPCSTR entry
 	return hr;
 }
 
-UEngine::DXShader* UEngine::DXShader::Init(ID3D11Device* const device, ID3D11DeviceContext* const deviceContext)
+UEngine::DXShader* UEngine::DXShader::Init(ID3D11Device* const device, const std::string& vertex_shader_file, const std::string& pixel_shader_file)
 {
 	UEngine::DXShader* instnace = new UEngine::DXShader;
-	instnace->device = device;
-	instnace->deviceContext = deviceContext;
+	instnace->SetShader(device, vertex_shader_file, UEngine::ShaderType::VERTEX_SHADER);
+	instnace->SetShader(device, pixel_shader_file, UEngine::ShaderType::PIXEL_SHADER);
 	return instnace;
 }
 
@@ -146,7 +134,7 @@ void UEngine::DXShader::Release(DXShader** const shader)
 	*shader = nullptr;
 }
 
-void UEngine::DXShader::Render()
+void UEngine::DXShader::Render(ID3D11DeviceContext* const deviceContext)
 {
 	deviceContext->IASetInputLayout(pipeline.inputLayout.Get());
 

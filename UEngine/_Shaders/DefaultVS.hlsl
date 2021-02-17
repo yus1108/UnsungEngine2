@@ -3,6 +3,7 @@ struct VertexInput
     //¸â¹öº¯¼ö
     //              : ½Ã¸àÆ½ (»ç¿ë¿ëµµ)
     float4 coordinate : POSITION0;
+    float2 tex				: TEXCOORD0;
 };
 
 struct VertexOutput
