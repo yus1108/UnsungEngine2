@@ -2,7 +2,7 @@
 
 namespace UEngine
 {
-	namespace Definition
+	namespace Utility
 	{
 		struct Coordinate2D
 		{

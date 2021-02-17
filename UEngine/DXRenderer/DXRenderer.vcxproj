@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="DXRenderer.h" />
+    <ClInclude Include="DXRenderMesh.h" />
     <ClInclude Include="dxrframework.h" />
     <ClInclude Include="DXShader.h" />
   </ItemGroup>

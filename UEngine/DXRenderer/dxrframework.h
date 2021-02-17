@@ -26,3 +26,4 @@
 #include "Definitions.h"
 #include "DXRenderer.h"
 #include "DXShader.h"
+#include "DXRenderMesh.h"

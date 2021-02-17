@@ -53,15 +53,17 @@ void UEngine::DXRenderer::Init(HWND outputWindow, const DXRenderingDesc& desc)
 void UEngine::DXRenderer::Begin(ID3D11DeviceContext* const deviceContext)
 {
 	// clearing depth buffer and render target
-	immediateDeviceContext->OMSetDepthStencilState(default_render_view_resource.depth_stencil_state.Get(), 1);
-	immediateDeviceContext->OMSetRenderTargets(1, default_render_view_resource.render_target_view.GetAddressOf(),
-		default_render_view_resource.depth_stencil_view.Get());
+	immediateDeviceContext->ClearRenderTargetView(default_render_view_resource.render_target_view.Get(), DirectX::Colors::Gray);
 
-	immediateDeviceContext->ClearRenderTargetView(default_render_view_resource.render_target_view.Get(), DirectX::Colors::Transparent);
+	immediateDeviceContext->RSSetViewports(1, &default_render_view_resource.viewport);
 }
 
 void UEngine::DXRenderer::End()
 {
+	immediateDeviceContext->OMSetDepthStencilState(default_render_view_resource.depth_stencil_state.Get(), 1);
+	immediateDeviceContext->OMSetRenderTargets(1, default_render_view_resource.render_target_view.GetAddressOf(),
+		default_render_view_resource.depth_stencil_view.Get());
+
 	swapchain->Present(0, 0);
 }
 

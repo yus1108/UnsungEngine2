@@ -1,7 +1,7 @@
 #include "dxrframework.h"
 #include "DXShader.h"
 
-void UEngine::DXShader::SetShader(ID3DBlob* const shaderBlob, const UEngine::ShaderType& shader_type)
+void UEngine::DXShader::SetShader(ID3DBlob* const shaderBlob, const ShaderType& shader_type)
 {
 	switch (shader_type)
 	{
@@ -26,12 +26,12 @@ void UEngine::DXShader::SetShader(ID3DBlob* const shaderBlob, const UEngine::Sha
 	}
 }
 
-void UEngine::DXShader::SetShader(const std::string& shader_file, const UEngine::ShaderType& shader_type)
+void UEngine::DXShader::SetShader(const std::string& shader_file, const ShaderType& shader_type)
 {
 	SetShader(shader_file, "main", shader_type);
 }
 
-void UEngine::DXShader::SetShader(const std::string& shader_file, const std::string& entry_point, const UEngine::ShaderType& shader_type)
+void UEngine::DXShader::SetShader(const std::string& shader_file, const std::string& entry_point, const ShaderType& shader_type)
 {
 	Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
 	shader_files[static_cast<unsigned>(shader_type)] = shader_file;
@@ -65,7 +65,7 @@ void UEngine::DXShader::SetShader(const std::string& shader_file, const std::str
 	SetShader(shaderBlob.Get(), shader_type);
 }
 
-void UEngine::DXShader::SetShaders(const std::string shader_files[static_cast<unsigned>(UEngine::ShaderType::COUNT)])
+void UEngine::DXShader::SetShaders(const std::string shader_files[static_cast<unsigned>(ShaderType::COUNT)])
 {
 	for (unsigned i = 0; i < static_cast<unsigned>(ShaderType::COUNT); i++)
 	{
@@ -132,18 +132,18 @@ HRESULT UEngine::DXShader::CompileShader(_In_ LPCWSTR srcFile, _In_ LPCSTR entry
 	return hr;
 }
 
-void UEngine::DXShader::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+UEngine::DXShader* UEngine::DXShader::Init(ID3D11Device* const device, ID3D11DeviceContext* const deviceContext)
 {
-	this->device = device;
-	this->deviceContext = deviceContext;
+	UEngine::DXShader* instnace = new UEngine::DXShader;
+	instnace->device = device;
+	instnace->deviceContext = deviceContext;
+	return instnace;
 }
 
-void UEngine::DXShader::Release()
+void UEngine::DXShader::Release(DXShader** const shader)
 {
-}
-
-void UEngine::DXShader::Update()
-{
+	delete *shader;
+	*shader = nullptr;
 }
 
 void UEngine::DXShader::Render()

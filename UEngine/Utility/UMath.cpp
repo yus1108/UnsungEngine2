@@ -20,9 +20,9 @@ namespace UEngine
 			return degree * 0.0174532925199;
 		}
 
-		const UEngine::Definition::Coordinate2D UMath::ConvertPixelToNDC(const UEngine::Definition::Coordinate2D& mousePos, HWND window)
+		const UEngine::Utility::Coordinate2D UMath::ConvertPixelToNDC(const UEngine::Utility::Coordinate2D& mousePos, HWND window)
 		{
-			UEngine::Definition::Coordinate2D pos = mousePos;
+			UEngine::Utility::Coordinate2D pos = mousePos;
 			RECT clientSize;
 			GetClientRect(window, &clientSize);
 			pos.x /= clientSize.right - 1;

@@ -13,7 +13,6 @@ namespace UEngine
 	{
         static void ResetCursorPos()
         {
-            #include <Windows.h>
             HANDLE hOut;
             COORD Position;
 

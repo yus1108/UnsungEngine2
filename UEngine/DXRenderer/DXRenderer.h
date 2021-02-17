@@ -12,7 +12,7 @@ namespace UEngine
 		static DXRenderer* Get() { return &instance; }
 
 	private:
-		DXRenderer() = default;
+		DXRenderer() : hwnd(NULL) {};
 		~DXRenderer() = default;
 		static DXRenderer instance;
 #pragma endregion

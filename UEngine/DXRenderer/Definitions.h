@@ -24,7 +24,7 @@ namespace UEngine
 
 	struct DXRenderViewResource
 	{
-		D3D11_VIEWPORT viewport;
+		D3D11_VIEWPORT viewport{};
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depth_stencil_state;
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target_view;
@@ -33,8 +33,10 @@ namespace UEngine
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shader_resource_view;
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> output_texture;
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> output_shader_resource_view;
-		UINT width;
-		UINT height;
+		UINT width{};
+		UINT height{};
+
+		DXRenderViewResource() {}
 	};
 
 	struct DXRPipeline

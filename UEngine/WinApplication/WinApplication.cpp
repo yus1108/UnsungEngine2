@@ -1,17 +1,15 @@
 #include <functional>
-#include <Windows.h>
-#include "WinInput.h"
+#include "uengine_winapp.h"
 #include "WinApplication.h"
-
-
 
 namespace UEngine
 {
     WinApplication WinApplication::instance;
 
     WinApplication::WinApplication()
-        : hWnd(nullptr)
+        : hWnd(NULL)
         , appDesc({ 0 })
+        , isDefaultDesc(false)
     {
     }
 
@@ -36,12 +34,15 @@ namespace UEngine
         UEngine::WINDOWS_APPLICATION_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
 
+        
         desc.HInstance = hInstance;
+        desc.HasTitleBar = true;
+        desc.InitUTime = true;
+        desc.InitWinInput = true;
         desc.TitleName = _T("Window Application");
         desc.NCmdShow = 10;
         desc.WindowSize = { 800, 600 };
         desc.wcex = &wcex;
-        desc.HasTitleBar = true;
 
         Create(desc);
         isDefaultDesc = true;
@@ -72,6 +73,8 @@ namespace UEngine
         int halfHeight = windowSize.y / 2;
         hWnd = CreateWindow(windowClassName, titleName, appDesc.HasTitleBar ? WS_OVERLAPPEDWINDOW : WS_POPUPWINDOW,
             x - halfWidth, y - halfHeight, windowSize.x, windowSize.y, nullptr, nullptr, hInstance, nullptr);
+
+        UEngine::WinInput::Get()->AttachHandler(hWnd);
 
         if (!hWnd)
         {
@@ -105,9 +108,6 @@ namespace UEngine
     {
         switch (message)
         {
-        case WM_MOUSEMOVE:
-            break;
-        break;
         case WM_DESTROY: case WM_CLOSE:
             PostQuitMessage(0);
             break;

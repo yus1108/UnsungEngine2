@@ -27,12 +27,18 @@
     <ClInclude Include="WinMemoryLeak.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="uengine_winapp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WinInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uengine_winapp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

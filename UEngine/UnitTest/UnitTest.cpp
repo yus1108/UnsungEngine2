@@ -39,7 +39,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     wcex.cbSize = sizeof(WNDCLASSEX);
 
     wcex.style = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc = WndProc;
+    wcex.lpfnWndProc = nullptr;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
@@ -54,105 +54,61 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     ZeroMemory(&desc, sizeof(desc));
 
     desc.HInstance = hInstance;
-    desc.TitleName = szTitle;
+    desc.HasTitleBar = true;
+    desc.InitUTime = true;
+    desc.InitWinInput = true;
     desc.NCmdShow = nCmdShow;
+    desc.TitleName = szTitle;
     desc.WindowSize = { 800, 600 };
     desc.wcex = &wcex;
-    desc.HasTitleBar = true;
 
     auto app = UEngine::WinApplication::Get();
-    app->Create(hInstance);
+    app->Create(desc);
 
     auto renderer = UEngine::DXRenderer::Get();
     renderer->Init(app->GetHandler());
 
+    auto shader = UEngine::DXShader::Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
+    shader->SetShader("../_Shaders/DefaultVS.hlsl", UEngine::ShaderType::VERTEX_SHADER);
+    shader->SetShader("../_Shaders/DefaultPS.hlsl", UEngine::ShaderType::PIXEL_SHADER);
+    shader->InitInputLayout();
+
+    auto renderMesh = UEngine::RenderMesh<UEngine::SIMPLE_VERTEX>::Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
+
+    std::vector<UEngine::SIMPLE_VERTEX> vertices
+    {
+       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
+       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}},
+       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
+    };
+    std::vector<unsigned> indices{ 0 ,1, 2 };
+
+    renderMesh->SetVertices(vertices);
+    renderMesh->SetIndices(indices);
+    renderMesh->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
     auto returnedValue = app->UpdateLoop([&]() 
     {
-        //system("cls");
+        UEngine::Utility::UTime::Get()->Throttle(200);
+
         UEngine::WinConsole::ResetCursorPos();
         std::cout << "\t\t" << std::endl;
         std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
         UEngine::WinConsole::ResetCursorPos();
-        RECT clientSize, windowSize;
-        app->GetClientSize(&clientSize);
-        GetWindowRect(app->GetHandler(), &windowSize);
-        UEngine::Utility::UTime::Get()->Signal();
+
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
-        std::cout << UEngine::Utility::UMath::ConvertPixelToNDC(UEngine::WinInput::Get()->GetMousePos(), app->GetHandler()).x << std::endl;
-        std::cout << UEngine::Utility::UMath::ConvertPixelToNDC(UEngine::WinInput::Get()->GetMousePos(), app->GetHandler()).y << std::endl;
-        std::cout << UEngine::WinInput::Get()->GetMousePos().x << std::endl;
-        std::cout << UEngine::WinInput::Get()->GetMousePos().y << std::endl;
-        std::cout << clientSize.right - clientSize.left << std::endl;
-        std::cout << clientSize.bottom - clientSize.top << std::endl;
-        std::cout << windowSize.right - windowSize.left << std::endl;
-        std::cout << windowSize.bottom - windowSize.top << std::endl;
-        UEngine::Utility::UTime::Get()->Throttle(200);
+
+        renderer->Begin();
+        renderMesh->Render();
+        shader->Render();
+        renderer->GetImmediateDeviceContext()->DrawIndexed(renderMesh->GetIndicesCount(), 0, 0);
+        renderer->End();
+        
     });
+
+    UEngine::DXShader::Release(&shader);
+    UEngine::RenderMesh<UEngine::SIMPLE_VERTEX>::Release(&renderMesh);
 
     return returnedValue;
 }
-
-
-void DefaultWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch (message)
-    {
-    case WM_MOUSEMOVE:
-        UEngine::WinInput::Get()->SetMousePos(UEngine::Definition::Coordinate2D{ (float)LOWORD(lParam), (float)HIWORD(lParam) });
-        break;
-    case WM_KEYDOWN:
-        UEngine::WinInput::Get()->SetKeyPress(true, wParam);
-        break;
-    case WM_KEYUP:
-        UEngine::WinInput::Get()->SetKeyPress(false, wParam);
-        break;
-    case WM_LBUTTONDOWN:
-        UEngine::WinInput::Get()->SetMousePress(true, UEngine::WinInput::MouseType::LEFT);
-        break;
-    case WM_LBUTTONUP:
-        UEngine::WinInput::Get()->SetMousePress(false, UEngine::WinInput::MouseType::LEFT);
-        break;
-    case WM_RBUTTONDOWN:
-        UEngine::WinInput::Get()->SetMousePress(true, UEngine::WinInput::MouseType::RIGHT);
-        break;
-    case WM_RBUTTONUP:
-        UEngine::WinInput::Get()->SetMousePress(false, UEngine::WinInput::MouseType::RIGHT);
-        break;
-    case WM_MOUSEWHEEL:
-        UEngine::WinInput::Get()->SetMousePress(true, UEngine::WinInput::MouseType::SCROLL);
-        UEngine::WinInput::Get()->scroll = (int)wParam;
-        break;
-    case WM_TOUCH:
-        break;
-    case WM_MBUTTONDOWN:
-        UEngine::WinInput::Get()->SetMousePress(true, UEngine::WinInput::MouseType::MIDDLE);
-        break;
-    case WM_MBUTTONUP:
-        UEngine::WinInput::Get()->SetMousePress(false, UEngine::WinInput::MouseType::MIDDLE);
-        break;
-    }
-}
-
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    DefaultWndProc(hWnd, message, wParam, lParam);
-    //어떤 메세지가 발생되었는가를 통해 처리할 조건문
-    if (message == WM_DESTROY || message == WM_CLOSE)
-    {
-        PostQuitMessage(0);
-        return (DefWindowProc(hWnd, message, wParam, lParam));
-    }
-
-    return (DefWindowProc(hWnd, message, wParam, lParam));
-}
-

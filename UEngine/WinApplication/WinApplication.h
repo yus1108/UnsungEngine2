@@ -1,16 +1,19 @@
 #pragma once
 #include <tchar.h>
+#include "../Utility/UTime.h"
 
 namespace UEngine
 {
 	struct WINDOWS_APPLICATION_DESC
 	{
-		int NCmdShow;
+		HINSTANCE HInstance;
 		bool HasTitleBar;
-		POINT WindowSize;
+		bool InitUTime;
+		bool InitWinInput;
+		int NCmdShow;
 		LPCTSTR TitleName;
 		WNDCLASSEXW* wcex;
-		HINSTANCE HInstance;
+		POINT WindowSize;
 	};
 
 	class WinApplication final
@@ -71,6 +74,8 @@ namespace UEngine
 			}
 			else
 			{
+				if (appDesc.InitUTime)
+					UEngine::Utility::UTime::Get()->Signal();
 				func();
 			}
 		}

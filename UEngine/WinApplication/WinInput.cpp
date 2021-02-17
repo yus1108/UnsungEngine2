@@ -1,51 +1,76 @@
+#include "uengine_winapp.h"
 #include "WinInput.h"
 
 UEngine::WinInput UEngine::WinInput::instance;
 
-void UEngine::WinInput::SetKeyPress(bool _keypressed, unsigned _wParam)
+const bool UEngine::WinInput::GetKeyDown(const unsigned& _key)
 {
-	keys[_wParam] = _keypressed;
+    if (GetAsyncKeyState(_key) & 0x8000)
+    {
+        //배열에 bool값이 false라면
+        if (keys[_key] == false)
+        {
+            keys[_key] = true;
+            return true;
+        };
+    }
+    //현재는 안누르고 있다면
+    else
+    {
+        keys[_key] = false;
+    }
+    return false;
 }
 
-void UEngine::WinInput::SetMousePress(bool _keypressed, MouseType _wParam)
+const bool UEngine::WinInput::GetKey(const unsigned& _key)
 {
-	mouse[static_cast<unsigned>(_wParam)] = _keypressed;
+    if (GetAsyncKeyState(_key) & 0x8000)
+    {
+        PrevKey = _key;
+        return true;
+    }
+    return false;
 }
 
-void UEngine::WinInput::SetMousePos(UEngine::Definition::Coordinate2D mousePos)
+const bool UEngine::WinInput::GetKeyUp(const unsigned& _key)
 {
-	prevMousePos = currMousePos;
-	currMousePos = mousePos;
+    //누르고있지 않을때
+    if (GetKey(_key) == false)
+    {
+        if (PrevKey == _key)
+        {
+            PrevKey = NULL;
+            return true;
+        }
+    }
+    return false;
 }
 
-const bool& UEngine::WinInput::GetKeyPress(const unsigned& _key)
-{
-	if (keys[_key])
-	{
-		counter[_key]++;
-		if (counter[_key] == 1)
-			return true;
-		else if (counter[_key] == 0xffffffff) // UINT_MAX
-			counter[_key] = 2;
-	}
-	else {
-		counter[_key] = 0;
-	}
-	return false;
-}
 
-const bool& UEngine::WinInput::GetMousePress(const unsigned& _mouseInput)
+const UEngine::Utility::Coordinate2D UEngine::WinInput::GetMousePos() const
 {
-	if (mouse[_mouseInput])
-	{
-		mouseCounter[_mouseInput]++;
-		if (mouseCounter[_mouseInput] == 1)
-			return true;
-		else if (mouseCounter[_mouseInput] == 0xffffffff) // UINT_MAX
-			mouseCounter[_mouseInput] = 2;
-	}
-	else {
-		mouseCounter[_mouseInput] = 0;
-	}
-	return false;
+    UEngine::Utility::Coordinate2D value;
+    RECT clientSize, windowSize, rc;
+    POINT point;
+
+    GetCursorPos(&point);
+    GetClientRect(handler, &clientSize);
+    GetWindowRect(handler, &windowSize);
+
+    rc.left = 0;
+    rc.top = 0;
+    rc.right = clientSize.right;
+    rc.bottom = clientSize.bottom;
+    
+    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, true);
+
+    point.x = point.x - windowSize.left + rc.left;
+    point.x = point.x < clientSize.left ? clientSize.left : point.x;
+    value.x = static_cast<float>(point.x >= clientSize.right ? clientSize.right - 1 : point.x);
+
+    point.y = point.y - windowSize.top + rc.top;
+    point.y = point.y < clientSize.top ? clientSize.top : point.y;
+    value.y = static_cast<float>(point.y >= clientSize.bottom ? clientSize.bottom - 1 : point.y);
+
+    return value;
 }
