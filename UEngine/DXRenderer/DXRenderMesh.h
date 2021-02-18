@@ -5,11 +5,11 @@
 namespace UEngine
 {
 	template <typename STRUCT_VERTEX>
-	class RenderMesh final
+	class DXRenderMesh final
 	{
 	private:
-		RenderMesh() {}
-		~RenderMesh() = default;
+		DXRenderMesh() {}
+		~DXRenderMesh() = default;
 	private:
 
 		std::vector<STRUCT_VERTEX> vertices;
@@ -29,27 +29,26 @@ namespace UEngine
 		unsigned GetIndicesCount() { return indices.size(); }
 
 		// Initialize to Draw line strip with only vertices
-		static RenderMesh<STRUCT_VERTEX>* const Instantiate
+		static DXRenderMesh<STRUCT_VERTEX>* const Instantiate
 		(
 			ID3D11Device* const device, 
 			const std::vector<STRUCT_VERTEX>& vertices
 		);
 		// Initialize to Draw with vertices, indices, and the given topology
-		static RenderMesh<STRUCT_VERTEX>* const Instantiate
+		static DXRenderMesh<STRUCT_VERTEX>* const Instantiate
 		(
 			ID3D11Device* const device, 
 			const std::vector<STRUCT_VERTEX>& vertices,
 			const std::vector<unsigned>& indices,
 			D3D11_PRIMITIVE_TOPOLOGY topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST
-		)
-			;
-		static void Release(RenderMesh<STRUCT_VERTEX>** const renderMesh);
+		);
+		static void Release(DXRenderMesh<STRUCT_VERTEX>** const renderMesh);
 		void Render(ID3D11DeviceContext* const deviceContext);
 	};	
 
 
 	template <typename STRUCT_VERTEX>
-	void RenderMesh<STRUCT_VERTEX>::SetVertices(ID3D11Device* const device, const std::vector<STRUCT_VERTEX>& vertices)
+	void DXRenderMesh<STRUCT_VERTEX>::SetVertices(ID3D11Device* const device, const std::vector<STRUCT_VERTEX>& vertices)
 	{
 		this->vertices = vertices;
 		this->vertices.shrink_to_fit();
@@ -68,7 +67,7 @@ namespace UEngine
 	}
 
 	template <typename STRUCT_VERTEX>
-	void RenderMesh<STRUCT_VERTEX>::SetIndices(ID3D11Device* const device, const std::vector<unsigned>& indices)
+	void DXRenderMesh<STRUCT_VERTEX>::SetIndices(ID3D11Device* const device, const std::vector<unsigned>& indices)
 	{
 		this->indices = indices;
 		this->indices.shrink_to_fit();
@@ -88,16 +87,16 @@ namespace UEngine
 	}
 
 	template <typename STRUCT_VERTEX>
-	RenderMesh<STRUCT_VERTEX>* const RenderMesh<STRUCT_VERTEX>::Instantiate(ID3D11Device* const device, const std::vector<STRUCT_VERTEX>& vertices)
+	DXRenderMesh<STRUCT_VERTEX>* const DXRenderMesh<STRUCT_VERTEX>::Instantiate(ID3D11Device* const device, const std::vector<STRUCT_VERTEX>& vertices)
 	{
-		RenderMesh<STRUCT_VERTEX>* instnace = new RenderMesh<STRUCT_VERTEX>;
+		DXRenderMesh<STRUCT_VERTEX>* instnace = new DXRenderMesh<STRUCT_VERTEX>;
 		instnace->SetVertices(device, vertices);
 		instnace->SetTopology(device, D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
 		return instnace;
 	}
 
 	template <typename STRUCT_VERTEX>
-	RenderMesh<STRUCT_VERTEX>* const RenderMesh<STRUCT_VERTEX>::Instantiate
+	DXRenderMesh<STRUCT_VERTEX>* const DXRenderMesh<STRUCT_VERTEX>::Instantiate
 	(
 		ID3D11Device* const device,
 		const std::vector<STRUCT_VERTEX>& vertices,
@@ -105,7 +104,7 @@ namespace UEngine
 		D3D11_PRIMITIVE_TOPOLOGY topology
 	)
 	{
-		RenderMesh<STRUCT_VERTEX>* instnace = new RenderMesh<STRUCT_VERTEX>;
+		DXRenderMesh<STRUCT_VERTEX>* instnace = new DXRenderMesh<STRUCT_VERTEX>;
 		instnace->SetVertices(device, vertices);
 		instnace->SetIndices(device, indices);
 		instnace->SetTopology(topology);
@@ -113,14 +112,14 @@ namespace UEngine
 	}
 
 	template <typename STRUCT_VERTEX>
-	void RenderMesh<STRUCT_VERTEX>::Release(RenderMesh<STRUCT_VERTEX>** const renderMesh)
+	void DXRenderMesh<STRUCT_VERTEX>::Release(DXRenderMesh<STRUCT_VERTEX>** const renderMesh)
 	{
 		delete *renderMesh;
 		*renderMesh = nullptr;
 	}
 
 	template <typename STRUCT_VERTEX>
-	void RenderMesh<STRUCT_VERTEX>::Render(ID3D11DeviceContext* const deviceContext)
+	void DXRenderMesh<STRUCT_VERTEX>::Render(ID3D11DeviceContext* const deviceContext)
 	{
 		UINT stride = sizeof(STRUCT_VERTEX);
 		UINT offset = 0;

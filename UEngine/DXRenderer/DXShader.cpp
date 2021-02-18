@@ -27,7 +27,7 @@ void UEngine::DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const sh
 	}
 }
 
-void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const ShaderType& shader_type, const std::string& entry_point)
+void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const ShaderType& shader_type, bool isDebuggable, const std::string& entry_point)
 {
 	Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
 	shader_files[static_cast<unsigned>(shader_type)] = shader_file;
@@ -37,19 +37,19 @@ void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string&
 	switch (shader_type)
 	{
 	case ShaderType::VERTEX_SHADER:
-		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "vs_4_0");
+		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "vs_4_0", isDebuggable);
 		break;
 	case ShaderType::PIXEL_SHADER:
-		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ps_4_0");
+		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ps_4_0", isDebuggable);
 		break;
 	case ShaderType::GEOMETRY_SHADER:
-		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "gs_4_0");
+		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "gs_4_0", isDebuggable);
 		break;
 	case ShaderType::HULL_SHADER:
-		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "hs_4_0");
+		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "hs_4_0", isDebuggable);
 		break;
 	case ShaderType::DOMAIN_SHADER:
-		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ds_4_0");
+		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ds_4_0", isDebuggable);
 		break;
 	default:
 		assert(false && "Invalid Shader Type");
@@ -119,11 +119,41 @@ HRESULT UEngine::DXShader::CompileShader(_In_ LPCWSTR srcFile, _In_ LPCSTR entry
 	return hr;
 }
 
-UEngine::DXShader* UEngine::DXShader::Instantiate(ID3D11Device* const device, const std::string& vertex_shader_file, const std::string& pixel_shader_file)
+UEngine::DXShader* UEngine::DXShader::Instantiate
+(
+	DXRenderer* const renderer, 
+	const std::string& vertex_shader_file, 
+	const std::string& pixel_shader_file,
+	bool isDebuggable,
+	const DXRasterDesc* const rasterizerStateDesc,
+	const D3D11_SAMPLER_DESC* const samplerStateDesc,
+	const D3D11_BLEND_DESC* const blendStateDesc
+)
 {
+	auto device = renderer->GetDevice();
+
 	UEngine::DXShader* instnace = new UEngine::DXShader;
-	instnace->SetShader(device, vertex_shader_file, UEngine::ShaderType::VERTEX_SHADER);
-	instnace->SetShader(device, pixel_shader_file, UEngine::ShaderType::PIXEL_SHADER);
+	instnace->SetShader(device, vertex_shader_file, UEngine::ShaderType::VERTEX_SHADER, isDebuggable);
+	instnace->SetShader(device, pixel_shader_file, UEngine::ShaderType::PIXEL_SHADER, isDebuggable);
+
+	// Rasterizer State
+	renderer->InitRasterizerState
+	(
+		instnace->pipeline.rasterizerState.GetAddressOf(),
+		rasterizerStateDesc->FillMode,
+		rasterizerStateDesc->CullMode,
+		rasterizerStateDesc->MultiSampleEnable,
+		rasterizerStateDesc->AntialiasedLineEnable,
+		rasterizerStateDesc->DepthClipEnable,
+		rasterizerStateDesc->ScissorEnable
+	);
+
+	// Sampler State
+	device->CreateSamplerState(samplerStateDesc, &instnace->pipeline.samplerState);
+
+	// Blending State
+	if (blendStateDesc) device->CreateBlendState(blendStateDesc, &instnace->pipeline.blendingState);
+
 	return instnace;
 }
 

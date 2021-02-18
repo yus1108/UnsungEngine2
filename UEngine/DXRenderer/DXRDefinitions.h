@@ -3,23 +3,25 @@
 
 namespace UEngine
 {
-	struct MultiSampleDesc {
-		bool enable;
-		DXGI_SAMPLE_DESC sample_description;
+	struct DXRasterDesc
+	{
+		bool ScissorEnable = false;
+		bool DepthClipEnable = false;
+		bool MultiSampleEnable = false;
+		bool AntialiasedLineEnable = false;
+		D3D11_FILL_MODE FillMode = D3D11_FILL_SOLID;
+		D3D11_CULL_MODE CullMode = D3D11_CULL_BACK;
 	};
 
 	struct DXRenderingDesc
 	{
 		bool IsDebuggable = false;
 		bool IsFullScreen = false;
-		bool ScissorEnable = false;
-		bool AntialiasedLineEnable = false;
-		D3D11_FILL_MODE FillMode = D3D11_FILL_SOLID;
-		D3D11_CULL_MODE CullMode = D3D11_CULL_BACK;
-		DXGI_RATIONAL RefreshRate{ 60, 1 };
-		MultiSampleDesc MultiSampleDesc{ false, {1, 0} };
-		D3D_FEATURE_LEVEL* FeatureLevels = nullptr;
 		UINT FeatureLevelsCount = 0;
+		DXGI_RATIONAL RefreshRate{ 60, 1 };
+		D3D_FEATURE_LEVEL* FeatureLevels = nullptr;
+		DXGI_SAMPLE_DESC MultisampleDesc = { 1, 0 };
+		DXRasterDesc RasterizerStateDesc;
 	};
 
 	struct DXRenderViewContext

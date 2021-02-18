@@ -65,19 +65,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto app = UEngine::WinApplication::Get();
     app->Create(desc);
 
+    UEngine::DXRenderingDesc rendererDesc = UEngine::DXRenderer::CreateDefaultInitDesc();
+    rendererDesc.IsDebuggable = true;
     auto renderer = UEngine::DXRenderer::Get();
-    renderer->Init(app->GetHandler());
-
-    auto shader = UEngine::DXShader::Instantiate(renderer->GetDevice(), "../_Shaders/DefaultVS.hlsl", "../_Shaders/DefaultPS.hlsl");
-
-    std::vector<UEngine::SIMPLE_VERTEX> vertices
-    {
-       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
-       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}},
-       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
-    };
-    std::vector<unsigned> indices{ 0 ,1, 2 };
-    auto renderMesh = UEngine::RenderMesh<UEngine::SIMPLE_VERTEX>::Instantiate(renderer->GetDevice(), vertices, indices);
+    renderer->Init(app->GetHandler(), false, false, &rendererDesc);
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
@@ -91,16 +82,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
 
-        renderer->Begin();
-        renderMesh->Render(renderer->GetImmediateDeviceContext());
-        shader->Render(renderer->GetImmediateDeviceContext());
-        renderer->GetImmediateDeviceContext()->DrawIndexed(renderMesh->GetIndicesCount(), 0, 0);
+        renderer->Begin(DirectX::Colors::Gray);
         renderer->End();
         
     });
 
-    UEngine::DXShader::Release(&shader);
-    UEngine::RenderMesh<UEngine::SIMPLE_VERTEX>::Release(&renderMesh);
+    renderer->Release();
 
     return returnedValue;
 }

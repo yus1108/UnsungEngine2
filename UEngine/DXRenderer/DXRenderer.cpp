@@ -4,12 +4,23 @@
 
 UEngine::DXRenderer UEngine::DXRenderer::instance;
 
-void UEngine::DXRenderer::Init(HWND outputWindow, const DXRenderingDesc& desc)
+void UEngine::DXRenderer::Init
+(
+	HWND outputWindow,
+	bool enableDepthStencil,
+	bool enableBlendState,
+	const DXRenderingDesc* desc,
+	const D3D11_DEPTH_STENCIL_DESC* dssDesc,
+	const D3D11_DEPTH_STENCIL_VIEW_DESC* dsvDesc ,
+	const D3D11_SAMPLER_DESC* ssDesc,
+	const D3D11_BLEND_DESC* bsDesc
+)
 {
 
 	RECT clientSize;
 	hwnd = outputWindow;
-	rendering_desc = desc;
+	rendering_desc = CreateDefaultInitDesc();
+	if (desc) rendering_desc = *desc;
 	featureLevel = static_cast<D3D_FEATURE_LEVEL>(0);
 	GetClientRect(outputWindow, &clientSize);
 	InitViewport(&immediate.Viewport, clientSize);
@@ -22,36 +33,53 @@ void UEngine::DXRenderer::Init(HWND outputWindow, const DXRenderingDesc& desc)
 		InitRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 
 		// Depth Stencil Texture, View, State
+		auto default_dssDesc = DSSCreateDesc();
+		auto default_dsvDesc = DSVCreateDesc();
+		if (!dssDesc) dssDesc = &default_dssDesc;
+		if (!dsvDesc) dsvDesc = &default_dsvDesc;
 		InitDepthStencil
 		(
 			immediate.DepthStencilTexture2D.GetAddressOf(),
-			immediate.DepthStencilView.GetAddressOf(),
+			enableDepthStencil ? immediate.DepthStencilView.GetAddressOf() : nullptr,
 			immediate.DepthStencilState.GetAddressOf(),
 			clientSize,
-			DSSCreateDesc(),
-			DSVCreateDesc()
+			dssDesc,
+			dsvDesc
 		);
 
-		// Rasterizer State
-		InitRasterizerState
+		// Shader
+		auto default_ssDesc = SSCreateDesc();
+		auto default_bsDesc = BSCreateDesc();
+		if (!ssDesc) ssDesc = &default_ssDesc;
+		if (!bsDesc) bsDesc = &default_bsDesc;
+		if (!enableBlendState) bsDesc = nullptr;
+		default_shader = DXShader::Instantiate
 		(
-			default_pipeline.rasterizerState.GetAddressOf(),
-			immediate.DepthStencilView.Get(),
-			rendering_desc.FillMode,
-			rendering_desc.CullMode,
-			rendering_desc.MultiSampleDesc.enable,
-			rendering_desc.AntialiasedLineEnable,
-			rendering_desc.ScissorEnable
+			this,
+			"../_Shaders/DefaultVS.hlsl",
+			"../_Shaders/DefaultPS.hlsl",
+			rendering_desc.IsDebuggable,
+			&rendering_desc.RasterizerStateDesc,
+			ssDesc,
+			bsDesc
 		);
 
-		// Sampler State
-		auto ssDesc = SSCreateDesc();
-		device->CreateSamplerState(&ssDesc, &default_pipeline.samplerState);
-
-		// Blending State
-		auto bsDesc = BSCreateDesc();
-		device->CreateBlendState(&bsDesc, &default_pipeline.blendingState);
+		std::vector<UEngine::SIMPLE_VERTEX> vertices
+		{
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}},
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}},
+		};
+		std::vector<unsigned> indices{ 0 ,1, 2, 2, 1, 3 };
+		default_renderMesh = UEngine::DXRenderMesh<UEngine::SIMPLE_VERTEX>::Instantiate(device.Get(), vertices, indices);
 	}
+}
+
+void UEngine::DXRenderer::Release()
+{
+	DXShader::Release(&default_shader);
+	DXRenderMesh<SIMPLE_VERTEX>::Release(&default_renderMesh);
 }
 
 void UEngine::DXRenderer::Begin(const float clearRGBA[4])
@@ -59,12 +87,16 @@ void UEngine::DXRenderer::Begin(const float clearRGBA[4])
 	// clearing depth buffer and render target
 	immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
 	immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
+
+	immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
+	immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
 }
 
 void UEngine::DXRenderer::End()
 {
-	immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
-	immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
+	default_shader->Render(immediate.DeviceContext.Get());
+	default_renderMesh->Render(immediate.DeviceContext.Get());
+	immediate.DeviceContext->DrawIndexed(default_renderMesh->GetIndicesCount(), 0, 0);
 
 	swapchain->Present(0, 0);
 }
@@ -75,7 +107,23 @@ void UEngine::DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)
 	InitRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 }
 
-D3D11_DEPTH_STENCIL_DESC UEngine::DXRenderer::DSSCreateDesc() const
+UEngine::DXRenderingDesc UEngine::DXRenderer::CreateDefaultInitDesc()
+{
+	DXRasterDesc rasterDesc;
+	ZeroMemory(&rasterDesc, sizeof(DXRasterDesc));
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
+
+	DXRenderingDesc renderingDesc;
+	ZeroMemory(&renderingDesc, sizeof(DXRenderingDesc));
+	renderingDesc.RefreshRate = { 60, 1 };
+	renderingDesc.MultisampleDesc = { 1, 0 };
+	renderingDesc.RasterizerStateDesc = rasterDesc;
+
+	return renderingDesc;
+}
+
+D3D11_DEPTH_STENCIL_DESC UEngine::DXRenderer::DSSCreateDesc()
 {
 	D3D11_DEPTH_STENCIL_DESC depthState;
 
@@ -104,7 +152,7 @@ D3D11_DEPTH_STENCIL_DESC UEngine::DXRenderer::DSSCreateDesc() const
 	return depthState;
 }
 
-D3D11_DEPTH_STENCIL_VIEW_DESC UEngine::DXRenderer::DSVCreateDesc() const
+D3D11_DEPTH_STENCIL_VIEW_DESC UEngine::DXRenderer::DSVCreateDesc()
 {
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
@@ -115,7 +163,7 @@ D3D11_DEPTH_STENCIL_VIEW_DESC UEngine::DXRenderer::DSVCreateDesc() const
 	return descDSV;
 }
 
-D3D11_SAMPLER_DESC UEngine::DXRenderer::SSCreateDesc() const
+D3D11_SAMPLER_DESC UEngine::DXRenderer::SSCreateDesc()
 {
 	D3D11_SAMPLER_DESC samplerDesc;
 	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
@@ -132,7 +180,7 @@ D3D11_SAMPLER_DESC UEngine::DXRenderer::SSCreateDesc() const
 	return samplerDesc;
 }
 
-D3D11_BLEND_DESC UEngine::DXRenderer::BSCreateDesc() const
+D3D11_BLEND_DESC UEngine::DXRenderer::BSCreateDesc()
 {
 	D3D11_BLEND_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_BLEND_DESC));
@@ -194,10 +242,10 @@ void UEngine::DXRenderer::InitDeviceContextSwapchain(const RECT& clientSize, boo
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	desc.OutputWindow = hwnd;
-	desc.SampleDesc = rendering_desc.MultiSampleDesc.enable ? rendering_desc.MultiSampleDesc.sample_description : DXGI_SAMPLE_DESC{ 1, 0 };
+	desc.SampleDesc = rendering_desc.MultisampleDesc;
 	desc.Windowed = !rendering_desc.IsFullScreen;
 
-	if (isDebuggable) flag |= D3D11_CREATE_DEVICE_DEBUG;
+	//if (isDebuggable) flag |= D3D11_CREATE_DEVICE_DEBUG;
 
 	// create swapchain, device, and context
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr,
@@ -231,9 +279,9 @@ void UEngine::DXRenderer::InitDepthStencil
 	ID3D11Texture2D** const depth_stencil_texture,
 	ID3D11DepthStencilView** const depth_stencil_view,
 	ID3D11DepthStencilState** const depth_stencil_state,
-	RECT clientSize,
-	D3D11_DEPTH_STENCIL_DESC dss_desc,
-	D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc
+	const RECT clientSize,
+	const D3D11_DEPTH_STENCIL_DESC* const dss_desc,
+	const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsv_desc
 )
 {
 	D3D11_TEXTURE2D_DESC depthBuffer;
@@ -249,19 +297,20 @@ void UEngine::DXRenderer::InitDepthStencil
 	depthBuffer.CPUAccessFlags = NULL;
 	depthBuffer.MiscFlags = NULL;
 
+	if (device->CreateDepthStencilState(dss_desc, depth_stencil_state) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+	if (depth_stencil_view == nullptr) return;
 	if (device->CreateTexture2D(&depthBuffer, nullptr, depth_stencil_texture) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
-	if (device->CreateDepthStencilState(&dss_desc, depth_stencil_state) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
-	if (device->CreateDepthStencilView(*depth_stencil_texture, &dsv_desc, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+	if (device->CreateDepthStencilView(*depth_stencil_texture, dsv_desc, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
 }
 
 void UEngine::DXRenderer::InitRasterizerState
 (
 	ID3D11RasterizerState** const rasterizerState,
-	const ID3D11DepthStencilView* const dsv,
 	const D3D11_FILL_MODE& fillMode,
 	const D3D11_CULL_MODE& cullMode,
 	const BOOL& multisampleEnable,
 	const BOOL& antialisedEnable,
+	const BOOL& depthClipEnable,
 	const BOOL& scissorEnable
 )
 {
@@ -273,7 +322,7 @@ void UEngine::DXRenderer::InitRasterizerState
 	desc.FrontCounterClockwise = false; //cw ccw 값 정하기
 	desc.DepthBiasClamp = 0;
 	desc.SlopeScaledDepthBias = 0;
-	desc.DepthClipEnable = dsv ? true : false; //깊이클리핑 끄기
+	desc.DepthClipEnable = depthClipEnable; //깊이클리핑 끄기
 	desc.ScissorEnable = scissorEnable; //시저테스트 하지 않음
 	desc.MultisampleEnable = multisampleEnable; //멀티 샘플링 하지않음
 	desc.AntialiasedLineEnable = antialisedEnable; //라인안티앨리어싱 없음
