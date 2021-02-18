@@ -72,7 +72,6 @@ namespace UEngine
 			const D3D11_DEPTH_STENCIL_DESC* const dss_desc,
 			const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsv_desc
 		);
-		void InitDeferredContext(ID3D11Device* const device, ID3D11DeviceContext** const deferredContext);
 		void InitRenderViewContext
 		(
 			UEngine::DXRenderViewContext** const context,

@@ -305,11 +305,6 @@ void UEngine::DXRenderer::InitDepthStencil
 	if (device->CreateDepthStencilView(*depth_stencil_texture, dsv_desc, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
 }
 
-void UEngine::DXRenderer::InitDeferredContext(ID3D11Device* const device, ID3D11DeviceContext** const deferredContext)
-{
-	device->CreateDeferredContext(NULL, deferredContext);
-}
-
 void UEngine::DXRenderer::InitRenderViewContext
 (
 	UEngine::DXRenderViewContext** const context,
@@ -379,8 +374,8 @@ void UEngine::DXRenderer::InitRenderViewContext
 	singleSRVDesc.Texture2D.MostDetailedMip = 0;
 	singleSRVDesc.Texture2D.MipLevels = 1;
 
-	device->CreateTexture2D(&desc, nullptr, (*context)->OutputTexture2D.GetAddressOf());
-	device->CreateShaderResourceView((*context)->OutputTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
+	//device->CreateTexture2D(&desc, nullptr, (*context)->OutputTexture2D.GetAddressOf());
+	device->CreateShaderResourceView((*context)->RenderTargetViewTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
 
 	device->CreateDeferredContext(NULL, &(*context)->DeviceContext);
 }

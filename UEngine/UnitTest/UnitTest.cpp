@@ -10,7 +10,6 @@
 #include "../Utility/UMath.h"
 #include "../Utility/UTime.h"
 #include "../DXRenderer/dxrframework.h"
-#include <thread>
 
 #define MAX_LOADSTRING 100
 
@@ -75,6 +74,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     ZeroMemory(newRender, sizeof(UEngine::DXRenderViewContext));
     renderer->InitRenderViewContext(&newRender, 400, 400);
 
+    UEngine::DXRenderViewContext* newRender2 = new UEngine::DXRenderViewContext;
+    ZeroMemory(newRender2, sizeof(UEngine::DXRenderViewContext));
+    renderer->InitRenderViewContext(&newRender2, 400, 400);
+
     // Shader
     UEngine::DXRenderingDesc rsDesc = UEngine::DXRenderingDesc();
     auto default_ssDesc = renderer->SSCreateDesc();
@@ -83,7 +86,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     (
         renderer,
         "../_Shaders/DefaultVS.hlsl",
-        "../_Shaders/DefaultPS2.hlsl",
+        "../_Shaders/DefaultPS.hlsl",
+        true,
+        &rsDesc.RasterizerStateDesc,
+        &default_ssDesc,
+        &default_bsDesc
+    );
+
+    // Shader2
+    auto default_shader2 = UEngine::DXShader::Instantiate
+    (
+        renderer,
+        "../_Shaders/DefaultVS.hlsl",
+        "../_Shaders/ColorPS.hlsl",
         true,
         &rsDesc.RasterizerStateDesc,
         &default_ssDesc,
@@ -105,6 +120,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     DirectX::XMFLOAT4 color{ 1,1,1,1 };
     buffer->UpdateBuffer(renderer->GetImmediateDeviceContext(), &color, sizeof(DirectX::XMFLOAT4));
 
+    UEngine::DXConstantBuffer* buffer2 = UEngine::DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4));
+    DirectX::XMFLOAT4 color2{ 0,0.5f,0,1 };
+    buffer2->UpdateBuffer(renderer->GetImmediateDeviceContext(), &color2, sizeof(DirectX::XMFLOAT4));
+
+
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
@@ -117,47 +137,75 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
 
-        // clearing depth buffer and render target
-        newRender->DeviceContext->ClearRenderTargetView(newRender->RenderTargetView.Get(), DirectX::Colors::Black);
-        newRender->DeviceContext->RSSetViewports(1, &newRender->Viewport);
+        // Render1
+        {
+            // clearing depth buffer and render target
+            newRender->DeviceContext->ClearRenderTargetView(newRender->RenderTargetView.Get(), DirectX::Colors::Coral);
+            newRender->DeviceContext->RSSetViewports(1, &newRender->Viewport);
 
-        newRender->DeviceContext->OMSetRenderTargets(1, newRender->RenderTargetView.GetAddressOf(), newRender->DepthStencilView.Get());
-        newRender->DeviceContext->OMSetDepthStencilState(newRender->DepthStencilState.Get(), 1);
+            newRender->DeviceContext->OMSetRenderTargets(1, newRender->RenderTargetView.GetAddressOf(), newRender->DepthStencilView.Get());
+            newRender->DeviceContext->OMSetDepthStencilState(newRender->DepthStencilState.Get(), 1);
 
-        newRender->DeviceContext->PSSetConstantBuffers(0, 1, buffer->GetBufferAddressOf());
+            newRender->DeviceContext->PSSetConstantBuffers(0, 1, buffer2->GetBufferAddressOf());
 
-        default_shader->Render(newRender->DeviceContext.Get());
-        default_renderMesh->Render(newRender->DeviceContext.Get());
-        newRender->DeviceContext->DrawIndexed(default_renderMesh->GetIndicesCount(), 0, 0);
+            default_shader2->Render(newRender->DeviceContext.Get());
+            default_renderMesh->Render(newRender->DeviceContext.Get());
+            newRender->DeviceContext->DrawIndexed(default_renderMesh->GetIndicesCount(), 0, 0);
 
-        newRender->DeviceContext->FinishCommandList(true, newRender->CommandList.GetAddressOf());
-        renderer->GetImmediateDeviceContext()->ExecuteCommandList(newRender->CommandList.Get(), true);
-        newRender->CommandList.ReleaseAndGetAddressOf();
+            newRender->DeviceContext->FinishCommandList(true, newRender->CommandList.GetAddressOf());
+            newRender2->DeviceContext->ExecuteCommandList(newRender->CommandList.Get(), true);
+            newRender->CommandList.ReleaseAndGetAddressOf();
+        }
+
+        // Render2
+        {
+            // clearing depth buffer and render target
+            newRender2->DeviceContext->ClearRenderTargetView(newRender2->RenderTargetView.Get(), DirectX::Colors::Aqua);
+            newRender2->DeviceContext->RSSetViewports(1, &newRender2->Viewport);
+
+            newRender2->DeviceContext->OMSetRenderTargets(1, newRender2->RenderTargetView.GetAddressOf(), newRender2->DepthStencilView.Get());
+            newRender2->DeviceContext->OMSetDepthStencilState(newRender2->DepthStencilState.Get(), 1);
+
+            newRender2->DeviceContext->PSSetConstantBuffers(0, 1, buffer->GetBufferAddressOf());
+
+            default_shader->Render(newRender2->DeviceContext.Get());
+            default_renderMesh->Render(newRender2->DeviceContext.Get());
+
+            newRender2->DeviceContext->PSSetShaderResources(0, 1, newRender->OutputShaderResourceView.GetAddressOf());
+
+            newRender2->DeviceContext->DrawIndexed(default_renderMesh->GetIndicesCount(), 0, 0);
+
+            newRender2->DeviceContext->FinishCommandList(true, newRender2->CommandList.GetAddressOf());
+            renderer->GetImmediateDeviceContext()->ExecuteCommandList(newRender2->CommandList.Get(), true);
+            newRender2->CommandList.ReleaseAndGetAddressOf();
+        }
 
         renderer->Begin(DirectX::Colors::Gray);
         renderer->GetImmediateDeviceContext()->PSSetConstantBuffers(0, 1, buffer->GetBufferAddressOf());
         
-        renderer->GetImmediateDeviceContext()->ResolveSubresource
+        /*renderer->GetImmediateDeviceContext()->ResolveSubresource
         (
             (ID3D11Resource*)newRender->OutputTexture2D.Get(), 
             D3D11CalcSubresource(0, 0, 1),
             (ID3D11Resource*)newRender->RenderTargetViewTexture2D.Get(), 
             D3D11CalcSubresource(0, 0, 1), 
             DXGI_FORMAT_R32G32B32A32_FLOAT
-        );
-        ID3D11ShaderResourceView* baseTexture[]
+        );*/
+       /* ID3D11ShaderResourceView* baseTexture[]
         {
             (ID3D11ShaderResourceView*)newRender->OutputShaderResourceView.Get()
-        };
-        renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, baseTexture);
+        };*/
+        renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, newRender2->OutputShaderResourceView.GetAddressOf());
 
         renderer->End();
-        
     });
 
     delete newRender;
+    delete newRender2;
     UEngine::DXConstantBuffer::Release(&buffer);
+    UEngine::DXConstantBuffer::Release(&buffer2);
     UEngine::DXShader::Release(&default_shader);
+    UEngine::DXShader::Release(&default_shader2);
     UEngine::DXRenderMesh<UEngine::SIMPLE_VERTEX>::Release(&default_renderMesh);
 
     return returnedValue;
