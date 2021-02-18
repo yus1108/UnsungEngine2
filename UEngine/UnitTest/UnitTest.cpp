@@ -9,7 +9,7 @@
 #include "../WinApplication/WinMemoryLeak.h"
 #include "../Utility/UMath.h"
 #include "../Utility/UTime.h"
-#include "../DXRenderer/DXRenderer.h"
+#include "../DXRenderer/dxrframework.h"
 
 #define MAX_LOADSTRING 100
 
@@ -70,6 +70,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto renderer = UEngine::DXRenderer::Get();
     renderer->Init(app->GetHandler(), false, false, &rendererDesc);
 
+    UEngine::DXConstantBuffer* buffer = UEngine::DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4));
+    DirectX::XMFLOAT4 color{ 1,0,0,1 };
+    buffer->UpdateBuffer(renderer->GetImmediateDeviceContext(), &color, sizeof(DirectX::XMFLOAT4));
+
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
@@ -83,11 +87,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
 
         renderer->Begin(DirectX::Colors::Gray);
+        renderer->GetImmediateDeviceContext()->PSSetConstantBuffers(0, 1, buffer->GetBufferAddressOf());
         renderer->End();
         
     });
 
-    renderer->Release();
+    UEngine::DXConstantBuffer::Release(&buffer);
 
     return returnedValue;
 }

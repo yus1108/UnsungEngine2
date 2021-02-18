@@ -28,3 +28,4 @@
 #include "DXRenderer.h"
 #include "DXShader.h"
 #include "DXRenderMesh.h"
+#include "DXConstantBuffer.h"

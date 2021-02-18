@@ -16,6 +16,7 @@ void UEngine::DXRenderer::Init
 	const D3D11_BLEND_DESC* bsDesc
 )
 {
+	Release();
 
 	RECT clientSize;
 	hwnd = outputWindow;
@@ -30,7 +31,7 @@ void UEngine::DXRenderer::Init
 	// multi-thread safe processes
 	{
 		// Render Target View
-		InitRenderTargetView(immediate.RenderTargetView.GetAddressOf());
+		InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 
 		// Depth Stencil Texture, View, State
 		auto default_dssDesc = DSSCreateDesc();
@@ -66,10 +67,10 @@ void UEngine::DXRenderer::Init
 
 		std::vector<UEngine::SIMPLE_VERTEX> vertices
 		{
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}},
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}},
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
+		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
 		};
 		std::vector<unsigned> indices{ 0 ,1, 2, 2, 1, 3 };
 		default_renderMesh = UEngine::DXRenderMesh<UEngine::SIMPLE_VERTEX>::Instantiate(device.Get(), vertices, indices);
@@ -104,7 +105,7 @@ void UEngine::DXRenderer::End()
 void UEngine::DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)
 {
 	swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
-	InitRenderTargetView(immediate.RenderTargetView.GetAddressOf());
+	InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 }
 
 UEngine::DXRenderingDesc UEngine::DXRenderer::CreateDefaultInitDesc()
@@ -198,7 +199,7 @@ D3D11_BLEND_DESC UEngine::DXRenderer::BSCreateDesc()
 	return desc;
 }
 
-void UEngine::DXRenderer::InitConstBuffer(UINT byteWidth, ID3D11Buffer** constBuffer)
+void UEngine::DXRenderer::InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer)
 {
 	// Create Constant Buffers
 	D3D11_BUFFER_DESC constBufferDesc;
@@ -264,7 +265,7 @@ void UEngine::DXRenderer::InitDeviceContextSwapchain(const RECT& clientSize, boo
 	assert(SUCCEEDED(hr) && "Not able to create Device and Swapchain");
 }
 
-void UEngine::DXRenderer::InitRenderTargetView(ID3D11RenderTargetView** const rtv)
+void UEngine::DXRenderer::InitMainRenderTargetView(ID3D11RenderTargetView** const rtv)
 {
 	Microsoft::WRL::ComPtr<ID3D11Debug> pDebugger;
 
@@ -301,6 +302,79 @@ void UEngine::DXRenderer::InitDepthStencil
 	if (depth_stencil_view == nullptr) return;
 	if (device->CreateTexture2D(&depthBuffer, nullptr, depth_stencil_texture) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
 	if (device->CreateDepthStencilView(*depth_stencil_texture, dsv_desc, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+}
+
+void UEngine::DXRenderer::InitDeferredContext(ID3D11Device* const device, ID3D11DeviceContext** const deferredContext)
+{
+	device->CreateDeferredContext(NULL, deferredContext);
+}
+
+void UEngine::DXRenderer::InitRenderViewContext
+(
+	UEngine::DXRenderViewContext** const context,
+	UINT width,
+	UINT height,
+	const D3D11_DEPTH_STENCIL_DESC* const dssDesc,
+	const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsvDesc,
+	const DXGI_SAMPLE_DESC* const sampleDesc
+)
+{
+	RECT viewSize = { 0 };
+	viewSize.right = width;
+	viewSize.bottom = height;
+	// Depth Stencil Texture, View, State
+	InitDepthStencil
+	(
+		immediate.DepthStencilTexture2D.GetAddressOf(),
+		dssDesc && dsvDesc ? immediate.DepthStencilView.GetAddressOf() : nullptr,
+		immediate.DepthStencilState.GetAddressOf(),
+		viewSize,
+		dssDesc,
+		dsvDesc
+	);
+
+	//
+	D3D11_TEXTURE2D_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.Width = width;
+	desc.Height = height;
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	desc.SampleDesc = sampleDesc ? *sampleDesc : DXGI_SAMPLE_DESC{ 1,0 };
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+
+	device->CreateTexture2D(&desc, nullptr, (*context)->RenderTargetViewTexture2D.GetAddressOf());
+
+	/////////////////////// Map's Render Target
+		// Setup the description of the render target view.
+	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+	renderTargetViewDesc.Format = desc.Format;
+	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+	renderTargetViewDesc.Texture2D.MipSlice = 0;
+
+	HRESULT h_ok = device->CreateRenderTargetView((*context)->RenderTargetViewTexture2D.Get(), &renderTargetViewDesc, (*context)->RenderTargetView.GetAddressOf());
+
+	(*context)->width = width;
+	(*context)->height = height;
+
+	/*desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;*/
+
+	// Setup the description of the shader resource view.
+	D3D11_SHADER_RESOURCE_VIEW_DESC singleSRVDesc;
+	singleSRVDesc.Format = desc.Format;
+	singleSRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	singleSRVDesc.Texture2D.MostDetailedMip = 0;
+	singleSRVDesc.Texture2D.MipLevels = 1;
+
+	//device->CreateTexture2D(&desc, nullptr, (*context)->outTexture);
+	//device->CreateShaderResourceView((*context)->OutputTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
+	device->CreateShaderResourceView((*context)->RenderTargetViewTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
 }
 
 void UEngine::DXRenderer::InitRasterizerState

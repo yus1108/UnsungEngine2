@@ -14,7 +14,7 @@ namespace UEngine
 
 	private:
 		DXRenderer() = default;
-		~DXRenderer() = default;
+		~DXRenderer() { Release(); }
 		static DXRenderer instance;
 #pragma endregion
 
@@ -58,10 +58,11 @@ namespace UEngine
 		static D3D11_SAMPLER_DESC SSCreateDesc();
 		static D3D11_BLEND_DESC BSCreateDesc();
 
-		void InitConstBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
+		void InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
+
 		void InitViewport(D3D11_VIEWPORT* const _viewport, const RECT& clientSize);
 		void InitDeviceContextSwapchain(const RECT& clientSize, bool isDebuggable);
-		void InitRenderTargetView(ID3D11RenderTargetView** const rtv);
+		void InitMainRenderTargetView(ID3D11RenderTargetView** const rtv);
 		void InitDepthStencil
 		(
 			ID3D11Texture2D** const depth_stencil_texture,
@@ -70,6 +71,16 @@ namespace UEngine
 			const RECT clientSize,
 			const D3D11_DEPTH_STENCIL_DESC* const dss_desc,
 			const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsv_desc
+		);
+		void InitDeferredContext(ID3D11Device* const device, ID3D11DeviceContext** const deferredContext);
+		void InitRenderViewContext
+		(
+			UEngine::DXRenderViewContext** const context,
+			UINT width,
+			UINT height,
+			const D3D11_DEPTH_STENCIL_DESC* const dssDesc = nullptr,
+			const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsvDesc = nullptr,
+			const DXGI_SAMPLE_DESC* const sampleDesc = nullptr
 		);
 		void InitRasterizerState
 		(

@@ -2,13 +2,14 @@ struct VertexInput
 {
     //멤버변수
     //              : 시멘틱 (사용용도)
-    float4 coordinate : POSITION0;
-    float2 tex				: TEXCOORD0;
+    float4 coordinate   : POSITION0;
+    float2 tex		    : TEXCOORD0;
 };
 
 struct VertexOutput
 {
-    float4 coordinate : SV_POSITION; //화면좌표계 포지션
+    float4 coordinate   : SV_POSITION; //화면좌표계 포지션
+    float2 tex		    : TEXCOORD0;
 };
 
 cbuffer WorldBuffer : register(b0)
@@ -29,6 +30,7 @@ VertexOutput main(VertexInput input)
     VertexOutput output;
 
     output.coordinate = input.coordinate;
+    output.tex = input.tex;
     //output.coordinate = mul(input.coordinate, worldMat);
     //output.coordinate = mul(output.coordinate, view);
     //output.coordinate = mul(output.coordinate, projection);

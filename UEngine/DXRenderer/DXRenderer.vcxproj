@@ -159,6 +159,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DXConstantBuffer.h" />
     <ClInclude Include="DXRDefinitions.h" />
     <ClInclude Include="DXRenderer.h" />
     <ClInclude Include="DXRenderMesh.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="DXShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DXConstantBuffer.cpp" />
     <ClCompile Include="DXRenderer.cpp" />
     <ClCompile Include="dxrframework.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
