@@ -10,6 +10,7 @@
 #include "../Utility/UMath.h"
 #include "../Utility/UTime.h"
 #include "../DXRenderer/dxrframework.h"
+#include <thread>
 
 #define MAX_LOADSTRING 100
 
@@ -70,8 +71,38 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto renderer = UEngine::DXRenderer::Get();
     renderer->Init(app->GetHandler(), false, false, &rendererDesc);
 
+    UEngine::DXRenderViewContext* newRender = new UEngine::DXRenderViewContext;
+    ZeroMemory(newRender, sizeof(UEngine::DXRenderViewContext));
+    renderer->InitRenderViewContext(&newRender, 400, 400);
+
+    // Shader
+    UEngine::DXRenderingDesc rsDesc = UEngine::DXRenderingDesc();
+    auto default_ssDesc = renderer->SSCreateDesc();
+    auto default_bsDesc = renderer->BSCreateDesc();
+    auto default_shader = UEngine::DXShader::Instantiate
+    (
+        renderer,
+        "../_Shaders/DefaultVS.hlsl",
+        "../_Shaders/DefaultPS2.hlsl",
+        true,
+        &rsDesc.RasterizerStateDesc,
+        &default_ssDesc,
+        &default_bsDesc
+    );
+
+    // RenderMesh
+    std::vector<UEngine::SIMPLE_VERTEX> vertices
+    {
+       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
+       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
+       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
+       UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
+    };
+    std::vector<unsigned> indices{ 0 ,1, 2, 2, 1, 3 };
+    auto default_renderMesh = UEngine::DXRenderMesh<UEngine::SIMPLE_VERTEX>::Instantiate(renderer->GetDevice(), vertices, indices);
+
     UEngine::DXConstantBuffer* buffer = UEngine::DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4));
-    DirectX::XMFLOAT4 color{ 1,0,0,1 };
+    DirectX::XMFLOAT4 color{ 1,1,1,1 };
     buffer->UpdateBuffer(renderer->GetImmediateDeviceContext(), &color, sizeof(DirectX::XMFLOAT4));
 
     auto returnedValue = app->UpdateLoop([&]() 
@@ -86,13 +117,48 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
 
+        // clearing depth buffer and render target
+        newRender->DeviceContext->ClearRenderTargetView(newRender->RenderTargetView.Get(), DirectX::Colors::Black);
+        newRender->DeviceContext->RSSetViewports(1, &newRender->Viewport);
+
+        newRender->DeviceContext->OMSetRenderTargets(1, newRender->RenderTargetView.GetAddressOf(), newRender->DepthStencilView.Get());
+        newRender->DeviceContext->OMSetDepthStencilState(newRender->DepthStencilState.Get(), 1);
+
+        newRender->DeviceContext->PSSetConstantBuffers(0, 1, buffer->GetBufferAddressOf());
+
+        default_shader->Render(newRender->DeviceContext.Get());
+        default_renderMesh->Render(newRender->DeviceContext.Get());
+        newRender->DeviceContext->DrawIndexed(default_renderMesh->GetIndicesCount(), 0, 0);
+
+        newRender->DeviceContext->FinishCommandList(true, newRender->CommandList.GetAddressOf());
+        renderer->GetImmediateDeviceContext()->ExecuteCommandList(newRender->CommandList.Get(), true);
+        newRender->CommandList.ReleaseAndGetAddressOf();
+
         renderer->Begin(DirectX::Colors::Gray);
         renderer->GetImmediateDeviceContext()->PSSetConstantBuffers(0, 1, buffer->GetBufferAddressOf());
+        
+        renderer->GetImmediateDeviceContext()->ResolveSubresource
+        (
+            (ID3D11Resource*)newRender->OutputTexture2D.Get(), 
+            D3D11CalcSubresource(0, 0, 1),
+            (ID3D11Resource*)newRender->RenderTargetViewTexture2D.Get(), 
+            D3D11CalcSubresource(0, 0, 1), 
+            DXGI_FORMAT_R32G32B32A32_FLOAT
+        );
+        ID3D11ShaderResourceView* baseTexture[]
+        {
+            (ID3D11ShaderResourceView*)newRender->OutputShaderResourceView.Get()
+        };
+        renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, baseTexture);
+
         renderer->End();
         
     });
 
+    delete newRender;
     UEngine::DXConstantBuffer::Release(&buffer);
+    UEngine::DXShader::Release(&default_shader);
+    UEngine::DXRenderMesh<UEngine::SIMPLE_VERTEX>::Release(&default_renderMesh);
 
     return returnedValue;
 }

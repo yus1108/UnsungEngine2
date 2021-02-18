@@ -65,6 +65,7 @@ void UEngine::DXRenderer::Init
 			bsDesc
 		);
 
+		// RenderMesh
 		std::vector<UEngine::SIMPLE_VERTEX> vertices
 		{
 		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
@@ -246,7 +247,7 @@ void UEngine::DXRenderer::InitDeviceContextSwapchain(const RECT& clientSize, boo
 	desc.SampleDesc = rendering_desc.MultisampleDesc;
 	desc.Windowed = !rendering_desc.IsFullScreen;
 
-	//if (isDebuggable) flag |= D3D11_CREATE_DEVICE_DEBUG;
+	if (isDebuggable) flag |= D3D11_CREATE_DEVICE_DEBUG;
 
 	// create swapchain, device, and context
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr,
@@ -322,14 +323,20 @@ void UEngine::DXRenderer::InitRenderViewContext
 	RECT viewSize = { 0 };
 	viewSize.right = width;
 	viewSize.bottom = height;
+
+	InitViewport(&(*context)->Viewport, viewSize);
+
 	// Depth Stencil Texture, View, State
+	auto a = dssDesc && dsvDesc ? (*context)->DepthStencilView.GetAddressOf() : nullptr;
+	auto default_dssDesc = DSSCreateDesc();
+
 	InitDepthStencil
 	(
-		immediate.DepthStencilTexture2D.GetAddressOf(),
-		dssDesc && dsvDesc ? immediate.DepthStencilView.GetAddressOf() : nullptr,
-		immediate.DepthStencilState.GetAddressOf(),
+		(*context)->DepthStencilTexture2D.GetAddressOf(),
+		dssDesc && dsvDesc ? (*context)->DepthStencilView.GetAddressOf() : nullptr,
+		(*context)->DepthStencilState.GetAddressOf(),
 		viewSize,
-		dssDesc,
+		dssDesc ? dssDesc : &default_dssDesc,
 		dsvDesc
 	);
 
@@ -372,9 +379,10 @@ void UEngine::DXRenderer::InitRenderViewContext
 	singleSRVDesc.Texture2D.MostDetailedMip = 0;
 	singleSRVDesc.Texture2D.MipLevels = 1;
 
-	//device->CreateTexture2D(&desc, nullptr, (*context)->outTexture);
-	//device->CreateShaderResourceView((*context)->OutputTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
-	device->CreateShaderResourceView((*context)->RenderTargetViewTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
+	device->CreateTexture2D(&desc, nullptr, (*context)->OutputTexture2D.GetAddressOf());
+	device->CreateShaderResourceView((*context)->OutputTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
+
+	device->CreateDeferredContext(NULL, &(*context)->DeviceContext);
 }
 
 void UEngine::DXRenderer::InitRasterizerState

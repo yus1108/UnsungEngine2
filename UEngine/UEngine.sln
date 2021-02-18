@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Shaders", "_Shaders", "{984B989D-D095-45C7-A90A-39CE367A936F}"
 	ProjectSection(SolutionItems) = preProject
 		_Shaders\DefaultPS.hlsl = _Shaders\DefaultPS.hlsl
+		_Shaders\DefaultPS2.hlsl = _Shaders\DefaultPS2.hlsl
 		_Shaders\DefaultVS.hlsl = _Shaders\DefaultVS.hlsl
 	EndProjectSection
 EndProject

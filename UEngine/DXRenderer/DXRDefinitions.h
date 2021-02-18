@@ -30,12 +30,13 @@ namespace UEngine
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> DepthStencilTexture2D;
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> DepthStencilState;
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DepthStencilView;
+
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RenderTargetView;
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> RenderTargetViewTexture2D;
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RenderTargetViewMap;
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> ShaderResourceView;
+
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> OutputTexture2D;
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> OutputShaderResourceView;
+
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> DeviceContext;
 		Microsoft::WRL::ComPtr<ID3D11CommandList> CommandList;
 		UINT width{};

@@ -13,6 +13,6 @@ Texture2D baseTexture : register(t0); // texture to draw
 SamplerState filters : register(s0); // filter 0 using CLAMP, filter 1 using WRAP
 float4 main(PixelInput input) : SV_TARGET //SV_TARGET Àº Å¸°ÙÀÌµÉ »ö±ò 
 {
-    //return color;
-	return color * baseTexture.Sample(filters, input.tex);
+    return color;
+	//return color * baseTexture.Sample(filters, input.tex);
 }
