@@ -16,8 +16,10 @@ namespace UEngine
 		static DXView* const Instantiate
 		(
 			DXRenderer* renderer,
-			UINT width, 
-			UINT height
+			UINT width,
+			UINT height,
+			bool enableDepthStencil,
+			DXGI_SAMPLE_DESC sampleDesc
 		);
 		static void Release(DXView** const view);
 

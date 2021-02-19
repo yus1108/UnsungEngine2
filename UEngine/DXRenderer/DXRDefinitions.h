@@ -17,11 +17,17 @@ namespace UEngine
 	{
 		bool IsDebuggable = false;
 		bool IsFullScreen = false;
-		UINT FeatureLevelsCount = 0;
-		DXGI_RATIONAL RefreshRate{ 60, 1 };
+		bool enableDepthStencil = false;
+		bool enableBlendState = false;
+		bool enableAntialise = false;
+		bool ScissorEnable = false;
 		D3D_FEATURE_LEVEL* FeatureLevels = nullptr;
+		UINT FeatureLevelsCount = 0;
+		bool enableMultisampling = false;
 		DXGI_SAMPLE_DESC MultisampleDesc = { 1, 0 };
-		DXRasterDesc RasterizerStateDesc;
+		DXGI_RATIONAL RefreshRate{ 60, 1 };
+		D3D11_FILL_MODE FillMode = D3D11_FILL_SOLID;
+		D3D11_CULL_MODE CullMode = D3D11_CULL_BACK;
 	};
 
 	struct DXRenderViewContext

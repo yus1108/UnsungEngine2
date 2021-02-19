@@ -7,13 +7,7 @@ UEngine::DXRenderer UEngine::DXRenderer::instance;
 void UEngine::DXRenderer::Init
 (
 	HWND outputWindow,
-	bool enableDepthStencil,
-	bool enableBlendState,
-	const DXRenderingDesc* desc,
-	const D3D11_DEPTH_STENCIL_DESC* dssDesc,
-	const D3D11_DEPTH_STENCIL_VIEW_DESC* dsvDesc ,
-	const D3D11_SAMPLER_DESC* ssDesc,
-	const D3D11_BLEND_DESC* bsDesc
+	const DXRenderingDesc* desc
 )
 {
 	Release();
@@ -34,35 +28,29 @@ void UEngine::DXRenderer::Init
 		InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 
 		// Depth Stencil Texture, View, State
-		auto default_dssDesc = DSSCreateDesc();
-		auto default_dsvDesc = DSVCreateDesc();
-		if (!dssDesc) dssDesc = &default_dssDesc;
-		if (!dsvDesc) dsvDesc = &default_dsvDesc;
 		InitDepthStencil
 		(
-			immediate.DepthStencilTexture2D.GetAddressOf(),
-			enableDepthStencil ? immediate.DepthStencilView.GetAddressOf() : nullptr,
-			immediate.DepthStencilState.GetAddressOf(),
+			rendering_desc.enableDepthStencil,
 			clientSize,
-			dssDesc,
-			dsvDesc
+			immediate.DepthStencilState.GetAddressOf(),
+			immediate.DepthStencilTexture2D.GetAddressOf(),
+			immediate.DepthStencilView.GetAddressOf()
 		);
 
 		// Shader
-		auto default_ssDesc = SSCreateDesc();
-		auto default_bsDesc = BSCreateDesc();
-		if (!ssDesc) ssDesc = &default_ssDesc;
-		if (!bsDesc) bsDesc = &default_bsDesc;
-		if (!enableBlendState) bsDesc = nullptr;
+		UEngine::DXRasterDesc rsDesc = UEngine::DXRasterDesc();
+		rsDesc.AntialiasedLineEnable = rendering_desc.enableAntialise;
+		rsDesc.DepthClipEnable = rendering_desc.enableDepthStencil;
+		rsDesc.MultiSampleEnable = rendering_desc.enableMultisampling;
+		rsDesc.ScissorEnable = rendering_desc.ScissorEnable;
 		default_shader = DXShader::Instantiate
 		(
 			this,
 			"../_Shaders/DefaultVS.hlsl",
 			"../_Shaders/DefaultPS.hlsl",
 			rendering_desc.IsDebuggable,
-			&rendering_desc.RasterizerStateDesc,
-			ssDesc,
-			bsDesc
+			rendering_desc.enableBlendState,
+			&rsDesc
 		);
 
 		// RenderMesh
@@ -122,84 +110,11 @@ UEngine::DXRenderingDesc UEngine::DXRenderer::CreateDefaultInitDesc()
 	ZeroMemory(&renderingDesc, sizeof(DXRenderingDesc));
 	renderingDesc.RefreshRate = { 60, 1 };
 	renderingDesc.MultisampleDesc = { 1, 0 };
-	renderingDesc.RasterizerStateDesc = rasterDesc;
+	renderingDesc.FillMode = D3D11_FILL_SOLID;
+	renderingDesc.CullMode = D3D11_CULL_BACK;
+	renderingDesc.IsDebuggable = true;
 
 	return renderingDesc;
-}
-
-D3D11_DEPTH_STENCIL_DESC UEngine::DXRenderer::DSSCreateDesc()
-{
-	D3D11_DEPTH_STENCIL_DESC depthState;
-
-	// Depth test parameters
-	depthState.DepthEnable = true;
-	depthState.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	depthState.DepthFunc = D3D11_COMPARISON_LESS;
-
-	// Stencil test parameters
-	depthState.StencilEnable = true;
-	depthState.StencilReadMask = 0xFF;
-	depthState.StencilWriteMask = 0xFF;
-
-	// Stencil operations if pixel is front-facing
-	depthState.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	depthState.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	depthState.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthState.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-	// Stencil operations if pixel is back-facing
-	depthState.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	depthState.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-	depthState.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthState.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-	return depthState;
-}
-
-D3D11_DEPTH_STENCIL_VIEW_DESC UEngine::DXRenderer::DSVCreateDesc()
-{
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
-	descDSV.Flags = NULL;
-	descDSV.Texture2D.MipSlice = NULL;
-
-	return descDSV;
-}
-
-D3D11_SAMPLER_DESC UEngine::DXRenderer::SSCreateDesc()
-{
-	D3D11_SAMPLER_DESC samplerDesc;
-	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.MaxLOD = FLT_MAX;
-	samplerDesc.MinLOD = -FLT_MAX;
-	samplerDesc.MipLODBias = 0;
-
-	return samplerDesc;
-}
-
-D3D11_BLEND_DESC UEngine::DXRenderer::BSCreateDesc()
-{
-	D3D11_BLEND_DESC desc;
-	ZeroMemory(&desc, sizeof(D3D11_BLEND_DESC));
-	desc.AlphaToCoverageEnable = true;
-	desc.IndependentBlendEnable = false;
-	desc.RenderTarget[0].BlendEnable = true;
-	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
-	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-	return desc;
 }
 
 void UEngine::DXRenderer::InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer)
@@ -280,14 +195,37 @@ void UEngine::DXRenderer::InitMainRenderTargetView(ID3D11RenderTargetView** cons
 
 void UEngine::DXRenderer::InitDepthStencil
 (
-	ID3D11Texture2D** const depth_stencil_texture,
-	ID3D11DepthStencilView** const depth_stencil_view,
-	ID3D11DepthStencilState** const depth_stencil_state,
+	bool enableDepthStencil,
 	const RECT clientSize,
-	const D3D11_DEPTH_STENCIL_DESC* const dss_desc,
-	const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsv_desc
+	ID3D11DepthStencilState** const depth_stencil_state,
+	ID3D11Texture2D** const depth_stencil_texture,
+	ID3D11DepthStencilView** const depth_stencil_view
 )
 {
+	D3D11_DEPTH_STENCIL_DESC depthState;
+
+	// Depth test parameters
+	depthState.DepthEnable = enableDepthStencil;
+	depthState.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthState.DepthFunc = D3D11_COMPARISON_LESS;
+
+	// Stencil test parameters
+	depthState.StencilEnable = enableDepthStencil;
+	depthState.StencilReadMask = 0xFF;
+	depthState.StencilWriteMask = 0xFF;
+
+	// Stencil operations if pixel is front-facing
+	depthState.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthState.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthState.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthState.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Stencil operations if pixel is back-facing
+	depthState.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthState.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthState.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthState.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
 	D3D11_TEXTURE2D_DESC depthBuffer;
 	depthBuffer.Width = (UINT)(clientSize.right - clientSize.left);
 	depthBuffer.Height = (UINT)(clientSize.bottom - clientSize.top);
@@ -301,10 +239,16 @@ void UEngine::DXRenderer::InitDepthStencil
 	depthBuffer.CPUAccessFlags = NULL;
 	depthBuffer.MiscFlags = NULL;
 
-	if (device->CreateDepthStencilState(dss_desc, depth_stencil_state) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
-	if (depth_stencil_view == nullptr) return;
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+	descDSV.Flags = NULL;
+	descDSV.Texture2D.MipSlice = NULL;
+
+	if (device->CreateDepthStencilState(&depthState, depth_stencil_state) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+	if (enableDepthStencil == false) return;
 	if (device->CreateTexture2D(&depthBuffer, nullptr, depth_stencil_texture) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
-	if (device->CreateDepthStencilView(*depth_stencil_texture, dsv_desc, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
+	if (device->CreateDepthStencilView(*depth_stencil_texture, &descDSV, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
 }
 
 void UEngine::DXRenderer::InitRenderViewContext
@@ -312,9 +256,8 @@ void UEngine::DXRenderer::InitRenderViewContext
 	UEngine::DXRenderViewContext** const context,
 	UINT width,
 	UINT height,
-	const D3D11_DEPTH_STENCIL_DESC* const dssDesc,
-	const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsvDesc,
-	const DXGI_SAMPLE_DESC* const sampleDesc
+	bool enableDepthStencil,
+	DXGI_SAMPLE_DESC sampleDesc
 )
 {
 	RECT viewSize = { 0 };
@@ -324,17 +267,13 @@ void UEngine::DXRenderer::InitRenderViewContext
 	InitViewport(&(*context)->Viewport, viewSize);
 
 	// Depth Stencil Texture, View, State
-	auto a = dssDesc && dsvDesc ? (*context)->DepthStencilView.GetAddressOf() : nullptr;
-	auto default_dssDesc = DSSCreateDesc();
-
 	InitDepthStencil
 	(
-		(*context)->DepthStencilTexture2D.GetAddressOf(),
-		dssDesc && dsvDesc ? (*context)->DepthStencilView.GetAddressOf() : nullptr,
-		(*context)->DepthStencilState.GetAddressOf(),
+		enableDepthStencil,
 		viewSize,
-		dssDesc ? dssDesc : &default_dssDesc,
-		dsvDesc
+		(*context)->DepthStencilState.GetAddressOf(),
+		(*context)->DepthStencilTexture2D.GetAddressOf(),
+		(*context)->DepthStencilView.GetAddressOf()
 	);
 
 	//
@@ -345,7 +284,7 @@ void UEngine::DXRenderer::InitRenderViewContext
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
 	desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	desc.SampleDesc = sampleDesc ? *sampleDesc : DXGI_SAMPLE_DESC{ 1,0 };
+	desc.SampleDesc = sampleDesc;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags = 0;
@@ -360,14 +299,19 @@ void UEngine::DXRenderer::InitRenderViewContext
 	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
-	HRESULT h_ok = device->CreateRenderTargetView((*context)->RenderTargetViewTexture2D.Get(), &renderTargetViewDesc, (*context)->RenderTargetView.GetAddressOf());
+	HRESULT h_ok = device->CreateRenderTargetView
+	(
+		(*context)->RenderTargetViewTexture2D.Get(), 
+		&renderTargetViewDesc, 
+		(*context)->RenderTargetView.GetAddressOf()
+	);
 
 	(*context)->width = width;
 	(*context)->height = height;
 
-	/*desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
-	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;*/
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
 	// Setup the description of the shader resource view.
 	D3D11_SHADER_RESOURCE_VIEW_DESC singleSRVDesc;
@@ -376,8 +320,13 @@ void UEngine::DXRenderer::InitRenderViewContext
 	singleSRVDesc.Texture2D.MostDetailedMip = 0;
 	singleSRVDesc.Texture2D.MipLevels = 1;
 
-	//device->CreateTexture2D(&desc, nullptr, (*context)->OutputTexture2D.GetAddressOf());
-	device->CreateShaderResourceView((*context)->RenderTargetViewTexture2D.Get(), &singleSRVDesc, (*context)->OutputShaderResourceView.GetAddressOf());
+	device->CreateTexture2D(&desc, nullptr, (*context)->OutputTexture2D.GetAddressOf());
+	device->CreateShaderResourceView
+	(
+		(*context)->OutputTexture2D.Get(), 
+		&singleSRVDesc, 
+		(*context)->OutputShaderResourceView.GetAddressOf()
+	);
 
 	device->CreateDeferredContext(NULL, &(*context)->DeviceContext);
 }

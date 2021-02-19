@@ -5,13 +5,15 @@ UEngine::DXView* const UEngine::DXView::Instantiate
 (
     DXRenderer* renderer,
     UINT width, 
-    UINT height
+    UINT height,
+    bool enableDepthStencil,
+    DXGI_SAMPLE_DESC sampleDesc
 )
 {
     DXView* instance = new DXView;
     DXRenderViewContext* contextAddressOf[] = { &instance->context };
     ZeroMemory(&instance->context, sizeof(UEngine::DXRenderViewContext));
-    renderer->InitRenderViewContext(contextAddressOf, 400, 400);
+    renderer->InitRenderViewContext(contextAddressOf, 400, 400, enableDepthStencil, sampleDesc);
 
     return instance;
 }
@@ -52,5 +54,14 @@ void UEngine::DXView::End(ID3D11DeviceContext* deviceContext)
 {
     deviceContext->ExecuteCommandList(context.CommandList.Get(), true);
     context.CommandList.ReleaseAndGetAddressOf();
+
+    deviceContext->ResolveSubresource
+    (
+        (ID3D11Resource*)context.OutputTexture2D.Get(),
+        D3D11CalcSubresource(0, 0, 1),
+        (ID3D11Resource*)context.RenderTargetViewTexture2D.Get(), 
+        D3D11CalcSubresource(0, 0, 1), 
+        DXGI_FORMAT_R32G32B32A32_FLOAT
+    );
 }
 

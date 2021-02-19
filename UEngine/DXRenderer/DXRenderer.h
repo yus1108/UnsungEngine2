@@ -31,17 +31,7 @@ namespace UEngine
 		class DXRenderMesh* default_renderMesh{ nullptr };
 
 	public:
-		void Init
-		(
-			HWND outputWindow, 
-			bool enableDepthStencil = false,
-			bool enableBlendState = false,
-			const DXRenderingDesc* desc = nullptr,
-			const D3D11_DEPTH_STENCIL_DESC* dssDesc = nullptr,
-			const D3D11_DEPTH_STENCIL_VIEW_DESC* dsvDesc = nullptr,
-			const D3D11_SAMPLER_DESC* ssDesc = nullptr,
-			const D3D11_BLEND_DESC* bsDesc = nullptr
-		);
+		void Init(HWND outputWindow, const DXRenderingDesc* desc = nullptr);
 		void Release();
 		void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
 		void End();
@@ -53,10 +43,6 @@ namespace UEngine
 		ID3D11DeviceContext* const GetImmediateDeviceContext() { return immediate.DeviceContext.Get(); }
 
 		static DXRenderingDesc CreateDefaultInitDesc();
-		static D3D11_DEPTH_STENCIL_DESC DSSCreateDesc();
-		static D3D11_DEPTH_STENCIL_VIEW_DESC DSVCreateDesc();
-		static D3D11_SAMPLER_DESC SSCreateDesc();
-		static D3D11_BLEND_DESC BSCreateDesc();
 
 		void InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
 
@@ -65,21 +51,19 @@ namespace UEngine
 		void InitMainRenderTargetView(ID3D11RenderTargetView** const rtv);
 		void InitDepthStencil
 		(
-			ID3D11Texture2D** const depth_stencil_texture,
-			ID3D11DepthStencilView** const depth_stencil_view,
-			ID3D11DepthStencilState** const depth_stencil_state,
+			bool enableDepthStencil,
 			const RECT clientSize,
-			const D3D11_DEPTH_STENCIL_DESC* const dss_desc,
-			const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsv_desc
+			ID3D11DepthStencilState** const depth_stencil_state,
+			ID3D11Texture2D** const depth_stencil_texture,
+			ID3D11DepthStencilView** const depth_stencil_view
 		);
 		void InitRenderViewContext
 		(
 			UEngine::DXRenderViewContext** const context,
 			UINT width,
 			UINT height,
-			const D3D11_DEPTH_STENCIL_DESC* const dssDesc = nullptr,
-			const D3D11_DEPTH_STENCIL_VIEW_DESC* const dsvDesc = nullptr,
-			const DXGI_SAMPLE_DESC* const sampleDesc = nullptr
+			bool enableDepthStencil,
+			DXGI_SAMPLE_DESC sampleDesc
 		);
 		void InitRasterizerState
 		(

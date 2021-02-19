@@ -27,13 +27,12 @@ namespace UEngine
 		// init DXShader with minimum requirements (Setting VS and PS with entrypoint = "main")
 		static DXShader* Instantiate
 		(
-			class DXRenderer* const renderer, 
-			const std::string& vertex_shader_file, 
+			DXRenderer* const renderer,
+			const std::string& vertex_shader_file,
 			const std::string& pixel_shader_file,
 			bool isDebuggable,
-			const DXRasterDesc* const rasterizerStateDesc,
-			const D3D11_SAMPLER_DESC* const samplerStateDesc,
-			const D3D11_BLEND_DESC* const blendStateDesc
+			bool enableBlending,
+			const DXRasterDesc* const rasterizerStateDesc
 		);
 		static void Release(DXShader** const shader);
 		void Set(ID3D11DeviceContext* const deviceContext);

@@ -125,9 +125,8 @@ UEngine::DXShader* UEngine::DXShader::Instantiate
 	const std::string& vertex_shader_file, 
 	const std::string& pixel_shader_file,
 	bool isDebuggable,
-	const DXRasterDesc* const rasterizerStateDesc,
-	const D3D11_SAMPLER_DESC* const samplerStateDesc,
-	const D3D11_BLEND_DESC* const blendStateDesc
+	bool enableBlending,
+	const DXRasterDesc* const rasterizerStateDesc
 )
 {
 	auto device = renderer->GetDevice();
@@ -149,10 +148,33 @@ UEngine::DXShader* UEngine::DXShader::Instantiate
 	);
 
 	// Sampler State
-	device->CreateSamplerState(samplerStateDesc, &instance->pipeline.samplerState);
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.MaxLOD = FLT_MAX;
+	samplerDesc.MinLOD = -FLT_MAX;
+	samplerDesc.MipLODBias = 0;
+	device->CreateSamplerState(&samplerDesc, &instance->pipeline.samplerState);
 
 	// Blending State
-	if (blendStateDesc) device->CreateBlendState(blendStateDesc, &instance->pipeline.blendingState);
+	D3D11_BLEND_DESC blendDesc;
+	ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+	blendDesc.AlphaToCoverageEnable = true;
+	blendDesc.IndependentBlendEnable = false;
+	blendDesc.RenderTarget[0].BlendEnable = true;
+	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	if (enableBlending) device->CreateBlendState(&blendDesc, &instance->pipeline.blendingState);
 
 	return instance;
 }
