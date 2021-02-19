@@ -34,7 +34,8 @@ void UEngine::DXRenderer::Init
 			clientSize,
 			immediate.DepthStencilState.GetAddressOf(),
 			immediate.DepthStencilTexture2D.GetAddressOf(),
-			immediate.DepthStencilView.GetAddressOf()
+			immediate.DepthStencilView.GetAddressOf(),
+			rendering_desc.MultisampleDesc
 		);
 
 		// Shader
@@ -199,7 +200,8 @@ void UEngine::DXRenderer::InitDepthStencil
 	const RECT clientSize,
 	ID3D11DepthStencilState** const depth_stencil_state,
 	ID3D11Texture2D** const depth_stencil_texture,
-	ID3D11DepthStencilView** const depth_stencil_view
+	ID3D11DepthStencilView** const depth_stencil_view,
+	DXGI_SAMPLE_DESC sampleDesc
 )
 {
 	D3D11_DEPTH_STENCIL_DESC depthState;
@@ -232,8 +234,7 @@ void UEngine::DXRenderer::InitDepthStencil
 	depthBuffer.MipLevels = 1;
 	depthBuffer.ArraySize = 1;
 	depthBuffer.Format = DXGI_FORMAT_D32_FLOAT;
-	depthBuffer.SampleDesc.Count = 1;
-	depthBuffer.SampleDesc.Quality = 0;
+	depthBuffer.SampleDesc = sampleDesc;
 	depthBuffer.Usage = D3D11_USAGE_DEFAULT;
 	depthBuffer.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthBuffer.CPUAccessFlags = NULL;
@@ -273,7 +274,8 @@ void UEngine::DXRenderer::InitRenderViewContext
 		viewSize,
 		(*context)->DepthStencilState.GetAddressOf(),
 		(*context)->DepthStencilTexture2D.GetAddressOf(),
-		(*context)->DepthStencilView.GetAddressOf()
+		(*context)->DepthStencilView.GetAddressOf(),
+		sampleDesc
 	);
 
 	//

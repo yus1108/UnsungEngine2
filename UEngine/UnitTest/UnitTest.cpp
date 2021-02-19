@@ -67,11 +67,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     UEngine::DXRenderingDesc rendererDesc = UEngine::DXRenderer::CreateDefaultInitDesc();
     rendererDesc.IsDebuggable = true;
-    rendererDesc.enableAntialise = false;
-    rendererDesc.enableBlendState = false;
+    rendererDesc.enableAntialise = true;
+    rendererDesc.enableBlendState = true;
     rendererDesc.enableDepthStencil = false;
-    rendererDesc.enableMultisampling = false;
-    rendererDesc.MultisampleDesc = { 1, 0 };
+    rendererDesc.enableMultisampling = true;
+    rendererDesc.MultisampleDesc = { 4, 0 };
     rendererDesc.ScissorEnable = false;
     auto renderer = UEngine::DXRenderer::Get();
     renderer->Init(app->GetHandler(), &rendererDesc);
@@ -112,6 +112,41 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         renderObj->UpdateConstantBuffer(renderer->GetImmediateDeviceContext(), "Color", &color, sizeof(DirectX::XMFLOAT4));
     }
 
+    UEngine::DXRenderObject* renderObj2;
+    {
+        // Shader
+        UEngine::DXRasterDesc rsDesc = UEngine::DXRasterDesc();
+        rsDesc.AntialiasedLineEnable = rendererDesc.enableAntialise;
+        rsDesc.DepthClipEnable = rendererDesc.enableDepthStencil;
+        rsDesc.MultiSampleEnable = rendererDesc.enableMultisampling;
+        rsDesc.ScissorEnable = rendererDesc.ScissorEnable;
+        auto default_shader = UEngine::DXShader::Instantiate
+        (
+            renderer,
+            "../_Shaders/DefaultVS.hlsl",
+            "../_Shaders/ColorPS.hlsl",
+            true,
+            rendererDesc.enableBlendState,
+            &rsDesc
+        );
+
+        // RenderMesh
+        UEngine::SIMPLE_VERTEX vertices[] =
+        {
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
+        };
+        auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(renderer->GetDevice(), &vertices[0], ARRAYSIZE(vertices));
+
+        renderObj2 = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
+
+        DirectX::XMFLOAT4 color{ 1,0,0,1 };
+        renderObj2->AddConstantBuffer(renderer, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+        renderObj2->UpdateConstantBuffer(renderer->GetImmediateDeviceContext(), "Color", &color, sizeof(DirectX::XMFLOAT4));
+    }
+
     UEngine::DXView* view = UEngine::DXView::Instantiate
     (
         renderer, 
@@ -121,6 +156,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         rendererDesc.MultisampleDesc
     );
     view->AddRenderObject(renderObj);
+    view->AddRenderObject(renderObj2);
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
@@ -147,6 +183,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     });
 
     UEngine::DXRenderObject::Release(&renderObj);
+    UEngine::DXRenderObject::Release(&renderObj2);
     UEngine::DXView::Release(&view);
 
     return returnedValue;

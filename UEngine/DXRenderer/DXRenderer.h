@@ -55,7 +55,8 @@ namespace UEngine
 			const RECT clientSize,
 			ID3D11DepthStencilState** const depth_stencil_state,
 			ID3D11Texture2D** const depth_stencil_texture,
-			ID3D11DepthStencilView** const depth_stencil_view
+			ID3D11DepthStencilView** const depth_stencil_view,
+			DXGI_SAMPLE_DESC sampleDesc
 		);
 		void InitRenderViewContext
 		(
