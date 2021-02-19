@@ -1,6 +1,6 @@
 #include "dxrframework.h"
-#include "../WinApplication/WinApplication.h"
 #include "DXRenderer.h"
+#include "../WinApplication/WinApplication.h"
 
 UEngine::DXRenderer UEngine::DXRenderer::instance;
 
@@ -66,22 +66,23 @@ void UEngine::DXRenderer::Init
 		);
 
 		// RenderMesh
-		std::vector<UEngine::SIMPLE_VERTEX> vertices
+		UEngine::SIMPLE_VERTEX vertices[] =
 		{
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
-		   UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
+			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, -1, 0}, DirectX::XMFLOAT2{0, 1}},
+			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, 1, 0}, DirectX::XMFLOAT2{0, 0}},
+			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, -1, 0}, DirectX::XMFLOAT2{1, 1}},
+			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
 		};
-		std::vector<unsigned> indices{ 0 ,1, 2, 2, 1, 3 };
-		default_renderMesh = UEngine::DXRenderMesh<UEngine::SIMPLE_VERTEX>::Instantiate(device.Get(), vertices, indices);
+		unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
+		
+		default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(device.Get(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
 	}
 }
 
 void UEngine::DXRenderer::Release()
 {
 	DXShader::Release(&default_shader);
-	DXRenderMesh<SIMPLE_VERTEX>::Release(&default_renderMesh);
+	DXRenderMesh::Release(&default_renderMesh);
 }
 
 void UEngine::DXRenderer::Begin(const float clearRGBA[4])
@@ -92,13 +93,14 @@ void UEngine::DXRenderer::Begin(const float clearRGBA[4])
 
 	immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
 	immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
+
+	default_shader->Set(immediate.DeviceContext.Get());
+	default_renderMesh->Set(immediate.DeviceContext.Get());
 }
 
 void UEngine::DXRenderer::End()
 {
-	default_shader->Render(immediate.DeviceContext.Get());
-	default_renderMesh->Render(immediate.DeviceContext.Get());
-	immediate.DeviceContext->DrawIndexed(default_renderMesh->GetIndicesCount(), 0, 0);
+	immediate.DeviceContext->DrawIndexed(default_renderMesh->GetIndexCount(), 0, 0);
 
 	swapchain->Present(0, 0);
 }

@@ -28,7 +28,7 @@ namespace UEngine
 
 		DXRenderViewContext immediate; // main render view
 		class DXShader* default_shader{ nullptr };
-		class DXRenderMesh<SIMPLE_VERTEX>* default_renderMesh{ nullptr };
+		class DXRenderMesh* default_renderMesh{ nullptr };
 
 	public:
 		void Init

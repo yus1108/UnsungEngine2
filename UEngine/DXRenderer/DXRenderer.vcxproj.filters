@@ -21,9 +21,6 @@
     <ClInclude Include="DXShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DXRenderMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DXRDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -31,6 +28,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DXRFramework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -45,6 +51,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DXRFramework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXRenderMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXRenderObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

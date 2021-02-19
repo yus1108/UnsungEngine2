@@ -4,6 +4,8 @@
 #include <tchar.h>
 #include <wrl.h>
 #include <string>
+#include <unordered_map>
+#include <vector>
 #include <stdexcept>
 
 // DX111 라이브러리 추가
@@ -29,3 +31,5 @@
 #include "DXShader.h"
 #include "DXRenderMesh.h"
 #include "DXConstantBuffer.h"
+#include "DXRenderObject.h"
+#include "DXView.h"

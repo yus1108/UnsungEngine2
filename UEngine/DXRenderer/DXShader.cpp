@@ -1,24 +1,24 @@
 #include "dxrframework.h"
 #include "DXShader.h"
 
-void UEngine::DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const ShaderType& shader_type)
+void UEngine::DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXSHADERTYPE& shader_type)
 {
 	switch (shader_type)
 	{
-	case ShaderType::VERTEX_SHADER:
+	case UENGINE_DXSHADERTYPE_VERTEX_SHADER:
 		device->CreateVertexShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.vertexShader.GetAddressOf());
 		InitInputLayout(device, shaderBlob);
 		break;
-	case ShaderType::PIXEL_SHADER:
+	case UENGINE_DXSHADERTYPE_PIXEL_SHADER:
 		device->CreatePixelShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.pixelShader.GetAddressOf());
 		break;
-	case ShaderType::GEOMETRY_SHADER:
+	case UENGINE_DXSHADERTYPE_GEOMETRY_SHADER:
 		device->CreateGeometryShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.geometryShader.GetAddressOf());
 		break;
-	case ShaderType::HULL_SHADER:
+	case UENGINE_DXSHADERTYPE_HULL_SHADER:
 		device->CreateHullShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.hullShader.GetAddressOf());
 		break;
-	case ShaderType::DOMAIN_SHADER:
+	case UENGINE_DXSHADERTYPE_DOMAIN_SHADER:
 		device->CreateDomainShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.domainShader.GetAddressOf());
 		break;
 	default:
@@ -27,7 +27,7 @@ void UEngine::DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const sh
 	}
 }
 
-void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const ShaderType& shader_type, bool isDebuggable, const std::string& entry_point)
+void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const UENGINE_DXSHADERTYPE& shader_type, bool isDebuggable, const std::string& entry_point)
 {
 	Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
 	shader_files[static_cast<unsigned>(shader_type)] = shader_file;
@@ -36,19 +36,19 @@ void UEngine::DXShader::SetShader(ID3D11Device* const device, const std::string&
 	std::wstring wstr_shader_file = std::wstring(shader_file.begin(), shader_file.end());
 	switch (shader_type)
 	{
-	case ShaderType::VERTEX_SHADER:
+	case UENGINE_DXSHADERTYPE_VERTEX_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "vs_4_0", isDebuggable);
 		break;
-	case ShaderType::PIXEL_SHADER:
+	case UENGINE_DXSHADERTYPE_PIXEL_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ps_4_0", isDebuggable);
 		break;
-	case ShaderType::GEOMETRY_SHADER:
+	case UENGINE_DXSHADERTYPE_GEOMETRY_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "gs_4_0", isDebuggable);
 		break;
-	case ShaderType::HULL_SHADER:
+	case UENGINE_DXSHADERTYPE_HULL_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "hs_4_0", isDebuggable);
 		break;
-	case ShaderType::DOMAIN_SHADER:
+	case UENGINE_DXSHADERTYPE_DOMAIN_SHADER:
 		hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ds_4_0", isDebuggable);
 		break;
 	default:
@@ -132,14 +132,14 @@ UEngine::DXShader* UEngine::DXShader::Instantiate
 {
 	auto device = renderer->GetDevice();
 
-	UEngine::DXShader* instnace = new UEngine::DXShader;
-	instnace->SetShader(device, vertex_shader_file, UEngine::ShaderType::VERTEX_SHADER, isDebuggable);
-	instnace->SetShader(device, pixel_shader_file, UEngine::ShaderType::PIXEL_SHADER, isDebuggable);
+	UEngine::DXShader* instance = new UEngine::DXShader;
+	instance->SetShader(device, vertex_shader_file, UENGINE_DXSHADERTYPE_VERTEX_SHADER, isDebuggable);
+	instance->SetShader(device, pixel_shader_file, UENGINE_DXSHADERTYPE_PIXEL_SHADER, isDebuggable);
 
 	// Rasterizer State
 	renderer->InitRasterizerState
 	(
-		instnace->pipeline.rasterizerState.GetAddressOf(),
+		instance->pipeline.rasterizerState.GetAddressOf(),
 		rasterizerStateDesc->FillMode,
 		rasterizerStateDesc->CullMode,
 		rasterizerStateDesc->MultiSampleEnable,
@@ -149,12 +149,12 @@ UEngine::DXShader* UEngine::DXShader::Instantiate
 	);
 
 	// Sampler State
-	device->CreateSamplerState(samplerStateDesc, &instnace->pipeline.samplerState);
+	device->CreateSamplerState(samplerStateDesc, &instance->pipeline.samplerState);
 
 	// Blending State
-	if (blendStateDesc) device->CreateBlendState(blendStateDesc, &instnace->pipeline.blendingState);
+	if (blendStateDesc) device->CreateBlendState(blendStateDesc, &instance->pipeline.blendingState);
 
-	return instnace;
+	return instance;
 }
 
 void UEngine::DXShader::Release(DXShader** const shader)
@@ -163,7 +163,7 @@ void UEngine::DXShader::Release(DXShader** const shader)
 	*shader = nullptr;
 }
 
-void UEngine::DXShader::Render(ID3D11DeviceContext* const deviceContext)
+void UEngine::DXShader::Set(ID3D11DeviceContext* const deviceContext)
 {
 	deviceContext->IASetInputLayout(pipeline.inputLayout.Get());
 

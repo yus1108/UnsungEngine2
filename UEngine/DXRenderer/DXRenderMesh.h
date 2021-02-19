@@ -1,131 +1,103 @@
 #pragma once
-#include <vector>
-#include "dxrframework.h"
 
 namespace UEngine
 {
-	template <typename STRUCT_VERTEX>
 	class DXRenderMesh final
 	{
 	private:
 		DXRenderMesh() {}
 		~DXRenderMesh() = default;
 	private:
+		UINT stride{ 0 };
+		UINT vertexCount{ 0 };
+		UINT indexCount{ 0 };
 
-		std::vector<STRUCT_VERTEX> vertices;
-		std::vector<unsigned> indices;	
 		D3D11_PRIMITIVE_TOPOLOGY topology{ D3D_PRIMITIVE_TOPOLOGY_UNDEFINED };
-
 		Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
 
 	public:
-		void SetVertices(ID3D11Device* const device, const std::vector<STRUCT_VERTEX>& vertices);
-		void SetIndices(ID3D11Device* const device, const std::vector<unsigned>& indices);
+		template <typename T>
+		void SetVertices(ID3D11Device* const device, const T* const vertices, UINT vertexCount);
+		void SetIndices(ID3D11Device* const device, const unsigned* const indices, UINT indexCount);
 		void SetTopology(D3D11_PRIMITIVE_TOPOLOGY topology) { this->topology = topology; }
 
-		const std::vector<STRUCT_VERTEX>& GetVertices() const { return vertices; }
-		unsigned GetVerticesCount() { return vertices.size(); }
-		unsigned GetIndicesCount() { return indices.size(); }
+		unsigned GetStride() { return stride; }
+		unsigned GetVertexCount() { return vertexCount; }
+		unsigned GetIndexCount() { return indexCount; }
 
 		// Initialize to Draw line strip with only vertices
-		static DXRenderMesh<STRUCT_VERTEX>* const Instantiate
+		template <typename T>
+		static DXRenderMesh* const Instantiate
 		(
-			ID3D11Device* const device, 
-			const std::vector<STRUCT_VERTEX>& vertices
+			ID3D11Device* const device,
+			const T* const vertices,
+			UINT vertexCount
 		);
+
 		// Initialize to Draw with vertices, indices, and the given topology
-		static DXRenderMesh<STRUCT_VERTEX>* const Instantiate
+		template <typename T>
+		static DXRenderMesh* const Instantiate
 		(
 			ID3D11Device* const device, 
-			const std::vector<STRUCT_VERTEX>& vertices,
-			const std::vector<unsigned>& indices,
+			const T* const vertices,
+			UINT vertexCount,
+			const unsigned* const indices,
+			UINT indexCount,
 			D3D11_PRIMITIVE_TOPOLOGY topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 		);
-		static void Release(DXRenderMesh<STRUCT_VERTEX>** const renderMesh);
-		void Render(ID3D11DeviceContext* const deviceContext);
+		static void Release(DXRenderMesh** const renderMesh);
+		void Set(ID3D11DeviceContext* const deviceContext);
 	};	
 
-
-	template <typename STRUCT_VERTEX>
-	void DXRenderMesh<STRUCT_VERTEX>::SetVertices(ID3D11Device* const device, const std::vector<STRUCT_VERTEX>& vertices)
+	template <typename T>
+	void DXRenderMesh::SetVertices(ID3D11Device* const device, const T* const vertices, UINT vertexCount)
 	{
-		this->vertices = vertices;
-		this->vertices.shrink_to_fit();
+		stride = sizeof(T);
+		this->vertexCount = vertexCount;
 
 		D3D11_BUFFER_DESC bufferDesc;
-		ZeroMemory(&bufferDesc, sizeof(bufferDesc));
+		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 		bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bufferDesc.ByteWidth = (UINT)(sizeof(STRUCT_VERTEX) * vertices.size());
+		bufferDesc.ByteWidth = (UINT)(sizeof(T) * vertexCount);
 
 		// Define the resource data.
 		D3D11_SUBRESOURCE_DATA initData;
-		ZeroMemory(&initData, sizeof(initData));
-		initData.pSysMem = &vertices[0];
+		ZeroMemory(&initData, sizeof(D3D11_SUBRESOURCE_DATA));
+		initData.pSysMem = vertices;
 		device->CreateBuffer(&bufferDesc, &initData, vertexBuffer.GetAddressOf());
 	}
 
-	template <typename STRUCT_VERTEX>
-	void DXRenderMesh<STRUCT_VERTEX>::SetIndices(ID3D11Device* const device, const std::vector<unsigned>& indices)
-	{
-		this->indices = indices;
-		this->indices.shrink_to_fit();
-
-		D3D11_BUFFER_DESC bufferDesc;
-		// Fill in a buffer description.
-		ZeroMemory(&bufferDesc, sizeof(bufferDesc));
-		bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-		bufferDesc.ByteWidth = (UINT)(sizeof(unsigned int) * indices.size());
-		bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-		// Define the resource data.
-		D3D11_SUBRESOURCE_DATA initData;
-		ZeroMemory(&initData, sizeof(initData));
-		initData.pSysMem = &indices[0];
-		device->CreateBuffer(&bufferDesc, &initData, indexBuffer.GetAddressOf());
-	}
-
-	template <typename STRUCT_VERTEX>
-	DXRenderMesh<STRUCT_VERTEX>* const DXRenderMesh<STRUCT_VERTEX>::Instantiate(ID3D11Device* const device, const std::vector<STRUCT_VERTEX>& vertices)
-	{
-		DXRenderMesh<STRUCT_VERTEX>* instnace = new DXRenderMesh<STRUCT_VERTEX>;
-		instnace->SetVertices(device, vertices);
-		instnace->SetTopology(device, D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
-		return instnace;
-	}
-
-	template <typename STRUCT_VERTEX>
-	DXRenderMesh<STRUCT_VERTEX>* const DXRenderMesh<STRUCT_VERTEX>::Instantiate
+	template <typename T>
+	DXRenderMesh* const DXRenderMesh::Instantiate
 	(
 		ID3D11Device* const device,
-		const std::vector<STRUCT_VERTEX>& vertices,
-		const std::vector<unsigned>& indices,
+		const T* const vertices,
+		UINT vertexCount
+	)
+	{
+		DXRenderMesh* instance = new DXRenderMesh;
+		instance->SetVertices<T>(device, vertices, vertexCount);
+		instance->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
+		return instance;
+	}
+
+	template <typename T>
+	DXRenderMesh* const DXRenderMesh::Instantiate
+	(
+		ID3D11Device* const device,
+		const T* const vertices,
+		UINT vertexCount,
+		const unsigned* const indices,
+		UINT indexCount,
 		D3D11_PRIMITIVE_TOPOLOGY topology
 	)
 	{
-		DXRenderMesh<STRUCT_VERTEX>* instnace = new DXRenderMesh<STRUCT_VERTEX>;
-		instnace->SetVertices(device, vertices);
-		instnace->SetIndices(device, indices);
-		instnace->SetTopology(topology);
-		return instnace;
-	}
-
-	template <typename STRUCT_VERTEX>
-	void DXRenderMesh<STRUCT_VERTEX>::Release(DXRenderMesh<STRUCT_VERTEX>** const renderMesh)
-	{
-		delete *renderMesh;
-		*renderMesh = nullptr;
-	}
-
-	template <typename STRUCT_VERTEX>
-	void DXRenderMesh<STRUCT_VERTEX>::Render(ID3D11DeviceContext* const deviceContext)
-	{
-		UINT stride = sizeof(STRUCT_VERTEX);
-		UINT offset = 0;
-
-		deviceContext->IASetPrimitiveTopology(topology);
-		deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-		deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		DXRenderMesh* instance = new DXRenderMesh;
+		instance->SetVertices<T>(device, vertices, vertexCount);
+		instance->SetIndices(device, indices, indexCount);
+		instance->SetTopology(topology);
+		return instance;
 	}
 }

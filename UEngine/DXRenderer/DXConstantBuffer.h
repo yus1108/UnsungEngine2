@@ -12,12 +12,22 @@ namespace UEngine
 		Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
 
 	public:
-		// Initialize to Draw line strip with only vertices
-		static DXConstantBuffer* const Instantiate(DXRenderer* const renderer, size_t _Data_Size);
+		UINT StartSlot{ 0 };
+		UINT Flags{ 0 };
+
+		static DXConstantBuffer* const Instantiate
+		(
+			DXRenderer* const renderer, 
+			size_t _Data_Size,
+			UINT flags = UENGINE_DXSHADERTYPE_UNKNOWN,
+			UINT startSlot = 0
+		);
 		static void Release(DXConstantBuffer** const constantBuffer);
 
-		void UpdateBuffer(ID3D11DeviceContext* const deviceContext, const void* data, size_t _Size);
 		ID3D11Buffer* const GetBuffer() { return constBuffer.Get(); }
-		ID3D11Buffer* const * const GetBufferAddressOf() { return constBuffer.GetAddressOf(); }
+		ID3D11Buffer* const* const GetBufferAddressOf() { return constBuffer.GetAddressOf(); }
+
+		void UpdateBuffer(ID3D11DeviceContext* const deviceContext, const void* data, size_t _Size);
+		void Set(ID3D11DeviceContext* const deviceContext);
 	};
 }

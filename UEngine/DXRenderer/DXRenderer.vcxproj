@@ -163,12 +163,16 @@
     <ClInclude Include="DXRDefinitions.h" />
     <ClInclude Include="DXRenderer.h" />
     <ClInclude Include="DXRenderMesh.h" />
+    <ClInclude Include="DXRenderObject.h" />
     <ClInclude Include="DXRFramework.h" />
     <ClInclude Include="DXShader.h" />
+    <ClInclude Include="DXView.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXConstantBuffer.cpp" />
     <ClCompile Include="DXRenderer.cpp" />
+    <ClCompile Include="DXRenderMesh.cpp" />
+    <ClCompile Include="DXRenderObject.cpp" />
     <ClCompile Include="DXRFramework.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -176,6 +180,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DXShader.cpp" />
+    <ClCompile Include="DXView.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

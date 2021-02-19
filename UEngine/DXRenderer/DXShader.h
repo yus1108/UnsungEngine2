@@ -10,16 +10,15 @@ namespace UEngine
 		~DXShader() = default;
 	private:
 		DXRPipeline pipeline;
-
-		std::string shader_files[static_cast<unsigned>(ShaderType::COUNT)];
+		std::string shader_files[5];
 
 		void InitInputLayout(ID3D11Device* const device, ID3DBlob* const vsShaderBlob);
 
 	public:
 		void SetInputLayout(ID3D11InputLayout* const input_layout) { pipeline.inputLayout = input_layout; }
 
-		void SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const ShaderType& shader_type);
-		void SetShader(ID3D11Device* const device, const std::string& shader_file, const ShaderType& shader_type, 
+		void SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXSHADERTYPE& shader_type);
+		void SetShader(ID3D11Device* const device, const std::string& shader_file, const UENGINE_DXSHADERTYPE& shader_type,
 			bool isDebuggable, const std::string& entry_point = "main");
 
 		static HRESULT CompileShader(_In_ LPCWSTR srcFile, _In_ LPCSTR entryPoint, _In_ ID3D11Device* device,
@@ -37,6 +36,6 @@ namespace UEngine
 			const D3D11_BLEND_DESC* const blendStateDesc
 		);
 		static void Release(DXShader** const shader);
-		void Render(ID3D11DeviceContext* const deviceContext);
+		void Set(ID3D11DeviceContext* const deviceContext);
 	};
 }
