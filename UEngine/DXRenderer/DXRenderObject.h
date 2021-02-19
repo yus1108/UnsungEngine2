@@ -37,7 +37,9 @@ namespace UEngine
 			UINT startSlot = UENGINE_DXSHADERTYPE_UNKNOWN
 		);
 		void AddConstantBuffer(const std::string bufferName, DXConstantBuffer * const constantBuffer);
-		void UpdateConstantBuffer(ID3D11DeviceContext* const deviceContext, const std::string bufferName, const void* data, size_t _Size);
+		void UpdateConstantBufferWith(const std::string bufferName, const void* data, size_t _Size);
+		void UpdateConstantBuffer(ID3D11DeviceContext* const deviceContext, const std::string bufferName);
+		void UpdateConstantBuffers(ID3D11DeviceContext* const deviceContext);
 
 		void Set(ID3D11DeviceContext* const deviceContext);
 		void Draw(ID3D11DeviceContext* const deviceContext);

@@ -10,6 +10,8 @@ namespace UEngine
 		~DXConstantBuffer() = default;
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
+		const void* data;
+		size_t _Size;
 
 	public:
 		UINT StartSlot{ 0 };
@@ -27,7 +29,9 @@ namespace UEngine
 		ID3D11Buffer* const GetBuffer() { return constBuffer.Get(); }
 		ID3D11Buffer* const* const GetBufferAddressOf() { return constBuffer.GetAddressOf(); }
 
-		void UpdateBuffer(ID3D11DeviceContext* const deviceContext, const void* data, size_t _Size);
+		void UpdateBufferWith(const void* data, size_t _Size);
+
+		void Update(ID3D11DeviceContext* const deviceContext);
 		void Set(ID3D11DeviceContext* const deviceContext);
 	};
 }

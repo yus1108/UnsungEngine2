@@ -10,6 +10,7 @@
 #include "../Utility/UMath.h"
 #include "../Utility/UTime.h"
 #include "../DXRenderer/dxrframework.h"
+#include <thread>
 
 #define MAX_LOADSTRING 100
 
@@ -104,10 +105,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(renderer->GetDevice(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
 
         renderObj = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
-
-        DirectX::XMFLOAT4 color{ 1,1,1,1 };
         renderObj->AddConstantBuffer(renderer, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
-        renderObj->UpdateConstantBuffer(renderer->GetImmediateDeviceContext(), "Color", &color, sizeof(DirectX::XMFLOAT4));
+        DirectX::XMFLOAT4 color{ 1,0,1,1 };
+        renderObj->UpdateConstantBufferWith("Color", &color, sizeof(DirectX::XMFLOAT4));
     }
 
     UEngine::DXRenderObject* renderObj2;
@@ -138,10 +138,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(renderer->GetDevice(), &vertices[0], ARRAYSIZE(vertices));
 
         renderObj2 = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
-
-        DirectX::XMFLOAT4 color{ 1,0,0,1 };
         renderObj2->AddConstantBuffer(renderer, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
-        renderObj2->UpdateConstantBuffer(renderer->GetImmediateDeviceContext(), "Color", &color, sizeof(DirectX::XMFLOAT4));
+        DirectX::XMFLOAT4 color{ 1,0,0,1 };
+        renderObj2->UpdateConstantBufferWith("Color", &color, sizeof(DirectX::XMFLOAT4));
     }
 
     UEngine::DXView* view = UEngine::DXView::Instantiate
@@ -155,28 +154,44 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     view->AddRenderObject(renderObj);
     view->AddRenderObject(renderObj2);
 
+    std::vector<std::thread> threads;
+    
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
 
-        UEngine::WinConsole::ResetCursorPos();
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        UEngine::WinConsole::ResetCursorPos();
+        // constant buffers mapping
+        renderObj->UpdateConstantBuffers(renderer->GetImmediateDeviceContext());
+        renderObj2->UpdateConstantBuffer(renderer->GetImmediateDeviceContext(), "Color");
 
-        std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
-        std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
+        // rendering in different thread
+        threads.push_back(std::thread([&]() {
 
-        view->Set();
-        view->Begin();
-        view->End(renderer->GetImmediateDeviceContext());
+            view->Begin();
+            view->End(renderer->GetImmediateDeviceContext());
 
-        renderer->Begin(DirectX::Colors::Gray);
+            renderer->Begin(DirectX::Colors::Gray);
+            renderObj->GetConstantBuffer("Color")->Set(renderer->GetImmediateDeviceContext());
+            renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, view->GetAddressOfViewResource());
+            renderer->End();
+        }));	// render target view
+
+        // update in main thread
+        {
+            UEngine::WinConsole::ResetCursorPos();
+            std::cout << "\t\t" << std::endl;
+            std::cout << "\t\t" << std::endl;
+            UEngine::WinConsole::ResetCursorPos();
+
+            std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
+            std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
+        }
         
-        renderObj->GetConstantBuffer("Color")->Set(renderer->GetImmediateDeviceContext());
-        renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, view->GetAddressOfViewResource());
-
-        renderer->End();
+        // join threads
+        for (auto& thread : threads) {
+            thread.join();
+        }
+        threads.clear();
     });
 
     UEngine::DXRenderObject::Release(&renderObj);

@@ -39,9 +39,20 @@ void UEngine::DXRenderObject::AddConstantBuffer(const std::string bufferName, DX
 	constantBuffers[bufferName] = constantBuffer;
 }
 
-void UEngine::DXRenderObject::UpdateConstantBuffer(ID3D11DeviceContext* const deviceContext, const std::string bufferName, const void* data, size_t _Size)
+void UEngine::DXRenderObject::UpdateConstantBufferWith(const std::string bufferName, const void* data, size_t _Size)
 {
-	constantBuffers[bufferName]->UpdateBuffer(deviceContext, data, _Size);
+	constantBuffers[bufferName]->UpdateBufferWith(data, _Size);
+}
+
+void UEngine::DXRenderObject::UpdateConstantBuffer(ID3D11DeviceContext* const deviceContext, const std::string bufferName)
+{
+	constantBuffers[bufferName]->Update(deviceContext);
+}
+
+void UEngine::DXRenderObject::UpdateConstantBuffers(ID3D11DeviceContext* const deviceContext)
+{
+	for (auto buffer : constantBuffers)
+		buffer.second->Update(deviceContext);
 }
 
 void UEngine::DXRenderObject::Set(ID3D11DeviceContext* const deviceContext)

@@ -29,7 +29,7 @@ void UEngine::DXView::AddRenderObject(DXRenderObject* const renderObject)
     renderObjectList.push_back(renderObject);
 }
 
-void UEngine::DXView::Set()
+void UEngine::DXView::Begin()
 {
     // clearing depth buffer and render target
     context.DeviceContext->ClearRenderTargetView(context.RenderTargetView.Get(), DirectX::Colors::Transparent);
@@ -37,18 +37,15 @@ void UEngine::DXView::Set()
 
     context.DeviceContext->RSSetViewports(1, &context.Viewport);
 
+    context.DeviceContext->OMSetRenderTargets(1, context.RenderTargetView.GetAddressOf(), context.DepthStencilView.Get());
+    context.DeviceContext->OMSetDepthStencilState(context.DepthStencilState.Get(), 1);
+
     for (size_t i = 0; i < renderObjectList.size(); i++)
     {
         renderObjectList[i]->Set(context.DeviceContext.Get());
         renderObjectList[i]->Draw(context.DeviceContext.Get());
     }
 
-    context.DeviceContext->OMSetRenderTargets(1, context.RenderTargetView.GetAddressOf(), context.DepthStencilView.Get());
-    context.DeviceContext->OMSetDepthStencilState(context.DepthStencilState.Get(), 1);
-}
-
-void UEngine::DXView::Begin()
-{
     context.DeviceContext->FinishCommandList(true, context.CommandList.GetAddressOf());
 }
 

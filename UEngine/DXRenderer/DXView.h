@@ -27,7 +27,6 @@ namespace UEngine
 		ID3D11ShaderResourceView* const * const GetAddressOfViewResource() { return context.OutputShaderResourceView.GetAddressOf(); }
 
 		void AddRenderObject(DXRenderObject* const renderObject);
-		void Set();
 		void Begin();
 		void End(ID3D11DeviceContext* deviceContext);
 	};

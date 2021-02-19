@@ -23,9 +23,14 @@ void UEngine::DXConstantBuffer::Release(DXConstantBuffer** const constantBuffer)
 	*constantBuffer = nullptr;
 }
 
-void UEngine::DXConstantBuffer::UpdateBuffer(ID3D11DeviceContext* const deviceContext, const void* data, size_t _Size)
+void UEngine::DXConstantBuffer::UpdateBufferWith(const void* data, size_t _Size)
 {
-	// world matrix
+	this->data = data;
+	this->_Size = _Size;
+}
+
+void UEngine::DXConstantBuffer::Update(ID3D11DeviceContext* const deviceContext)
+{
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	deviceContext->Map(constBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
