@@ -43,7 +43,6 @@ void UEngine::DXRenderer::Init
 		rsDesc.AntialiasedLineEnable = rendering_desc.enableAntialise;
 		rsDesc.DepthClipEnable = rendering_desc.enableDepthStencil;
 		rsDesc.MultiSampleEnable = rendering_desc.enableMultisampling;
-		rsDesc.ScissorEnable = rendering_desc.ScissorEnable;
 		default_shader = DXShader::Instantiate
 		(
 			this,
@@ -76,15 +75,16 @@ void UEngine::DXRenderer::Release()
 
 void UEngine::DXRenderer::Begin(const float clearRGBA[4])
 {
-	// clearing depth buffer and render target
 	immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
-	immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
+	if (immediate.DepthStencilView) immediate.DeviceContext->ClearDepthStencilView(immediate.DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
-	immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
+	immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
 
 	default_shader->Set(immediate.DeviceContext.Get());
 	default_renderMesh->Set(immediate.DeviceContext.Get());
+
+	immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
+	immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
 }
 
 void UEngine::DXRenderer::End()
@@ -340,8 +340,7 @@ void UEngine::DXRenderer::InitRasterizerState
 	const D3D11_CULL_MODE& cullMode,
 	const BOOL& multisampleEnable,
 	const BOOL& antialisedEnable,
-	const BOOL& depthClipEnable,
-	const BOOL& scissorEnable
+	const BOOL& depthClipEnable
 )
 {
 	D3D11_RASTERIZER_DESC desc;
@@ -353,7 +352,7 @@ void UEngine::DXRenderer::InitRasterizerState
 	desc.DepthBiasClamp = 0;
 	desc.SlopeScaledDepthBias = 0;
 	desc.DepthClipEnable = depthClipEnable; //깊이클리핑 끄기
-	desc.ScissorEnable = scissorEnable; //시저테스트 하지 않음
+	desc.ScissorEnable = false; //시저테스트 하지 않음
 	desc.MultisampleEnable = multisampleEnable; //멀티 샘플링 하지않음
 	desc.AntialiasedLineEnable = antialisedEnable; //라인안티앨리어싱 없음
 	device->CreateRasterizerState(&desc, rasterizerState);

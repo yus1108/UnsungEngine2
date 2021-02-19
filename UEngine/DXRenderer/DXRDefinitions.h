@@ -5,7 +5,6 @@ namespace UEngine
 {
 	struct DXRasterDesc
 	{
-		bool ScissorEnable = false;
 		bool DepthClipEnable = false;
 		bool MultiSampleEnable = false;
 		bool AntialiasedLineEnable = false;
@@ -20,7 +19,6 @@ namespace UEngine
 		bool enableDepthStencil = false;
 		bool enableBlendState = false;
 		bool enableAntialise = false;
-		bool ScissorEnable = false;
 		D3D_FEATURE_LEVEL* FeatureLevels = nullptr;
 		UINT FeatureLevelsCount = 0;
 		bool enableMultisampling = false;

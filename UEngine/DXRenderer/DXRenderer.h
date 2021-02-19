@@ -73,8 +73,7 @@ namespace UEngine
 			const D3D11_CULL_MODE& cullMode = D3D11_CULL_BACK,
 			const BOOL& multisampleEnable = false,
 			const BOOL& antialisedEnable = false,
-			const BOOL& depthClipEnable = false,
-			const BOOL& scissorEnable = false
+			const BOOL& depthClipEnable = false
 		);
 
 		void VSSetConstantBuffers

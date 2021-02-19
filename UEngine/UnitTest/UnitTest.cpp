@@ -69,10 +69,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     rendererDesc.IsDebuggable = true;
     rendererDesc.enableAntialise = true;
     rendererDesc.enableBlendState = true;
-    rendererDesc.enableDepthStencil = false;
+    rendererDesc.enableDepthStencil = true;
     rendererDesc.enableMultisampling = true;
     rendererDesc.MultisampleDesc = { 4, 0 };
-    rendererDesc.ScissorEnable = false;
     auto renderer = UEngine::DXRenderer::Get();
     renderer->Init(app->GetHandler(), &rendererDesc);
 
@@ -83,7 +82,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         rsDesc.AntialiasedLineEnable = rendererDesc.enableAntialise;
         rsDesc.DepthClipEnable = rendererDesc.enableDepthStencil;
         rsDesc.MultiSampleEnable = rendererDesc.enableMultisampling;
-        rsDesc.ScissorEnable = rendererDesc.ScissorEnable;
         auto default_shader = UEngine::DXShader::Instantiate
         (
             renderer,
@@ -97,10 +95,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         // RenderMesh
         UEngine::SIMPLE_VERTEX vertices[] =
         {
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0.1f}, DirectX::XMFLOAT2{0, 1}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0.1f}, DirectX::XMFLOAT2{0, 0}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0.1f}, DirectX::XMFLOAT2{1, 1}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0.1f}, DirectX::XMFLOAT2{1, 0}},
         };
         unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
         auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(renderer->GetDevice(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
@@ -119,7 +117,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         rsDesc.AntialiasedLineEnable = rendererDesc.enableAntialise;
         rsDesc.DepthClipEnable = rendererDesc.enableDepthStencil;
         rsDesc.MultiSampleEnable = rendererDesc.enableMultisampling;
-        rsDesc.ScissorEnable = rendererDesc.ScissorEnable;
         auto default_shader = UEngine::DXShader::Instantiate
         (
             renderer,
@@ -133,10 +130,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         // RenderMesh
         UEngine::SIMPLE_VERTEX vertices[] =
         {
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.3f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.3f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1.0f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
+            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1.0f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
         };
         auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(renderer->GetDevice(), &vertices[0], ARRAYSIZE(vertices));
 

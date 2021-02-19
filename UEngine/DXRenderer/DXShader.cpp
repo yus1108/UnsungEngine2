@@ -143,8 +143,7 @@ UEngine::DXShader* UEngine::DXShader::Instantiate
 		rasterizerStateDesc->CullMode,
 		rasterizerStateDesc->MultiSampleEnable,
 		rasterizerStateDesc->AntialiasedLineEnable,
-		rasterizerStateDesc->DepthClipEnable,
-		rasterizerStateDesc->ScissorEnable
+		rasterizerStateDesc->DepthClipEnable
 	);
 
 	// Sampler State
@@ -199,8 +198,7 @@ void UEngine::DXShader::Set(ID3D11DeviceContext* const deviceContext)
 
 	deviceContext->RSSetState(pipeline.rasterizerState.Get());
 
-	ID3D11SamplerState* sampler[]{ pipeline.samplerState.Get() };
-	deviceContext->PSSetSamplers(0, 1, sampler);
+	deviceContext->PSSetSamplers(0, 1, pipeline.samplerState.GetAddressOf());
 	deviceContext->PSSetShader(pipeline.pixelShader.Get(), 0, 0);
 
 	deviceContext->OMSetBlendState(pipeline.blendingState.Get(), NULL, 0xffffffff);
