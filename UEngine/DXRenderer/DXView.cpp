@@ -29,6 +29,14 @@ void UEngine::DXView::AddRenderObject(DXRenderObject* const renderObject)
     renderObjectList.push_back(renderObject);
 }
 
+void UEngine::DXView::UpdateConstantBuffers()
+{
+    for (size_t i = 0; i < renderObjectList.size(); i++)
+    {
+        renderObjectList[i]->CBUpdateAll(context.DeviceContext.Get());
+    }
+}
+
 void UEngine::DXView::Begin()
 {
     // clearing depth buffer and render target

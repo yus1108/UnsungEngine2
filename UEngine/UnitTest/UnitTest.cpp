@@ -107,7 +107,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         renderObj = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
         renderObj->AddConstantBuffer(renderer, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
         DirectX::XMFLOAT4 color{ 1,0,1,1 };
-        renderObj->UpdateConstantBufferWith("Color", &color, sizeof(DirectX::XMFLOAT4));
+        renderObj->CBAttachData("Color", &color, sizeof(color));
     }
 
     UEngine::DXRenderObject* renderObj2;
@@ -140,7 +140,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         renderObj2 = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
         renderObj2->AddConstantBuffer(renderer, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
         DirectX::XMFLOAT4 color{ 1,0,0,1 };
-        renderObj2->UpdateConstantBufferWith("Color", &color, sizeof(DirectX::XMFLOAT4));
+        renderObj2->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
     }
 
     UEngine::DXView* view = UEngine::DXView::Instantiate
@@ -161,8 +161,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         UEngine::Utility::UTime::Get()->Throttle(200);
 
         // constant buffers mapping
-        renderObj->UpdateConstantBuffers(renderer->GetImmediateDeviceContext());
-        renderObj2->UpdateConstantBuffer(renderer->GetImmediateDeviceContext(), "Color");
+        view->UpdateConstantBuffers();
+        renderer->UpdateConstantBuffers();
 
         // rendering in different thread
         threads.push_back(std::thread([&]() {
@@ -171,7 +171,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             view->End(renderer->GetImmediateDeviceContext());
 
             renderer->Begin(DirectX::Colors::Gray);
-            renderObj->GetConstantBuffer("Color")->Set(renderer->GetImmediateDeviceContext());
             renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, view->GetAddressOfViewResource());
             renderer->End();
         }));	// render target view

@@ -19,14 +19,17 @@ UEngine::DXConstantBuffer* const UEngine::DXConstantBuffer::Instantiate
 
 void UEngine::DXConstantBuffer::Release(DXConstantBuffer** const constantBuffer)
 {
+	if (!(*constantBuffer)->attached) delete (*constantBuffer)->data;
 	delete* constantBuffer;
 	*constantBuffer = nullptr;
 }
 
-void UEngine::DXConstantBuffer::UpdateBufferWith(const void* data, size_t _Size)
+void UEngine::DXConstantBuffer::AttachData(const void* data, size_t _Size)
 {
-	this->data = data;
+	if (!attached) delete this->data;
+	this->data = const_cast<void*>(data);
 	this->_Size = _Size;
+	attached = true;
 }
 
 void UEngine::DXConstantBuffer::Update(ID3D11DeviceContext* const deviceContext)

@@ -27,12 +27,13 @@ namespace UEngine
 		DXRenderingDesc rendering_desc;
 
 		DXRenderViewContext immediate; // main render view
-		class DXShader* default_shader{ nullptr };
-		class DXRenderMesh* default_renderMesh{ nullptr };
+		class DXRenderObject* default_renderObject{ nullptr };
+		//DirectX::XMFLOAT4 color{ 1,1,1,1 };
 
 	public:
 		void Init(HWND outputWindow, const DXRenderingDesc* desc = nullptr);
 		void Release();
+		void UpdateConstantBuffers();
 		void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
 		void End();
 

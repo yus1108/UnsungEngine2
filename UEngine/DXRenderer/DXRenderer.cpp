@@ -38,39 +38,49 @@ void UEngine::DXRenderer::Init
 			rendering_desc.MultisampleDesc
 		);
 
-		// Shader
-		UEngine::DXRasterDesc rsDesc = UEngine::DXRasterDesc();
-		rsDesc.AntialiasedLineEnable = rendering_desc.enableAntialise;
-		rsDesc.DepthClipEnable = rendering_desc.enableDepthStencil;
-		rsDesc.MultiSampleEnable = rendering_desc.enableMultisampling;
-		default_shader = DXShader::Instantiate
-		(
-			this,
-			"../_Shaders/DefaultVS.hlsl",
-			"../_Shaders/DefaultPS.hlsl",
-			rendering_desc.IsDebuggable,
-			rendering_desc.enableBlendState,
-			&rsDesc
-		);
-
-		// RenderMesh
-		UEngine::SIMPLE_VERTEX vertices[] =
 		{
-			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, -1, 0}, DirectX::XMFLOAT2{0, 1}},
-			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, 1, 0}, DirectX::XMFLOAT2{0, 0}},
-			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, -1, 0}, DirectX::XMFLOAT2{1, 1}},
-			UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
-		};
-		unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
-		
-		default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(device.Get(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
+			// Shader
+			UEngine::DXRasterDesc rsDesc = UEngine::DXRasterDesc();
+			rsDesc.AntialiasedLineEnable = rendering_desc.enableAntialise;
+			rsDesc.DepthClipEnable = rendering_desc.enableDepthStencil;
+			rsDesc.MultiSampleEnable = rendering_desc.enableMultisampling;
+			auto default_shader = UEngine::DXShader::Instantiate
+			(
+				this,
+				"../_Shaders/DefaultVS.hlsl",
+				"../_Shaders/DefaultPS.hlsl",
+				true,
+				rendering_desc.enableBlendState,
+				&rsDesc
+			);
+
+			// RenderMesh
+			UEngine::SIMPLE_VERTEX vertices[] =
+			{
+				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, -1, 0}, DirectX::XMFLOAT2{0, 1}},
+				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, 1, 0}, DirectX::XMFLOAT2{0, 0}},
+				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, -1, 0}, DirectX::XMFLOAT2{1, 1}},
+				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
+			};
+			unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
+			auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(device.Get(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
+
+			default_renderObject = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
+			default_renderObject->AddConstantBuffer(this, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+			DirectX::XMFLOAT4 color{ 1,1,1,1 };
+			default_renderObject->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
+		}
 	}
 }
 
 void UEngine::DXRenderer::Release()
 {
-	DXShader::Release(&default_shader);
-	DXRenderMesh::Release(&default_renderMesh);
+	DXRenderObject::Release(&default_renderObject);
+}
+
+void UEngine::DXRenderer::UpdateConstantBuffers()
+{
+	default_renderObject->CBUpdateAll(immediate.DeviceContext.Get());
 }
 
 void UEngine::DXRenderer::Begin(const float clearRGBA[4])
@@ -80,8 +90,7 @@ void UEngine::DXRenderer::Begin(const float clearRGBA[4])
 
 	immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
 
-	default_shader->Set(immediate.DeviceContext.Get());
-	default_renderMesh->Set(immediate.DeviceContext.Get());
+	default_renderObject->Set(immediate.DeviceContext.Get());
 
 	immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
 	immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
@@ -89,8 +98,7 @@ void UEngine::DXRenderer::Begin(const float clearRGBA[4])
 
 void UEngine::DXRenderer::End()
 {
-	immediate.DeviceContext->DrawIndexed(default_renderMesh->GetIndexCount(), 0, 0);
-
+	default_renderObject->Draw(immediate.DeviceContext.Get());
 	swapchain->Present(0, 0);
 }
 
