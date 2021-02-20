@@ -7,7 +7,7 @@ namespace UEngine
 	{
 	private:
 		DXConstantBuffer() {}
-		~DXConstantBuffer() = default;
+		~DXConstantBuffer() { if (!attached) delete data; };
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
 		void* data{ nullptr };

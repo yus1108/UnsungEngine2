@@ -146,8 +146,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UEngine::DXView* view = UEngine::DXView::Instantiate
     (
         renderer, 
-        400, 
-        400, 
+        800, 
+        600, 
         rendererDesc.enableDepthStencil, 
         rendererDesc.MultisampleDesc
     );

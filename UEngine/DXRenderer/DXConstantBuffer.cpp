@@ -19,7 +19,6 @@ UEngine::DXConstantBuffer* const UEngine::DXConstantBuffer::Instantiate
 
 void UEngine::DXConstantBuffer::Release(DXConstantBuffer** const constantBuffer)
 {
-	if (!(*constantBuffer)->attached) delete (*constantBuffer)->data;
 	delete* constantBuffer;
 	*constantBuffer = nullptr;
 }
