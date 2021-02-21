@@ -126,7 +126,7 @@ UEngine::DXShader* UEngine::DXShader::Instantiate
 	const std::string& pixel_shader_file,
 	bool isDebuggable,
 	bool enableBlending,
-	const DXRasterDesc* const rasterizerStateDesc
+	const DX_RASTERIZER_DESC* const rasterizerStateDesc
 )
 {
 	auto device = renderer->GetDevice();
@@ -141,9 +141,9 @@ UEngine::DXShader* UEngine::DXShader::Instantiate
 		instance->pipeline.rasterizerState.GetAddressOf(),
 		rasterizerStateDesc->FillMode,
 		rasterizerStateDesc->CullMode,
-		rasterizerStateDesc->MultiSampleEnable,
-		rasterizerStateDesc->AntialiasedLineEnable,
-		rasterizerStateDesc->DepthClipEnable
+		rasterizerStateDesc->EnableMultisampling,
+		rasterizerStateDesc->EnableAntialisedLine,
+		rasterizerStateDesc->EnableDepthStencil
 	);
 
 	// Sampler State

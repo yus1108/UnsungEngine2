@@ -15,21 +15,21 @@ namespace UEngine
 
     void WinApplication::Create(HINSTANCE hInstance)
     {
-        WNDCLASSEXW wcex;
+        WNDCLASSEXW Wcex;
 
-        wcex.cbSize = sizeof(WNDCLASSEX);
+        Wcex.cbSize = sizeof(WNDCLASSEX);
 
-        wcex.style = CS_HREDRAW | CS_VREDRAW;
-        wcex.lpfnWndProc = WndProc;
-        wcex.cbClsExtra = 0;
-        wcex.cbWndExtra = 0;
-        wcex.hInstance = hInstance;
-        wcex.hIcon = nullptr;
-        wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-        wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-        wcex.lpszMenuName = nullptr;
-        wcex.lpszClassName = _T("WIN_APPLICATION");
-        wcex.hIconSm = nullptr;
+        Wcex.style = CS_HREDRAW | CS_VREDRAW;
+        Wcex.lpfnWndProc = WndProc;
+        Wcex.cbClsExtra = 0;
+        Wcex.cbWndExtra = 0;
+        Wcex.hInstance = hInstance;
+        Wcex.hIcon = nullptr;
+        Wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+        Wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        Wcex.lpszMenuName = nullptr;
+        Wcex.lpszClassName = _T("WIN_APPLICATION");
+        Wcex.hIconSm = nullptr;
 
         UEngine::WINDOWS_APPLICATION_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
@@ -42,7 +42,7 @@ namespace UEngine
         desc.TitleName = _T("Window Application");
         desc.NCmdShow = 10;
         desc.WindowSize = { 800, 600 };
-        desc.wcex = &wcex;
+        desc.Wcex = &Wcex;
 
         Create(desc);
         isDefaultDesc = true;
@@ -51,17 +51,17 @@ namespace UEngine
     void WinApplication::Create(const WINDOWS_APPLICATION_DESC& desc)
     {
         appDesc = desc;
-        if (appDesc.wcex->lpfnWndProc == nullptr)
-            appDesc.wcex->lpfnWndProc = WndProc;
+        if (appDesc.Wcex->lpfnWndProc == nullptr)
+            appDesc.Wcex->lpfnWndProc = WndProc;
 
-        RegisterClassEx(desc.wcex);
+        RegisterClassEx(desc.Wcex);
         // Perform application initialization:
-        InitInstance(desc.HInstance, desc.NCmdShow, desc.TitleName, desc.wcex->lpszClassName, desc.WindowSize);
+        InitInstance(desc.HInstance, desc.NCmdShow, desc.TitleName, desc.Wcex->lpszClassName, desc.WindowSize);
     }
 
     void WinApplication::Close()
     {
-        UnregisterClass(isDefaultDesc ? _T("WIN_APPLICATION") : appDesc.wcex->lpszClassName, appDesc.HInstance);
+        UnregisterClass(isDefaultDesc ? _T("WIN_APPLICATION") : appDesc.Wcex->lpszClassName, appDesc.HInstance);
         PostQuitMessage(0);
     }
 
@@ -98,7 +98,7 @@ namespace UEngine
         rc.bottom = height;
 
         //실제 윈도우 크기 조정
-        AdjustWindowRect(&rc, appDesc.HasTitleBar ? WS_OVERLAPPEDWINDOW : WS_POPUPWINDOW, appDesc.wcex->lpszMenuName != nullptr);
+        AdjustWindowRect(&rc, appDesc.HasTitleBar ? WS_OVERLAPPEDWINDOW : WS_POPUPWINDOW, appDesc.Wcex->lpszMenuName != nullptr);
         //위 RECT 정보로 윈도우 사이즈 세팅
         SetWindowPos(hWnd, NULL, x, y, (rc.right - rc.left), (rc.bottom - rc.top),
             SWP_NOZORDER | SWP_NOMOVE);

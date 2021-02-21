@@ -3,27 +3,27 @@
 
 namespace UEngine
 {
-	struct DXRasterDesc
+	struct DX_RASTERIZER_DESC
 	{
-		bool DepthClipEnable = false;
-		bool MultiSampleEnable = false;
-		bool AntialiasedLineEnable = false;
+		bool EnableDepthStencil = false;
+		bool EnableMultisampling = false;
+		bool EnableAntialisedLine = false;
 		D3D11_FILL_MODE FillMode = D3D11_FILL_SOLID;
 		D3D11_CULL_MODE CullMode = D3D11_CULL_BACK;
 	};
 
-	struct DXRenderingDesc
+	struct DX_RENDERER_DESC
 	{
 		bool IsDebuggable = false;
 		bool IsFullScreen = false;
-		bool enableDepthStencil = false;
-		bool enableBlendState = false;
-		bool enableAntialise = false;
-		D3D_FEATURE_LEVEL* FeatureLevels = nullptr;
+		bool EnableDepthStencil = false;
+		bool EnableBlendState = false;
+		bool EnableAntialisedLine = false;
+		bool EnableMultisampling = false;
 		UINT FeatureLevelsCount = 0;
-		bool enableMultisampling = false;
 		DXGI_SAMPLE_DESC MultisampleDesc = { 1, 0 };
 		DXGI_RATIONAL RefreshRate{ 60, 1 };
+		D3D_FEATURE_LEVEL* FeatureLevels = nullptr;
 		D3D11_FILL_MODE FillMode = D3D11_FILL_SOLID;
 		D3D11_CULL_MODE CullMode = D3D11_CULL_BACK;
 	};

@@ -37,9 +37,14 @@ namespace UEngine
 			UINT startSlot = UENGINE_DXSHADERTYPE_UNKNOWN
 		);
 		void AddConstantBuffer(const std::string bufferName, DXConstantBuffer * const constantBuffer);
+		
+		size_t CBGetDataSize(const std::string bufferName) { return constantBuffers[bufferName]->GetDataSize(); }
+		template <typename T>
+		T* const CBGetData(const std::string bufferName) { return constantBuffers[bufferName]->GetData<T>(); }
 		template <typename T>
 		void CBCopyData(const std::string bufferName, const T* data, size_t _Size);
 		void CBAttachData(const std::string bufferName, const void* data, size_t _Size);
+
 		void CBUpdate(ID3D11DeviceContext* const deviceContext, const std::string bufferName);
 		void CBUpdateAll(ID3D11DeviceContext* const deviceContext);
 

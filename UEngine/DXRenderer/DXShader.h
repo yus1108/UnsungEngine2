@@ -32,7 +32,7 @@ namespace UEngine
 			const std::string& pixel_shader_file,
 			bool isDebuggable,
 			bool enableBlending,
-			const DXRasterDesc* const rasterizerStateDesc
+			const DX_RASTERIZER_DESC* const rasterizerStateDesc
 		);
 		static void Release(DXShader** const shader);
 		void Set(ID3D11DeviceContext* const deviceContext);

@@ -7,7 +7,7 @@ UEngine::DXRenderer UEngine::DXRenderer::instance;
 void UEngine::DXRenderer::Init
 (
 	HWND outputWindow,
-	const DXRenderingDesc* desc
+	const DX_RENDERER_DESC* desc
 )
 {
 	Release();
@@ -16,7 +16,6 @@ void UEngine::DXRenderer::Init
 	hwnd = outputWindow;
 	rendering_desc = CreateDefaultInitDesc();
 	if (desc) rendering_desc = *desc;
-	featureLevel = static_cast<D3D_FEATURE_LEVEL>(0);
 	GetClientRect(outputWindow, &clientSize);
 	InitViewport(&immediate.Viewport, clientSize);
 	InitDeviceContextSwapchain(clientSize, rendering_desc.IsDebuggable);
@@ -30,7 +29,7 @@ void UEngine::DXRenderer::Init
 		// Depth Stencil Texture, View, State
 		InitDepthStencil
 		(
-			rendering_desc.enableDepthStencil,
+			rendering_desc.EnableDepthStencil,
 			clientSize,
 			immediate.DepthStencilState.GetAddressOf(),
 			immediate.DepthStencilTexture2D.GetAddressOf(),
@@ -40,34 +39,45 @@ void UEngine::DXRenderer::Init
 
 		{
 			// Shader
-			UEngine::DXRasterDesc rsDesc = UEngine::DXRasterDesc();
-			rsDesc.AntialiasedLineEnable = rendering_desc.enableAntialise;
-			rsDesc.DepthClipEnable = rendering_desc.enableDepthStencil;
-			rsDesc.MultiSampleEnable = rendering_desc.enableMultisampling;
-			auto default_shader = UEngine::DXShader::Instantiate
+			UEngine::DX_RASTERIZER_DESC rsDesc = UEngine::DX_RASTERIZER_DESC();
+			rsDesc.EnableAntialisedLine = rendering_desc.EnableAntialisedLine;
+			rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
+			rsDesc.EnableMultisampling = rendering_desc.EnableMultisampling;
+			auto default_shader = DXShader::Instantiate
 			(
 				this,
 				"../_Shaders/DefaultVS.hlsl",
 				"../_Shaders/DefaultPS.hlsl",
-				true,
-				rendering_desc.enableBlendState,
+				rendering_desc.IsDebuggable,
+				rendering_desc.EnableBlendState,
+				&rsDesc
+			);
+
+			default_color_shader = DXShader::Instantiate
+			(
+				this,
+				"../_Shaders/DefaultVS.hlsl",
+				"../_Shaders/ColorPS.hlsl",
+				rendering_desc.IsDebuggable,
+				rendering_desc.EnableBlendState,
 				&rsDesc
 			);
 
 			// RenderMesh
-			UEngine::SIMPLE_VERTEX vertices[] =
+			SIMPLE_VERTEX vertices[] =
 			{
-				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, -1, 0}, DirectX::XMFLOAT2{0, 1}},
-				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, 1, 0}, DirectX::XMFLOAT2{0, 0}},
-				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, -1, 0}, DirectX::XMFLOAT2{1, 1}},
-				UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
+				SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, -1, 0}, DirectX::XMFLOAT2{0, 1}},
+				SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, 1, 0}, DirectX::XMFLOAT2{0, 0}},
+				SIMPLE_VERTEX{DirectX::XMFLOAT3{1, -1, 0}, DirectX::XMFLOAT2{1, 1}},
+				SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
 			};
 			unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
-			auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(device.Get(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
+			auto default_renderMesh = DXRenderMesh::Instantiate<SIMPLE_VERTEX>(device.Get(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
 
-			default_renderObject = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
-			default_renderObject->AddConstantBuffer(this, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+			// RenderObject
 			DirectX::XMFLOAT4 color{ 1,1,1,1 };
+			default_renderObject = DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
+			default_renderObject->AddConstantBuffer(this, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
 			default_renderObject->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
 		}
 	}
@@ -108,15 +118,15 @@ void UEngine::DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)
 	InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 }
 
-UEngine::DXRenderingDesc UEngine::DXRenderer::CreateDefaultInitDesc()
+UEngine::DX_RENDERER_DESC UEngine::DXRenderer::CreateDefaultInitDesc()
 {
-	DXRasterDesc rasterDesc;
-	ZeroMemory(&rasterDesc, sizeof(DXRasterDesc));
+	DX_RASTERIZER_DESC rasterDesc;
+	ZeroMemory(&rasterDesc, sizeof(DX_RASTERIZER_DESC));
 	rasterDesc.FillMode = D3D11_FILL_SOLID;
 	rasterDesc.CullMode = D3D11_CULL_BACK;
 
-	DXRenderingDesc renderingDesc;
-	ZeroMemory(&renderingDesc, sizeof(DXRenderingDesc));
+	DX_RENDERER_DESC renderingDesc;
+	ZeroMemory(&renderingDesc, sizeof(DX_RENDERER_DESC));
 	renderingDesc.RefreshRate = { 60, 1 };
 	renderingDesc.MultisampleDesc = { 1, 0 };
 	renderingDesc.FillMode = D3D11_FILL_SOLID;
@@ -204,7 +214,7 @@ void UEngine::DXRenderer::InitMainRenderTargetView(ID3D11RenderTargetView** cons
 
 void UEngine::DXRenderer::InitDepthStencil
 (
-	bool enableDepthStencil,
+	bool EnableDepthStencil,
 	const RECT clientSize,
 	ID3D11DepthStencilState** const depth_stencil_state,
 	ID3D11Texture2D** const depth_stencil_texture,
@@ -215,12 +225,12 @@ void UEngine::DXRenderer::InitDepthStencil
 	D3D11_DEPTH_STENCIL_DESC depthState;
 
 	// Depth test parameters
-	depthState.DepthEnable = enableDepthStencil;
+	depthState.DepthEnable = EnableDepthStencil;
 	depthState.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthState.DepthFunc = D3D11_COMPARISON_LESS;
 
 	// Stencil test parameters
-	depthState.StencilEnable = enableDepthStencil;
+	depthState.StencilEnable = EnableDepthStencil;
 	depthState.StencilReadMask = 0xFF;
 	depthState.StencilWriteMask = 0xFF;
 
@@ -255,7 +265,7 @@ void UEngine::DXRenderer::InitDepthStencil
 	descDSV.Texture2D.MipSlice = NULL;
 
 	if (device->CreateDepthStencilState(&depthState, depth_stencil_state) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
-	if (enableDepthStencil == false) return;
+	if (EnableDepthStencil == false) return;
 	if (device->CreateTexture2D(&depthBuffer, nullptr, depth_stencil_texture) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
 	if (device->CreateDepthStencilView(*depth_stencil_texture, &descDSV, depth_stencil_view) != S_OK) throw std::runtime_error::runtime_error("Rendering Creation Failed!");
 }
@@ -265,7 +275,7 @@ void UEngine::DXRenderer::InitRenderViewContext
 	UEngine::DXRenderViewContext** const context,
 	UINT width,
 	UINT height,
-	bool enableDepthStencil,
+	bool EnableDepthStencil,
 	DXGI_SAMPLE_DESC sampleDesc
 )
 {
@@ -278,7 +288,7 @@ void UEngine::DXRenderer::InitRenderViewContext
 	// Depth Stencil Texture, View, State
 	InitDepthStencil
 	(
-		enableDepthStencil,
+		EnableDepthStencil,
 		viewSize,
 		(*context)->DepthStencilState.GetAddressOf(),
 		(*context)->DepthStencilTexture2D.GetAddressOf(),
@@ -366,52 +376,3 @@ void UEngine::DXRenderer::InitRasterizerState
 	device->CreateRasterizerState(&desc, rasterizerState);
 }
 
-void UEngine::DXRenderer::VSSetConstantBuffers
-(
-	ID3D11Buffer* const* const constBuffer, 
-	const void* data, size_t _Size, 
-	const unsigned& startSlot, 
-	ID3D11DeviceContext* const deviceContext,
-	const unsigned& numBuffers
-)
-{
-	if (deviceContext == nullptr)
-	{
-		VSSetConstantBuffers(constBuffer, data, _Size, startSlot, immediate.DeviceContext.Get(), numBuffers);
-		return;
-	}
-
-	// world matrix
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	deviceContext->Map(*constBuffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
-	memcpy(mappedResource.pData, data, _Size);
-	deviceContext->Unmap(*constBuffer, 0);
-
-	deviceContext->VSSetConstantBuffers(startSlot, numBuffers, constBuffer);
-}
-
-void UEngine::DXRenderer::PSSetConstantBuffers
-(
-	ID3D11Buffer* const* const constBuffer,
-	const void* data, size_t _Size,
-	const unsigned& startSlot,
-	ID3D11DeviceContext* const deviceContext,
-	const unsigned& numBuffers
-)
-{
-	if (deviceContext == nullptr)
-	{
-		PSSetConstantBuffers(constBuffer, data, _Size, startSlot, immediate.DeviceContext.Get(), numBuffers);
-		return;
-	}
-
-	// world matrix
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	deviceContext->Map(*constBuffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
-	memcpy(mappedResource.pData, data, _Size);
-	deviceContext->Unmap(*constBuffer, 0);
-
-	deviceContext->PSSetConstantBuffers(startSlot, numBuffers, constBuffer);
-}

@@ -35,127 +35,69 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_UNITTEST, szWindowClass, MAX_LOADSTRING);
 
-    WNDCLASSEXW wcex;
-
-    wcex.cbSize = sizeof(WNDCLASSEX);
-
-    wcex.style = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc = nullptr;
-    wcex.cbClsExtra = 0;
-    wcex.cbWndExtra = 0;
-    wcex.hInstance = hInstance;
-    wcex.hIcon = nullptr;
-    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_UNITTEST);
-    wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-
-    UEngine::WINDOWS_APPLICATION_DESC desc;
-    ZeroMemory(&desc, sizeof(desc));
-
-    desc.HInstance = hInstance;
-    desc.HasTitleBar = true;
-    desc.InitUTime = true;
-    desc.InitWinInput = true;
-    desc.NCmdShow = nCmdShow;
-    desc.TitleName = szTitle;
-    desc.WindowSize = { 800, 600 };
-    desc.wcex = &wcex;
-
+    // Window Application
     auto app = UEngine::WinApplication::Get();
-    app->Create(desc);
+    {
+        WNDCLASSEXW Wcex;
 
-    UEngine::DXRenderingDesc rendererDesc = UEngine::DXRenderer::CreateDefaultInitDesc();
-    rendererDesc.IsDebuggable = true;
-    rendererDesc.enableAntialise = true;
-    rendererDesc.enableBlendState = true;
-    rendererDesc.enableDepthStencil = true;
-    rendererDesc.enableMultisampling = true;
-    rendererDesc.MultisampleDesc = { 4, 0 };
+        Wcex.cbSize = sizeof(WNDCLASSEX);
+
+        Wcex.style = CS_HREDRAW | CS_VREDRAW;
+        Wcex.lpfnWndProc = nullptr;
+        Wcex.cbClsExtra = 0;
+        Wcex.cbWndExtra = 0;
+        Wcex.hInstance = hInstance;
+        Wcex.hIcon = nullptr;
+        Wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+        Wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        Wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_UNITTEST);
+        Wcex.lpszClassName = szWindowClass;
+        Wcex.hIconSm = LoadIcon(Wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
+        UEngine::WINDOWS_APPLICATION_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+
+        desc.HInstance = hInstance;
+        desc.HasTitleBar = true;
+        desc.InitUTime = true;
+        desc.InitWinInput = true;
+        desc.NCmdShow = nCmdShow;
+        desc.TitleName = szTitle;
+        desc.WindowSize = { 800, 600 };
+        desc.Wcex = &Wcex;
+
+        app->Create(desc);
+    }
+
+    // DXRenderer
     auto renderer = UEngine::DXRenderer::Get();
-    renderer->Init(app->GetHandler(), &rendererDesc);
-
-    UEngine::DXRenderObject* renderObj;
+    UEngine::DX_RENDERER_DESC rendererDesc = UEngine::DXRenderer::CreateDefaultInitDesc();
     {
-        // Shader
-        UEngine::DXRasterDesc rsDesc = UEngine::DXRasterDesc();
-        rsDesc.AntialiasedLineEnable = rendererDesc.enableAntialise;
-        rsDesc.DepthClipEnable = rendererDesc.enableDepthStencil;
-        rsDesc.MultiSampleEnable = rendererDesc.enableMultisampling;
-        auto default_shader = UEngine::DXShader::Instantiate
-        (
-            renderer,
-            "../_Shaders/DefaultVS.hlsl",
-            "../_Shaders/ColorPS.hlsl",
-            true,
-            rendererDesc.enableBlendState,
-            &rsDesc
-        );
-
-        // RenderMesh
-        UEngine::SIMPLE_VERTEX vertices[] =
-        {
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0.1f}, DirectX::XMFLOAT2{0, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0.1f}, DirectX::XMFLOAT2{0, 0}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0.1f}, DirectX::XMFLOAT2{1, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0.1f}, DirectX::XMFLOAT2{1, 0}},
-        };
-        unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
-        auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(renderer->GetDevice(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
-
-        renderObj = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
-        renderObj->AddConstantBuffer(renderer, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
-        DirectX::XMFLOAT4 color{ 1,0,1,1 };
-        renderObj->CBAttachData("Color", &color, sizeof(color));
+        rendererDesc.IsDebuggable = true;
+        rendererDesc.EnableAntialisedLine = true;
+        rendererDesc.EnableBlendState = true;
+        rendererDesc.EnableDepthStencil = true;
+        rendererDesc.EnableMultisampling = true;
+        rendererDesc.MultisampleDesc = { 4, 0 };
+        renderer->Init(app->GetHandler(), &rendererDesc);
     }
 
-    UEngine::DXRenderObject* renderObj2;
-    {
-        // Shader
-        UEngine::DXRasterDesc rsDesc = UEngine::DXRasterDesc();
-        rsDesc.AntialiasedLineEnable = rendererDesc.enableAntialise;
-        rsDesc.DepthClipEnable = rendererDesc.enableDepthStencil;
-        rsDesc.MultiSampleEnable = rendererDesc.enableMultisampling;
-        auto default_shader = UEngine::DXShader::Instantiate
-        (
-            renderer,
-            "../_Shaders/DefaultVS.hlsl",
-            "../_Shaders/ColorPS.hlsl",
-            true,
-            rendererDesc.enableBlendState,
-            &rsDesc
-        );
-
-        // RenderMesh
-        UEngine::SIMPLE_VERTEX vertices[] =
-        {
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.3f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{0.3f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1.0f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
-            UEngine::SIMPLE_VERTEX{DirectX::XMFLOAT3{1.0f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
-        };
-        auto default_renderMesh = UEngine::DXRenderMesh::Instantiate<UEngine::SIMPLE_VERTEX>(renderer->GetDevice(), &vertices[0], ARRAYSIZE(vertices));
-
-        renderObj2 = UEngine::DXRenderObject::Instantiate(default_renderMesh, default_shader, true);
-        renderObj2->AddConstantBuffer(renderer, "Color", sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
-        DirectX::XMFLOAT4 color{ 1,0,0,1 };
-        renderObj2->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
-    }
-
+    // View & Object Creation
     UEngine::DXView* view = UEngine::DXView::Instantiate
     (
         renderer, 
         800, 
         600, 
-        rendererDesc.enableDepthStencil, 
+        rendererDesc.EnableDepthStencil, 
         rendererDesc.MultisampleDesc
     );
-    view->AddRenderObject(renderObj);
-    view->AddRenderObject(renderObj2);
-
     std::vector<std::thread> threads;
-    
+    UEngine::DXRenderObject* renderObj;
+    {
+        renderObj = UEngine::DXGeometryFigurePrefab::CreateCircle();
+        view->AddRenderObject(renderObj);
+    }
+
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
@@ -170,7 +112,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             view->Begin();
             view->End(renderer->GetImmediateDeviceContext());
 
-            renderer->Begin(DirectX::Colors::Gray);
+            renderer->Begin(DirectX::Colors::Transparent);
             renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, view->GetAddressOfViewResource());
             renderer->End();
         }));	// render target view
@@ -194,7 +136,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     });
 
     UEngine::DXRenderObject::Release(&renderObj);
-    UEngine::DXRenderObject::Release(&renderObj2);
     UEngine::DXView::Release(&view);
 
     return returnedValue;

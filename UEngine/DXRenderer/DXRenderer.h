@@ -24,14 +24,14 @@ namespace UEngine
 		Microsoft::WRL::ComPtr<IDXGISwapChain> swapchain;
 		D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_1_0_CORE;
 
-		DXRenderingDesc rendering_desc;
+		DX_RENDERER_DESC rendering_desc;
 
 		DXRenderViewContext immediate; // main render view
 		class DXRenderObject* default_renderObject{ nullptr };
-		//DirectX::XMFLOAT4 color{ 1,1,1,1 };
+		class DXShader* default_color_shader{ nullptr };
 
 	public:
-		void Init(HWND outputWindow, const DXRenderingDesc* desc = nullptr);
+		void Init(HWND outputWindow, const DX_RENDERER_DESC* desc = nullptr);
 		void Release();
 		void UpdateConstantBuffers();
 		void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
@@ -39,11 +39,13 @@ namespace UEngine
 
 		void ResizeMainRenderTarget(UINT width, UINT height);
 
+		DX_RENDERER_DESC GetDescription() { return rendering_desc; }
 		D3D_FEATURE_LEVEL GetFeatureLevel() { return featureLevel; }
 		ID3D11Device* const GetDevice() { return device.Get(); }
 		ID3D11DeviceContext* const GetImmediateDeviceContext() { return immediate.DeviceContext.Get(); }
+		DXShader* const GetDefaultColorShader() { return default_color_shader; }
 
-		static DXRenderingDesc CreateDefaultInitDesc();
+		static DX_RENDERER_DESC CreateDefaultInitDesc();
 
 		void InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
 
@@ -52,7 +54,7 @@ namespace UEngine
 		void InitMainRenderTargetView(ID3D11RenderTargetView** const rtv);
 		void InitDepthStencil
 		(
-			bool enableDepthStencil,
+			bool EnableDepthStencil,
 			const RECT clientSize,
 			ID3D11DepthStencilState** const depth_stencil_state,
 			ID3D11Texture2D** const depth_stencil_texture,
@@ -64,7 +66,7 @@ namespace UEngine
 			UEngine::DXRenderViewContext** const context,
 			UINT width,
 			UINT height,
-			bool enableDepthStencil,
+			bool EnableDepthStencil,
 			DXGI_SAMPLE_DESC sampleDesc
 		);
 		void InitRasterizerState
@@ -75,25 +77,6 @@ namespace UEngine
 			const BOOL& multisampleEnable = false,
 			const BOOL& antialisedEnable = false,
 			const BOOL& depthClipEnable = false
-		);
-
-		void VSSetConstantBuffers
-		(
-			ID3D11Buffer* const* const constBuffer, 
-			const void* data, 
-			size_t _Size, 
-			const unsigned& startSlot, 
-			ID3D11DeviceContext* const deviceContext = nullptr,
-			const unsigned& numBuffers = 1
-		);
-		void PSSetConstantBuffers
-		(
-			ID3D11Buffer* const* const constBuffer, 
-			const void* data, 
-			size_t _Size, 
-			const unsigned& startSlot, 
-			ID3D11DeviceContext* const deviceContext = nullptr,
-			const unsigned& numBuffers = 1
 		);
 	};
 }

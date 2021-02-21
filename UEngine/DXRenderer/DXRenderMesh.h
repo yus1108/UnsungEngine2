@@ -32,7 +32,8 @@ namespace UEngine
 		(
 			ID3D11Device* const device,
 			const T* const vertices,
-			UINT vertexCount
+			UINT vertexCount,
+			D3D11_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
 		);
 
 		// Initialize to Draw with vertices, indices, and the given topology
@@ -44,7 +45,7 @@ namespace UEngine
 			UINT vertexCount,
 			const unsigned* const indices,
 			UINT indexCount,
-			D3D11_PRIMITIVE_TOPOLOGY topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+			D3D11_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 		);
 		static void Release(DXRenderMesh** const renderMesh);
 		void Set(ID3D11DeviceContext* const deviceContext);
@@ -74,12 +75,13 @@ namespace UEngine
 	(
 		ID3D11Device* const device,
 		const T* const vertices,
-		UINT vertexCount
+		UINT vertexCount,
+		D3D11_PRIMITIVE_TOPOLOGY topology
 	)
 	{
 		DXRenderMesh* instance = new DXRenderMesh;
 		instance->SetVertices<T>(device, vertices, vertexCount);
-		instance->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
+		instance->SetTopology(topology);
 		return instance;
 	}
 

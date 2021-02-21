@@ -6,14 +6,14 @@ UEngine::DXView* const UEngine::DXView::Instantiate
     DXRenderer* renderer,
     UINT width, 
     UINT height,
-    bool enableDepthStencil,
+    bool EnableDepthStencil,
     DXGI_SAMPLE_DESC sampleDesc
 )
 {
     DXView* instance = new DXView;
     DXRenderViewContext* contextAddressOf[] = { &instance->context };
     ZeroMemory(&instance->context, sizeof(UEngine::DXRenderViewContext));
-    renderer->InitRenderViewContext(contextAddressOf, 400, 400, enableDepthStencil, sampleDesc);
+    renderer->InitRenderViewContext(contextAddressOf, 400, 400, EnableDepthStencil, sampleDesc);
 
     return instance;
 }

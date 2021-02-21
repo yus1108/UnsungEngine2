@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXConstantBuffer.h" />
+    <ClInclude Include="DXGeometryFigurePrefab.h" />
     <ClInclude Include="DXRDefinitions.h" />
     <ClInclude Include="DXRenderer.h" />
     <ClInclude Include="DXRenderMesh.h" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXConstantBuffer.cpp" />
+    <ClCompile Include="DXGeometryFigurePrefab.cpp" />
     <ClCompile Include="DXRenderer.cpp" />
     <ClCompile Include="DXRenderMesh.cpp" />
     <ClCompile Include="DXRenderObject.cpp" />

@@ -29,10 +29,14 @@ namespace UEngine
 
 		ID3D11Buffer* const GetBuffer() { return constBuffer.Get(); }
 		ID3D11Buffer* const* const GetBufferAddressOf() { return constBuffer.GetAddressOf(); }
+		size_t const GetDataSize() { return _Size; }
 
+		template <typename T>
+		T* const GetData() { return data; }
 		template <typename T>
 		void CopyData(const T* data, size_t _Size);
 		void AttachData(const void* data, size_t _Size);
+
 		void Update(ID3D11DeviceContext* const deviceContext);
 		void Set(ID3D11DeviceContext* const deviceContext);
 	};

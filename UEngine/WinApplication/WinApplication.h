@@ -12,7 +12,7 @@ namespace UEngine
 		bool InitWinInput;
 		int NCmdShow;
 		LPCTSTR TitleName;
-		WNDCLASSEXW* wcex;
+		WNDCLASSEXW* Wcex;
 		POINT WindowSize;
 	};
 
@@ -48,9 +48,6 @@ namespace UEngine
 		WINDOWS_APPLICATION_DESC appDesc;
 		bool isDefaultDesc;
 
-		// Forward declarations of functions included in this code module:
-		
-		ATOM MyRegisterClass(HINSTANCE hInstance, WNDCLASSEX wcex);
 		BOOL InitInstance(HINSTANCE hInstance, int nCmdShow, LPCTSTR titleName, LPCTSTR windowClassName, POINT windowSize);
 		static LRESULT CALLBACK	WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	};
