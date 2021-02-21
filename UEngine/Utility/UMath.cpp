@@ -1,6 +1,3 @@
-#include <Windows.h>
-#include "UtilityDefinitions.h"
-#include "..\WinApplication\WinApplication.h"
 #include "UMath.h"
 
 namespace UEngine

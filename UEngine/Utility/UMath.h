@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 #include "UtilityDefinitions.h"
 
 namespace UEngine

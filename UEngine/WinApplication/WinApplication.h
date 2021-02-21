@@ -53,7 +53,7 @@ namespace UEngine
 	};
 
 	template<typename Lambda>
-	inline int WinApplication::UpdateLoop(Lambda func)
+	inline int WinApplication::UpdateLoop(Lambda function)
 	{
 		MSG message;
 		ZeroMemory(&message, sizeof(MSG));
@@ -73,7 +73,7 @@ namespace UEngine
 			{
 				if (appDesc.InitUTime)
 					UEngine::Utility::UTime::Get()->Signal();
-				func();
+				function();
 			}
 		}
 

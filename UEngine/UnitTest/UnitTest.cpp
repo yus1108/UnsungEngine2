@@ -3,14 +3,10 @@
 
 #include "framework.h"
 #include "UnitTest.h"
-#include "../WinApplication/WinApplication.h"
-#include "../WinApplication/WinInput.h"
+#include "../UEngine/UEngine.h"
 #include "../WinApplication/WinConsole.h"
 #include "../WinApplication/WinMemoryLeak.h"
-#include "../Utility/UMath.h"
-#include "../Utility/UTime.h"
-#include "../DXRenderer/dxrframework.h"
-#include <thread>
+#include "../Utility/UThreadSync.h"
 
 #define MAX_LOADSTRING 100
 
@@ -83,20 +79,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     // View & Object Creation
+    RECT windowSize;
+    app->GetClientSize(&windowSize);
     UEngine::DXView* view = UEngine::DXView::Instantiate
     (
         renderer, 
-        800, 
-        600, 
+        windowSize.right - windowSize.left, 
+        windowSize.bottom - windowSize.top, 
         rendererDesc.EnableDepthStencil, 
         rendererDesc.MultisampleDesc
     );
-    std::vector<std::thread> threads;
     UEngine::DXRenderObject* renderObj;
     {
         renderObj = UEngine::DXGeometryFigurePrefab::CreateCircle();
         view->AddRenderObject(renderObj);
     }
+
+    auto threadPool = UEngine::Utility::UThreadSync::Get();
+    threadPool->Init();
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
@@ -107,15 +107,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         renderer->UpdateConstantBuffers();
 
         // rendering in different thread
-        threads.push_back(std::thread([&]() {
-
+        threadPool->AddTask([&]() {
             view->Begin();
             view->End(renderer->GetImmediateDeviceContext());
 
             renderer->Begin(DirectX::Colors::Transparent);
             renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, view->GetAddressOfViewResource());
             renderer->End();
-        }));	// render target view
+        }); // render target view
 
         // update in main thread
         {
@@ -128,11 +127,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
         }
         
-        // join threads
-        for (auto& thread : threads) {
-            thread.join();
-        }
-        threads.clear();
+        
     });
 
     UEngine::DXRenderObject::Release(&renderObj);
