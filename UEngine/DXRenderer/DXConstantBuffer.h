@@ -24,7 +24,7 @@ namespace UEngine
 			(
 				DXRenderer* const renderer, 
 				size_t _Data_Size,
-				UINT flags = UENGINE_DXSHADERTYPE_UNKNOWN,
+				UINT flags = UENGINE_DXRENDERER_SHADERTYPE_UNKNOWN,
 				UINT startSlot = 0
 			);
 			static void Release(DXConstantBuffer** const constantBuffer);

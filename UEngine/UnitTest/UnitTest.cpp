@@ -67,8 +67,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     // DXRenderer
-    auto renderer = UEngine::DXRenderer::DXRenderer::Get();
-    UEngine::DX_RENDERER_DESC rendererDesc = UEngine::DXRenderer::DXRenderer::CreateDefaultInitDesc();
+    auto renderer = UEngine::DXRenderer::Get();
+    UEngine::DXRenderer::RENDERER_DESC rendererDesc = UEngine::DXRenderer::CreateDefaultInitDesc();
     {
         rendererDesc.IsDebuggable = true;
         rendererDesc.EnableAntialisedLine = false;

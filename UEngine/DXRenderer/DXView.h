@@ -10,7 +10,7 @@ namespace UEngine
 			DXView() {}
 			~DXView() = default;
 		private:
-			UEngine::DXRenderViewContext context;
+			ViewContext context;
 			std::unordered_map<DXRenderObject*, DXRenderObject*> renderObjectList;
 
 		public:

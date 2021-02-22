@@ -46,11 +46,11 @@ namespace UEngine
 
 		void DXConstantBuffer::Set(ID3D11DeviceContext* const deviceContext)
 		{
-			if (Flags & UENGINE_DXSHADERTYPE_VERTEX_SHADER) deviceContext->VSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
-			if (Flags & UENGINE_DXSHADERTYPE_PIXEL_SHADER) deviceContext->PSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
-			if (Flags & UENGINE_DXSHADERTYPE_GEOMETRY_SHADER) deviceContext->GSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
-			if (Flags & UENGINE_DXSHADERTYPE_HULL_SHADER) deviceContext->DSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
-			if (Flags & UENGINE_DXSHADERTYPE_DOMAIN_SHADER) deviceContext->HSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
+			if (Flags & UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER) deviceContext->VSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
+			if (Flags & UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER) deviceContext->PSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
+			if (Flags & UENGINE_DXRENDERER_SHADERTYPE_GEOMETRY_SHADER) deviceContext->GSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
+			if (Flags & UENGINE_DXRENDERER_SHADERTYPE_HULL_SHADER) deviceContext->DSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
+			if (Flags & UENGINE_DXRENDERER_SHADERTYPE_DOMAIN_SHADER) deviceContext->HSSetConstantBuffers(StartSlot, 1, constBuffer.GetAddressOf());
 		}
 
 	}

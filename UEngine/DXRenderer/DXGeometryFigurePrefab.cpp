@@ -24,7 +24,7 @@ namespace UEngine
 					);
 
 			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
 			renderObj->AddConstantBuffer("Color", constantBuffer);
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
 			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
@@ -49,7 +49,7 @@ namespace UEngine
 					);
 
 			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
 			renderObj->AddConstantBuffer("Color", constantBuffer);
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
 			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
@@ -76,7 +76,7 @@ namespace UEngine
 					);
 
 			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
 			renderObj->AddConstantBuffer("Color", constantBuffer);
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
 			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
@@ -106,7 +106,7 @@ namespace UEngine
 					);
 
 			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
 			renderObj->AddConstantBuffer("Color", constantBuffer);
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
 			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
@@ -145,7 +145,7 @@ namespace UEngine
 					);
 
 			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
 			renderObj->AddConstantBuffer("Color", constantBuffer);
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
 			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));

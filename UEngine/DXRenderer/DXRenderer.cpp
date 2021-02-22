@@ -11,10 +11,9 @@ namespace UEngine
 		void DXRenderer::Init
 		(
 			HWND outputWindow,
-			const DX_RENDERER_DESC* desc
+			const RENDERER_DESC* desc
 		)
 		{
-			Release();
 
 			RECT clientSize;
 			hwnd = outputWindow;
@@ -43,7 +42,7 @@ namespace UEngine
 
 				{
 					// Shader
-					DX_RASTERIZER_DESC rsDesc = DX_RASTERIZER_DESC();
+					RASTERIZER_DESC rsDesc = RASTERIZER_DESC();
 					rsDesc.EnableAntialisedLine = rendering_desc.EnableAntialisedLine;
 					rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
 					rsDesc.EnableMultisampling = rendering_desc.EnableMultisampling;
@@ -81,7 +80,7 @@ namespace UEngine
 					// RenderObject
 					DirectX::XMFLOAT4 color{ 1,1,1,1 };
 					default_renderObject = DXRenderObject::Instantiate(default_renderMesh, default_shader);
-					DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(this, sizeof(DirectX::XMFLOAT4), UENGINE_DXSHADERTYPE_PIXEL_SHADER);
+					DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(this, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
 					default_renderObject->AddConstantBuffer("Color", constantBuffer);
 					default_renderObject->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
 				}
@@ -130,24 +129,6 @@ namespace UEngine
 		{
 			swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
 			InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
-		}
-
-		DX_RENDERER_DESC DXRenderer::CreateDefaultInitDesc()
-		{
-			DX_RASTERIZER_DESC rasterDesc;
-			ZeroMemory(&rasterDesc, sizeof(DX_RASTERIZER_DESC));
-			rasterDesc.FillMode = D3D11_FILL_SOLID;
-			rasterDesc.CullMode = D3D11_CULL_BACK;
-
-			DX_RENDERER_DESC renderingDesc;
-			ZeroMemory(&renderingDesc, sizeof(DX_RENDERER_DESC));
-			renderingDesc.RefreshRate = { 60, 1 };
-			renderingDesc.MultisampleDesc = { 1, 0 };
-			renderingDesc.FillMode = D3D11_FILL_SOLID;
-			renderingDesc.CullMode = D3D11_CULL_BACK;
-			renderingDesc.IsDebuggable = true;
-
-			return renderingDesc;
 		}
 
 		void DXRenderer::InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer)
@@ -286,7 +267,7 @@ namespace UEngine
 
 		void DXRenderer::InitRenderViewContext
 		(
-			DXRenderViewContext** const context,
+			ViewContext** const context,
 			UINT width,
 			UINT height,
 			bool EnableDepthStencil,
@@ -389,7 +370,5 @@ namespace UEngine
 			desc.AntialiasedLineEnable = antialisedEnable; //¶óÀÎ¾ÈÆ¼¾Ù¸®¾î½Ì ¾øÀ½
 			device->CreateRasterizerState(&desc, rasterizerState);
 		}
-
-
 	}
 }

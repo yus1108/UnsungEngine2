@@ -24,14 +24,14 @@ namespace UEngine
 			Microsoft::WRL::ComPtr<IDXGISwapChain> swapchain;
 			D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_1_0_CORE;
 
-			DX_RENDERER_DESC rendering_desc;
+			RENDERER_DESC rendering_desc;
 
-			DXRenderViewContext immediate; // main render view
+			ViewContext immediate; // main render view
 			class DXRenderObject* default_renderObject{ nullptr };
 			class DXShader* default_color_shader{ nullptr };
 
 		public:
-			void Init(HWND outputWindow, const DX_RENDERER_DESC* desc = nullptr);
+			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
 			void Release();
 			void UpdateConstantBuffers();
 			void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
@@ -39,13 +39,11 @@ namespace UEngine
 
 			void ResizeMainRenderTarget(UINT width, UINT height);
 
-			DX_RENDERER_DESC GetDescription() { return rendering_desc; }
+			RENDERER_DESC GetDescription() { return rendering_desc; }
 			D3D_FEATURE_LEVEL GetFeatureLevel() { return featureLevel; }
 			ID3D11Device* const GetDevice() { return device.Get(); }
 			ID3D11DeviceContext* const GetImmediateDeviceContext() { return immediate.DeviceContext.Get(); }
 			DXShader* const GetDefaultColorShader() { return default_color_shader; }
-
-			static DX_RENDERER_DESC CreateDefaultInitDesc();
 
 			void InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
 
@@ -63,7 +61,7 @@ namespace UEngine
 			);
 			void InitRenderViewContext
 			(
-				UEngine::DXRenderViewContext** const context,
+				ViewContext** const context,
 				UINT width,
 				UINT height,
 				bool EnableDepthStencil,
@@ -79,5 +77,24 @@ namespace UEngine
 				const BOOL& depthClipEnable = false
 			);
 		};
+
+		static DXRenderer* Get() { return DXRenderer::Get(); }
+		static RENDERER_DESC CreateDefaultInitDesc()
+		{
+			RASTERIZER_DESC rasterDesc;
+			ZeroMemory(&rasterDesc, sizeof(RASTERIZER_DESC));
+			rasterDesc.FillMode = D3D11_FILL_SOLID;
+			rasterDesc.CullMode = D3D11_CULL_BACK;
+
+			RENDERER_DESC renderingDesc;
+			ZeroMemory(&renderingDesc, sizeof(RENDERER_DESC));
+			renderingDesc.RefreshRate = { 60, 1 };
+			renderingDesc.MultisampleDesc = { 1, 0 };
+			renderingDesc.FillMode = D3D11_FILL_SOLID;
+			renderingDesc.CullMode = D3D11_CULL_BACK;
+			renderingDesc.IsDebuggable = true;
+
+			return renderingDesc;
+		}
 	}
 }

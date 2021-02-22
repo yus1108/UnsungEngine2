@@ -5,24 +5,24 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		void DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXSHADERTYPE& shader_type)
+		void DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXRENDERER_SHADERTYPE& shader_type)
 		{
 			switch (shader_type)
 			{
-			case UENGINE_DXSHADERTYPE_VERTEX_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER:
 				device->CreateVertexShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.vertexShader.GetAddressOf());
 				InitInputLayout(device, shaderBlob);
 				break;
-			case UENGINE_DXSHADERTYPE_PIXEL_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER:
 				device->CreatePixelShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.pixelShader.GetAddressOf());
 				break;
-			case UENGINE_DXSHADERTYPE_GEOMETRY_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_GEOMETRY_SHADER:
 				device->CreateGeometryShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.geometryShader.GetAddressOf());
 				break;
-			case UENGINE_DXSHADERTYPE_HULL_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_HULL_SHADER:
 				device->CreateHullShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.hullShader.GetAddressOf());
 				break;
-			case UENGINE_DXSHADERTYPE_DOMAIN_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_DOMAIN_SHADER:
 				device->CreateDomainShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.domainShader.GetAddressOf());
 				break;
 			default:
@@ -31,7 +31,7 @@ namespace UEngine
 			}
 		}
 
-		void DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const UENGINE_DXSHADERTYPE& shader_type, bool isDebuggable, const std::string& entry_point)
+		void DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const UENGINE_DXRENDERER_SHADERTYPE& shader_type, bool isDebuggable, const std::string& entry_point)
 		{
 			Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
 			shader_files[static_cast<unsigned>(shader_type)] = shader_file;
@@ -40,19 +40,19 @@ namespace UEngine
 			std::wstring wstr_shader_file = std::wstring(shader_file.begin(), shader_file.end());
 			switch (shader_type)
 			{
-			case UENGINE_DXSHADERTYPE_VERTEX_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER:
 				hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "vs_4_0", isDebuggable);
 				break;
-			case UENGINE_DXSHADERTYPE_PIXEL_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER:
 				hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ps_4_0", isDebuggable);
 				break;
-			case UENGINE_DXSHADERTYPE_GEOMETRY_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_GEOMETRY_SHADER:
 				hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "gs_4_0", isDebuggable);
 				break;
-			case UENGINE_DXSHADERTYPE_HULL_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_HULL_SHADER:
 				hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "hs_4_0", isDebuggable);
 				break;
-			case UENGINE_DXSHADERTYPE_DOMAIN_SHADER:
+			case UENGINE_DXRENDERER_SHADERTYPE_DOMAIN_SHADER:
 				hr = CompileShader(wstr_shader_file.c_str(), entry_point.c_str(), device, shaderBlob.GetAddressOf(), "ds_4_0", isDebuggable);
 				break;
 			default:
@@ -130,14 +130,14 @@ namespace UEngine
 			const std::string& pixel_shader_file,
 			bool isDebuggable,
 			bool enableBlending,
-			const DX_RASTERIZER_DESC* const rasterizerStateDesc
+			const RASTERIZER_DESC* const rasterizerStateDesc
 		)
 		{
 			auto device = renderer->GetDevice();
 
 			DXShader* instance = new DXShader;
-			instance->SetShader(device, vertex_shader_file, UENGINE_DXSHADERTYPE_VERTEX_SHADER, isDebuggable);
-			instance->SetShader(device, pixel_shader_file, UENGINE_DXSHADERTYPE_PIXEL_SHADER, isDebuggable);
+			instance->SetShader(device, vertex_shader_file, UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER, isDebuggable);
+			instance->SetShader(device, pixel_shader_file, UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER, isDebuggable);
 
 			// Rasterizer State
 			renderer->InitRasterizerState
