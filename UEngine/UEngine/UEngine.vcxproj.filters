@@ -10,12 +10,24 @@
     <ClInclude Include="Components\IComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Components\RenderMesh.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Shader.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Components\Transform.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\RenderMesh.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Shader.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>

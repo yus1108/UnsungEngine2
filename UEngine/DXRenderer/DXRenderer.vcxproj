@@ -165,6 +165,7 @@
     <ClInclude Include="DXRenderer.h" />
     <ClInclude Include="DXRenderMesh.h" />
     <ClInclude Include="DXRenderObject.h" />
+    <ClInclude Include="DXResourceManager.h" />
     <ClInclude Include="DXRFramework.h" />
     <ClInclude Include="DXShader.h" />
     <ClInclude Include="DXView.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="DXRenderer.cpp" />
     <ClCompile Include="DXRenderMesh.cpp" />
     <ClCompile Include="DXRenderObject.cpp" />
+    <ClCompile Include="DXResourceManager.cpp" />
     <ClCompile Include="DXRFramework.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

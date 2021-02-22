@@ -9,113 +9,55 @@ namespace UEngine
 		DXRenderObject* DXGeometryFigurePrefab::CreatePoint()
 		{
 			DXRenderer* renderer = DXRenderer::Get();
+			auto resourceManager = DXResourceManager::Get();
 
-			// RenderMesh
-			SIMPLE_VERTEX vertices[] =
-			{
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}},
-			};
-			auto default_renderMesh = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
-				(
-					renderer->GetDevice(),
-					vertices,
-					ARRAYSIZE(vertices),
-					D3D11_PRIMITIVE_TOPOLOGY_POINTLIST
-					);
-
-			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
-			renderObj->AddConstantBuffer("Color", constantBuffer);
+			DXRenderObject* renderObj = DXRenderObject::Instantiate(resourceManager->GetRenderMesh("point"), resourceManager->GetShaders("color"));
+			renderObj->AddConstantBuffer("color", resourceManager->GetConstantBuffer("color"));
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
-			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
+			renderObj->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));
 			return renderObj;
 		}
 
 		DXRenderObject* DXGeometryFigurePrefab::CreateLine()
 		{
 			DXRenderer* renderer = DXRenderer::Get();
+			auto resourceManager = DXResourceManager::Get();
 
-			// RenderMesh
-			SIMPLE_VERTEX vertices[] =
-			{
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}},
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 1.0f, 0}},
-			};
-			auto default_renderMesh = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
-				(
-					renderer->GetDevice(),
-					vertices,
-					ARRAYSIZE(vertices)
-					);
-
-			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
-			renderObj->AddConstantBuffer("Color", constantBuffer);
+			DXRenderObject* renderObj = DXRenderObject::Instantiate(resourceManager->GetRenderMesh("line"), resourceManager->GetShaders("color"));
+			renderObj->AddConstantBuffer("color", resourceManager->GetConstantBuffer("color"));
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
-			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
+			renderObj->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));
 			return renderObj;
 		}
 
 		DXRenderObject* DXGeometryFigurePrefab::CreateTriangle()
 		{
 			DXRenderer* renderer = DXRenderer::Get();
+			auto resourceManager = DXResourceManager::Get();
 
-			// RenderMesh
-			SIMPLE_VERTEX vertices[] =
-			{
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0.5f, 0}},
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
-			};
-			auto default_renderMesh = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
-				(
-					renderer->GetDevice(),
-					vertices,
-					ARRAYSIZE(vertices),
-					D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
-					);
-
-			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
-			renderObj->AddConstantBuffer("Color", constantBuffer);
+			DXRenderObject* renderObj = DXRenderObject::Instantiate(resourceManager->GetRenderMesh("triangle"), resourceManager->GetShaders("color"));
+			renderObj->AddConstantBuffer("color", resourceManager->GetConstantBuffer("color"));
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
-			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
+			renderObj->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));
 			return renderObj;
 		}
 
 		DXRenderObject* DXGeometryFigurePrefab::CreateRectangle()
 		{
 			DXRenderer* renderer = DXRenderer::Get();
+			auto resourceManager = DXResourceManager::Get();
 
-			// RenderMesh
-			SIMPLE_VERTEX vertices[] =
-			{
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}},
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
-				SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}},
-			};
-			unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
-			auto default_renderMesh = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
-				(
-					renderer->GetDevice(),
-					vertices,
-					ARRAYSIZE(vertices),
-					indices,
-					ARRAYSIZE(indices)
-					);
-
-			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
-			renderObj->AddConstantBuffer("Color", constantBuffer);
+			DXRenderObject* renderObj = DXRenderObject::Instantiate(resourceManager->GetRenderMesh("rectangle"), resourceManager->GetShaders("color"));
+			renderObj->AddConstantBuffer("color", resourceManager->GetConstantBuffer("color"));
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
-			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
+			renderObj->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));
 			return renderObj;
 		}
 
 		DXRenderObject* DXGeometryFigurePrefab::CreateCircle(unsigned slice)
 		{
 			DXRenderer* renderer = DXRenderer::Get();
+			auto resourceManager = DXResourceManager::Get();
 
 			// RenderMesh
 			std::vector<SIMPLE_VERTEX> vertices = std::vector<SIMPLE_VERTEX>
@@ -135,20 +77,19 @@ namespace UEngine
 			indices.emplace_back(0);
 			indices.emplace_back(slice);
 			indices.emplace_back(1);
-			auto default_renderMesh = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+			resourceManager->SetRenderMesh("circle_" + slice, DXRenderMesh::Instantiate<SIMPLE_VERTEX>
 				(
 					renderer->GetDevice(),
 					&vertices[0],
 					vertices.size(),
 					&indices[0],
 					indices.size()
-					);
+					));
 
-			DXRenderObject* renderObj = DXRenderObject::Instantiate(default_renderMesh, renderer->GetDefaultColorShader());
-			DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(renderer, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
-			renderObj->AddConstantBuffer("Color", constantBuffer);
+			DXRenderObject* renderObj = DXRenderObject::Instantiate(resourceManager->GetRenderMesh("circle_"+slice), resourceManager->GetShaders("color"));
+			renderObj->AddConstantBuffer("color", resourceManager->GetConstantBuffer("color"));
 			DirectX::XMFLOAT4 color{ 0.5f,0.5f, 0.5f, 1 };
-			renderObj->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
+			renderObj->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));
 			return renderObj;
 		}
 

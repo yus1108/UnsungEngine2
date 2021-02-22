@@ -28,7 +28,6 @@ namespace UEngine
 
 			ViewContext immediate; // main render view
 			class DXRenderObject* default_renderObject{ nullptr };
-			class DXShader* default_color_shader{ nullptr };
 
 		public:
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
@@ -43,7 +42,6 @@ namespace UEngine
 			D3D_FEATURE_LEVEL GetFeatureLevel() { return featureLevel; }
 			ID3D11Device* const GetDevice() { return device.Get(); }
 			ID3D11DeviceContext* const GetImmediateDeviceContext() { return immediate.DeviceContext.Get(); }
-			DXShader* const GetDefaultColorShader() { return default_color_shader; }
 
 			void InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
 

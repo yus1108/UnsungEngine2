@@ -91,6 +91,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -109,6 +110,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -127,6 +129,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -145,6 +148,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -167,12 +171,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\IComponent.h" />
+    <ClInclude Include="Components\RenderMesh.h" />
+    <ClInclude Include="Components\Shader.h" />
     <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="UEngine.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\RenderMesh.cpp" />
+    <ClCompile Include="Components\Shader.cpp" />
     <ClCompile Include="Components\Transform.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />

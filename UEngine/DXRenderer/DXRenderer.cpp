@@ -41,63 +41,23 @@ namespace UEngine
 				);
 
 				{
-					// Shader
-					RASTERIZER_DESC rsDesc = RASTERIZER_DESC();
-					rsDesc.EnableAntialisedLine = rendering_desc.EnableAntialisedLine;
-					rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
-					rsDesc.EnableMultisampling = rendering_desc.EnableMultisampling;
-					auto default_shader = DXShader::Instantiate
-					(
-						this,
-						"../_Shaders/DefaultVS.hlsl",
-						"../_Shaders/DefaultPS.hlsl",
-						rendering_desc.IsDebuggable,
-						rendering_desc.EnableBlendState,
-						&rsDesc
-					);
-
-					default_color_shader = DXShader::Instantiate
-					(
-						this,
-						"../_Shaders/DefaultVS.hlsl",
-						"../_Shaders/ColorPS.hlsl",
-						rendering_desc.IsDebuggable,
-						rendering_desc.EnableBlendState,
-						&rsDesc
-					);
-
-					// RenderMesh
-					SIMPLE_VERTEX vertices[] =
-					{
-						SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, -1, 0}, DirectX::XMFLOAT2{0, 1}},
-						SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, 1, 0}, DirectX::XMFLOAT2{0, 0}},
-						SIMPLE_VERTEX{DirectX::XMFLOAT3{1, -1, 0}, DirectX::XMFLOAT2{1, 1}},
-						SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
-					};
-					unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
-					auto default_renderMesh = DXRenderMesh::Instantiate<SIMPLE_VERTEX>(device.Get(), &vertices[0], ARRAYSIZE(vertices), indices, ARRAYSIZE(indices));
-
-					// RenderObject
 					DirectX::XMFLOAT4 color{ 1,1,1,1 };
-					default_renderObject = DXRenderObject::Instantiate(default_renderMesh, default_shader);
-					DXConstantBuffer* constantBuffer = DXConstantBuffer::Instantiate(this, sizeof(DirectX::XMFLOAT4), UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
-					default_renderObject->AddConstantBuffer("Color", constantBuffer);
-					default_renderObject->CBCopyData<DirectX::XMFLOAT4>("Color", &color, sizeof(color));
+					auto manager = DXResourceManager::Get();
+					manager->Init();
+
+					default_renderObject = DXRenderObject::Instantiate
+					(
+						manager->GetRenderMesh("default"),
+						manager->GetShaders("default")
+					);
+					default_renderObject->AddConstantBuffer("color", manager->GetConstantBuffer("color"));
+					default_renderObject->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));
 				}
 			}
 		}
 
 		void DXRenderer::Release()
 		{
-			if (default_renderObject)
-			{
-				auto renderMesh = default_renderObject->GetRenderMesh();
-				auto shader = default_renderObject->GetShader();
-				auto constantBuffer = default_renderObject->GetConstantBuffer("Color");
-				DXRenderMesh::Release(&renderMesh);
-				DXShader::Release(&shader);
-				DXConstantBuffer::Release(&constantBuffer);
-			}
 			DXRenderObject::Release(&default_renderObject);
 		}
 

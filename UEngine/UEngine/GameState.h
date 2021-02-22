@@ -14,6 +14,9 @@ namespace UEngine
 		static GameState instance;
 #pragma endregion
 	private:
+		// temporary object
+		DXRenderer::DXRenderObject* renderObj;
+
 		Utility::Sync::UThreadPool threadPool;
 		class WinApplication* app{ nullptr };
 		class DXRenderer::DXRenderer* renderer{ nullptr };

@@ -31,6 +31,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDC_UNITTEST, szWindowClass, MAX_LOADSTRING);
 
     UEngine::GameObject* gameObject = UEngine::GameObject::Instantiate();
+    UEngine::GameObject::Release(&gameObject);
 
     // Window Application
     auto app = UEngine::WinApplication::Get();

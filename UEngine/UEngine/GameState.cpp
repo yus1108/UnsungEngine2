@@ -16,6 +16,7 @@ void UEngine::GameState::Init(WinApplication* app, DXRenderer::DXRenderer* const
 void UEngine::GameState::Release()
 {
     DXRenderer::DXView::Release(&currentView);
+    DXRenderer::DXRenderObject::Release(&renderObj);
 }
 
 void UEngine::GameState::LoadScene(std::string file_name, std::function<void()> loadingScene)
@@ -35,7 +36,7 @@ void UEngine::GameState::LoadScene(std::string file_name, std::function<void()> 
         rendererDesc.EnableDepthStencil,
         rendererDesc.MultisampleDesc
     );
-    DXRenderer::DXRenderObject* renderObj;
+
     {
         renderObj = DXRenderer::DXGeometryFigurePrefab::CreateCircle(36000);
         currentView->AddRenderObject(renderObj);

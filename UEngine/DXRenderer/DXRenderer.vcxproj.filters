@@ -42,6 +42,9 @@
     <ClInclude Include="DXGeometryFigurePrefab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DXResourceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXRenderer.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DXGeometryFigurePrefab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXResourceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

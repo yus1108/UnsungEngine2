@@ -31,6 +31,7 @@
 #include "DXShader.h"
 #include "DXRenderMesh.h"
 #include "DXConstantBuffer.h"
+#include "DXResourceManager.h"
 #include "DXRenderObject.h"
 #include "DXGeometryFigurePrefab.h"
 #include "DXView.h"

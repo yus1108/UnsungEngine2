@@ -9,6 +9,8 @@
 
 #include "Components\IComponent.h"
 #include "Components\Transform.h"
+#include "Components\RenderMesh.h"
+#include "Components\Shader.h"
 #include "GameObject.h"
 #include "GameState.h"
 
