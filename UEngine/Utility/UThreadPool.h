@@ -13,15 +13,11 @@ namespace UEngine
 		class UThreadPool
 		{
 		public:
-			static UThreadPool* Get() { return &instance; }
-			UThreadPool() = default;
+			UThreadPool(size_t numThreads = 0) { Init(numThreads); }
 			~UThreadPool() { Release(); }
 
-		private:
-			static UThreadPool instance;
-
 		public:
-			void Init(size_t numThreads = 8);
+			void Init(size_t numThreads = 0);
 			void Release();
 
 		private:
@@ -29,8 +25,8 @@ namespace UEngine
 			size_t numThreads{ 0 };
 			std::vector<std::thread> pool;
 			std::queue<std::function<void()>> tasks;
-			std::condition_variable cv_threadpool;
-			std::mutex m_threadpool;
+			std::condition_variable condition_variable;
+			std::mutex mutex;
 
 		private:
 			void WorkerThread();
@@ -39,6 +35,23 @@ namespace UEngine
 			void AddTask(std::function<void()> task);
 		};
 
+		namespace Sync
+		{
+			class UThreadPool final : public UEngine::Utility::UThreadPool
+			{
+			public:
+				UThreadPool(size_t numThreads = 0) : UEngine::Utility::UThreadPool(numThreads) {}
 
+			private:
+				std::mutex mutex;
+				std::condition_variable condition_variable;
+				unsigned count{ 0 };
+
+			public:
+
+				void AddSyncTask(std::function<void()> task);
+				void Join();
+			};
+		}
 	}
 }

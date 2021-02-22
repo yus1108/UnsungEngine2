@@ -1,11 +1,12 @@
 #include "UThreadPool.h"
 #include <iostream>
 
-UEngine::Utility::UThreadPool UEngine::Utility::UThreadPool::instance;
-
 void UEngine::Utility::UThreadPool::Init(size_t numThreads)
 {
+	if (numThreads == 0) return;
+
 	Release();
+	this->stop_all = false;
 	this->numThreads = numThreads;
 	pool.reserve(numThreads);
 	for (size_t i = 0; i < numThreads; i++)
@@ -15,7 +16,7 @@ void UEngine::Utility::UThreadPool::Init(size_t numThreads)
 void UEngine::Utility::UThreadPool::Release()
 {
 	stop_all = true;
-	cv_threadpool.notify_all();
+	condition_variable.notify_all();
 
 	for (auto& thread : pool)
 		thread.join();
@@ -25,8 +26,8 @@ void UEngine::Utility::UThreadPool::WorkerThread()
 {
 	while (true)
 	{
-		std::unique_lock<std::mutex> lock(m_threadpool);
-		cv_threadpool.wait(lock, [this]() { return !this->tasks.empty() || stop_all; });
+		std::unique_lock<std::mutex> lock(mutex);
+		condition_variable.wait(lock, [this]() { return !this->tasks.empty() || stop_all; });
 		if (stop_all && tasks.empty()) return;
 
 		auto task = std::move(tasks.front());
@@ -39,7 +40,7 @@ void UEngine::Utility::UThreadPool::WorkerThread()
 
 void UEngine::Utility::UThreadPool::AddTask(std::function<void()> task)
 {
-	std::unique_lock<std::mutex> lock(m_threadpool);
+	std::unique_lock<std::mutex> lock(mutex);
 	bool stop = stop_all;
 	lock.unlock();
 
@@ -49,5 +50,31 @@ void UEngine::Utility::UThreadPool::AddTask(std::function<void()> task)
 		lock.lock();
 		tasks.push(std::move(task));
 	}
-	cv_threadpool.notify_one();
+	condition_variable.notify_one();
+}
+
+void UEngine::Utility::Sync::UThreadPool::AddSyncTask(std::function<void()> task)
+{
+	std::unique_lock<std::mutex> lock(mutex);
+	count++;
+	lock.unlock();
+
+	this->AddTask([this, task]()
+	{ 
+		if (task == nullptr) return;
+
+		task();
+
+		std::unique_lock<std::mutex> lock(mutex);
+		int count = --this->count;
+		lock.unlock();
+
+		if (count == 0) condition_variable.notify_one();
+	});
+}
+
+void UEngine::Utility::Sync::UThreadPool::Join()
+{
+	std::unique_lock<std::mutex> lock(mutex);
+	condition_variable.wait(lock, [this]() { return count == 0; });
 }

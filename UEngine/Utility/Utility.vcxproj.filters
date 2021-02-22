@@ -27,9 +27,6 @@
     <ClInclude Include="UThreadPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UThreadSync.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UTime.cpp">
@@ -39,9 +36,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UThreadPool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UThreadSync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

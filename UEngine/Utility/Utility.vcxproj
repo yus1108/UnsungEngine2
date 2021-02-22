@@ -144,7 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="UThreadPool.h" />
-    <ClInclude Include="UThreadSync.h" />
     <ClInclude Include="UtilityDefinitions.h" />
     <ClInclude Include="UMath.h" />
     <ClInclude Include="UTime.h" />
@@ -152,7 +151,6 @@
   <ItemGroup>
     <ClCompile Include="UMath.cpp" />
     <ClCompile Include="UThreadPool.cpp" />
-    <ClCompile Include="UThreadSync.cpp" />
     <ClCompile Include="UTime.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

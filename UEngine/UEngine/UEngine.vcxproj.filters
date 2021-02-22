@@ -3,9 +3,25 @@
   <ItemGroup>
     <ClInclude Include="UEngine.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Components\Transform.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\IComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Components\Transform.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{ecaed85d-dbd1-42b1-af9d-b10ddcfb75e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

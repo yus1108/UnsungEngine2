@@ -13,21 +13,18 @@ namespace UEngine
 		~GameState() { Release(); }
 		static GameState instance;
 #pragma endregion
+	private:
+		Utility::Sync::UThreadPool threadPool;
+		class WinApplication* app{ nullptr };
+		class DXRenderer::DXRenderer* renderer{ nullptr };
+		DXRenderer::DXView* currentView{ nullptr };
+
 	public:
-		void Init();
+		void Init(WinApplication* app, DXRenderer::DXRenderer* const renderer, size_t numThreads = 8);
 		void Release();
 
-		template <typename Lambda>
-		void LoadScene(Lambda loadingScene);
-		void LoadScene(std::string file_name);
+		void LoadScene(std::string file_name, std::function<void()> loadingScene = nullptr);
 
 		void Update();
 	};
-
-	template<typename Lambda>
-	inline void GameState::LoadScene(Lambda loadingScene)
-	{
-
-	}
-
 }

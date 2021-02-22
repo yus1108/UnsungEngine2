@@ -1,6 +1,7 @@
 #pragma once
 #include <tchar.h>
 #include "../Utility/UTime.h"
+#include <functional>
 
 namespace UEngine
 {
@@ -32,8 +33,7 @@ namespace UEngine
 		void Create(HINSTANCE hInstance);
 		void Create(const WINDOWS_APPLICATION_DESC& desc);
 
-		template<typename Lambda>
-		int UpdateLoop(Lambda func = []() {});
+		int UpdateLoop(std::function<void()> f = nullptr);
 		void Close();
 
 		const HINSTANCE GetInstance() { return appDesc.HInstance; }
@@ -51,34 +51,6 @@ namespace UEngine
 		BOOL InitInstance(HINSTANCE hInstance, int nCmdShow, LPCTSTR titleName, LPCTSTR windowClassName, POINT windowSize);
 		static LRESULT CALLBACK	WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	};
-
-	template<typename Lambda>
-	inline int WinApplication::UpdateLoop(Lambda function)
-	{
-		MSG message;
-		ZeroMemory(&message, sizeof(MSG));
-
-		while (true)
-		{
-			if (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE))
-			{
-				if (message.message == WM_QUIT)
-				{
-					break;
-				}
-				TranslateMessage(&message);
-				DispatchMessage(&message);
-			}
-			else
-			{
-				if (appDesc.InitUTime)
-					UEngine::Utility::UTime::Get()->Signal();
-				function();
-			}
-		}
-
-		return message.wParam;
-	}
 }
 
 

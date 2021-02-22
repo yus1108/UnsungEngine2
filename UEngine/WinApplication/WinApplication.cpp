@@ -59,6 +59,33 @@ namespace UEngine
         InitInstance(desc.HInstance, desc.NCmdShow, desc.TitleName, desc.Wcex->lpszClassName, desc.WindowSize);
     }
 
+    int WinApplication::UpdateLoop(std::function<void()> f)
+    {
+        MSG message;
+        ZeroMemory(&message, sizeof(MSG));
+
+        while (true)
+        {
+            if (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE))
+            {
+                if (message.message == WM_QUIT)
+                {
+                    break;
+                }
+                TranslateMessage(&message);
+                DispatchMessage(&message);
+            }
+            else
+            {
+                if (appDesc.InitUTime)
+                    UEngine::Utility::UTime::Get()->Signal();
+                if (f) f();
+            }
+        }
+
+        return message.wParam;
+    }
+
     void WinApplication::Close()
     {
         UnregisterClass(isDefaultDesc ? _T("WIN_APPLICATION") : appDesc.Wcex->lpszClassName, appDesc.HInstance);

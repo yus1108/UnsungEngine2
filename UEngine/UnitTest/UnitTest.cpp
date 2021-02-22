@@ -6,7 +6,6 @@
 #include "../UEngine/UEngine.h"
 #include "../WinApplication/WinConsole.h"
 #include "../WinApplication/WinMemoryLeak.h"
-#include "../Utility/UThreadSync.h"
 
 #define MAX_LOADSTRING 100
 
@@ -30,6 +29,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_UNITTEST, szWindowClass, MAX_LOADSTRING);
+
+    UEngine::GameObject* gameObject = UEngine::GameObject::Instantiate();
 
     // Window Application
     auto app = UEngine::WinApplication::Get();
@@ -66,72 +67,29 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     // DXRenderer
-    auto renderer = UEngine::DXRenderer::Get();
-    UEngine::DX_RENDERER_DESC rendererDesc = UEngine::DXRenderer::CreateDefaultInitDesc();
+    auto renderer = UEngine::DXRenderer::DXRenderer::Get();
+    UEngine::DX_RENDERER_DESC rendererDesc = UEngine::DXRenderer::DXRenderer::CreateDefaultInitDesc();
     {
         rendererDesc.IsDebuggable = true;
-        rendererDesc.EnableAntialisedLine = true;
+        rendererDesc.EnableAntialisedLine = false;
         rendererDesc.EnableBlendState = true;
         rendererDesc.EnableDepthStencil = true;
-        rendererDesc.EnableMultisampling = true;
-        rendererDesc.MultisampleDesc = { 4, 0 };
+        rendererDesc.EnableMultisampling = false;
+        rendererDesc.MultisampleDesc = { 1, 0 };
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
 
-    // View & Object Creation
-    RECT windowSize;
-    app->GetClientSize(&windowSize);
-    UEngine::DXView* view = UEngine::DXView::Instantiate
-    (
-        renderer, 
-        windowSize.right - windowSize.left, 
-        windowSize.bottom - windowSize.top, 
-        rendererDesc.EnableDepthStencil, 
-        rendererDesc.MultisampleDesc
-    );
-    UEngine::DXRenderObject* renderObj;
-    {
-        renderObj = UEngine::DXGeometryFigurePrefab::CreateCircle();
-        view->AddRenderObject(renderObj);
-    }
-
-    auto threadPool = UEngine::Utility::UThreadSync::Get();
-    threadPool->Init();
+    auto gameState = UEngine::GameState::Get();
+    gameState->Init(app, renderer);
+    gameState->LoadScene("");
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
-
-        // constant buffers mapping
-        view->UpdateConstantBuffers();
-        renderer->UpdateConstantBuffers();
-
-        // rendering in different thread
-        threadPool->AddTask([&]() {
-            view->Begin();
-            view->End(renderer->GetImmediateDeviceContext());
-
-            renderer->Begin(DirectX::Colors::Transparent);
-            renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, view->GetAddressOfViewResource());
-            renderer->End();
-        }); // render target view
-
-        // update in main thread
-        {
-            UEngine::WinConsole::ResetCursorPos();
-            std::cout << "\t\t" << std::endl;
-            std::cout << "\t\t" << std::endl;
-            UEngine::WinConsole::ResetCursorPos();
-
-            std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
-            std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
-        }
-        
-        
+        gameState->Update();
     });
 
-    UEngine::DXRenderObject::Release(&renderObj);
-    UEngine::DXView::Release(&view);
+    gameState->Release();
 
     return returnedValue;
 }
