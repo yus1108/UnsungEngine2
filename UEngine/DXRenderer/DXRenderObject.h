@@ -32,6 +32,11 @@ namespace UEngine
 
 			void const SetRenderMesh(DXRenderMesh* renderMesh) { this->renderMesh = renderMesh; }
 			void const SetShader(DXShader* shader) { this->shader = shader; }
+			void const SetConstantBuffers(const std::unordered_map<std::string, class DXConstantBuffer*>& buffers) 
+			{
+				for (auto buffer : buffers)
+					constantBuffers[buffer.first] = buffer.second;
+			};
 
 			void AddConstantBuffer(const std::string bufferName, DXConstantBuffer * const constantBuffer);
 			DXConstantBuffer* const RemoveConstantBuffer(const std::string bufferName);

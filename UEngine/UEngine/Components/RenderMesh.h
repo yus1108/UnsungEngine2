@@ -10,13 +10,8 @@ namespace UEngine
 		DXRenderer::DXRenderMesh* renderMeshBuffer{ nullptr };
 
 	public:
-		void Instantiate
-		(
-			const std::vector<DXRenderer::SIMPLE_VERTEX>& vertices,
-			const std::vector<unsigned>& indices,
-			D3D11_PRIMITIVE_TOPOLOGY topology
-		);
-
-		virtual void OnDestroy() override { DXRenderer::DXRenderMesh::Release(&renderMeshBuffer); }
+		void Instantiate(std::string resource_name);
+		virtual void OnEnable() override { gameObject()->renderObject->SetRenderMesh(renderMeshBuffer); }
+		virtual void OnDisable() override { gameObject()->renderObject->SetRenderMesh(nullptr); }
 	};
 }

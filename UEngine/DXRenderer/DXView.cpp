@@ -28,12 +28,6 @@ namespace UEngine
             *view = nullptr;
         }
 
-        void DXView::UpdateConstantBuffers()
-        {
-            for (auto renderObject : renderObjectList)
-                renderObject.second->CBUpdateAll(context.DeviceContext.Get());
-        }
-
         void DXView::Begin()
         {
             // clearing depth buffer and render target
@@ -44,17 +38,14 @@ namespace UEngine
 
             context.DeviceContext->OMSetRenderTargets(1, context.RenderTargetView.GetAddressOf(), context.DepthStencilView.Get());
             context.DeviceContext->OMSetDepthStencilState(context.DepthStencilState.Get(), 1);
+        }
 
-            for (auto renderObject : renderObjectList)
-            {
-                renderObject.second->Set(context.DeviceContext.Get());
-                renderObject.second->Draw(context.DeviceContext.Get());
-            }
-
+        void DXView::End()
+        {
             context.DeviceContext->FinishCommandList(true, context.CommandList.GetAddressOf());
         }
 
-        void DXView::End(ID3D11DeviceContext* deviceContext)
+        void DXView::Execute(ID3D11DeviceContext* deviceContext)
         {
             deviceContext->ExecuteCommandList(context.CommandList.Get(), true);
             context.CommandList.ReleaseAndGetAddressOf();

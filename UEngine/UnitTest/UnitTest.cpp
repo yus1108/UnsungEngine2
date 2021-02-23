@@ -30,9 +30,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_UNITTEST, szWindowClass, MAX_LOADSTRING);
 
-    UEngine::GameObject* gameObject = UEngine::GameObject::Instantiate();
-    UEngine::GameObject::Release(&gameObject);
-
     // Window Application
     auto app = UEngine::WinApplication::Get();
     {
@@ -79,6 +76,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         rendererDesc.MultisampleDesc = { 1, 0 };
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
+    renderer->UpdateConstantBuffers();
 
     auto gameState = UEngine::GameState::Get();
     gameState->Init(app, renderer);
@@ -89,8 +87,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         UEngine::Utility::UTime::Get()->Throttle(200);
         gameState->Update();
     });
-
-    gameState->Release();
 
     return returnedValue;
 }

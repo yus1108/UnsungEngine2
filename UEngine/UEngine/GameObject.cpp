@@ -2,10 +2,10 @@
 #include "GameObject.h"
 
 UEngine::GameObject::GameObject()
-	: m_transform(nullptr)
-	, renderObject(DXRenderer::DXRenderObject::Instantiate(nullptr, nullptr))
+	: renderObject(DXRenderer::DXRenderObject::Instantiate(nullptr, nullptr))
+	, m_transform(nullptr)
 {
-	m_transform->AddComponent<Transform>(this);
+	m_transform = m_transform->AddComponent<Transform>(this);
 }
 
 UEngine::GameObject::~GameObject()
@@ -19,9 +19,22 @@ UEngine::GameObject::~GameObject()
 	
 }
 
+void UEngine::GameObject::CopyRenderObject(DXRenderer::DXRenderObject* renderObject)
+{
+	this->renderObject->SetShader(renderObject->GetShader());
+	this->renderObject->SetRenderMesh(renderObject->GetRenderMesh());
+	this->renderObject->SetConstantBuffers(renderObject->GetConstantBuffers());
+}
+
+void UEngine::GameObject::Update()
+{
+	for (auto component : components)
+		component->Update();
+}
+
 UEngine::GameObject* UEngine::GameObject::Instantiate()
 {
-	GameObject* obj = new GameObject();
+	UEngine::GameObject* obj = new UEngine::GameObject();
 	return obj;
 }
 

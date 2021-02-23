@@ -61,7 +61,6 @@ namespace UEngine
 			rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
 			rsDesc.EnableMultisampling = rendering_desc.EnableMultisampling;
 
-			// Shader
 			shaders["default"] = DXShader::Instantiate
 			(
 				renderer,
@@ -75,7 +74,7 @@ namespace UEngine
 			shaders["color"] = DXShader::Instantiate
 			(
 				renderer,
-				"../_Shaders/DefaultVS.hlsl",
+				"../_Shaders/WorldVS.hlsl",
 				"../_Shaders/ColorPS.hlsl",
 				rendering_desc.IsDebuggable,
 				rendering_desc.EnableBlendState,
@@ -176,13 +175,20 @@ namespace UEngine
 		{
 			auto renderer = DXRenderer::Get();
 
-			// RenderObject
 			constantBuffers["color"] =
 				DXConstantBuffer::Instantiate
 				(
 					renderer,
 					sizeof(DirectX::XMFLOAT4),
 					UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER
+				);
+
+			constantBuffers["world"] =
+				DXConstantBuffer::Instantiate
+				(
+					renderer,
+					sizeof(DirectX::XMMATRIX),
+					UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER
 				);
 		}
 	}

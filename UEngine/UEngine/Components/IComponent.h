@@ -5,11 +5,13 @@ namespace UEngine
 {
 	class IComponent
 	{
+		friend class GameObject;
 	private:
-		virtual void Awake() {};
-		virtual void OnEnable() {};
-		virtual void OnDisable() {};
-		virtual void OnDestroy() {};
+		virtual void Awake() {}
+		virtual void OnEnable() {}
+		virtual void OnDisable() {}
+		virtual void OnDestroy() {}
+		virtual void Update() {}
 
 	private:
 		class GameObject* m_gameObject{ nullptr };

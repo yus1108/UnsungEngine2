@@ -15,8 +15,17 @@ void UEngine::GameState::Init(WinApplication* app, DXRenderer::DXRenderer* const
 
 void UEngine::GameState::Release()
 {
+    for (auto gameObject : gameObjects)
+        GameObject::Release(&gameObject.second);
+    gameObjects.clear();
     DXRenderer::DXView::Release(&currentView);
-    DXRenderer::DXRenderObject::Release(&renderObj);
+}
+
+void UEngine::GameState::AddGameObject(std::string name, GameObject* gameObject)
+{
+    if (gameObjects[name]) throw std::runtime_error("GameObject with given name already exists");
+
+    gameObjects[name] = gameObject;
 }
 
 void UEngine::GameState::LoadScene(std::string file_name, std::function<void()> loadingScene)
@@ -37,9 +46,13 @@ void UEngine::GameState::LoadScene(std::string file_name, std::function<void()> 
         rendererDesc.MultisampleDesc
     );
 
+    // adding gameobjects
     {
-        renderObj = DXRenderer::DXGeometryFigurePrefab::CreateCircle(36000);
-        currentView->AddRenderObject(renderObj);
+        auto gameObject = GameObject::Instantiate();
+        auto renderObj = DXRenderer::DXGeometryFigurePrefab::CreateCircle(36000);
+        gameObject->CopyRenderObject(renderObj);
+        DXRenderer::DXRenderObject::Release(renderObj);
+        AddGameObject("test", gameObject);
     }
 
     threadPool.Join();
@@ -48,13 +61,19 @@ void UEngine::GameState::LoadScene(std::string file_name, std::function<void()> 
 void UEngine::GameState::Update()
 {
     // constant buffers mapping
-    currentView->UpdateConstantBuffers();
-    renderer->UpdateConstantBuffers();
+    for (auto gameObject : gameObjects)
+        gameObject.second->GetRenderObject()->CBUpdateAll(currentView->GetDeviceContext());
 
     // rendering in different thread
     threadPool.AddSyncTask([&]() {
         currentView->Begin();
-        currentView->End(renderer->GetImmediateDeviceContext());
+        for (auto gameObject : gameObjects)
+        {
+            gameObject.second->GetRenderObject()->Set(currentView->GetDeviceContext());
+            gameObject.second->GetRenderObject()->Draw(currentView->GetDeviceContext());
+        }
+        currentView->End();
+        currentView->Execute(renderer->GetImmediateDeviceContext());
 
         renderer->Begin(DirectX::Colors::Transparent);
         renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, currentView->GetAddressOfViewResource());
@@ -66,7 +85,19 @@ void UEngine::GameState::Update()
         UEngine::WinConsole::ResetCursorPos();
         std::cout << "\t\t" << std::endl;
         std::cout << "\t\t" << std::endl;
+        std::cout << "\t\t" << std::endl;
         UEngine::WinConsole::ResetCursorPos();
+
+        if (UEngine::WinInput::Get()->GetKey(VK_LEFT))
+        {
+            std::cout << "key pressed" << std::endl;
+            gameObjects["test"]->transform()->localPosition.x -= UEngine::Utility::UTime::Get()->DeltaTime();
+        }
+
+        for (auto gameObject : gameObjects)
+        {
+            gameObject.second->Update();
+        }
 
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;

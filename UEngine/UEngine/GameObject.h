@@ -5,8 +5,10 @@ namespace UEngine
 {
 	class GameObject final
 	{
+		friend class GameState;
 		friend class RenderMesh;
 		friend class Shader;
+		friend class Transform;
 	private:
 		GameObject();
 		~GameObject();
@@ -15,7 +17,13 @@ namespace UEngine
 		class Transform* m_transform;
 		DXRenderer::DXRenderObject* const renderObject;
 
+		void CopyRenderObject(DXRenderer::DXRenderObject* renderObject);
+		DXRenderer::DXRenderObject* const GetRenderObject() { return renderObject; }
+
+		void Update();
+
 	public:
+		GameObject* parent{ nullptr };
 		std::vector<GameObject*> children;
 		std::vector<class IComponent*> components;
 		
