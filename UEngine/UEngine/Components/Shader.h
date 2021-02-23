@@ -8,7 +8,7 @@ namespace UEngine
 		DXRenderer::DXShader* shaderBuffer;
 
 	public:
-		void Instantiate(std::string resource_name);
+		void Load(std::string resource_name);
 		virtual void OnEnable() override { gameObject()->renderObject->SetShader(shaderBuffer); }
 		virtual void OnDisable() override { gameObject()->renderObject->SetShader(nullptr); }
 	};

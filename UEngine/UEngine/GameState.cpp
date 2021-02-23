@@ -18,7 +18,6 @@ void UEngine::GameState::Release()
     for (auto gameObject : gameObjects)
         GameObject::Release(&gameObject.second);
     gameObjects.clear();
-    DXRenderer::DXView::Release(&currentView);
 }
 
 void UEngine::GameState::AddGameObject(std::string name, GameObject* gameObject)
@@ -37,21 +36,14 @@ void UEngine::GameState::LoadScene(std::string file_name, std::function<void()> 
     // View & Object Creation
     RECT windowSize;
     app->GetClientSize(&windowSize);
-    currentView = DXRenderer::DXView::Instantiate
-    (
-        renderer,
-        windowSize.right - windowSize.left,
-        windowSize.bottom - windowSize.top,
-        rendererDesc.EnableDepthStencil,
-        rendererDesc.MultisampleDesc
-    );
 
     // adding gameobjects
     {
         auto gameObject = GameObject::Instantiate();
-        auto renderObj = DXRenderer::DXGeometryFigurePrefab::CreateCircle(36000);
-        gameObject->CopyRenderObject(renderObj);
-        DXRenderer::DXRenderObject::Release(renderObj);
+        gameObject->AddComponent<RenderMesh>()->Load("circle");
+        gameObject->AddComponent<Shader>()->Load("color");
+        gameObject->AddComponent<Material>()->color = Color{ 1, 0, 0, 1 };
+        gameObject->AddComponent<Camera>();
         AddGameObject("test", gameObject);
     }
 
@@ -61,24 +53,37 @@ void UEngine::GameState::LoadScene(std::string file_name, std::function<void()> 
 void UEngine::GameState::Update()
 {
     // constant buffers mapping
-    for (auto gameObject : gameObjects)
-        gameObject.second->GetRenderObject()->CBUpdateAll(currentView->GetDeviceContext());
-
-    // rendering in different thread
-    threadPool.AddSyncTask([&]() {
-        currentView->Begin();
+    for (size_t i = 0; i < cameras.size(); i++)
+    {
         for (auto gameObject : gameObjects)
+            gameObject.second->GetRenderObject()->CBUpdateAll(cameras[i]->view->GetDeviceContext());
+    }
+
+    for (size_t i = 0; i < cameras.size(); i++)
+    {
+        int index = i;
+        threadPool.AddSyncTask([&]()
         {
-            gameObject.second->GetRenderObject()->Set(currentView->GetDeviceContext());
-            gameObject.second->GetRenderObject()->Draw(currentView->GetDeviceContext());
-        }
-        currentView->End();
-        currentView->Execute(renderer->GetImmediateDeviceContext());
+            cameras[index]->view->Begin();
+            for (auto gameObject : gameObjects)
+            {
+                gameObject.second->GetRenderObject()->Set(cameras[index]->view->GetDeviceContext());
+                gameObject.second->GetRenderObject()->Draw(cameras[index]->view->GetDeviceContext());
+            }
+            cameras[index]->view->End();
+        });
+    }
+    threadPool.Join();
+
+    threadPool.AddSyncTask([&]()
+    {
+        for (size_t i = 0; i < cameras.size(); i++)
+            cameras[i]->view->Execute(renderer->GetImmediateDeviceContext());
 
         renderer->Begin(DirectX::Colors::Transparent);
-        renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, currentView->GetAddressOfViewResource());
+        renderer->GetImmediateDeviceContext()->PSSetShaderResources(0, 1, cameras[0]->view->GetAddressOfViewResource());
         renderer->End();
-    }); // render target view
+    });
 
     // update in main thread
     {
@@ -102,6 +107,6 @@ void UEngine::GameState::Update()
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
     }
-
+    
     threadPool.Join();
 }

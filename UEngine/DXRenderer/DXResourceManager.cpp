@@ -169,6 +169,35 @@ namespace UEngine
 						ARRAYSIZE(indices)
 						);
 			}
+
+			{
+				unsigned slice = 360;
+				std::vector<SIMPLE_VERTEX> vertices = std::vector<SIMPLE_VERTEX>
+				{
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}}
+				};
+				float radian = Utility::UMath::PI * 2.0f / slice;
+				for (size_t i = 0; i < slice; i++)
+					vertices.emplace_back(SIMPLE_VERTEX{ DirectX::XMFLOAT3{cos(radian * (slice - i)), sin(radian * (slice - i)), 0} });
+				std::vector<unsigned> indices;
+				for (size_t i = 0; i < slice - 1; i++)
+				{
+					indices.emplace_back(0);
+					indices.emplace_back(i + 1);
+					indices.emplace_back(i + 2);
+				}
+				indices.emplace_back(0);
+				indices.emplace_back(slice);
+				indices.emplace_back(1);
+				renderMeshes["circle"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+					(
+						device,
+						&vertices[0],
+						vertices.size(),
+						&indices[0],
+						indices.size()
+						);
+			}
 		}
 
 		void DXResourceManager::InitConstantBuffer()
@@ -189,6 +218,15 @@ namespace UEngine
 					renderer,
 					sizeof(DirectX::XMMATRIX),
 					UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER
+				);
+
+			constantBuffers["camera"] =
+				DXConstantBuffer::Instantiate
+				(
+					renderer,
+					128U, // sizeof(CPU_CAMERA)
+					UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
+					1
 				);
 		}
 	}

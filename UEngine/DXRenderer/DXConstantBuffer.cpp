@@ -14,7 +14,7 @@ namespace UEngine
 		)
 		{
 			DXConstantBuffer* instance = new DXConstantBuffer;
-			instance->StartSlot = 0;
+			instance->StartSlot = startSlot;
 			instance->Flags = flags;
 			renderer->InitConstantBuffer(_Data_Size, instance->constBuffer.GetAddressOf());
 

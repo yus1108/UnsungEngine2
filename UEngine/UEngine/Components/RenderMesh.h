@@ -10,7 +10,7 @@ namespace UEngine
 		DXRenderer::DXRenderMesh* renderMeshBuffer{ nullptr };
 
 	public:
-		void Instantiate(std::string resource_name);
+		void Load(std::string resource_name);
 		virtual void OnEnable() override { gameObject()->renderObject->SetRenderMesh(renderMeshBuffer); }
 		virtual void OnDisable() override { gameObject()->renderObject->SetRenderMesh(nullptr); }
 	};

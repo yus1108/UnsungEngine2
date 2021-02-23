@@ -60,6 +60,7 @@ namespace UEngine
 
 		void DXRenderObject::Set(ID3D11DeviceContext* const deviceContext)
 		{
+			if (!renderMesh || !shader) return;
 			renderMesh->Set(deviceContext);
 			shader->Set(deviceContext);
 			for (auto buffer : constantBuffers)
@@ -68,6 +69,7 @@ namespace UEngine
 
 		void DXRenderObject::Draw(ID3D11DeviceContext* const deviceContext)
 		{
+			if (!renderMesh || !shader) return;
 			UINT indexCount = renderMesh->GetIndexCount();
 			if (indexCount == 0)
 			{

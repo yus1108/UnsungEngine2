@@ -15,12 +15,12 @@ namespace UEngine
 #pragma endregion
 	private:
 		Utility::Sync::UThreadPool threadPool;
-		class WinApplication* app{ nullptr };
-		class DXRenderer::DXRenderer* renderer{ nullptr };
 		std::unordered_map<std::string, GameObject*> gameObjects;
 
 	public:
-		DXRenderer::DXView* currentView{ nullptr };
+		class WinApplication* app{ nullptr };
+		class DXRenderer::DXRenderer* renderer{ nullptr };
+		std::vector<class Camera*> cameras;
 
 	public:
 		void Init(WinApplication* app, DXRenderer::DXRenderer* const renderer, size_t numThreads = 8);

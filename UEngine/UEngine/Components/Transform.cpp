@@ -27,4 +27,6 @@ void UEngine::Transform::Update()
 		worldMat,
 		XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z)
 	);
+
+	worldMat = XMMatrixTranspose(worldMat);
 }

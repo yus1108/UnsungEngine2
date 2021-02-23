@@ -8,6 +8,8 @@ namespace UEngine
 		friend class GameState;
 		friend class RenderMesh;
 		friend class Shader;
+		friend class Material;
+		friend class Camera;
 		friend class Transform;
 	private:
 		GameObject();
@@ -34,8 +36,17 @@ namespace UEngine
 		static void Release(GameObject** const gameObject);
 
 		template <typename T>
+		T* AddComponent();
+		template <typename T>
 		void RemoveComponent();
 	};
+
+	template<typename T>
+	inline T* GameObject::AddComponent()
+	{
+		auto component = IComponent::AddComponent<T>(this);
+		return component;
+	}
 
 	template<typename T>
 	inline void GameObject::RemoveComponent()

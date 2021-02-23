@@ -11,6 +11,8 @@
 #include "Components\Transform.h"
 #include "Components\RenderMesh.h"
 #include "Components\Shader.h"
+#include "Components\Material.h"
+#include "Components\Camera.h"
 #include "GameObject.h"
 #include "GameState.h"
 

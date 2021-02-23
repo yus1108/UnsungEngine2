@@ -16,6 +16,12 @@
     <ClInclude Include="Components\Shader.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Material.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Camera.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -28,6 +34,9 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\Shader.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Camera.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
