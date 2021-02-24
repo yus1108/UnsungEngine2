@@ -6,16 +6,23 @@ namespace UEngine
 	{
 		class DXRenderObjectPool
 		{
+#pragma region Singleton
+		public:
+			static DXRenderObjectPool* Get() { return &instance; }
+
+		private:
+			DXRenderObjectPool() = default;
+			~DXRenderObjectPool();
+			static DXRenderObjectPool instance;
+#pragma endregion
+
 		private:
 			std::vector<DXRenderObject*> pool;
-			std::queue<DXRenderObject*> creationQueue;
-			std::map<DXRenderObject*, DXRenderObject*> deletionMap;
 
 		public:
-			~DXRenderObjectPool();
-			DXRenderObject* LoadObject(std::string shader, std::string renderMesh);
-			void Remove(DXRenderObject* renderObject) { deletionMap[renderObject] = renderObject; }
-			void Update();
+			DXRenderObject* LoadObject(std::string shader, std::string renderMesh, std::list<CONSTANT_BUFFER_DESC> bufferDescs);
+			const std::vector<DXRenderObject*>* const GetList() { return &pool; }
+			void Remove(DXRenderObject* renderObject);
 		};
 	}
 }

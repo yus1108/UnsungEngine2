@@ -13,17 +13,11 @@ namespace UEngine
 			UINT objectNumber{ 0 };
 			class DXRenderMesh* renderMesh{ nullptr };
 			class DXShader* shader{ nullptr };
-			std::list<CONSTANT_BUFFER_DESC> bufferDescs;
 
-#pragma region POOL_CREATION
+#pragma region RESOURCE_CREATION
 			friend class DXRenderObjectPool;
 			static UINT NextObjectNumber;
-			static DXRenderObject* const Instantiate
-			(
-				DXRenderMesh* renderMesh,
-				DXShader* shader,
-				std::list<CONSTANT_BUFFER_DESC> bufferDescs
-			);
+			static DXRenderObject* const Instantiate(DXRenderMesh* renderMesh, DXShader* shader);
 			static void Release(DXRenderObject* const renderObject);
 #pragma endregion
 

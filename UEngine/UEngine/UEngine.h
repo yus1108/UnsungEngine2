@@ -11,12 +11,15 @@
 #include "../WinApplication/uengine_winapp.h"
 #include "../DXRenderer/dxrframework.h"
 
-//#include "Components\IComponent.h"
-//#include "Components\Transform.h"
-//#include "Components\RenderMesh.h"
-//#include "Components\Shader.h"
-//#include "Components\Material.h"
-//#include "Components\Camera.h"
-//#include "GameObject.h"
-//#include "GameState.h"
+
+#include "UEngineDefinitions.h"
+#include "Pool\RenderObjectPool.h"
+#include "Game\GameScene.h"
+#include "Game\GameState.h"
+#include "Object\Component\IComponent.h"
+#include "Object\Component\Camera.h"
+#include "Object\Component\Material.h"
+#include "Object\Component\RenderComponent.h"
+#include "Object\GameObject.h"
+//#include "Object\Component\Transform.h"
 

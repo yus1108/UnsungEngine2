@@ -6,6 +6,7 @@
 #include "../UEngine/UEngine.h"
 #include "../WinApplication/WinConsole.h"
 #include "../WinApplication/WinMemoryLeak.h"
+#include "SceneScript.h"
 
 #define MAX_LOADSTRING 100
 
@@ -24,7 +25,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
-    UEngine::WinMemoryLeak::Detect();
+    UEngine::WinMemoryLeak::Detect(458);
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -78,14 +79,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
     renderer->UpdateConstantBuffers();
 
-    //auto gameState = UEngine::GameState::Get();
-    //gameState->Init(app, renderer);
-    //gameState->LoadScene("");
+    SceneScript sceneScript;
+    auto gameState = UEngine::GameState::Get();
+    gameState->Init(app, renderer);
+    sceneScript.Load(gameState);
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
-        //gameState->Update();
+        gameState->Update();
     });
 
     return returnedValue;

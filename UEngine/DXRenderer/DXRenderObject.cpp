@@ -7,12 +7,11 @@ namespace UEngine
 	{
 		UINT DXRenderObject::NextObjectNumber = 0;
 
-		DXRenderObject* const DXRenderObject::Instantiate(DXRenderMesh* renderMesh, DXShader* shader, std::list<CONSTANT_BUFFER_DESC> bufferDescs)
+		DXRenderObject* const DXRenderObject::Instantiate(DXRenderMesh* renderMesh, DXShader* shader)
 		{
 			DXRenderObject* instance = new DXRenderObject;
 			instance->renderMesh = renderMesh;
 			instance->shader = shader;
-			instance->bufferDescs = bufferDescs;
 			instance->objectNumber = NextObjectNumber++;
 
 			return instance;

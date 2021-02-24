@@ -11,6 +11,7 @@ namespace UEngine
 		DirectX::XMVECTOR view_determinant;
 
 	public:
+		static Camera* mainCamera;
 		DXRenderer::DXView* view{ nullptr };
 		Vector3 cameraPosition{ 0, 0, 0 };
 		Vector3 cameraRotation{ 0, 0, 0 };
@@ -23,7 +24,6 @@ namespace UEngine
 		Camera();
 		~Camera();
 
-		virtual void OnEnable() override { gameObject()->GetRenderObject()->AddConstantBuffer("camera", cameraBuffer); }
-		virtual void OnDisable() override { gameObject()->GetRenderObject()->RemoveConstantBuffer("camera"); }
+		void SetMainCamera() {  }
 	};
 }

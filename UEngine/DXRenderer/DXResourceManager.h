@@ -34,6 +34,7 @@ namespace UEngine
 
 			DXShader* GetShaders(std::string resource_name) { return shaders[resource_name]; }
 			DXRenderMesh* GetRenderMesh(std::string resource_name) { return renderMeshes[resource_name]; }
+			// resource_name : typeid(cpu_buffer_struct).raw_name()
 			CONSTANT_BUFFER_DESC GetConstantBuffer(std::string resource_name) { return constantBuffers[resource_name]; }
 
 			void Init();

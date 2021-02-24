@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{e4c1e6c0-36e0-4fcc-bae0-0bbbe7a28896}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXRenderer.h">
@@ -42,11 +45,11 @@
     <ClInclude Include="DXGeometryFigurePrefab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DXResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DXRenderObjectPool.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXResourceManager.h">
+      <Filter>ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,11 +77,11 @@
     <ClCompile Include="DXGeometryFigurePrefab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DXResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DXRenderObjectPool.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,39 +1,36 @@
 #include "dxrframework.h"
 #include "DXRenderObjectPool.h"
 
+UEngine::DXRenderer::DXRenderObjectPool UEngine::DXRenderer::DXRenderObjectPool::instance;
+
 UEngine::DXRenderer::DXRenderObjectPool::~DXRenderObjectPool()
 {
 	for (auto object : pool)
 		DXRenderObject::Release(object);
 	pool.clear();
-	while (!creationQueue.empty())
-	{
-		DXRenderObject::Release(creationQueue.front());
-		creationQueue.pop();
-	}
-	for (auto object : deletionMap)
-		DXRenderObject::Release(object.second);
-	deletionMap.clear();
 }
 
-UEngine::DXRenderer::DXRenderObject* UEngine::DXRenderer::DXRenderObjectPool::LoadObject(std::string shader, std::string renderMesh)
+UEngine::DXRenderer::DXRenderObject* UEngine::DXRenderer::DXRenderObjectPool::LoadObject(std::string shader, std::string renderMesh, std::list<CONSTANT_BUFFER_DESC> bufferDescs)
 {
-    return nullptr;
+	auto resourceManager = DXResourceManager::Get();
+	auto object = DXRenderObject::Instantiate
+	(
+		resourceManager->GetRenderMesh(renderMesh),
+		resourceManager->GetShaders(shader)
+	);
+	pool.push_back(object);
+    return object;
 }
 
-void UEngine::DXRenderer::DXRenderObjectPool::Update()
+void UEngine::DXRenderer::DXRenderObjectPool::Remove(DXRenderObject* renderObject)
 {
-	while (!creationQueue.empty())
+	for (auto iter = pool.begin(); iter != pool.end(); iter++)
 	{
-		auto curr = creationQueue.front();
-		creationQueue.pop();
-		pool.push_back(curr);
-	}
-	auto curr = pool.begin();
-	while (curr != pool.end())
-	{
-		if (*curr == deletionMap[*curr])
-			pool.erase(curr);
-		curr++;
+		if (*iter == renderObject)
+		{
+			DXRenderObject::Release(*iter);
+			pool.erase(iter);
+			break;
+		}
 	}
 }

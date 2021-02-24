@@ -3,7 +3,7 @@
 
 namespace UEngine
 {
-	struct CPU_World
+	struct CPU_WORLD
 	{
 		DirectX::XMMATRIX matrix;
 	};
@@ -83,7 +83,7 @@ namespace UEngine
 			DirectX::XMUINT4 joints;
 		};
 
-		struct CONSTANT_BUFFER_DESC 
+		struct CONSTANT_BUFFER_DESC
 		{
 			std::string TypeName; // Name of the type of the data
 			std::size_t Size{ 0 }; // sizeof(data)
@@ -95,19 +95,6 @@ namespace UEngine
 				StartSlots = ARRAY{ slot_of_vertex_shader, slot_of_geometry_shader }
 			*/
 			UINT* StartSlots{ nullptr };
-		};
-
-		struct RenderObject
-		{
-			/*
-				It is the number of DXRenderObject to access the resource by refering this number
-			*/
-			UINT objectNumber;
-			/*
-				key: std::string = typeid(T).raw_name()
-				value: class DXConstantBuffer*
-			*/
-			std::map<std::string, class DXConstantBuffer*> constantBuffers;
 		};
 	}
 }

@@ -205,10 +205,10 @@ namespace UEngine
 				nullptr
 			};
 
-			constantBuffers[typeid(CPU_World).raw_name()] = CONSTANT_BUFFER_DESC
+			constantBuffers[typeid(CPU_WORLD).raw_name()] = CONSTANT_BUFFER_DESC
 			{
-				typeid(CPU_World).raw_name(),
-				sizeof(CPU_World),
+				typeid(CPU_WORLD).raw_name(),
+				sizeof(CPU_WORLD),
 				UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
 				nullptr
 			};

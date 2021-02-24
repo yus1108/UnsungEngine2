@@ -1,23 +1,27 @@
 #include "UEngine.h"
 #include "Camera.h"
 
+UEngine::Camera* UEngine::Camera::mainCamera = nullptr;
+
 UEngine::Camera::Camera()
-    : cameraBuffer(DXRenderer::DXResourceManager::Get()->GetConstantBuffer("camera"))
+    : cameraBuffer(
+        DXRenderer::DXConstantBuffer::Instantiate(DXRenderer::Get(), 
+            DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(CPU_CAMERA).raw_name())))
 {
+    
     auto gameState = GameState::Get();
-    auto rendererDesc = gameState->renderer->GetDescription();
+    auto rendererDesc = DXRenderer::Get()->GetDescription();
     // View & Object Creation
     RECT windowSize;
-    gameState->app->GetClientSize(&windowSize);
+    WinApplication::Get()->GetClientSize(&windowSize);
     view = DXRenderer::DXView::Instantiate
     (
-        gameState->renderer,
+        DXRenderer::Get(),
         windowSize.right - windowSize.left,
         windowSize.bottom - windowSize.top,
         rendererDesc.EnableDepthStencil,
         rendererDesc.MultisampleDesc
     );
-    gameState->cameras.emplace_back(this);
 
     viewWidth = 40;
     viewHeight = 30;
@@ -43,14 +47,4 @@ UEngine::Camera::Camera()
 
 UEngine::Camera::~Camera()
 {
-    auto cameras = GameState::Get()->cameras;
-    for (auto camera = cameras.begin(); camera != cameras.end(); camera++)
-    {
-        if (*camera == this)
-        {
-            cameras.erase(camera);
-            break;
-        }
-    }
-    DXRenderer::DXView::Release(&view);
 }
