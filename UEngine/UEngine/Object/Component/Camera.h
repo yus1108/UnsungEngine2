@@ -24,6 +24,6 @@ namespace UEngine
 		Camera();
 		~Camera();
 
-		void SetMainCamera() {  }
+		void SetMainCamera() { GameState::Get()->gameScene.SetView(view); }
 	};
 }

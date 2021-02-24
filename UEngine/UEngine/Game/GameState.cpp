@@ -24,6 +24,7 @@ void UEngine::GameState::Update()
 {
     // cpu-gpu transfer
     gameScene.OnPreRender();
+    constantBufferPool.OnPreRender();
     // resources mapping
 
     // thread safe

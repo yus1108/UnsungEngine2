@@ -177,6 +177,7 @@
     <ClInclude Include="Object\Component\Material.h" />
     <ClInclude Include="Object\Component\RenderComponent.h" />
     <ClInclude Include="Object\GameObject.h" />
+    <ClInclude Include="Pool\ConstantBufferPool.h" />
     <ClInclude Include="Pool\RenderObjectPool.h" />
     <ClInclude Include="UEngine.h" />
     <ClInclude Include="UEngineDefinitions.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Object\Component\Camera.cpp" />
     <ClCompile Include="Object\Component\RenderComponent.cpp" />
     <ClCompile Include="Object\GameObject.cpp" />
+    <ClCompile Include="Pool\ConstantBufferPool.cpp" />
     <ClCompile Include="Pool\RenderObjectPool.cpp" />
     <ClCompile Include="UEngine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

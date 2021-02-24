@@ -24,6 +24,7 @@ namespace UEngine
 
         void DXView::Release(DXView** const view)
         {
+            (*view)->context.CommandList.ReleaseAndGetAddressOf();
             delete* view;
             *view = nullptr;
         }

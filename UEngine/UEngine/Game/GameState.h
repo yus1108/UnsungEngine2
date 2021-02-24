@@ -19,6 +19,7 @@ namespace UEngine
 
 	public:
 		GameScene gameScene;
+		ConstantBufferPool constantBufferPool;
 
 	private:
 		class WinApplication* app{ nullptr };

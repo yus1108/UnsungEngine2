@@ -3,20 +3,28 @@
 
 UEngine::RenderObjectPool::~RenderObjectPool()
 {
+	while (!creationQueue.empty())
+	{
+		delete creationQueue.front();
+		creationQueue.pop();
+	}
+	for (auto objectPair : deletionMap)
+	{
+		auto object = objectPair.second;
+		delete (*pool[object->objectNumber])[object];
+		pool[object->objectNumber]->erase(object);
+		if (pool[object->objectNumber]->size() == 0)
+		{
+			delete pool[object->objectNumber];
+			pool.erase(object->objectNumber);
+		}
+	}
 	for (auto list : pool)
 	{
 		for (auto object : *list.second)
 			delete object.second;
 		delete list.second;
 	}
-	while (!creationQueue.empty())
-	{
-		delete creationQueue.front();
-		creationQueue.pop();
-	}
-	for (auto object : deletionMap)
-		delete object.second;
-	deletionMap.clear();
 }
 
 void UEngine::RenderObjectPool::OnPreRender()

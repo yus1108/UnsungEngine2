@@ -14,6 +14,14 @@ namespace UEngine
 		(
 			DXRenderer::Get(),
 			DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(Color).raw_name())
-		)) { colorBuffer->AttachData(&color, sizeof(Color)); }
+		)) 
+		{ 
+			colorBuffer->AttachData(&color, sizeof(Color));
+			GameState::Get()->constantBufferPool.Add(colorBuffer);
+		}
+		~Material()
+		{
+			GameState::Get()->constantBufferPool.Remove(colorBuffer);
+		}
 	};
 }

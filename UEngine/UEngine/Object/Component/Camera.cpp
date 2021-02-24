@@ -9,8 +9,8 @@ UEngine::Camera::Camera()
             DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(CPU_CAMERA).raw_name())))
 {
     
-    auto gameState = GameState::Get();
     auto rendererDesc = DXRenderer::Get()->GetDescription();
+
     // View & Object Creation
     RECT windowSize;
     WinApplication::Get()->GetClientSize(&windowSize);
@@ -43,8 +43,12 @@ UEngine::Camera::Camera()
     };
 
     cameraBuffer->AttachData(&cpu_camera, sizeof(CPU_CAMERA));
+    GameState::Get()->constantBufferPool.Add(cameraBuffer);
+    GameState::Get()->gameScene.AddView(view);
 }
 
 UEngine::Camera::~Camera()
 {
+    GameState::Get()->constantBufferPool.Remove(cameraBuffer);
+    GameState::Get()->gameScene.RemoveView(view);
 }

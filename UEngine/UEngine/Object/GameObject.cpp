@@ -7,6 +7,12 @@ UEngine::GameObject::GameObject()
 
 UEngine::GameObject::~GameObject()
 {
+	for (auto componentListPair : components)
+	{
+		for (auto component : *componentListPair.second)
+			delete component;
+		delete componentListPair.second;
+	}
 }
 
 UEngine::GameObject* UEngine::GameObject::Instantiate()

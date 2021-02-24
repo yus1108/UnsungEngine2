@@ -9,9 +9,10 @@ namespace UEngine
 		DXRenderer::DXView* mainView;
 		DXRenderer::DXView* nextMainView;
 		std::queue<DXRenderer::DXView*> viewCreationQueue;
-		std::list<DXRenderer::DXView*> view_resources;
+		std::map<DXRenderer::DXView*, DXRenderer::DXView*> view_resources;
 		std::map<DXRenderer::DXView*, DXRenderer::DXView*> viewDeletionQueue;
 	public:
+		virtual ~GameScene();
 
 		void AddObject(RenderObject* const renderObject) { renderObjectPool.Add(renderObject); }
 		void RemoveObject(RenderObject* const renderObject) { renderObjectPool.Remove(renderObject); }

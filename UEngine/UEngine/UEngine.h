@@ -14,6 +14,7 @@
 
 #include "UEngineDefinitions.h"
 #include "Pool\RenderObjectPool.h"
+#include "Pool\ConstantBufferPool.h"
 #include "Game\GameScene.h"
 #include "Game\GameState.h"
 #include "Object\Component\IComponent.h"

@@ -27,6 +27,9 @@
     <ClInclude Include="Object\Component\RenderComponent.h">
       <Filter>Object\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Pool\ConstantBufferPool.h">
+      <Filter>Pool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -47,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="Object\Component\RenderComponent.cpp">
       <Filter>Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Pool\ConstantBufferPool.cpp">
+      <Filter>Pool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
