@@ -21,6 +21,6 @@
 #include "Object\Component\Camera.h"
 #include "Object\Component\Material.h"
 #include "Object\Component\RenderComponent.h"
+#include "Object\Component\Transform.h"
 #include "Object\GameObject.h"
-//#include "Object\Component\Transform.h"
 

@@ -30,6 +30,9 @@
     <ClInclude Include="Pool\ConstantBufferPool.h">
       <Filter>Pool</Filter>
     </ClInclude>
+    <ClInclude Include="Object\Component\Transform.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="Pool\ConstantBufferPool.cpp">
       <Filter>Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Component\Transform.cpp">
+      <Filter>Object\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

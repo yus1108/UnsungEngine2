@@ -19,9 +19,6 @@ namespace UEngine
 			colorBuffer->AttachData(&color, sizeof(Color));
 			GameState::Get()->constantBufferPool.Add(colorBuffer);
 		}
-		~Material()
-		{
-			GameState::Get()->constantBufferPool.Remove(colorBuffer);
-		}
+		~Material() { GameState::Get()->constantBufferPool.Remove(colorBuffer); }
 	};
 }

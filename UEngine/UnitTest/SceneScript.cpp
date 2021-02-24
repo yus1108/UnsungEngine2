@@ -7,8 +7,10 @@ void SceneScript::Load(UEngine::GameState* gameState)
 	// basic load
 	{
 		GameObject* mainCamera = GameObject::Instantiate();
+		mainCamera->AddComponent<Transform>();
 		mainCamera->AddComponent<Camera>()->SetMainCamera();
 		GameObject* rectangle = GameObject::Instantiate();
+		rectangle->AddComponent<Transform>();
 		rectangle->AddComponent<RenderComponent>();
 		rectangle->AddComponent<Material>();
 

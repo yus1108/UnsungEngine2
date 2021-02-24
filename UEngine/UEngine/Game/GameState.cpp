@@ -25,17 +25,13 @@ void UEngine::GameState::Update()
     // cpu-gpu transfer
     gameScene.OnPreRender();
     constantBufferPool.OnPreRender();
+    for (auto obj : gameObjects)
+        obj->OnPreRender();
+
     // resources mapping
 
-    // thread safe
-    {
-        gameScene.OnRender();
-        // gameobjects update
-    }
-    
-    // thread join
-    gameScene.OnPostRender();
-
+    // rendering thread
+    gameScene.OnRender();
     // update in main thread
     {
         UEngine::WinConsole::ResetCursorPos();
@@ -52,6 +48,35 @@ void UEngine::GameState::Update()
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
     }
+    {
+        // fixed timestamp update
+        {
+            for (auto obj : gameObjects)
+                obj->FixedUpdate();
+            for (auto obj : gameObjects)
+                obj->PhysicsUpdate();
+        }
+        for (auto obj : gameObjects)
+            obj->Update();
+        for (auto obj : gameObjects)
+            obj->LateUpdate();
+        for (auto obj : gameObjects)
+            obj->AnimationUpdate();
+    }
     
+    // thread join
+    threadPool.Join();
+
+    // onRender Update
+    for (auto obj : gameObjects)
+        obj->OnRender();
+
+    // post render thread
+    gameScene.OnPostRender();
+    // post render update thread
+    for (auto obj : gameObjects)
+        obj->OnPostRender();
+
+    // thread join
     threadPool.Join();
 }

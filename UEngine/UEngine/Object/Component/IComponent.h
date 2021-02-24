@@ -1,10 +1,20 @@
 #pragma once
+#include "Object\GameObject.h"
 
 namespace UEngine
 {
 	class IComponent
 	{
-	public:
+	private:
+		friend class UEngine::GameObject;
+
+	private:
+		GameObject* gameObject;
+
+	protected:
+		GameObject* const GetGameObject() { return gameObject; }
+
+	private:
 		virtual void Awake() {}
 		virtual void Start() {}
 		virtual void OnEnable() {}
