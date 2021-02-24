@@ -32,15 +32,8 @@ namespace UEngine
 			renderMeshes[resource_name] = renderMesh;
 		}
 
-		void DXResourceManager::SetConstantBuffer(std::string resource_name, DXConstantBuffer* constantBuffer)
+		void DXResourceManager::SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer)
 		{
-			auto resource = constantBuffers[resource_name];
-			if (resource != nullptr)
-			{
-				constantBuffers.erase(resource_name);
-				DXConstantBuffer::Release(&resource);
-			}
-
 			constantBuffers[resource_name] = constantBuffer;
 		}
 
@@ -204,30 +197,29 @@ namespace UEngine
 		{
 			auto renderer = DXRenderer::Get();
 
-			constantBuffers["color"] =
-				DXConstantBuffer::Instantiate
-				(
-					renderer,
-					sizeof(DirectX::XMFLOAT4),
-					UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER
-				);
+			constantBuffers[typeid(Color).raw_name()] = CONSTANT_BUFFER_DESC
+			{
+				typeid(Color).raw_name(),
+				sizeof(Color),
+				UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER,
+				nullptr
+			};
 
-			constantBuffers["world"] =
-				DXConstantBuffer::Instantiate
-				(
-					renderer,
-					sizeof(DirectX::XMMATRIX),
-					UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER
-				);
+			constantBuffers[typeid(CPU_World).raw_name()] = CONSTANT_BUFFER_DESC
+			{
+				typeid(CPU_World).raw_name(),
+				sizeof(CPU_World),
+				UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
+				nullptr
+			};
 
-			constantBuffers["camera"] =
-				DXConstantBuffer::Instantiate
-				(
-					renderer,
-					128U, // sizeof(CPU_CAMERA)
-					UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
-					1
-				);
+			constantBuffers[typeid(CPU_CAMERA).raw_name()] = CONSTANT_BUFFER_DESC
+			{
+				typeid(CPU_CAMERA).raw_name(),
+				sizeof(CPU_CAMERA),
+				UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
+				new UINT[1] { 1 }
+			};
 		}
 	}
 }

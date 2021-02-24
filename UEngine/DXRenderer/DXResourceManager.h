@@ -20,17 +20,21 @@ namespace UEngine
 		private:
 			std::unordered_map<std::string, DXShader*> shaders;
 			std::unordered_map<std::string, DXRenderMesh*> renderMeshes;
-			std::unordered_map<std::string, DXConstantBuffer*> constantBuffers;
+			/*
+				key: std::string - typeid(cpu_buffer_struct).raw_name()
+				value: CONSTANT_BUFFER_DESC - description to create a buffer
+			*/
+			std::unordered_map<std::string, CONSTANT_BUFFER_DESC> constantBuffers;
 
 		public:
 
 			void SetShaders(std::string resource_name, DXShader* shader);
 			void SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh);
-			void SetConstantBuffer(std::string resource_name, DXConstantBuffer* constantBuffer);
+			void SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer);
 
 			DXShader* GetShaders(std::string resource_name) { return shaders[resource_name]; }
 			DXRenderMesh* GetRenderMesh(std::string resource_name) { return renderMeshes[resource_name]; }
-			DXConstantBuffer* GetConstantBuffer(std::string resource_name) { return constantBuffers[resource_name]; }
+			CONSTANT_BUFFER_DESC GetConstantBuffer(std::string resource_name) { return constantBuffers[resource_name]; }
 
 			void Init();
 			void InitShader();
@@ -45,7 +49,7 @@ namespace UEngine
 				for (auto resource : renderMeshes)
 					DXRenderMesh::Release(&resource.second);
 				for (auto resource : constantBuffers)
-					DXConstantBuffer::Release(&resource.second);
+					delete resource.second.StartSlots;
 			}
 		};
 	}

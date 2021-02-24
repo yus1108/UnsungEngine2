@@ -5,13 +5,6 @@ namespace UEngine
 	class Camera : public IComponent
 	{
 	private:
-		struct CPU_CAMERA
-		{
-			DirectX::XMMATRIX view;
-			DirectX::XMMATRIX projection;
-		};
-
-	private:
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };
 
 		CPU_CAMERA cpu_camera;

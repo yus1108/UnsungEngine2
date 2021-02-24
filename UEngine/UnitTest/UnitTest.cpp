@@ -78,14 +78,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
     renderer->UpdateConstantBuffers();
 
-    auto gameState = UEngine::GameState::Get();
-    gameState->Init(app, renderer);
-    gameState->LoadScene("");
+    //auto gameState = UEngine::GameState::Get();
+    //gameState->Init(app, renderer);
+    //gameState->LoadScene("");
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
-        gameState->Update();
+        //gameState->Update();
     });
 
     return returnedValue;

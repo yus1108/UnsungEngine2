@@ -5,8 +5,12 @@
 #include <wrl.h>
 #include <string>
 #include <unordered_map>
+#include <list>
+#include <queue>
+#include <map>
 #include <vector>
 #include <stdexcept>
+#include <typeinfo>
 
 // DX111 라이브러리 추가
 // D2D1
@@ -33,5 +37,6 @@
 #include "DXConstantBuffer.h"
 #include "DXResourceManager.h"
 #include "DXRenderObject.h"
+#include "DXRenderObjectPool.h"
 #include "DXGeometryFigurePrefab.h"
 #include "DXView.h"

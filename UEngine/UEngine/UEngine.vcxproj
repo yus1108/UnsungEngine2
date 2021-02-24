@@ -170,23 +170,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Components\Camera.h" />
-    <ClInclude Include="Components\IComponent.h" />
-    <ClInclude Include="Components\Material.h" />
-    <ClInclude Include="Components\RenderMesh.h" />
-    <ClInclude Include="Components\Shader.h" />
-    <ClInclude Include="Components\Transform.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameState.h" />
     <ClInclude Include="UEngine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Components\Camera.cpp" />
-    <ClCompile Include="Components\RenderMesh.cpp" />
-    <ClCompile Include="Components\Shader.cpp" />
-    <ClCompile Include="Components\Transform.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="UEngine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

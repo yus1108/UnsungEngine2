@@ -1,5 +1,9 @@
 #pragma once
 
+#include <list>
+#include <queue>
+#include <map>
+
 #include "../Utility/UtilityDefinitions.h"
 #include "../Utility/UMath.h"
 #include "../Utility/UTime.h"
@@ -7,12 +11,12 @@
 #include "../WinApplication/uengine_winapp.h"
 #include "../DXRenderer/dxrframework.h"
 
-#include "Components\IComponent.h"
-#include "Components\Transform.h"
-#include "Components\RenderMesh.h"
-#include "Components\Shader.h"
-#include "Components\Material.h"
-#include "Components\Camera.h"
-#include "GameObject.h"
-#include "GameState.h"
+//#include "Components\IComponent.h"
+//#include "Components\Transform.h"
+//#include "Components\RenderMesh.h"
+//#include "Components\Shader.h"
+//#include "Components\Material.h"
+//#include "Components\Camera.h"
+//#include "GameObject.h"
+//#include "GameState.h"
 

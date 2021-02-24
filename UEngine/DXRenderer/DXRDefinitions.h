@@ -3,6 +3,17 @@
 
 namespace UEngine
 {
+	struct CPU_World
+	{
+		DirectX::XMMATRIX matrix;
+	};
+
+	struct CPU_CAMERA
+	{
+		DirectX::XMMATRIX view;
+		DirectX::XMMATRIX projection;
+	};
+
 	namespace DXRenderer
 	{
 		struct RASTERIZER_DESC
@@ -70,6 +81,33 @@ namespace UEngine
 			DirectX::XMFLOAT3 binomals;
 			DirectX::XMFLOAT4 weights;
 			DirectX::XMUINT4 joints;
+		};
+
+		struct CONSTANT_BUFFER_DESC 
+		{
+			std::string TypeName; // Name of the type of the data
+			std::size_t Size{ 0 }; // sizeof(data)
+			UINT Flag{ 0x00 }; // UENGINE_DXRENDERER_SHADERTYPE
+			/*
+				Start slot of each pipeline in order of UENGINE_DXRENDERER_SHADERTYPE
+				If null, start slots will be set to default which is 0 for all pipeline
+				i.e) if Flag = UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER | UENGINE_DXRENDERER_SHADERTYPE_GEOMETRY_SHADER,
+				StartSlots = ARRAY{ slot_of_vertex_shader, slot_of_geometry_shader }
+			*/
+			UINT* StartSlots{ nullptr };
+		};
+
+		struct RenderObject
+		{
+			/*
+				It is the number of DXRenderObject to access the resource by refering this number
+			*/
+			UINT objectNumber;
+			/*
+				key: std::string = typeid(T).raw_name()
+				value: class DXConstantBuffer*
+			*/
+			std::map<std::string, class DXConstantBuffer*> constantBuffers;
 		};
 	}
 }

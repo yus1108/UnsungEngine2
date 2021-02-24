@@ -45,25 +45,25 @@ namespace UEngine
 					auto manager = DXResourceManager::Get();
 					manager->Init();
 
-					default_renderObject = DXRenderObject::Instantiate
+				/*	default_renderObject = DXRenderObject::Instantiate
 					(
 						manager->GetRenderMesh("default"),
 						manager->GetShaders("default")
 					);
 					default_renderObject->AddConstantBuffer("color", manager->GetConstantBuffer("color"));
-					default_renderObject->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));
+					default_renderObject->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));*/
 				}
 			}
 		}
 
 		void DXRenderer::Release()
 		{
-			DXRenderObject::Release(&default_renderObject);
+			//DXRenderObject::Release(&default_renderObject);
 		}
 
 		void DXRenderer::UpdateConstantBuffers()
 		{
-			default_renderObject->CBUpdateAll(immediate.DeviceContext.Get());
+			//default_renderObject->CBUpdateAll(immediate.DeviceContext.Get());
 		}
 
 		void DXRenderer::Begin(const float clearRGBA[4])
