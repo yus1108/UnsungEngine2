@@ -10,17 +10,16 @@ void UEngine::Transform::Awake()
 void UEngine::Transform::LateUpdate()
 {
 	using namespace DirectX;
-	world.matrix = XMMatrixMultiply
+	RTP = XMMatrixMultiply
 	(
-		XMMatrixScaling(scale.x, scale.y, scale.z), 
-		XMMatrixRotationRollPitchYaw(localRotation.z, localRotation.x, localRotation.y)
-	);
-	world.matrix = XMMatrixMultiply
-	(
-		world.matrix,
+		XMMatrixRotationRollPitchYaw(localRotation.z, localRotation.x, localRotation.y),
 		XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z)
 	);
 
+	if (GetParent() != nullptr)
+		RTP = XMMatrixMultiply(RTP, GetParent()->GetWorld());
+
+	world.matrix = XMMatrixMultiply(XMMatrixScaling(scale.x, scale.y, scale.z), RTP);
 	world.matrix = XMMatrixTranspose(world.matrix);
 
 	auto renderComponent = GetComponent<RenderComponent>();
@@ -35,4 +34,27 @@ void UEngine::Transform::LateUpdate()
 void UEngine::Transform::OnPreRender()
 {
 	worldBuffer->Update(DXRenderer::Get()->GetImmediateDeviceContext());
+}
+
+UEngine::Transform* UEngine::Transform::GetParent()
+{
+	auto goParent = GetGameObject()->GetParent();
+	if (goParent == nullptr) return nullptr;
+	return goParent->GetTransform();
+}
+
+UEngine::Transform* UEngine::Transform::GetChild(UINT index)
+{
+	auto goChild = GetGameObject()->GetChild(index);
+	if (goChild == nullptr) return nullptr;
+	return goChild->GetTransform();
+}
+
+std::vector<UEngine::Transform*> UEngine::Transform::GetChildren()
+{
+	auto goChildren = GetGameObject()->GetChildren();
+	std::vector<Transform*> children;
+	for (size_t i = 0; i < goChildren.size(); i++)
+		children.push_back(goChildren[i]->GetTransform());
+	return children;
 }

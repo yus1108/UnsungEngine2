@@ -37,10 +37,10 @@ void UEngine::Camera::Awake()
 
 void UEngine::Camera::Start()
 {
-    viewWidth = 40;
-    viewHeight = 30;
+    viewWidth = 10.0f;
+    viewHeight = 10.0f;
     nearZ = -1.0f;
-    farZ = 100.0f;
+    farZ = 10.0f;
 }
 
 void UEngine::Camera::LateUpdate()
@@ -48,7 +48,7 @@ void UEngine::Camera::LateUpdate()
     DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(cameraRotation.z, cameraRotation.x, cameraRotation.y);
     DirectX::XMMATRIX position = DirectX::XMMatrixTranslation(cameraPosition.x, cameraPosition.y, cameraPosition.z);
     cpu_camera.view = DirectX::XMMatrixMultiply(rotation, position);
-    //cpu_camera.view = DirectX::XMMatrixMultiply(cpu_camera.view, GetGameObject()->GetTransform()->GetRT());
+    cpu_camera.view = DirectX::XMMatrixMultiply(cpu_camera.view, GetTransform()->GetRTP());
     view_determinant = DirectX::XMMatrixDeterminant(cpu_camera.view);
 
     cpu_camera.projection = DirectX::XMMatrixOrthographicLH(viewWidth, viewHeight, nearZ, farZ);

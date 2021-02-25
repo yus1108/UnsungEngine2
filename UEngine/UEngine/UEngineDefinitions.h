@@ -15,4 +15,6 @@ namespace UEngine
 		*/
 		std::map<std::string, DXRenderer::DXConstantBuffer*> constantBuffers;
 	};
+
+	typedef DirectX::XMMATRIX Matrix;
 }

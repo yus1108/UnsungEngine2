@@ -9,6 +9,7 @@ namespace UEngine
 		DXRenderer::DXConstantBuffer* worldBuffer;
 		Vector3 worldPosition{ 0, 0, 0 };
 		CPU_WORLD world{ DirectX::XMMatrixIdentity() };
+		Matrix RTP{ DirectX::XMMatrixIdentity() };
 
 		void Awake() override;
 		void LateUpdate() override;
@@ -19,6 +20,17 @@ namespace UEngine
 		Vector3 localPosition{ 0, 0, 0 };
 		Vector3 localRotation{ 0, 0, 0 };
 		Vector3 scale{ 1, 1, 1 };
+
+		const Matrix& GetRTP() { return RTP; }
+		const Matrix& GetWorld() { return world.matrix; }
+
+		Transform* GetParent();
+		Transform* GetChild(UINT index);
+
+		void SetParent(Transform* transform) { GetGameObject()->SetParent(transform->GetGameObject()); }
+		void AddChild(Transform* transform) { GetGameObject()->AddChild(transform->GetGameObject()); }
+		std::vector<Transform*> GetChildren();
+		void RemoveChild(Transform* transform) { GetGameObject()->RemoveChild(transform->GetGameObject()); }
 	public:
 		Transform() : worldBuffer(DXRenderer::DXConstantBuffer::Instantiate
 		(

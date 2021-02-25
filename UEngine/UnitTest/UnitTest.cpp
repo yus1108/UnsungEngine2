@@ -3,10 +3,7 @@
 
 #include "framework.h"
 #include "UnitTest.h"
-#include "../UEngine/UEngine.h"
-#include "../WinApplication/WinConsole.h"
-#include "../WinApplication/WinMemoryLeak.h"
-#include "SceneScript.h"
+#include "ScriptComponent.h"
 
 #define MAX_LOADSTRING 100
 
@@ -24,7 +21,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: Place code here.
     UEngine::WinMemoryLeak::Detect();
 
     // Initialize global strings
@@ -78,10 +74,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
 
-    SceneScript sceneScript;
     auto gameState = UEngine::GameState::Get();
     gameState->Init(app, renderer);
-    sceneScript.Load(gameState);
+
+    // TODO: Place code here.
+    {
+        // basic load
+        using namespace UEngine;
+
+        GameObject* mainCamera = GameObject::Instantiate();
+        mainCamera->AddComponent<Transform>();
+        mainCamera->AddComponent<Camera>();
+        GameObject* rectangle = GameObject::Instantiate();
+        rectangle->AddComponent<Transform>();
+        rectangle->AddComponent<RenderComponent>()->Load("rectangle", "color");
+        rectangle->AddComponent<Material>()->color = Color{ 1, 0, 0, 1 };
+        rectangle->AddComponent<ScriptComponent>();
+
+        gameState->AddObject(mainCamera);
+        gameState->AddObject(rectangle);
+    }
 
     auto returnedValue = app->UpdateLoop([&]() 
     {

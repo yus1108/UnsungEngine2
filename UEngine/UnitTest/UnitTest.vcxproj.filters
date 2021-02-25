@@ -23,7 +23,7 @@
     <ClInclude Include="UnitTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneScript.h">
+    <ClInclude Include="ScriptComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -42,6 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest.cpp" />
-    <ClCompile Include="SceneScript.cpp" />
+    <ClCompile Include="ScriptComponent.cpp" />
   </ItemGroup>
 </Project>

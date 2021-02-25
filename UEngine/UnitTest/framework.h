@@ -23,3 +23,7 @@
 #define _tstring string
 #define _tcout   cout
 #endif
+
+#include "../UEngine/UEngine.h"
+#include "../WinApplication/WinConsole.h"
+#include "../WinApplication/WinMemoryLeak.h"
