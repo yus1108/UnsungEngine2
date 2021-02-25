@@ -68,7 +68,7 @@ namespace UEngine
 
 			default_renderObject->Set(immediate.DeviceContext.Get());
 			default_colorBuffer->Set(immediate.DeviceContext.Get());
-			immediate.DeviceContext->PSGetShaderResources(0, 1, sceneTexture);
+			immediate.DeviceContext->PSSetShaderResources(0, 1, sceneTexture);
 
 
 			immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
@@ -156,8 +156,8 @@ namespace UEngine
 		void DXRenderer::InitMainRenderTargetView(ID3D11RenderTargetView** const rtv)
 		{
 			Microsoft::WRL::ComPtr<ID3D11Debug> pDebugger;
-
 			device->QueryInterface(__uuidof(ID3D11Debug), (void**)&pDebugger);
+			//pDebugger->ReportLiveDeviceObjects(D3D11_RLDO_FLAGS::D3D11_RLDO_IGNORE_INTERNAL);
 			Microsoft::WRL::ComPtr<ID3D11Texture2D> pSwapChainBuffer;
 			swapchain->GetBuffer(0, __uuidof(pSwapChainBuffer), (void**)&pSwapChainBuffer);
 			device->CreateRenderTargetView(pSwapChainBuffer.Get(), nullptr, rtv);

@@ -7,7 +7,7 @@ namespace UEngine
 	private:
 		RenderObjectPool renderObjectPool;
 		DXRenderer::DXView* mainView;
-		DXRenderer::DXView* nextMainView;
+		DXRenderer::DXConstantBuffer* mainCameraBuffer;
 		std::queue<DXRenderer::DXView*> viewCreationQueue;
 		std::map<DXRenderer::DXView*, DXRenderer::DXView*> view_resources;
 		std::map<DXRenderer::DXView*, DXRenderer::DXView*> viewDeletionQueue;
@@ -19,7 +19,6 @@ namespace UEngine
 		void AddObject(RenderObject* const renderObject) { renderObjectPool.Add(renderObject); }
 		void RemoveObject(RenderObject* const renderObject) { renderObjectPool.Remove(renderObject); }
 
-		void SetView(DXRenderer::DXView* nextMainView) { this->nextMainView = nextMainView; }
 		void AddView(DXRenderer::DXView* view) { viewCreationQueue.push(view); }
 		void RemoveView(DXRenderer::DXView* view) { viewDeletionQueue[view] = view; }
 

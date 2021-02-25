@@ -5,14 +5,13 @@ UEngine::Camera* UEngine::Camera::mainCamera = nullptr;
 
 void UEngine::Camera::OnEnable()
 {
-    GameState::Get()->constantBufferPool.Add(cameraBuffer);
-    GameState::Get()->gameScene.AddView(view);
+    if (mainCamera == nullptr) SetMainCamera();
 }
 
 void UEngine::Camera::OnDisable()
 {
-    GameState::Get()->constantBufferPool.Remove(cameraBuffer);
-    GameState::Get()->gameScene.RemoveView(view);
+    if (!GameState::Get()->GetTerminate() && mainCamera == this) 
+        throw std::runtime_error("You cannot remove main camera!");
 }
 
 void UEngine::Camera::Awake()
@@ -31,6 +30,9 @@ void UEngine::Camera::Awake()
         rendererDesc.MultisampleDesc
     );
     cameraBuffer->AttachData(&cpu_camera, sizeof(CPU_CAMERA));
+
+    GameState::Get()->constantBufferPool.Add(cameraBuffer);
+    GameState::Get()->gameScene.AddView(view);
 }
 
 void UEngine::Camera::Start()
@@ -39,7 +41,10 @@ void UEngine::Camera::Start()
     viewHeight = 30;
     nearZ = -1.0f;
     farZ = 100.0f;
+}
 
+void UEngine::Camera::LateUpdate()
+{
     DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(cameraRotation.z, cameraRotation.x, cameraRotation.y);
     DirectX::XMMATRIX position = DirectX::XMMatrixTranslation(cameraPosition.x, cameraPosition.y, cameraPosition.z);
     cpu_camera.view = DirectX::XMMatrixMultiply(rotation, position);
@@ -54,3 +59,16 @@ void UEngine::Camera::Start()
         DirectX::XMMatrixTranspose(cpu_camera.projection)
     };
 }
+
+void UEngine::Camera::OnPreRender()
+{
+    cameraBuffer->Update(view->GetDeviceContext());
+}
+
+void UEngine::Camera::OnDestroy()
+{
+    GameState::Get()->gameScene.RemoveView(view);
+    GameState::Get()->constantBufferPool.Remove(cameraBuffer);
+}
+
+

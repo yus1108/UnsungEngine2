@@ -99,15 +99,6 @@ void UEngine::GameObject::OnPreRender()
 	}
 }
 
-void UEngine::GameObject::OnRender()
-{
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			component->OnRender();
-	}
-}
-
 void UEngine::GameObject::OnPostRender()
 {
 	for (auto componentListPair : components)

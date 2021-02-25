@@ -9,7 +9,7 @@ namespace UEngine
 		friend class UEngine::GameObject;
 
 	private:
-		GameObject* gameObject;
+		GameObject* gameObject{ nullptr };
 		bool enabled{ false };
 		bool isStart{ false };
 
@@ -26,7 +26,6 @@ namespace UEngine
 		virtual void LateUpdate() {}
 		virtual void AnimationUpdate() {}
 		virtual void OnPreRender() {}
-		virtual void OnRender() {}
 		virtual void OnPostRender() {}
 		virtual void OnDisable() {}
 		virtual void OnDestroy() {}
@@ -48,8 +47,16 @@ namespace UEngine
 			enabled = enable;
 		}
 		bool GetEnable() { return enabled; }
+
+		template <typename T>
+		T* const GetComponent();
 		
 		IComponent() = default;
 		virtual ~IComponent() { SetEnable(false); OnDestroy(); };
 	};
+	template<typename T>
+	inline T* const IComponent::GetComponent()
+	{
+		return gameObject->GetComponent<T>();
+	}
 }

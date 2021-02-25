@@ -1,21 +1,15 @@
 #include "UEngine.h"
 #include "Transform.h"
 
-UEngine::Transform::Transform()
-	: worldBuffer(DXRenderer::DXConstantBuffer::Instantiate
-	(
-		DXRenderer::Get(),
-		DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(CPU_WORLD).raw_name())
-	))
+void UEngine::Transform::Awake()
 {
 	worldBuffer->AttachData(&world, sizeof(CPU_WORLD));
 	GameState::Get()->constantBufferPool.Add(worldBuffer);
 }
 
-void UEngine::Transform::Update()
+void UEngine::Transform::LateUpdate()
 {
 	using namespace DirectX;
-
 	world.matrix = XMMatrixMultiply
 	(
 		XMMatrixScaling(scale.x, scale.y, scale.z), 
@@ -28,4 +22,8 @@ void UEngine::Transform::Update()
 	);
 
 	world.matrix = XMMatrixTranspose(world.matrix);
+
+	auto renderComponent = GetComponent<RenderComponent>();
+	if (renderComponent == nullptr) return;
+	renderComponent->AddConstantBuffer(typeid(Transform).raw_name(), worldBuffer);
 }

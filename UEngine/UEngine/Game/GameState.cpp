@@ -15,6 +15,7 @@ void UEngine::GameState::Init(WinApplication* app, DXRenderer::DXRenderer* const
 
 void UEngine::GameState::Release()
 {
+    terminate = true;
     for (auto object : gameObjects)
         GameObject::Release(&object);
     gameObjects.clear();
@@ -25,13 +26,19 @@ void UEngine::GameState::Update()
     // cpu-gpu transfer
     gameScene.OnPreRender();
     constantBufferPool.OnPreRender();
+    // resources mapping
     for (auto obj : gameObjects)
         obj->OnPreRender();
 
-    // resources mapping
+
 
     // rendering thread
     gameScene.OnRender();
+    // post render thread
+    gameScene.OnPostRender();
+    renderer->Begin(gameScene.GetMainView()->GetAddressOfViewResource());
+    renderer->End();
+    
 
     // update in main thread
     {
@@ -67,15 +74,7 @@ void UEngine::GameState::Update()
     
     // thread join
     threadPool.Join();
-
-    // onRender Update
-    for (auto obj : gameObjects)
-        obj->OnRender();
-
-    // post render thread
-    gameScene.OnPostRender();
-    renderer->Begin(gameScene.GetMainView()->GetAddressOfViewResource());
-    renderer->End();
+    
     // post render update thread
     for (auto obj : gameObjects)
         obj->OnPostRender();

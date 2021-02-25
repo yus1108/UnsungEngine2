@@ -23,7 +23,11 @@ UEngine::GameScene::~GameScene()
 void UEngine::GameScene::OnPreRender()
 {
 	renderObjectPool.OnPreRender();
-	mainView = nextMainView;
+	if (mainView == nullptr)
+	{
+		mainView = Camera::mainCamera->view;
+		mainCameraBuffer = Camera::mainCamera->cameraBuffer;
+	}
 	while (!viewCreationQueue.empty())
 	{
 		auto curr = viewCreationQueue.front();
@@ -37,12 +41,14 @@ void UEngine::GameScene::OnPreRender()
 		DXRenderer::DXView::Release(&objectToDelete);
 	}
 	viewDeletionQueue.clear();
+	
 }
 
 void UEngine::GameScene::OnRender()
 {
 	if (!mainView) throw std::out_of_range("there is no main view");
 	mainView->Begin();
+	mainCameraBuffer->Set(mainView->GetDeviceContext());
 	renderObjectPool.OnRender(mainView->GetDeviceContext());
 	mainView->End();
 }

@@ -5,7 +5,9 @@ namespace UEngine
 {
 	class Camera : public IComponent
 	{
+		friend class GameScene;
 	private:
+		DXRenderer::DXView* view{ nullptr };
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };
 
 		CPU_CAMERA cpu_camera{ DirectX::XMMatrixIdentity() };
@@ -13,12 +15,14 @@ namespace UEngine
 
 		void OnEnable() override;
 		void OnDisable() override;
-		virtual void Awake() override;
-		virtual void Start() override;
+		void Awake() override;
+		void Start() override;
+		void LateUpdate() override;
+		void OnPreRender() override;
+		void OnDestroy() override;
 
 	public:
 		static Camera* mainCamera;
-		DXRenderer::DXView* view{ nullptr };
 		Vector3 cameraPosition{ 0, 0, 0 };
 		Vector3 cameraRotation{ 0, 0, 0 };
 
@@ -32,9 +36,9 @@ namespace UEngine
 			(
 				DXRenderer::DXConstantBuffer::Instantiate(DXRenderer::Get(),
 				DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(CPU_CAMERA).raw_name()))
-			){}
+			) {}
 
 
-		void SetMainCamera() { GameState::Get()->gameScene.SetView(view); }
+		void SetMainCamera() { mainCamera = this; }
 	};
 }

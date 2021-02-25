@@ -77,7 +77,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         rendererDesc.MultisampleDesc = { 1, 0 };
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
-    renderer->UpdateConstantBuffers();
 
     SceneScript sceneScript;
     auto gameState = UEngine::GameState::Get();

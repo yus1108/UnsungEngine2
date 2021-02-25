@@ -14,6 +14,7 @@ namespace UEngine
 		static GameState instance;
 #pragma endregion
 	private:
+		bool terminate{ false };
 		Utility::Sync::UThreadPool threadPool;
 		std::list<class GameObject*> gameObjects;
 
@@ -28,6 +29,8 @@ namespace UEngine
 	public:
 		void Init(WinApplication* app, DXRenderer::DXRenderer* const renderer, size_t numThreads = 8);
 		void Release();
+
+		bool GetTerminate() { return terminate; }
 
 		void AddObject(GameObject* gameObject) { gameObjects.push_back(gameObject); }
 

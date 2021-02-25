@@ -24,7 +24,6 @@ namespace UEngine
 		void LateUpdate();
 		void AnimationUpdate();
 		void OnPreRender();
-		void OnRender();
 		void OnPostRender();
 		void OnDisable();
 		void OnDestroy();
@@ -33,12 +32,28 @@ namespace UEngine
 		void SetActive(bool isActive);
 		bool GetActive() { return isActive; }
 
+		template <typename T>
+		T* const GetComponent();
+
 		static GameObject* Instantiate();
 		static void Release(GameObject** const gameObject);
 
 		template <typename T>
 		T* AddComponent();
 	};
+
+	template<typename T>
+	inline T* const GameObject::GetComponent()
+	{
+		static_assert(std::is_base_of<IComponent, T>::value, "Provider type does not implement IComponent");
+
+		if (components[typeid(T).raw_name()] == nullptr)
+		{
+			components.erase(typeid(T).raw_name());
+			return nullptr;
+		}
+		return static_cast<T*>(components[typeid(T).raw_name()]->front());
+	}
 
 	template<typename T>
 	inline T* GameObject::AddComponent()
