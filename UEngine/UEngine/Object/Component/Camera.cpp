@@ -62,7 +62,7 @@ void UEngine::Camera::LateUpdate()
 
 void UEngine::Camera::OnPreRender()
 {
-    cameraBuffer->Update(view->GetDeviceContext());
+    cameraBuffer->Update(DXRenderer::Get()->GetImmediateDeviceContext());
 }
 
 void UEngine::Camera::OnDestroy()

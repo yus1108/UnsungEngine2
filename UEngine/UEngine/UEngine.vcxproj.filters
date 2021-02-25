@@ -60,6 +60,9 @@
     <ClCompile Include="Object\Component\Transform.cpp">
       <Filter>Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Component\Material.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Game">

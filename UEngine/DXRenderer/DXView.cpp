@@ -32,7 +32,7 @@ namespace UEngine
         void DXView::Begin()
         {
             // clearing depth buffer and render target
-            context.DeviceContext->ClearRenderTargetView(context.RenderTargetView.Get(), DirectX::Colors::Black);
+            context.DeviceContext->ClearRenderTargetView(context.RenderTargetView.Get(), DirectX::Colors::Transparent);
             if (context.DepthStencilView) context.DeviceContext->ClearDepthStencilView(context.DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
             context.DeviceContext->RSSetViewports(1, &context.Viewport);

@@ -1,14 +1,6 @@
 #include "UEngine.h"
 #include "RenderComponent.h"
 
-void UEngine::RenderComponent::OnPreRender()
-{
-	for (auto bufferPair : renderObject->constantBuffers)
-	{
-		bufferPair.second->Update()
-	}
-}
-
 void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string shader_name)
 {
 	if (renderObject != nullptr) GameState::Get()->gameScene.RemoveObject(renderObject);

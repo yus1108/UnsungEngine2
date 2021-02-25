@@ -50,7 +50,7 @@ namespace UEngine
 
 		template <typename T>
 		T* const GetComponent();
-		
+
 		IComponent() = default;
 		virtual ~IComponent() { SetEnable(false); OnDestroy(); };
 	};

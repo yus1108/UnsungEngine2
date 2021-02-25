@@ -187,6 +187,7 @@
     <ClCompile Include="Game\GameScene.cpp" />
     <ClCompile Include="Game\GameState.cpp" />
     <ClCompile Include="Object\Component\Camera.cpp" />
+    <ClCompile Include="Object\Component\Material.cpp" />
     <ClCompile Include="Object\Component\RenderComponent.cpp" />
     <ClCompile Include="Object\Component\Transform.cpp" />
     <ClCompile Include="Object\GameObject.cpp" />

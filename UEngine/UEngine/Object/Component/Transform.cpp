@@ -25,5 +25,14 @@ void UEngine::Transform::LateUpdate()
 
 	auto renderComponent = GetComponent<RenderComponent>();
 	if (renderComponent == nullptr) return;
-	renderComponent->AddConstantBuffer(typeid(Transform).raw_name(), worldBuffer);
+	if (renderObject == nullptr || renderObject != renderComponent->GetRenderObject())
+	{
+		renderObject = renderComponent->GetRenderObject();
+		renderComponent->AddConstantBuffer(typeid(this).raw_name(), worldBuffer);
+	}
+}
+
+void UEngine::Transform::OnPreRender()
+{
+	worldBuffer->Update(DXRenderer::Get()->GetImmediateDeviceContext());
 }
