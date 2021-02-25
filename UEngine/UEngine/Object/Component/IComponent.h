@@ -1,6 +1,6 @@
 #pragma once
 #include "Object\GameObject.h"
-
+#include <iostream>
 namespace UEngine
 {
 	class IComponent
@@ -10,6 +10,8 @@ namespace UEngine
 
 	private:
 		GameObject* gameObject;
+		bool enabled{ false };
+		bool isStart{ false };
 
 	protected:
 		GameObject* const GetGameObject() { return gameObject; }
@@ -30,7 +32,24 @@ namespace UEngine
 		virtual void OnDestroy() {}
 
 	public:
-		IComponent() { Awake(); Start(); };
-		virtual ~IComponent() { OnDestroy(); };
+		void SetEnable(bool enable)
+		{
+			if (gameObject->GetActive())
+			{
+				if (enable && !enabled)
+				{
+					OnEnable();
+					if (isStart) return;
+					Start();
+					isStart = true;
+				}
+				else if (!enable && enabled) OnDisable();
+			}
+			enabled = enable;
+		}
+		bool GetEnable() { return enabled; }
+		
+		IComponent() = default;
+		virtual ~IComponent() { SetEnable(false); OnDestroy(); };
 	};
 }

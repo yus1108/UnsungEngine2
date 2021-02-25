@@ -12,19 +12,30 @@ namespace UEngine
 
 		private:
 			DXRenderObjectPool() = default;
-			~DXRenderObjectPool();
+			~DXRenderObjectPool() { Clear(); }
 			static DXRenderObjectPool instance;
 #pragma endregion
 
 		private:
-			std::vector<DXRenderObject*> pool;
+			std::map<std::string, DXRenderObject*> poolMap;
+			std::map<UINT, DXRenderObject*> poolVector;
+			std::queue<DXRenderObject*> creationQueue;
+			std::queue<DXRenderObject*> deletionQueue;
 
 		public:
-			DXRenderObject* LoadObject(std::string shader, std::string renderMesh, std::list<CONSTANT_BUFFER_DESC> bufferDescs);
-			const std::vector<DXRenderObject*>* const GetList() { return &pool; }
-			void Remove(DXRenderObject* renderObject);
+			DXRenderObject* LoadObject(std::string renderMesh, std::string shader);
+			void Clear();
+
+			void Add(DXRenderObject* const renderObject) { creationQueue.push(renderObject); }
+			void Remove(DXRenderObject* renderObject) { deletionQueue.push(renderObject); }
+
+			UEngine::DXRenderer::DXRenderObject* GetObjectByID(UINT id) { return poolVector[id]; }
+			UEngine::DXRenderer::DXRenderObject* GetObjectByName(std::string name) { return poolMap[name]; }
+
+			void OnPreRender();
 		};
 	}
 }
+
 
 

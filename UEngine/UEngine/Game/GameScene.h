@@ -14,6 +14,8 @@ namespace UEngine
 	public:
 		virtual ~GameScene();
 
+		// Load DXRenderObject (Instantiate it if not exsist) and return RenderObject
+		RenderObject* LoadObject(std::string renderMesh_name, std::string shader_name) { return renderObjectPool.LoadObject(renderMesh_name, shader_name); }
 		void AddObject(RenderObject* const renderObject) { renderObjectPool.Add(renderObject); }
 		void RemoveObject(RenderObject* const renderObject) { renderObjectPool.Remove(renderObject); }
 

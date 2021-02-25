@@ -43,7 +43,7 @@ void UEngine::GameScene::OnRender()
 {
 	if (!mainView) throw std::out_of_range("there is no main view");
 	mainView->Begin();
-	renderObjectPool.OnRender(mainView->GetDeviceContext(), DXRenderer::DXRenderObjectPool::Get()->GetList());
+	renderObjectPool.OnRender(mainView->GetDeviceContext());
 	mainView->End();
 }
 

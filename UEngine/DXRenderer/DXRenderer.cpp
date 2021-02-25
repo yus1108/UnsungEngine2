@@ -1,6 +1,7 @@
 #include "dxrframework.h"
 #include "DXRenderer.h"
 #include "../WinApplication/WinApplication.h"
+#include "../Utility/UtilityDefinitions.h"
 
 namespace UEngine
 {
@@ -41,32 +42,24 @@ namespace UEngine
 				);
 
 				{
-					DirectX::XMFLOAT4 color{ 1,1,1,1 };
+					Color color{ 1,1,1,1 };
 					auto manager = DXResourceManager::Get();
 					manager->Init();
 
-				/*	default_renderObject = DXRenderObject::Instantiate
-					(
-						manager->GetRenderMesh("default"),
-						manager->GetShaders("default")
-					);
-					default_renderObject->AddConstantBuffer("color", manager->GetConstantBuffer("color"));
-					default_renderObject->CBCopyData<DirectX::XMFLOAT4>("color", &color, sizeof(color));*/
+					default_renderObject = DXRenderObjectPool::Get()->LoadObject("default", "default");
+					default_colorBuffer = DXConstantBuffer::Instantiate(this, manager->GetConstantBuffer(typeid(Color).raw_name()));
+					default_colorBuffer->CopyData<Color>(&color, sizeof(color));
+					default_colorBuffer->Update(immediate.DeviceContext.Get());
 				}
 			}
 		}
 
 		void DXRenderer::Release()
 		{
-			//DXRenderObject::Release(&default_renderObject);
+			DXConstantBuffer::Release(&default_colorBuffer);
 		}
 
-		void DXRenderer::UpdateConstantBuffers()
-		{
-			//default_renderObject->CBUpdateAll(immediate.DeviceContext.Get());
-		}
-
-		void DXRenderer::Begin(const float clearRGBA[4])
+		void DXRenderer::Begin(ID3D11ShaderResourceView** sceneTexture, const float clearRGBA[4])
 		{
 			immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
 			if (immediate.DepthStencilView) immediate.DeviceContext->ClearDepthStencilView(immediate.DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -74,6 +67,9 @@ namespace UEngine
 			immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
 
 			default_renderObject->Set(immediate.DeviceContext.Get());
+			default_colorBuffer->Set(immediate.DeviceContext.Get());
+			immediate.DeviceContext->PSGetShaderResources(0, 1, sceneTexture);
+
 
 			immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
 			immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());

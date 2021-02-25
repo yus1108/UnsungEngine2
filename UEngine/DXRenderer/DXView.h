@@ -25,7 +25,7 @@ namespace UEngine
 
 			ID3D11DeviceContext* const GetDeviceContext() { return context.DeviceContext.Get(); }
 			ID3D11ShaderResourceView* const GetViewResource() { return context.OutputShaderResourceView.Get(); }
-			ID3D11ShaderResourceView* const* const GetAddressOfViewResource() { return context.OutputShaderResourceView.GetAddressOf(); }
+			ID3D11ShaderResourceView** const GetAddressOfViewResource() { return context.OutputShaderResourceView.GetAddressOf(); }
 
 			void Begin();
 			void End();

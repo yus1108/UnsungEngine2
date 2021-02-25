@@ -38,5 +38,4 @@
 #include "DXResourceManager.h"
 #include "DXRenderObject.h"
 #include "DXRenderObjectPool.h"
-#include "DXGeometryFigurePrefab.h"
 #include "DXView.h"

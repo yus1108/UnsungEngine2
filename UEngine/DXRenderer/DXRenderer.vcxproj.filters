@@ -42,9 +42,6 @@
     <ClInclude Include="DXView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DXGeometryFigurePrefab.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DXRenderObjectPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,9 +69,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DXView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DXGeometryFigurePrefab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DXRenderObjectPool.cpp">

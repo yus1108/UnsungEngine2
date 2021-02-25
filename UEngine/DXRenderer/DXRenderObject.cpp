@@ -5,15 +5,16 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		UINT DXRenderObject::NextObjectNumber = 0;
+		UINT DXRenderObject::NextObjectID = 0;
 
-		DXRenderObject* const DXRenderObject::Instantiate(DXRenderMesh* renderMesh, DXShader* shader)
+		DXRenderObject* const DXRenderObject::Instantiate(std::string renderMesh, std::string shader)
 		{
+			auto resourceManager = DXResourceManager::Get();
 			DXRenderObject* instance = new DXRenderObject;
-			instance->renderMesh = renderMesh;
-			instance->shader = shader;
-			instance->objectNumber = NextObjectNumber++;
-
+			instance->renderMesh = resourceManager->GetRenderMesh(renderMesh);
+			instance->shader = resourceManager->GetShaders(shader);
+			instance->objectID = NextObjectID++;
+			instance->objectName = renderMesh + shader;
 			return instance;
 		}
 

@@ -6,16 +6,18 @@ namespace UEngine
 	{
 		friend class GameState;
 	private:
-		GameObject();
+		GameObject() { Awake(); SetActive(true); }
 		~GameObject();
 		/*
 		* 
 		*/
+		bool isActive{ false };
+		bool isStart{ false };
 		std::map<std::string, std::list<class IComponent*>*> components;
 
 		void Awake();
-		void Start();
 		void OnEnable();
+		void Start();
 		void FixedUpdate();
 		void PhysicsUpdate();
 		void Update();
@@ -28,6 +30,9 @@ namespace UEngine
 		void OnDestroy();
 
 	public:
+		void SetActive(bool isActive);
+		bool GetActive() { return isActive; }
+
 		static GameObject* Instantiate();
 		static void Release(GameObject** const gameObject);
 
@@ -42,6 +47,8 @@ namespace UEngine
 
 		auto component = new T();
 		component->gameObject = this;
+		static_cast<IComponent*>(component)->Awake();
+		component->SetEnable(true);
 		if (components[typeid(T).raw_name()] == nullptr) components[typeid(T).raw_name()] = new std::list<IComponent*>();
 		components[typeid(T).raw_name()]->push_back(component);
 		return component;

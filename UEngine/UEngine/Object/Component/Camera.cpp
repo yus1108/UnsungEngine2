@@ -3,12 +3,20 @@
 
 UEngine::Camera* UEngine::Camera::mainCamera = nullptr;
 
-UEngine::Camera::Camera()
-    : cameraBuffer(
-        DXRenderer::DXConstantBuffer::Instantiate(DXRenderer::Get(), 
-            DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(CPU_CAMERA).raw_name())))
+void UEngine::Camera::OnEnable()
 {
-    
+    GameState::Get()->constantBufferPool.Add(cameraBuffer);
+    GameState::Get()->gameScene.AddView(view);
+}
+
+void UEngine::Camera::OnDisable()
+{
+    GameState::Get()->constantBufferPool.Remove(cameraBuffer);
+    GameState::Get()->gameScene.RemoveView(view);
+}
+
+void UEngine::Camera::Awake()
+{
     auto rendererDesc = DXRenderer::Get()->GetDescription();
 
     // View & Object Creation
@@ -22,7 +30,11 @@ UEngine::Camera::Camera()
         rendererDesc.EnableDepthStencil,
         rendererDesc.MultisampleDesc
     );
+    cameraBuffer->AttachData(&cpu_camera, sizeof(CPU_CAMERA));
+}
 
+void UEngine::Camera::Start()
+{
     viewWidth = 40;
     viewHeight = 30;
     nearZ = -1.0f;
@@ -41,14 +53,4 @@ UEngine::Camera::Camera()
         DirectX::XMMatrixTranspose(DirectX::XMMatrixInverse(&view_determinant, cpu_camera.view)),
         DirectX::XMMatrixTranspose(cpu_camera.projection)
     };
-
-    cameraBuffer->AttachData(&cpu_camera, sizeof(CPU_CAMERA));
-    GameState::Get()->constantBufferPool.Add(cameraBuffer);
-    GameState::Get()->gameScene.AddView(view);
-}
-
-UEngine::Camera::~Camera()
-{
-    GameState::Get()->constantBufferPool.Remove(cameraBuffer);
-    GameState::Get()->gameScene.RemoveView(view);
 }

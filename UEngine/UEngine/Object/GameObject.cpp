@@ -2,12 +2,10 @@
 #include "GameObject.h"
 #include "Component\IComponent.h"
 
-UEngine::GameObject::GameObject()
-{
-}
-
 UEngine::GameObject::~GameObject()
 {
+	OnDisable();
+	OnDestroy();
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
@@ -27,15 +25,6 @@ void UEngine::GameObject::Awake()
 	}
 }
 
-void UEngine::GameObject::Start()
-{
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			component->Start();
-	}
-}
-
 void UEngine::GameObject::OnEnable()
 {
 	for (auto componentListPair : components)
@@ -43,6 +32,17 @@ void UEngine::GameObject::OnEnable()
 		for (auto component : *componentListPair.second)
 			component->OnEnable();
 	}
+}
+
+void UEngine::GameObject::Start()
+{
+	if (isStart) return;
+	for (auto componentListPair : components)
+	{
+		for (auto component : *componentListPair.second)
+			component->Start();
+	}
+	isStart = true;
 }
 
 void UEngine::GameObject::FixedUpdate()
@@ -133,6 +133,20 @@ void UEngine::GameObject::OnDestroy()
 		for (auto component : *componentListPair.second)
 			component->OnDestroy();
 	}
+}
+
+void UEngine::GameObject::SetActive(bool isActive)
+{
+	if (isActive && !this->isActive)
+	{
+		OnEnable();
+		Start();
+	}
+	else if (!isActive && this->isActive)
+	{
+		OnDisable();
+	}
+	this->isActive = isActive;
 }
 
 UEngine::GameObject* UEngine::GameObject::Instantiate()

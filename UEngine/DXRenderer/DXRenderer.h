@@ -28,12 +28,12 @@ namespace UEngine
 
 			ViewContext immediate; // main render view
 			class DXRenderObject* default_renderObject{ nullptr };
+			class DXConstantBuffer* default_colorBuffer{ nullptr };
 
 		public:
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
 			void Release();
-			void UpdateConstantBuffers();
-			void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
+			void Begin(ID3D11ShaderResourceView** sceneTexture, const float clearRGBA[4] = DirectX::Colors::Transparent);
 			void End();
 
 			void ResizeMainRenderTarget(UINT width, UINT height);

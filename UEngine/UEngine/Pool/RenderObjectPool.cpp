@@ -1,7 +1,15 @@
 #include "UEngine.h"
 #include "RenderObjectPool.h"
 
-UEngine::RenderObjectPool::~RenderObjectPool()
+UEngine::RenderObject* UEngine::RenderObjectPool::LoadObject(std::string renderMesh, std::string shader)
+{
+	auto DXRObject = modelPool->LoadObject(renderMesh, shader);
+	RenderObject* renderObject = new RenderObject();
+	renderObject->objectNumber = DXRObject->GetID();
+	return renderObject;
+}
+
+void UEngine::RenderObjectPool::Clear()
 {
 	while (!creationQueue.empty())
 	{
@@ -10,14 +18,15 @@ UEngine::RenderObjectPool::~RenderObjectPool()
 	}
 	for (auto objectPair : deletionMap)
 	{
+		if (objectPair.second == nullptr) continue;
 		auto object = objectPair.second;
-		delete (*pool[object->objectNumber])[object];
 		pool[object->objectNumber]->erase(object);
 		if (pool[object->objectNumber]->size() == 0)
 		{
 			delete pool[object->objectNumber];
 			pool.erase(object->objectNumber);
 		}
+		delete object;
 	}
 	for (auto list : pool)
 	{
@@ -25,14 +34,18 @@ UEngine::RenderObjectPool::~RenderObjectPool()
 			delete object.second;
 		delete list.second;
 	}
+	deletionMap.clear();
+	pool.clear();
 }
 
 void UEngine::RenderObjectPool::OnPreRender()
 {
+	modelPool->OnPreRender();
 	while (!creationQueue.empty())
 	{
 		auto curr = creationQueue.front();
 		creationQueue.pop();
+		if (curr == nullptr) continue;
 		if (pool[curr->objectNumber] == nullptr) pool[curr->objectNumber] = new std::unordered_map<RenderObject*, RenderObject*>();
 		(*pool[curr->objectNumber])[curr] = curr;
 	}
@@ -50,12 +63,12 @@ void UEngine::RenderObjectPool::OnPreRender()
 	deletionMap.clear();
 }
 
-void UEngine::RenderObjectPool::OnRender(ID3D11DeviceContext* deviceContext, const std::vector<DXRenderer::DXRenderObject*>* const resources)
+void UEngine::RenderObjectPool::OnRender(ID3D11DeviceContext* deviceContext)
 {
 	// render
 	for (auto desc : pool)
 	{
-		auto model = (*resources)[desc.first];
+		auto model = modelPool->GetObjectByID(desc.first);
 		model->Set(deviceContext);
 		for (auto objectPair : *desc.second)
 		{
