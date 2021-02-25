@@ -17,10 +17,10 @@
 #include "Pool\ConstantBufferPool.h"
 #include "Game\GameScene.h"
 #include "Game\GameState.h"
-#include "Object\Component\IComponent.h"
+#include "Object\Component\Component.h"
+#include "Object\Component\Transform.h"
 #include "Object\Component\Camera.h"
 #include "Object\Component\Material.h"
 #include "Object\Component\RenderComponent.h"
-#include "Object\Component\Transform.h"
 #include "Object\GameObject.h"
 

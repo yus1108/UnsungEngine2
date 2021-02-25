@@ -15,9 +15,6 @@
     <ClInclude Include="Object\GameObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Component\IComponent.h">
-      <Filter>Object\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Component\Camera.h">
       <Filter>Object\Component</Filter>
     </ClInclude>
@@ -31,6 +28,9 @@
       <Filter>Pool</Filter>
     </ClInclude>
     <ClInclude Include="Object\Component\Transform.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Component\Component.h">
       <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include <iostream>
 namespace UEngine
 {
-	class IComponent
+	class Component
 	{
 	private:
 		friend class UEngine::GameObject;
@@ -15,6 +15,7 @@ namespace UEngine
 
 	protected:
 		GameObject* const GetGameObject() { return gameObject; }
+		Transform* const GetTransform() { return gameObject->GetTransform(); }
 
 	private:
 		virtual void Awake() {}
@@ -51,12 +52,28 @@ namespace UEngine
 		template <typename T>
 		T* const GetComponent();
 
-		IComponent() = default;
-		virtual ~IComponent() { SetEnable(false); OnDestroy(); };
+		template <typename T>
+		T* AddComponent();
+
+		template <typename T>
+		void RemoveComponent();
+
+		Component() = default;
+		virtual ~Component() { SetEnable(false); OnDestroy(); };
 	};
 	template<typename T>
-	inline T* const IComponent::GetComponent()
+	inline T* const Component::GetComponent()
 	{
 		return gameObject->GetComponent<T>();
+	}
+	template<typename T>
+	inline T* Component::AddComponent()
+	{
+		return gameObject->AddComponent<T>();
+	}
+	template<typename T>
+	inline void Component::RemoveComponent()
+	{
+		gameObject->RemoveComponent<T>();
 	}
 }

@@ -173,7 +173,7 @@
     <ClInclude Include="Game\GameScene.h" />
     <ClInclude Include="Game\GameState.h" />
     <ClInclude Include="Object\Component\Camera.h" />
-    <ClInclude Include="Object\Component\IComponent.h" />
+    <ClInclude Include="Object\Component\Component.h" />
     <ClInclude Include="Object\Component\Material.h" />
     <ClInclude Include="Object\Component\RenderComponent.h" />
     <ClInclude Include="Object\Component\Transform.h" />

@@ -3,7 +3,7 @@
 
 namespace UEngine
 {
-	class Camera : public IComponent
+	class Camera : public Component
 	{
 		friend class GameScene;
 	private:

@@ -3,7 +3,7 @@
 
 namespace UEngine
 {
-	class Material final : public IComponent
+	class Material final : public Component
 	{
 	private:
 		const RenderObject* renderObject{ nullptr };

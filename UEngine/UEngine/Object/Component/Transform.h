@@ -2,7 +2,7 @@
 
 namespace UEngine
 {
-	class Transform final : public IComponent
+	class Transform final : public Component
 	{
 	private:
 		const RenderObject* renderObject{ nullptr };

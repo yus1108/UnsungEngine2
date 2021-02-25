@@ -1,6 +1,6 @@
 #include "UEngine.h"
 #include "GameObject.h"
-#include "Component\IComponent.h"
+#include "Component\Component.h"
 
 UEngine::GameObject::~GameObject()
 {
@@ -138,6 +138,30 @@ void UEngine::GameObject::SetActive(bool isActive)
 		OnDisable();
 	}
 	this->isActive = isActive;
+}
+
+void UEngine::GameObject::SetParent(GameObject* parent)
+{
+	if (this->parent != nullptr) this->parent->RemoveChild(this);
+	if (parent != nullptr) parent->children.push_back(this);
+	this->parent = parent;
+}
+
+void UEngine::GameObject::AddChild(GameObject* child)
+{
+	child->SetParent(this);
+}
+
+void UEngine::GameObject::RemoveChild(GameObject* child)
+{
+	for (auto iter = children.begin(); iter != children.end(); iter++)
+	{
+		if (*iter == child)
+		{
+			children.erase(iter);
+			return;
+		}
+	}
 }
 
 UEngine::GameObject* UEngine::GameObject::Instantiate()

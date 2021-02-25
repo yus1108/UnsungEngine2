@@ -2,7 +2,7 @@
 
 namespace UEngine
 {
-	class RenderComponent : public IComponent
+	class RenderComponent : public Component
 	{
 	private:
 		RenderObject* renderObject{ nullptr };
