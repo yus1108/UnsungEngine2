@@ -46,6 +46,11 @@ namespace UEngine
 			return time_span.count() / 1000.0 * TimeScale;
 		}
 
+		const float UTime::DeltaTimeF()
+		{
+			return static_cast<float>(DeltaTime());
+		}
+
 		const double UTime::TotalTime()
 		{
 			return totalTime;

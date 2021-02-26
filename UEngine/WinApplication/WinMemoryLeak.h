@@ -6,18 +6,23 @@
 #include <cstdlib>
 #include <crtdbg.h>
 
+#endif // _DEBUG
+
 namespace UEngine
 {
     namespace WinMemoryLeak
     {
+#ifdef _DEBUG
         inline void Detect(long goToLine = -1)
         {
             //Also need this for memory leak code stuff
             _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
             _CrtSetBreakAlloc(goToLine); //Important!
         }
+#elif // _DEBUG
+        inline void Detect(long goToLine = -1) {}
+#endif
     } // namespace WMemoryLeak
 }
 
 
-#endif // _DEBUG

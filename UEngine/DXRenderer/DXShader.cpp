@@ -5,13 +5,14 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		void DXShader::SetShader(ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXRENDERER_SHADERTYPE& shader_type)
+		void DXShader::SetShader(bool enableInitInputLayout, ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXRENDERER_SHADERTYPE& shader_type)
 		{
 			switch (shader_type)
 			{
 			case UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER:
 				device->CreateVertexShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.vertexShader.GetAddressOf());
-				InitInputLayout(device, shaderBlob);
+				vsShaderBlob = shaderBlob;
+				InitInputLayout(enableInitInputLayout, device, shaderBlob);
 				break;
 			case UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER:
 				device->CreatePixelShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.pixelShader.GetAddressOf());
@@ -31,7 +32,7 @@ namespace UEngine
 			}
 		}
 
-		void DXShader::SetShader(ID3D11Device* const device, const std::string& shader_file, const UENGINE_DXRENDERER_SHADERTYPE& shader_type, bool isDebuggable, const std::string& entry_point)
+		void DXShader::SetShader(bool enableInitInputLayout, ID3D11Device* const device, const std::string& shader_file, const UENGINE_DXRENDERER_SHADERTYPE& shader_type, bool isDebuggable, const std::string& entry_point)
 		{
 			Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob = nullptr;
 			shader_files[static_cast<unsigned>(shader_type)] = shader_file;
@@ -61,13 +62,13 @@ namespace UEngine
 			}
 
 			assert(hr == S_OK && "Failed to compile shader");
-			SetShader(device, shaderBlob.Get(), shader_type);
+			SetShader(enableInitInputLayout, device, shaderBlob.Get(), shader_type);
 		}
 
-		void DXShader::InitInputLayout(ID3D11Device* const device, ID3DBlob* const vsShaderBlob)
+		void DXShader::InitInputLayout(bool enableInitInputLayout, ID3D11Device* const device, ID3DBlob* const vsShaderBlob)
 		{
+			if (enableInitInputLayout == false) return;
 			assert(pipeline.vertexShader.Get() != nullptr && "Vertex Shader must be set");
-
 			// Create view layout
 			D3D11_INPUT_ELEMENT_DESC vLayout[] =
 			{
@@ -81,6 +82,12 @@ namespace UEngine
 			};
 
 			device->CreateInputLayout(vLayout, ARRAYSIZE(vLayout), vsShaderBlob->GetBufferPointer(), vsShaderBlob->GetBufferSize(), pipeline.inputLayout.GetAddressOf());
+		}
+
+		void DXShader::InitInputLayout(ID3D11Device* const device, D3D11_INPUT_ELEMENT_DESC* inputLayout, UINT numElements)
+		{
+			assert(pipeline.vertexShader.Get() != nullptr && "Vertex Shader must be set");
+			device->CreateInputLayout(inputLayout, numElements, vsShaderBlob->GetBufferPointer(), vsShaderBlob->GetBufferSize(), pipeline.inputLayout.GetAddressOf());
 		}
 
 		HRESULT DXShader::CompileShader(_In_ LPCWSTR srcFile, _In_ LPCSTR entryPoint, _In_ ID3D11Device* device, _Outptr_ ID3DBlob** blob, LPCSTR shader_version, bool isDebuggable)
@@ -129,6 +136,7 @@ namespace UEngine
 			const std::string& vertex_shader_file,
 			const std::string& pixel_shader_file,
 			bool isDebuggable,
+			bool enableInitInputLayout,
 			bool enableBlending,
 			const RASTERIZER_DESC* const rasterizerStateDesc
 		)
@@ -136,8 +144,8 @@ namespace UEngine
 			auto device = renderer->GetDevice();
 
 			DXShader* instance = new DXShader;
-			instance->SetShader(device, vertex_shader_file, UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER, isDebuggable);
-			instance->SetShader(device, pixel_shader_file, UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER, isDebuggable);
+			instance->SetShader(enableInitInputLayout, device, vertex_shader_file, UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER, isDebuggable);
+			instance->SetShader(false, device, pixel_shader_file, UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER, isDebuggable);
 
 			// Rasterizer State
 			renderer->InitRasterizerState

@@ -17,10 +17,10 @@ namespace UEngine
 		bool terminate{ false };
 		Utility::Sync::UThreadPool threadPool;
 		std::list<class GameObject*> gameObjects;
-		DebugRenderer debugRenderer;
 
 	public:
 		GameScene gameScene;
+		DebugRenderer debugRenderer;
 		ConstantBufferPool constantBufferPool;
 
 	private:

@@ -119,7 +119,7 @@ namespace UEngine
     {
         RECT clientSize;
         GetClientSize(&clientSize);
-        return POINT{ clientSize.right - clientSize.left, clientSize.top - clientSize.bottom };
+        return POINT{ clientSize.right - clientSize.left, clientSize.bottom - clientSize.top };
     }
 
     void WinApplication::SetWindowSize(int x, int y, int width, int height)

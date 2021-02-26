@@ -11,6 +11,7 @@ void UEngine::GameState::Init(WinApplication* app, DXRenderer::DXRenderer* const
     this->app = app;
     this->renderer = renderer;
 	threadPool.Init(numThreads);
+    debugRenderer.Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
 }
 
 void UEngine::GameState::Release()
@@ -36,25 +37,30 @@ void UEngine::GameState::Update()
     gameScene.OnRender();
     // post render thread
     gameScene.OnPostRender();
-    renderer->Begin(gameScene.GetMainView()->GetAddressOfViewResource());
+
+    debugRenderer.Flush(gameScene.GetMainViewCBuffer());
+
+    renderer->Begin();
+    renderer->Draw(gameScene.GetMainView()->GetAddressOfViewResource());
+    renderer->Draw(debugRenderer.GetViewResource());
     renderer->End();
     
 
     // update in main thread
     {
-        /*UEngine::WinConsole::ResetCursorPos();
+        UEngine::WinConsole::ResetCursorPos();
         std::cout << "\t\t" << std::endl;
         std::cout << "\t\t" << std::endl;
         std::cout << "\t\t" << std::endl;
-        UEngine::WinConsole::ResetCursorPos();*/
+        UEngine::WinConsole::ResetCursorPos();
 
-        //if (UEngine::WinInput::Get()->GetKey(VK_LEFT))
-        //{
-        //    std::cout << "key pressed" << std::endl;
-        //}
+        if (UEngine::WinInput::Get()->GetKey(VK_LEFT))
+        {
+            std::cout << "key pressed" << std::endl;
+        }
 
-        //std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
-        //std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
+        std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
+        std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
     }
     {
         // fixed timestamp update

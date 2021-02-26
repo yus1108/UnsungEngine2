@@ -33,7 +33,8 @@ namespace UEngine
 		public:
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
 			void Release();
-			void Begin(ID3D11ShaderResourceView** sceneTexture, const float clearRGBA[4] = DirectX::Colors::Transparent);
+			void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
+			void Draw(ID3D11ShaderResourceView** sceneTexture);
 			void End();
 
 			void ResizeMainRenderTarget(UINT width, UINT height);

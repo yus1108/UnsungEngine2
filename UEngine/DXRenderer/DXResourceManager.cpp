@@ -60,6 +60,7 @@ namespace UEngine
 				"../_Shaders/DefaultVS.hlsl",
 				"../_Shaders/DefaultPS.hlsl",
 				rendering_desc.IsDebuggable,
+				true,
 				rendering_desc.EnableBlendState,
 				&rsDesc
 			);
@@ -70,11 +71,18 @@ namespace UEngine
 				"../_Shaders/WorldVS.hlsl",
 				"../_Shaders/ColorPS.hlsl",
 				rendering_desc.IsDebuggable,
+				true,
 				rendering_desc.EnableBlendState,
 				&rsDesc
 			);
 
 			rsDesc.FillMode = D3D11_FILL_WIREFRAME;
+			// Create view layout
+			D3D11_INPUT_ELEMENT_DESC vLayout[] =
+			{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
 			shaders["debug"] = DXShader::Instantiate
 			(
 				renderer,
@@ -82,8 +90,10 @@ namespace UEngine
 				"../_Shaders/DebugRenderPS.hlsl",
 				rendering_desc.IsDebuggable,
 				false,
+				false,
 				&rsDesc
 			);
+			shaders["debug"]->InitInputLayout(renderer->GetDevice(), vLayout, ARRAYSIZE(vLayout));
 		}
 
 		void DXResourceManager::InitRenderMesh()

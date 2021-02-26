@@ -18,6 +18,7 @@ namespace UEngine
 		if (viewContext)
 			delete viewContext;
 
+
 		// create all buffers
 		D3D11_BUFFER_DESC bufferDesc;
 		ZeroMemory(&bufferDesc, sizeof(bufferDesc));
@@ -32,6 +33,7 @@ namespace UEngine
 		ZeroMemory(&cpu_side_buffer, sizeof(cpu_side_buffer));
 
 		// ViewContext Creation
+		viewContext = new DXRenderer::ViewContext;
 		auto clientSize = WinApplication::Get()->GetClientPixelSize();
 		DXRenderer::Get()->InitRenderViewContext
 		(
@@ -256,10 +258,11 @@ namespace UEngine
 
 	void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 	{
+		if (vert_count == 0) return;
 		ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		viewContext->DeviceContext->Map(gpu_side_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
+		m_pImmediateContext->Map(gpu_side_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
 		memcpy(mappedResource.pData, &cpu_side_buffer, sizeof(UEngine::DebugVertex) * vert_count);
-		viewContext->DeviceContext->Unmap(gpu_side_buffer, 0);
+		m_pImmediateContext->Unmap(gpu_side_buffer, 0);
 
 		// set texture info
 		viewContext->DeviceContext->ClearRenderTargetView(viewContext->RenderTargetView.Get(), DirectX::Colors::Transparent);
@@ -269,21 +272,21 @@ namespace UEngine
 		mainCameraBuffer->Set(viewContext->DeviceContext.Get());
 
 		viewContext->DeviceContext->IASetVertexBuffers(0, 1, &gpu_side_buffer, &stride, &offset);
+		viewContext->DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 		viewContext->DeviceContext->RSSetViewports(1, &viewContext->Viewport);
 		viewContext->DeviceContext->OMSetDepthStencilState(viewContext->DepthStencilState.Get(), 1);
 		viewContext->DeviceContext->OMSetRenderTargets(1, viewContext->RenderTargetView.GetAddressOf(), viewContext->DepthStencilView.Get());
 		viewContext->DeviceContext->Draw(vert_count, 0);
 		viewContext->DeviceContext->FinishCommandList(true, viewContext->CommandList.GetAddressOf());
-
-		vert_count = 0;
 	}
 
-	ID3D11ShaderResourceView** DebugRenderer::GetViewResource(ID3D11DeviceContext* deviceContext)
+	ID3D11ShaderResourceView** DebugRenderer::GetViewResource()
 	{
-		deviceContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
+		if (vert_count == 0) return nullptr;
+		m_pImmediateContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
 		viewContext->CommandList.ReleaseAndGetAddressOf();
 
-		deviceContext->ResolveSubresource
+		m_pImmediateContext->ResolveSubresource
 		(
 			(ID3D11Resource*)viewContext->OutputTexture2D.Get(),
 			D3D11CalcSubresource(0, 0, 1),
@@ -292,6 +295,7 @@ namespace UEngine
 			DXGI_FORMAT_R32G32B32A32_FLOAT
 		);
 
+		vert_count = 0;
 		return viewContext->OutputShaderResourceView.GetAddressOf();
 	}
 

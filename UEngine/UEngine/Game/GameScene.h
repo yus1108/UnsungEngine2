@@ -6,8 +6,8 @@ namespace UEngine
 	{
 	private:
 		RenderObjectPool renderObjectPool;
-		DXRenderer::DXView* mainView;
-		DXRenderer::DXConstantBuffer* mainCameraBuffer;
+		DXRenderer::DXView* mainView{ nullptr };
+		DXRenderer::DXConstantBuffer* mainCameraBuffer{ nullptr };
 		std::queue<DXRenderer::DXView*> viewCreationQueue;
 		std::map<DXRenderer::DXView*, DXRenderer::DXView*> view_resources;
 		std::map<DXRenderer::DXView*, DXRenderer::DXView*> viewDeletionQueue;
@@ -23,6 +23,7 @@ namespace UEngine
 		void RemoveView(DXRenderer::DXView* view) { viewDeletionQueue[view] = view; }
 
 		DXRenderer::DXView* const GetMainView() { return mainView; }
+		DXRenderer::DXConstantBuffer* const GetMainViewCBuffer() { return mainCameraBuffer; }
 
 		void OnPreRender();
 		void OnRender();

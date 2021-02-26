@@ -28,6 +28,7 @@ namespace UEngine
 
 			void Signal();
 			const double DeltaTime();
+			const float DeltaTimeF();
 			const double TotalTime();
 			const double TotalTimeExact();
 			const double FramePerSecond();

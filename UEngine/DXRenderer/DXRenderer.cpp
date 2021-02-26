@@ -59,7 +59,7 @@ namespace UEngine
 			DXConstantBuffer::Release(&default_colorBuffer);
 		}
 
-		void DXRenderer::Begin(ID3D11ShaderResourceView** sceneTexture, const float clearRGBA[4])
+		void DXRenderer::Begin(const float clearRGBA[4])
 		{
 			immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
 			if (immediate.DepthStencilView) immediate.DeviceContext->ClearDepthStencilView(immediate.DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -68,16 +68,20 @@ namespace UEngine
 
 			default_renderObject->Set(immediate.DeviceContext.Get());
 			default_colorBuffer->Set(immediate.DeviceContext.Get());
-			immediate.DeviceContext->PSSetShaderResources(0, 1, sceneTexture);
-
 
 			immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
 			immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
 		}
 
+		void DXRenderer::Draw(ID3D11ShaderResourceView** sceneTexture)
+		{
+			if (sceneTexture == nullptr) return;
+			immediate.DeviceContext->PSSetShaderResources(0, 1, sceneTexture);
+			default_renderObject->Draw(immediate.DeviceContext.Get());
+		}
+
 		void DXRenderer::End()
 		{
-			default_renderObject->Draw(immediate.DeviceContext.Get());
 			swapchain->Present(0, 0);
 		}
 

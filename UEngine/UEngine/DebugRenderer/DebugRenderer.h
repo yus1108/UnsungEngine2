@@ -15,13 +15,13 @@ namespace UEngine
 
 		static const unsigned MAX_VERTS{ 100000 };
 		ID3D11Buffer* gpu_side_buffer{ nullptr };
-		UEngine::DebugVertex cpu_side_buffer[MAX_VERTS];
+		UEngine::DebugVertex cpu_side_buffer[MAX_VERTS]{ NULL };
 		unsigned vert_count{ 0 };
 
 		UINT stride{ sizeof(UEngine::DebugVertex) };
 		UINT offset{ 0 };
 
-		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		D3D11_MAPPED_SUBRESOURCE mappedResource{ NULL };
 
 	public:
 		DebugRenderer() = default;
@@ -36,6 +36,6 @@ namespace UEngine
 		//void Add_Axis(UnitNode * node);
 		void Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer);
 
-		ID3D11ShaderResourceView** GetViewResource(ID3D11DeviceContext* deviceContext);
+		ID3D11ShaderResourceView** GetViewResource();
 	};
 }
