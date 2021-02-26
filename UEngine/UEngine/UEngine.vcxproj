@@ -170,6 +170,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugRenderer\DebugRenderer.h" />
     <ClInclude Include="Game\GameScene.h" />
     <ClInclude Include="Game\GameState.h" />
     <ClInclude Include="Object\Component\Camera.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="UEngineDefinitions.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DebugRenderer\DebugRenderer.cpp" />
     <ClCompile Include="Game\GameScene.cpp" />
     <ClCompile Include="Game\GameState.cpp" />
     <ClCompile Include="Object\Component\Camera.cpp" />

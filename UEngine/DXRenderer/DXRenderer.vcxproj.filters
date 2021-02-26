@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -18,33 +14,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DXRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRDefinitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXConstantBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRFramework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRenderMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRenderObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRenderObjectPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="DXConstantBuffer.h" />
+    <ClInclude Include="DXRDefinitions.h" />
+    <ClInclude Include="DXRenderer.h" />
+    <ClInclude Include="DXRenderMesh.h" />
+    <ClInclude Include="DXRenderObject.h" />
+    <ClInclude Include="DXRenderObjectPool.h" />
+    <ClInclude Include="DXRFramework.h" />
+    <ClInclude Include="DXShader.h" />
+    <ClInclude Include="DXView.h" />
     <ClInclude Include="DXResourceManager.h">
       <Filter>ResourceManager</Filter>
     </ClInclude>

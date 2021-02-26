@@ -115,6 +115,13 @@ namespace UEngine
         return TRUE;
     }
 
+    const POINT& WinApplication::GetClientPixelSize() const
+    {
+        RECT clientSize;
+        GetClientSize(&clientSize);
+        return POINT{ clientSize.right - clientSize.left, clientSize.top - clientSize.bottom };
+    }
+
     void WinApplication::SetWindowSize(int x, int y, int width, int height)
     {
         //화면크기에 맞는 렉트

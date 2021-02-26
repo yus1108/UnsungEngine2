@@ -29,10 +29,10 @@ VertexOutput main(VertexInput input)
     //공간변환이 있을 예정인 곳
     VertexOutput output;
 
-    output.tex = input.tex;
     output.coordinate = mul(input.coordinate, worldMat);
     output.coordinate = mul(output.coordinate, view);
     output.coordinate = mul(output.coordinate, projection);
+    output.tex = input.tex;
 
     return output;
 }

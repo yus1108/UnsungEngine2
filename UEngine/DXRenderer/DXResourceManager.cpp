@@ -73,6 +73,17 @@ namespace UEngine
 				rendering_desc.EnableBlendState,
 				&rsDesc
 			);
+
+			rsDesc.FillMode = D3D11_FILL_WIREFRAME;
+			shaders["debug"] = DXShader::Instantiate
+			(
+				renderer,
+				"../_Shaders/DebugRenderVS.hlsl",
+				"../_Shaders/DebugRenderPS.hlsl",
+				rendering_desc.IsDebuggable,
+				false,
+				&rsDesc
+			);
 		}
 
 		void DXResourceManager::InitRenderMesh()

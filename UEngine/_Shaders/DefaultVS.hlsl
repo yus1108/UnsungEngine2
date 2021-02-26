@@ -31,9 +31,6 @@ VertexOutput main(VertexInput input)
 
     output.coordinate = input.coordinate;
     output.tex = input.tex;
-    //output.coordinate = mul(input.coordinate, worldMat);
-    //output.coordinate = mul(output.coordinate, view);
-    //output.coordinate = mul(output.coordinate, projection);
 
     return output;
 }

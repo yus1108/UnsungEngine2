@@ -16,5 +16,11 @@ namespace UEngine
 		std::map<std::string, DXRenderer::DXConstantBuffer*> constantBuffers;
 	};
 
+	struct DebugVertex
+	{
+		Vector3 position;
+		Color color;
+	};
+
 	typedef DirectX::XMMATRIX Matrix;
 }

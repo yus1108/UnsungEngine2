@@ -13,6 +13,7 @@
 
 
 #include "UEngineDefinitions.h"
+#include "DebugRenderer\DebugRenderer.h"
 #include "Pool\RenderObjectPool.h"
 #include "Pool\ConstantBufferPool.h"
 #include "Game\GameScene.h"

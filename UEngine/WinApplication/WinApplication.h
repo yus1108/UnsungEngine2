@@ -39,6 +39,7 @@ namespace UEngine
 		const HINSTANCE GetInstance() { return appDesc.HInstance; }
 		const HWND GetHandler() { return hWnd; }
 		const void GetClientSize(LPRECT clientSize) const { GetClientRect(hWnd, clientSize); }
+		const POINT& GetClientPixelSize() const;
 
 		void SetWindowSize(int x, int y, int width, int height);
 

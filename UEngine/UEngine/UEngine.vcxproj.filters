@@ -33,6 +33,9 @@
     <ClInclude Include="Object\Component\Component.h">
       <Filter>Object\Component</Filter>
     </ClInclude>
+    <ClInclude Include="DebugRenderer\DebugRenderer.h">
+      <Filter>DebugRenderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -63,6 +66,9 @@
     <ClCompile Include="Object\Component\Material.cpp">
       <Filter>Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="DebugRenderer\DebugRenderer.cpp">
+      <Filter>DebugRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Game">
@@ -76,6 +82,9 @@
     </Filter>
     <Filter Include="Pool">
       <UniqueIdentifier>{34d733eb-90fc-4d02-89fc-6a5096820359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugRenderer">
+      <UniqueIdentifier>{fd6ca42f-2cb3-4f6e-9704-87b6a0ed03a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
