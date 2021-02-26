@@ -30,17 +30,6 @@ namespace UEngine
 				// Render Target View
 				InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 
-				// Depth Stencil Texture, View, State
-				InitDepthStencil
-				(
-					rendering_desc.EnableDepthStencil,
-					clientSize,
-					immediate.DepthStencilState.GetAddressOf(),
-					immediate.DepthStencilTexture2D.GetAddressOf(),
-					immediate.DepthStencilView.GetAddressOf(),
-					rendering_desc.MultisampleDesc
-				);
-
 				{
 					Color color{ 1,1,1,1 };
 					auto manager = DXResourceManager::Get();
@@ -62,14 +51,12 @@ namespace UEngine
 		void DXRenderer::Begin(const float clearRGBA[4])
 		{
 			immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
-			if (immediate.DepthStencilView) immediate.DeviceContext->ClearDepthStencilView(immediate.DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 			immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
 
 			default_renderObject->Set(immediate.DeviceContext.Get());
 			default_colorBuffer->Set(immediate.DeviceContext.Get());
 
-			immediate.DeviceContext->OMSetDepthStencilState(immediate.DepthStencilState.Get(), 1);
 			immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
 		}
 

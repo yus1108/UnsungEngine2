@@ -40,7 +40,7 @@ namespace UEngine
 			&viewContext, 
 			clientSize.x, 
 			clientSize.y, 
-			true, 
+			DXRenderer::Get()->GetDescription().EnableDepthStencil,
 			DXRenderer::Get()->GetDescription().MultisampleDesc
 		);
 
@@ -49,7 +49,8 @@ namespace UEngine
 
 	void DebugRenderer::Add_line(UEngine::DebugVertex a, UEngine::DebugVertex b)
 	{
-		if (vert_count == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+		if (vert_count + 1 == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+		if (vert_count + 2 == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
 		cpu_side_buffer[vert_count++] = a;
 		cpu_side_buffer[vert_count++] = b;
 	}
@@ -256,7 +257,36 @@ namespace UEngine
 	//	}
 	//}
 
-	void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
+void DebugRenderer::Add_Axis(Matrix worldMatrix)
+{
+	DebugVertex center, right, up, front;
+	DirectX::XMVECTOR vCenter, vRight, vUp, vFront;
+	vCenter = worldMatrix.r[3];
+	vRight = DirectX::XMVectorAdd(vCenter, worldMatrix.r[0]);
+	vUp = DirectX::XMVectorAdd(vCenter, worldMatrix.r[1]);
+	vFront = DirectX::XMVectorAdd(vCenter, worldMatrix.r[2]);
+
+	center.position = Vector3(vCenter);;
+	right.position = Vector3(vRight);;
+	up.position = Vector3(vUp);;
+	front.position = Vector3(vFront);;
+
+	center.color = Color{ 1, 0, 0, 1 };
+	right.color = Color{ 1, 0, 0, 1 };
+	up.color = Color{ 0, 1, 0, 1 };
+	front.color = Color{ 0, 0, 1, 1 };
+	cpu_side_buffer[vert_count++] = center;
+	cpu_side_buffer[vert_count++] = right;
+	center.color = Color{ 0, 1, 0, 1 };
+	cpu_side_buffer[vert_count++] = center;
+	cpu_side_buffer[vert_count++] = up;
+	center.color = Color{ 0, 0, 1, 1 };
+	cpu_side_buffer[vert_count++] = center;
+	cpu_side_buffer[vert_count++] = front;
+
+}
+
+void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 	{
 		if (vert_count == 0) return;
 		ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));

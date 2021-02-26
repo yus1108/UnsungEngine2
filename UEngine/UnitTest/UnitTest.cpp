@@ -88,7 +88,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         GameObject* rectangle = GameObject::Instantiate();
         rectangle->AddComponent<Transform>();
         rectangle->AddComponent<RenderComponent>()->Load("rectangle", "color");
-        rectangle->AddComponent<Material>()->color = Color{ 1, 0, 0, 1 };
+        rectangle->AddComponent<Material>()->color = Color{ 1, 1, 0, 1 };
         rectangle->AddComponent<ScriptComponent>();
 
         gameState->AddObject(mainCamera);

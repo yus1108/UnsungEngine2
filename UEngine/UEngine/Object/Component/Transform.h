@@ -22,7 +22,7 @@ namespace UEngine
 		Vector3 scale{ 1, 1, 1 };
 
 		const Matrix& GetRTP() { return RTP; }
-		const Matrix& GetWorld() { return world.matrix; }
+		const Matrix& GetWorld() { return XMMatrixTranspose(world.matrix); }
 
 		Transform* GetParent();
 		Transform* GetChild(UINT index);

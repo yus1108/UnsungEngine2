@@ -20,6 +20,18 @@ namespace UEngine
 	{
 		Vector3 position;
 		Color color;
+
+		DebugVertex() = default;
+		DebugVertex(DebugVertex& debugVertex)
+		{
+			position = debugVertex.position;
+			color = debugVertex.color;
+		}
+		DebugVertex(Vector3 position, Color color)
+		{
+			this->position = position;
+			this->color = color;
+		}
 	};
 
 	typedef DirectX::XMMATRIX Matrix;

@@ -15,7 +15,7 @@ namespace UEngine
 
 		static const unsigned MAX_VERTS{ 100000 };
 		ID3D11Buffer* gpu_side_buffer{ nullptr };
-		UEngine::DebugVertex cpu_side_buffer[MAX_VERTS]{ NULL };
+		UEngine::DebugVertex cpu_side_buffer[MAX_VERTS];
 		unsigned vert_count{ 0 };
 
 		UINT stride{ sizeof(UEngine::DebugVertex) };
@@ -33,7 +33,7 @@ namespace UEngine
 		void Add_OOBB(OOBB * oobb, DirectX::XMFLOAT4 color);
 		void Add_Frustum(Frustum frustum, DirectX::XMFLOAT4 color);
 		void Add_UI_AABB(AABB aabb, DirectX::XMFLOAT4 color);*/
-		//void Add_Axis(UnitNode * node);
+		void Add_Axis(Matrix worldMatrix);
 		void Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer);
 
 		ID3D11ShaderResourceView** GetViewResource();
