@@ -3,6 +3,7 @@
 #include <list>
 #include <queue>
 #include <map>
+#include <array>
 
 #include "../Utility/UtilityDefinitions.h"
 #include "../Utility/UMath.h"
@@ -13,6 +14,7 @@
 
 
 #include "UEngineDefinitions.h"
+#include "Math\Math.h"
 #include "DebugRenderer\DebugRenderer.h"
 #include "Pool\RenderObjectPool.h"
 #include "Pool\ConstantBufferPool.h"

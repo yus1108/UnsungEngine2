@@ -34,5 +34,19 @@ namespace UEngine
 		}
 	};
 
-	typedef DirectX::XMMATRIX Matrix;
+	namespace Math
+	{
+		namespace Physics2D
+		{
+			struct CollisionResult
+			{
+				bool isColliding;
+				Vector2 coord;
+			};
+
+			typedef Vector2 PointCoord;
+			typedef std::array<Vector2, 2> LineCoords;
+			typedef std::array<Vector2, 3> TriangleCoords;
+		}
+	}
 }

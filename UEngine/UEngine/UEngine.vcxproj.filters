@@ -36,6 +36,9 @@
     <ClInclude Include="DebugRenderer\DebugRenderer.h">
       <Filter>DebugRenderer</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -69,6 +72,9 @@
     <ClCompile Include="DebugRenderer\DebugRenderer.cpp">
       <Filter>DebugRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="Math\Math.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Game">
@@ -85,6 +91,12 @@
     </Filter>
     <Filter Include="DebugRenderer">
       <UniqueIdentifier>{fd6ca42f-2cb3-4f6e-9704-87b6a0ed03a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{2fb42b1b-f5ca-4cfd-a658-1d9176890152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{e5c75232-4d26-49a6-a307-f2eaaf010175}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

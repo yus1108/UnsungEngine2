@@ -101,84 +101,94 @@ namespace UEngine
 			auto device = DXRenderer::Get()->GetDevice();
 
 			{
-				SIMPLE_VERTEX vertices[] =
+				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, -1, 0}, DirectX::XMFLOAT2{0, 1}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{-1, 1, 0}, DirectX::XMFLOAT2{0, 0}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{1, -1, 0}, DirectX::XMFLOAT2{1, 1}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
 				};
+				vertices.shrink_to_fit();
+				vertexInfo["default"] = vertices;
 				unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
 				renderMeshes["default"] =
 					DXRenderMesh::Instantiate<SIMPLE_VERTEX>
 					(
 						device,
 						&vertices[0],
-						ARRAYSIZE(vertices),
+						vertices.size(),
 						indices,
 						ARRAYSIZE(indices)
 						);
 			}
 			
 			{
-				SIMPLE_VERTEX vertices[] =
+				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}},
 				};
+				vertices.shrink_to_fit();
+				vertexInfo["point"] = vertices;
 				renderMeshes["point"] =
 					DXRenderMesh::Instantiate<SIMPLE_VERTEX>
 					(
 						device,
-						vertices,
-						ARRAYSIZE(vertices),
+						&vertices[0],
+						vertices.size(),
 						D3D11_PRIMITIVE_TOPOLOGY_POINTLIST
 						);
 			}
 
 			{
-				SIMPLE_VERTEX vertices[] =
+				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 1.0f, 0}},
 				};
+				vertices.shrink_to_fit();
+				vertexInfo["line"] = vertices;
 				renderMeshes["line"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
 					(
 						device,
-						vertices,
-						ARRAYSIZE(vertices)
+						&vertices[0],
+						vertices.size()
 						);
 			}
 
 			{
-				SIMPLE_VERTEX vertices[] =
+				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0.5f, 0}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
 				};
+				vertices.shrink_to_fit();
+				vertexInfo["triangle"] = vertices;
 				renderMeshes["triangle"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
 					(
 						device,
-						vertices,
-						ARRAYSIZE(vertices),
+						&vertices[0],
+						vertices.size(),
 						D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 						);
 			}
 
 			{
-				SIMPLE_VERTEX vertices[] =
+				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}},
 				};
+				vertices.shrink_to_fit();
+				vertexInfo["rectangle"] = vertices;
 				unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
 				renderMeshes["rectangle"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
 					(
 						device,
-						vertices,
-						ARRAYSIZE(vertices),
+						&vertices[0],
+						vertices.size(),
 						indices,
 						ARRAYSIZE(indices)
 						);
@@ -193,6 +203,8 @@ namespace UEngine
 				float radian = Utility::UMath::PI * 2.0f / slice;
 				for (size_t i = 0; i < slice; i++)
 					vertices.emplace_back(SIMPLE_VERTEX{ DirectX::XMFLOAT3{cos(radian * (slice - i)), sin(radian * (slice - i)), 0} });
+				vertices.shrink_to_fit();
+				vertexInfo["circle"] = vertices;
 				std::vector<unsigned> indices;
 				for (size_t i = 0; i < slice - 1; i++)
 				{

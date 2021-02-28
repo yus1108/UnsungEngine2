@@ -143,12 +143,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Math\Vector2.h" />
+    <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="UThreadPool.h" />
     <ClInclude Include="UtilityDefinitions.h" />
     <ClInclude Include="UMath.h" />
     <ClInclude Include="UTime.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Math\Vector2.cpp" />
+    <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="UMath.cpp" />
     <ClCompile Include="UThreadPool.cpp" />
     <ClCompile Include="UTime.cpp" />

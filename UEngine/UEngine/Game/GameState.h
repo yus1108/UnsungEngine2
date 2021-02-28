@@ -4,6 +4,9 @@ namespace UEngine
 {
 	class GameState
 	{
+		friend class Transform;
+		friend class Material;
+		friend class Camera;
 #pragma region Singleton
 	public:
 		static GameState* Get() { return &instance; }
@@ -17,11 +20,11 @@ namespace UEngine
 		bool terminate{ false };
 		Utility::Sync::UThreadPool threadPool;
 		std::list<class GameObject*> gameObjects;
+		ConstantBufferPool constantBufferPool;
 
 	public:
 		GameScene gameScene;
 		DebugRenderer debugRenderer;
-		ConstantBufferPool constantBufferPool;
 
 	private:
 		class WinApplication* app{ nullptr };

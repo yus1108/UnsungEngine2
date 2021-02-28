@@ -173,6 +173,7 @@
     <ClInclude Include="DebugRenderer\DebugRenderer.h" />
     <ClInclude Include="Game\GameScene.h" />
     <ClInclude Include="Game\GameState.h" />
+    <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Object\Component\Camera.h" />
     <ClInclude Include="Object\Component\Component.h" />
     <ClInclude Include="Object\Component\Material.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="DebugRenderer\DebugRenderer.cpp" />
     <ClCompile Include="Game\GameScene.cpp" />
     <ClCompile Include="Game\GameState.cpp" />
+    <ClCompile Include="Math\Math.cpp" />
     <ClCompile Include="Object\Component\Camera.cpp" />
     <ClCompile Include="Object\Component\Material.cpp" />
     <ClCompile Include="Object\Component\RenderComponent.cpp" />

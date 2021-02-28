@@ -115,7 +115,7 @@ namespace UEngine
         return TRUE;
     }
 
-    const POINT& WinApplication::GetClientPixelSize() const
+    const POINT WinApplication::GetClientPixelSize() const
     {
         RECT clientSize;
         GetClientSize(&clientSize);

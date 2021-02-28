@@ -20,6 +20,7 @@ namespace UEngine
 		private:
 			std::unordered_map<std::string, DXShader*> shaders;
 			std::unordered_map<std::string, DXRenderMesh*> renderMeshes;
+			std::unordered_map<std::string, std::vector<SIMPLE_VERTEX>> vertexInfo;
 			/*
 				key: std::string - typeid(cpu_buffer_struct).raw_name()
 				value: CONSTANT_BUFFER_DESC - description to create a buffer
@@ -36,6 +37,7 @@ namespace UEngine
 			DXRenderMesh* GetRenderMesh(std::string resource_name) { return renderMeshes[resource_name]; }
 			// resource_name : typeid(cpu_buffer_struct).raw_name()
 			CONSTANT_BUFFER_DESC GetConstantBuffer(std::string resource_name) { return constantBuffers[resource_name]; }
+			std::vector<SIMPLE_VERTEX> GetVertices(std::string resource_name) { return vertexInfo[resource_name]; }
 
 			void Init();
 			void InitShader();
@@ -51,6 +53,7 @@ namespace UEngine
 					DXRenderMesh::Release(&resource.second);
 				for (auto resource : constantBuffers)
 					delete resource.second.StartSlots;
+				vertexInfo.clear();
 			}
 		};
 	}

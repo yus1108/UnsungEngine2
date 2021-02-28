@@ -10,7 +10,7 @@ namespace UEngine
 		DXRenderer::DXView* view{ nullptr };
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };
 
-		CPU_CAMERA cpu_camera{ DirectX::XMMatrixIdentity() };
+		CPU_CAMERA cpu_camera{ Matrix() };
 		DirectX::XMVECTOR view_determinant{0};
 
 		void OnEnable() override;
@@ -40,5 +40,6 @@ namespace UEngine
 
 
 		void SetMainCamera() { mainCamera = this; }
+		CPU_CAMERA GetCameraMatrix() { return CPU_CAMERA{ DirectX::XMMatrixTranspose(cpu_camera.view), DirectX::XMMatrixTranspose(cpu_camera.projection) }; }
 	};
 }
