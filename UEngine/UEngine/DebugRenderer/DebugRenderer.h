@@ -15,10 +15,10 @@ namespace UEngine
 
 		static const unsigned MAX_VERTS{ 100000 };
 		ID3D11Buffer* gpu_side_buffer{ nullptr };
-		UEngine::DebugVertex cpu_side_buffer[MAX_VERTS];
+		UEngine::DebugRenderPoint cpu_side_buffer[MAX_VERTS];
 		unsigned vert_count{ 0 };
 
-		UINT stride{ sizeof(UEngine::DebugVertex) };
+		UINT stride{ sizeof(UEngine::DebugRenderPoint) };
 		UINT offset{ 0 };
 
 		D3D11_MAPPED_SUBRESOURCE mappedResource{ NULL };
@@ -28,9 +28,14 @@ namespace UEngine
 		~DebugRenderer();
 
 		void Init(ID3D11Device* _device, ID3D11DeviceContext* _immediateContext);
-		void Add_line(UEngine::DebugVertex a, UEngine::DebugVertex b);
-		/*void Add_AABB(AABB aabb, DirectX::XMFLOAT4 color);
-		void Add_OOBB(OOBB * oobb, DirectX::XMFLOAT4 color);
+		void Add_line(UEngine::DebugRenderPoint a, UEngine::DebugRenderPoint b);
+		void Add_line(UEngine::Math::Physics2D::PointCoord a, UEngine::Math::Physics2D::PointCoord b, UEngine::Color color);
+		void Add_line(UEngine::DebugRenderLine line);
+		void Add_line(UEngine::Math::Physics2D::LineCoords line, UEngine::Color color);
+		void Add_Triangle(UEngine::Math::Physics2D::TriangleCoords triangle, UEngine::Color color);
+		void Add_Rectangle(UEngine::Math::Physics2D::AABB aabb, UEngine::Color color);
+		void Add_Circle(UEngine::Math::Physics2D::CircleCoord circle, UEngine::Color color);
+		/*void Add_OOBB(OOBB * oobb, DirectX::XMFLOAT4 color);
 		void Add_Frustum(Frustum frustum, DirectX::XMFLOAT4 color);
 		void Add_UI_AABB(AABB aabb, DirectX::XMFLOAT4 color);*/
 		void Add_Axis(Matrix worldMatrix);

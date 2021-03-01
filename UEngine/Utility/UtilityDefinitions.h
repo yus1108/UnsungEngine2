@@ -13,6 +13,7 @@ namespace UEngine
 	}
 
 	typedef DirectX::XMMATRIX Matrix;
+	inline Matrix MatrixIdentity() { return DirectX::XMMatrixIdentity(); }
 
 	struct Color
 	{

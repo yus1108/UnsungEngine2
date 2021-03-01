@@ -24,7 +24,7 @@ namespace UEngine
 		ZeroMemory(&bufferDesc, sizeof(bufferDesc));
 		bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bufferDesc.ByteWidth = (UINT)(sizeof(UEngine::DebugVertex) * MAX_VERTS);
+		bufferDesc.ByteWidth = (UINT)(sizeof(UEngine::DebugRenderPoint) * MAX_VERTS);
 		bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 		device = _device;
@@ -47,12 +47,82 @@ namespace UEngine
 		shader = DXRenderer::DXResourceManager::Get()->GetShaders("debug");
 	}
 
-	void DebugRenderer::Add_line(UEngine::DebugVertex a, UEngine::DebugVertex b)
+	void DebugRenderer::Add_line(UEngine::DebugRenderPoint a, UEngine::DebugRenderPoint b)
 	{
 		if (vert_count + 1 == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
 		if (vert_count + 2 == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+
 		cpu_side_buffer[vert_count++] = a;
 		cpu_side_buffer[vert_count++] = b;
+	}
+
+	void DebugRenderer::Add_line(UEngine::Math::Physics2D::PointCoord a, UEngine::Math::Physics2D::PointCoord b, UEngine::Color color)
+	{
+		auto pA = UEngine::DebugRenderPoint(a, color);
+		auto pB = UEngine::DebugRenderPoint(b, color);
+		Add_line(pA, pB);
+	}
+
+	void DebugRenderer::Add_line(UEngine::DebugRenderLine line)
+	{
+		auto pA = line.GetStartPoint();
+		auto pB = line.GetEndPoint();
+		Add_line(pA, pB);
+	}
+
+	void DebugRenderer::Add_line(UEngine::Math::Physics2D::LineCoords line, UEngine::Color color)
+	{
+		Add_line(line[0], line[1], color);
+	}
+
+	void DebugRenderer::Add_Triangle(UEngine::Math::Physics2D::TriangleCoords triangle, UEngine::Color color)
+	{
+		for (size_t i = 1; i <= 6; i++)
+			if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+		Add_line(triangle[0], triangle[1], color);
+		Add_line(triangle[1], triangle[2], color);
+		Add_line(triangle[2], triangle[0], color);
+	}
+
+	void DebugRenderer::Add_Rectangle(UEngine::Math::Physics2D::AABB aabb, UEngine::Color color)
+	{
+		for (size_t i = 1; i <= 8; i++)
+			if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+
+		UEngine::DebugRenderPoint debugVertices[] =
+		{
+			UEngine::DebugRenderPoint(Vector2(aabb.left, aabb.bottom), color),
+			UEngine::DebugRenderPoint(Vector2(aabb.left, aabb.top), color),
+			UEngine::DebugRenderPoint(Vector2(aabb.right, aabb.top), color),
+			UEngine::DebugRenderPoint(Vector2(aabb.right, aabb.bottom), color),
+		};
+		Add_line(debugVertices[0], debugVertices[1]);
+		Add_line(debugVertices[1], debugVertices[2]);
+		Add_line(debugVertices[2], debugVertices[3]);
+		Add_line(debugVertices[3], debugVertices[0]);
+	}
+
+	void DebugRenderer::Add_Circle(UEngine::Math::Physics2D::CircleCoord circle, UEngine::Color color)
+	{
+		unsigned slice = 360;
+		for (size_t i = 1; i <= slice * 2; i++)
+			if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+		std::vector<UEngine::DebugRenderPoint> vertices;
+		vertices.reserve(slice);
+
+		float radian = Utility::UMath::PI * 2.0f / slice;
+		for (size_t i = 0; i < slice; i++)
+		{
+			auto point = Vector2
+			(
+				circle.radius * cos(radian * (slice - i)),
+				circle.radius * sin(radian * (slice - i))
+			);
+			vertices.push_back(UEngine::DebugRenderPoint(point + circle.center, color));
+		}
+		for (size_t i = 0; i < slice - 1; i++)
+			Add_line(vertices[i], vertices[i + 1]);
+		Add_line(vertices[slice - 1], vertices[0]);
 	}
 
 	//void DebugRenderer::Add_AABB(AABB aabb, DirectX::XMFLOAT4 color)
@@ -259,7 +329,10 @@ namespace UEngine
 
 void DebugRenderer::Add_Axis(Matrix worldMatrix)
 {
-	DebugVertex center, right, up, front;
+	for (size_t i = 1; i <= 6; i++)
+		if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+
+	DebugRenderPoint center, right, up, front;
 	DirectX::XMVECTOR vCenter, vRight, vUp, vFront;
 	vCenter = worldMatrix.r[3];
 	vRight = DirectX::XMVectorAdd(vCenter, worldMatrix.r[0]);
@@ -291,7 +364,7 @@ void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 		if (vert_count == 0) return;
 		ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 		m_pImmediateContext->Map(gpu_side_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
-		memcpy(mappedResource.pData, &cpu_side_buffer, sizeof(UEngine::DebugVertex) * vert_count);
+		memcpy(mappedResource.pData, &cpu_side_buffer, sizeof(UEngine::DebugRenderPoint) * vert_count);
 		m_pImmediateContext->Unmap(gpu_side_buffer, 0);
 
 		// set texture info

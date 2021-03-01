@@ -16,22 +16,45 @@ namespace UEngine
 		std::map<std::string, DXRenderer::DXConstantBuffer*> constantBuffers;
 	};
 
-	struct DebugVertex
+	struct DebugRenderPoint
 	{
 		Vector3 position;
-		Color color;
+		Color color{ 0 };
 
-		DebugVertex() = default;
-		DebugVertex(DebugVertex& debugVertex)
+		DebugRenderPoint() = default;
+		DebugRenderPoint(const DebugRenderPoint& point)
 		{
-			position = debugVertex.position;
-			color = debugVertex.color;
+			position = point.position;
+			color = point.color;
 		}
-		DebugVertex(Vector3 position, Color color)
+		DebugRenderPoint(Vector3 position, Color color)
 		{
 			this->position = position;
 			this->color = color;
 		}
+	};
+
+	struct DebugRenderLine
+	{
+		Vector3 lineStart;
+		Vector3 lineEnd;
+		Color color;
+
+		DebugRenderLine() = default;
+		DebugRenderLine(DebugRenderLine& line)
+		{
+			lineStart = line.lineStart;
+			lineEnd = line.lineEnd;
+			color = line.color;
+		}
+		DebugRenderLine(Vector3 lineStart, Vector3 lineEnd, Color color)
+		{
+			this->lineStart = lineStart;
+			this->lineEnd = lineEnd;
+			this->color = color;
+		}
+		DebugRenderPoint GetStartPoint() { return DebugRenderPoint(lineStart, color); }
+		DebugRenderPoint GetEndPoint() { return DebugRenderPoint(lineEnd, color); }
 	};
 
 	namespace Math
@@ -47,6 +70,18 @@ namespace UEngine
 			typedef Vector2 PointCoord;
 			typedef std::array<Vector2, 2> LineCoords;
 			typedef std::array<Vector2, 3> TriangleCoords;
+			struct AABB
+			{
+				float left;
+				float top;
+				float right;
+				float bottom;
+			};
+			struct CircleCoord
+			{
+				Vector2 center;
+				float radius;
+			};
 		}
 	}
 }

@@ -10,26 +10,23 @@ namespace UEngine
 
 		void DXResourceManager::SetShaders(std::string resource_name, DXShader* shader)
 		{
-			auto resource = shaders[resource_name];
-			if (resource != nullptr)
-			{
-				shaders.erase(resource_name);
-				DXShader::Release(&resource);
-			}
+			if (shaders[resource_name] != nullptr)
+				DXShader::Release(&shaders[resource_name]);
 
 			shaders[resource_name] = shader;
 		}
 
 		void DXResourceManager::SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh)
 		{
-			auto resource = renderMeshes[resource_name];
-			if (resource != nullptr)
-			{
-				renderMeshes.erase(resource_name);
-				DXRenderMesh::Release(&resource);
-			}
+			if (loadedRenderMeshes[resource_name] != nullptr)
+				DXRenderMesh::Release(&loadedRenderMeshes[resource_name]);
 
-			renderMeshes[resource_name] = renderMesh;
+			loadedRenderMeshes[resource_name] = renderMesh;
+		}
+
+		void DXResourceManager::SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices)
+		{
+			loadedVertexInfo[resource_name] = vertices;
 		}
 
 		void DXResourceManager::SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer)
@@ -37,8 +34,23 @@ namespace UEngine
 			constantBuffers[resource_name] = constantBuffer;
 		}
 
+		DXRenderMesh* DXResourceManager::GetRenderMesh(std::string resource_name)
+		{
+			if (renderMeshes[resource_name] == nullptr)
+				return loadedRenderMeshes[resource_name];
+			return renderMeshes[resource_name];
+		}
+
+		std::vector<SIMPLE_VERTEX> DXResourceManager::GetVertices(std::string resource_name)
+		{
+			if (vertexInfo[resource_name].size() == 0)
+				return loadedVertexInfo[resource_name];
+			return vertexInfo[resource_name];
+		}
+
 		void DXResourceManager::Init()
 		{
+			Release();
 			InitShader();
 			InitRenderMesh();
 			InitConstantBuffer();
@@ -156,11 +168,13 @@ namespace UEngine
 			}
 
 			{
+				float radian = Utility::UMath::PI * 2.0f / 3.0f;
+				float startRadian = Utility::UMath::PI / 2.0f;
 				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0.5f, 0}},
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian), 0.5f * sin(startRadian + radian), 0}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0.5f * sin(startRadian), 0}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian * 2.0f), 0.5f * sin(startRadian + radian * 2.0f), 0}},
 				};
 				vertices.shrink_to_fit();
 				vertexInfo["triangle"] = vertices;
@@ -202,7 +216,7 @@ namespace UEngine
 				};
 				float radian = Utility::UMath::PI * 2.0f / slice;
 				for (size_t i = 0; i < slice; i++)
-					vertices.emplace_back(SIMPLE_VERTEX{ DirectX::XMFLOAT3{cos(radian * (slice - i)), sin(radian * (slice - i)), 0} });
+					vertices.emplace_back(SIMPLE_VERTEX{ DirectX::XMFLOAT3{0.5f * cos(radian * (slice - i)), 0.5f * sin(radian * (slice - i)), 0} });
 				vertices.shrink_to_fit();
 				vertexInfo["circle"] = vertices;
 				std::vector<unsigned> indices;

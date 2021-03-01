@@ -31,8 +31,6 @@ void UEngine::GameState::Update()
     for (auto obj : gameObjects)
         obj->OnPreRender();
 
-
-
     // rendering thread
     gameScene.OnRender();
     // post render thread

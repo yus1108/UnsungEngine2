@@ -12,6 +12,9 @@ namespace UEngine
 		void OnDisable() override { if (renderObject) GameState::Get()->gameScene.RemoveObject(renderObject); }
 	public:
 		void Load(std::string renderMesh_name, std::string shader_name);
+		void LoadTriangle();
+		void LoadRectangle();
+		void LoadCircle(UINT slice = 360);
 		void AddConstantBuffer(std::string type_raw_name, DXRenderer::DXConstantBuffer* buffer);
 		const RenderObject* const GetRenderObject() { return renderObject; }
 	};

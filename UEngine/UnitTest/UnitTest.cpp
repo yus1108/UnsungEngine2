@@ -69,8 +69,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         rendererDesc.EnableAntialisedLine = false;
         rendererDesc.EnableBlendState = true;
         rendererDesc.EnableDepthStencil = true;
-        rendererDesc.EnableMultisampling = false;
-        rendererDesc.MultisampleDesc = { 1, 0 };
+        rendererDesc.EnableMultisampling = true;
+        rendererDesc.MultisampleDesc = { 4, 0 };
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
 
@@ -85,13 +85,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         GameObject* mainCamera = GameObject::Instantiate();
         mainCamera->AddComponent<Transform>();
         mainCamera->AddComponent<Camera>();
+        GameObject* triangle1 = GameObject::Instantiate();
+        triangle1->AddComponent<Transform>();
+        triangle1->AddComponent<RenderComponent>()->LoadTriangle();
+        triangle1->AddComponent<Material>()->color = Color{ 1, 1, 0, 1 };
+        triangle1->AddComponent<ScriptComponent>();
+
         GameObject* rectangle = GameObject::Instantiate();
         rectangle->AddComponent<Transform>();
-        rectangle->AddComponent<RenderComponent>()->Load("triangle", "color");
-        rectangle->AddComponent<Material>()->color = Color{ 1, 1, 0, 1 };
-        rectangle->AddComponent<ScriptComponent>();
+        rectangle->AddComponent<RenderComponent>()->LoadRectangle();
+        rectangle->AddComponent<Material>()->color = Color{ 0, 1, 1, 1 };
 
         gameState->AddObject(mainCamera);
+        gameState->AddObject(triangle1);
         gameState->AddObject(rectangle);
     }
 
