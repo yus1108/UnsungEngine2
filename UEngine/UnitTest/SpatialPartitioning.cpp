@@ -254,10 +254,13 @@ void SpatialPartitioning::AddNode(SPACE_PARTITIONING_NODE* currNode, SPACE_PARTI
 
 void SpatialPartitioning::DebugRender(SPACE_PARTITIONING_NODE* node, UEngine::Color color)
 {
-	DrawGrid(node->grid, color);
-	auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
-	for (auto childPair : node->children)
-		DebugRender(childPair, childrenColor);
+	if (node != nullptr)
+	{
+		DrawGrid(node->grid, color);
+		auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
+		for (auto childPair : node->children)
+			DebugRender(childPair, childrenColor);
+	}
 }
 
 void SpatialPartitioning::Release()

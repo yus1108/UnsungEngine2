@@ -100,15 +100,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
+    float counter = 0.0f;
+    float timestep = 0.02f;
+    float deltatime = 0.0f;
     auto returnedValue = app->UpdateLoop([&]() 
     {
-        UEngine::Utility::UTime::Get()->Throttle(200);
+        //UEngine::Utility::UTime::Get()->Throttle(200);
+        deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
+        counter += deltatime;
+        
+
         gameState->Update();
-        ScriptComponent::sp.Release();
-        for (size_t i = 0; i < objs.size(); i++)
+        if (counter > UEngine::Math::Clamp(deltatime, 0.02f, 0.1f))
         {
-            ScriptComponent::sp.ConstructNode(objs[i]->GetComponent<ScriptComponent>()->aabb, objs[i]);
+            ScriptComponent::sp.Release();
+            for (size_t i = 0; i < objs.size(); i++)
+            {
+                ScriptComponent::sp.ConstructNode(objs[i]->GetComponent<ScriptComponent>()->aabb, objs[i]);
+            }
+            counter -= 0.02f;
         }
+
         auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
         ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, childrenColor);
     });
