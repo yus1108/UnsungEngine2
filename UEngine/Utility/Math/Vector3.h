@@ -90,5 +90,11 @@ namespace UEngine
 			DirectX::XMVECTOR thisVector = DirectX::XMVectorSet(this->x, this->y, this->z, 0);
 			return DirectX::XMVector3TransformCoord(thisVector, rhs);
 		}
+
+		Vector3 operator*(const float rhs)
+		{
+			DirectX::XMVECTOR thisVector = DirectX::XMVectorSet(this->x * rhs, this->y * rhs, this->z * rhs, 0);
+			return thisVector;
+		}
 	};
 }

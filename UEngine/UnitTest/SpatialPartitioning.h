@@ -5,10 +5,10 @@ class SpatialPartitioning
 public:
 	struct GRID
 	{
-		int left;
-		int top;
-		int right;
-		int bottom;
+		int left{ 0 };
+		int top{ 0 };
+		int right{ 0 };
+		int bottom{ 0 };
 
 		GRID() = default;
 		GRID(const GRID& grid) : left(grid.left), top(grid.top), right(grid.right), bottom(grid.bottom) {}
@@ -17,7 +17,7 @@ private:
 	struct SPACE_PARTITIONING_NODE
 	{
 		GRID grid;
-		SPACE_PARTITIONING_NODE* parent;
+		SPACE_PARTITIONING_NODE* parent{ nullptr };
 		std::list<SPACE_PARTITIONING_NODE*> children;
 		std::list<UEngine::GameObject*> gameObjects;
 	};
@@ -34,11 +34,12 @@ public:
 	void DrawGrid(int x, int y);
 
 	int CompareGrid(GRID grid1, GRID grid2);
-	bool IsColliding(GRID aabb1, GRID aabb2);
+	bool IsColliding(GRID grid1, GRID grid2);
 
 	void ConstructNode(UEngine::Math::Physics2D::AABB aabb, UEngine::GameObject* gameObject);
 	void AddNode(SPACE_PARTITIONING_NODE* currNode, SPACE_PARTITIONING_NODE* newNode);
 	void DebugRender(SPACE_PARTITIONING_NODE* node, UEngine::Color color);
+	void Traverse(std::list<UEngine::GameObject*>& out, SPACE_PARTITIONING_NODE* currNode, UEngine::GameObject* gameObject);
 
 	void Release();
 

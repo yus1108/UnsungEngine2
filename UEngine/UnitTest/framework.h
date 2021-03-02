@@ -27,3 +27,5 @@
 #include "../UEngine/UEngine.h"
 #include "../WinApplication/WinConsole.h"
 #include "../WinApplication/WinMemoryLeak.h"
+
+#include "ScriptComponent.h"

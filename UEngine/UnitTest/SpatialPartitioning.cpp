@@ -15,10 +15,10 @@ SpatialPartitioning::~SpatialPartitioning()
 void SpatialPartitioning::DrawGrid(GRID grid, UEngine::Color color)
 {
 	UEngine::Math::Physics2D::AABB aabb;
-	aabb.left = grid.left;
-	aabb.right = grid.right;
-	aabb.top = grid.top;
-	aabb.bottom = grid.bottom;
+	aabb.left = static_cast<float>(grid.left);
+	aabb.right = static_cast<float>(grid.right);
+	aabb.top = static_cast<float>(grid.top);
+	aabb.bottom = static_cast<float>(grid.bottom);
 	GameState::Get()->debugRenderer.Add_Rectangle(aabb, color);
 }
 
@@ -45,10 +45,10 @@ int SpatialPartitioning::CompareGrid(SpatialPartitioning::GRID grid1, SpatialPar
 	return 2;
 }
 
-bool SpatialPartitioning::IsColliding(GRID aabb1, GRID aabb2)
+bool SpatialPartitioning::IsColliding(GRID grid1, GRID grid2)
 {
-	if (aabb1.right < aabb2.left || aabb1.left > aabb2.right) return false;
-	if (aabb1.top < aabb2.bottom || aabb1.bottom > aabb2.top) return false;
+	if (grid1.right < grid2.left || grid1.left > grid2.right) return false;
+	if (grid1.top < grid2.bottom || grid1.bottom > grid2.top) return false;
 	return true;
 }
 
@@ -260,6 +260,23 @@ void SpatialPartitioning::DebugRender(SPACE_PARTITIONING_NODE* node, UEngine::Co
 		auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
 		for (auto childPair : node->children)
 			DebugRender(childPair, childrenColor);
+	}
+}
+
+void SpatialPartitioning::Traverse
+(
+	std::list<UEngine::GameObject*>& out, 
+	SPACE_PARTITIONING_NODE* currNode, 
+	UEngine::GameObject* gameObject
+)
+{
+	auto grid = MakeGrid(gameObject->GetComponent<ScriptComponent>()->aabb);
+	if (IsColliding(grid, currNode->grid))
+	{
+		for (auto obj : currNode->gameObjects)
+			if (obj != gameObject) out.emplace_back(obj);
+		for (auto child : currNode->children)
+			Traverse(out, child, gameObject);
 	}
 }
 

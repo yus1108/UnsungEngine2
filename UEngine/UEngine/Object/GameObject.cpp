@@ -167,13 +167,9 @@ void UEngine::GameObject::RemoveChild(GameObject* child)
 UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::string name)
 {
 	auto objs = GameState::Get()->GetGameObjects();
-	for (auto i = objs.begin(); i != objs.end(); i++)
-	{
-		if ((*i)->name == name)
-		{
-			return *i;
-		}
-	}
+	for (auto obj : objs)
+		if (obj->name == name) return obj;
+	return nullptr;
 }
 
 UEngine::GameObject* UEngine::GameObject::Instantiate()

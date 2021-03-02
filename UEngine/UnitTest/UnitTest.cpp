@@ -93,7 +93,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             GameObject* circle = GameObject::Instantiate();
             circle->AddComponent<Transform>();
             circle->AddComponent<RenderComponent>()->LoadCircle();
-            circle->AddComponent<Material>()->color = Color{ 1, 1, 0, 1 };
+            circle->AddComponent<Material>()->color = Color{ 0.5f, 0.5f, 0.5f, 1 };
             circle->AddComponent<ScriptComponent>();
             gameState->AddObject(circle);
             objs.push_back(circle);
@@ -122,7 +122,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
 
         auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
-        ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, childrenColor);
+        //ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, childrenColor);
     });
 
     return returnedValue;
