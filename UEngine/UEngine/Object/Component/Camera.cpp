@@ -47,8 +47,9 @@ void UEngine::Camera::LateUpdate()
 {
     DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(cameraRotation.z, cameraRotation.x, cameraRotation.y);
     DirectX::XMMATRIX position = DirectX::XMMatrixTranslation(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    auto rtp = GetTransform()->GetRTP();
     cpu_camera.view = DirectX::XMMatrixMultiply(rotation, position);
-    cpu_camera.view = DirectX::XMMatrixMultiply(cpu_camera.view, GetTransform()->GetRTP());
+    cpu_camera.view = DirectX::XMMatrixMultiply(cpu_camera.view, rtp);
     view_determinant = DirectX::XMMatrixDeterminant(cpu_camera.view);
 
     cpu_camera.projection = DirectX::XMMatrixOrthographicLH(viewWidth, viewHeight, nearZ, farZ);

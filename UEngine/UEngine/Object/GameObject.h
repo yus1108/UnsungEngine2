@@ -37,6 +37,7 @@ namespace UEngine
 		void OnDestroy();
 
 	public:
+		std::string name{ "GameObject" };
 		void SetActive(bool isActive);
 		bool GetActive() { return isActive; }
 
@@ -57,6 +58,8 @@ namespace UEngine
 
 		template <typename T>
 		void RemoveComponent();
+
+		GameObject* const FindObjectWithName(std::string name);
 
 		static GameObject* Instantiate();
 		static void Release(GameObject** const gameObject);

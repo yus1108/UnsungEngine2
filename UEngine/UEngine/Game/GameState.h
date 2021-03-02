@@ -35,8 +35,9 @@ namespace UEngine
 		void Release();
 
 		bool GetTerminate() { return terminate; }
+		const std::list<class GameObject*>& GetGameObjects() { return gameObjects; }
 
-		void AddObject(GameObject* gameObject) { gameObjects.push_back(gameObject); }
+		void AddObject(GameObject* gameObject) { gameObjects.emplace_back(gameObject); }
 
 		void Update();
 	};
