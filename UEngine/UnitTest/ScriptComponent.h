@@ -12,6 +12,7 @@ public:
 	float speed{ 0 };
 	Math::Physics2D::CircleCoord circle;
 	Math::Physics2D::AABB aabb;
+	std::list<GameObject*> objs;
 
 	static SpatialPartitioning sp;
 

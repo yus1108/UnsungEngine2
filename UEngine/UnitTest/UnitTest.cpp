@@ -85,10 +85,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         GameObject* mainCamera = GameObject::Instantiate();
         mainCamera->AddComponent<Transform>();
-        mainCamera->AddComponent<Camera>();
+        auto cameraScript = mainCamera->AddComponent<Camera>();
+        cameraScript->viewWidth = 80;
+        cameraScript->viewHeight = 60;
         gameState->AddObject(mainCamera);
 
-        for (size_t i = 0; i < 20; i++)
+        for (size_t i = 0; i < 50; i++)
         {
             GameObject* circle = GameObject::Instantiate();
             circle->AddComponent<Transform>();
