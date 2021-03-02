@@ -108,7 +108,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         //UEngine::Utility::UTime::Get()->Throttle(200);
         deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
         counter += deltatime;
-        
 
         gameState->Update();
         if (counter > UEngine::Math::Clamp(deltatime, 0.02f, 0.1f))

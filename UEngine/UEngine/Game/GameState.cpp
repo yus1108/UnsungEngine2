@@ -24,6 +24,9 @@ void UEngine::GameState::Release()
 
 void UEngine::GameState::Update()
 {
+    deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
+    fixedUpdateTimer += deltatime;
+
     // cpu-gpu transfer
     gameScene.OnPreRender();
     constantBufferPool.OnPreRender();
@@ -62,11 +65,16 @@ void UEngine::GameState::Update()
     }
     {
         // fixed timestamp update
+        currentFixedTimestep = UEngine::Math::Clamp(deltatime, FixedTimestep, MaxFixedTimestep);
+        while (fixedUpdateTimer > currentFixedTimestep)
         {
+            currentFixedTimestep = UEngine::Math::Clamp(deltatime, FixedTimestep, MaxFixedTimestep);
             for (auto obj : gameObjects)
                 obj->FixedUpdate();
             for (auto obj : gameObjects)
                 obj->PhysicsUpdate();
+
+            fixedUpdateTimer -= currentFixedTimestep;
         }
         for (auto obj : gameObjects)
             obj->Update();

@@ -7,13 +7,39 @@ void ScriptComponent::Start()
 {
 	auto x = (float)rand() / (rand() % INT_MAX);
 	auto y = (float)rand() / (rand() % INT_MAX);
-	float speed = UEngine::Math::RndFloat(1.0f, 5.0f);
+	speed = UEngine::Math::RndFloat(1.0f, 5.0f);
 	float scale = UEngine::Math::RndFloat(1.0f, 3.0f);
 	GetTransform()->scale = Vector3(scale, scale, 1);
 	dir.x = x;
 	dir.y = y;
 	dir = dir.Normalize();
-	dir = dir * speed;
+	dir = dir;
+}
+
+void ScriptComponent::FixedUpdate()
+{
+	isAABBColliding = false;
+	isColliding = false;
+	circle = Math::Physics2D::MakeCircle(GetTransform()->localPosition, GetTransform()->scale.x * 0.5f);
+	aabb = Math::Physics2D::MakeAABB(circle);
+	std::list<GameObject*> objs;
+	if (sp.head != nullptr)
+	{
+		sp.Traverse(objs, sp.head, GetGameObject());
+		for (auto obj : objs)
+		{
+			isAABBColliding = true;
+			auto script = obj->GetComponent<ScriptComponent>();
+			if (Math::Physics2D::IsColliding(script->circle, circle))
+			{
+				isColliding = true;
+				auto transform = GetTransform();
+				dir = (transform->localPosition - obj->GetTransform()->localPosition).Normalize();
+				if (dir.Magnitude() == 0)
+					dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
+			}
+		}
+	}
 }
 
 void ScriptComponent::Update()
@@ -35,8 +61,8 @@ void ScriptComponent::Update()
 		GetTransform()->localRotation.y -= Utility::UTime::Get()->DeltaTimeF();*/
 
 	auto transform = GetTransform();
-	//auto value = dir * Utility::UTime::Get()->DeltaTimeF();
-	//transform->localPosition = transform->localPosition + value;
+	auto value = dir * speed * Utility::UTime::Get()->DeltaTimeF();
+	transform->localPosition = transform->localPosition + value;
 
 	
 	if (transform->localPosition.x + transform->scale.x * 0.5f > 20.0f) dir.x = -abs(dir.x);
@@ -47,25 +73,8 @@ void ScriptComponent::Update()
 
 void ScriptComponent::OnPreRender()
 {
-	circle = Math::Physics2D::MakeCircle(GetTransform()->localPosition, GetTransform()->scale.x * 0.5f);
-	aabb = Math::Physics2D::MakeAABB(circle);
-	std::list<GameObject*> objs;
-	if (sp.head != nullptr)
-	{
-		sp.Traverse(objs, sp.head, GetGameObject());
-		for (auto obj : objs)
-		{
-			auto script = obj->GetComponent<ScriptComponent>();
-			//GameState::Get()->debugRenderer.Add_Rectangle(script->aabb, Color{ 1, 0, 0, 1 }); */
-			if (Math::Physics2D::IsColliding(script->circle, circle))
-			{
-				GameState::Get()->debugRenderer.Add_Rectangle(script->aabb, Color{ 0, 0, 1, 1 });
-				auto transform = GetTransform();
-				auto unitVector = (transform->localPosition - obj->GetTransform()->localPosition).Normalize();
-				if (unitVector.Magnitude() == 0)
-					unitVector = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
-				transform->localPosition = transform->localPosition + unitVector * Utility::UTime::Get()->DeltaTimeF();
-			}
-		}
-	}
+	if (isColliding)
+		GameState::Get()->debugRenderer.Add_Circle(circle, Color{ 0, 0, 1, 1 });
+	else if (isAABBColliding)
+		GameState::Get()->debugRenderer.Add_Rectangle(aabb, Color{ 1, 0, 0, 1 });
 }

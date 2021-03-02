@@ -18,11 +18,18 @@ namespace UEngine
 #pragma endregion
 	private:
 		bool terminate{ false };
+
+		float currentFixedTimestep{ 0 };
+		float fixedUpdateTimer{ 0 };
+		float deltatime{ 0 };
+
 		Utility::Sync::UThreadPool threadPool;
 		std::list<class GameObject*> gameObjects;
 		ConstantBufferPool constantBufferPool;
 
 	public:
+		float FixedTimestep{ 0.02f };
+		float MaxFixedTimestep{ 0.1f };
 		GameScene gameScene;
 		DebugRenderer debugRenderer;
 
