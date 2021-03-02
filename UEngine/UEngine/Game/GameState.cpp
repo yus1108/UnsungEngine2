@@ -55,10 +55,10 @@ void UEngine::GameState::Update()
         /*if (UEngine::WinInput::Get()->GetKey(VK_LEFT))
         {
             std::cout << "key pressed" << std::endl;
-        }
+        }*/
 
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
-        std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;*/
+        std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
     }
     {
         // fixed timestamp update

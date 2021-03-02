@@ -76,7 +76,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     auto gameState = UEngine::GameState::Get();
     gameState->Init(app, renderer);
-
+    srand((unsigned)time(nullptr));
+    std::vector<GameObject*> objs;
     // TODO: Place code here.
     {
         // basic load
@@ -85,26 +86,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         GameObject* mainCamera = GameObject::Instantiate();
         mainCamera->AddComponent<Transform>();
         mainCamera->AddComponent<Camera>();
-        GameObject* triangle1 = GameObject::Instantiate();
-        triangle1->AddComponent<Transform>();
-        triangle1->AddComponent<RenderComponent>()->LoadTriangle();
-        triangle1->AddComponent<Material>()->color = Color{ 1, 1, 0, 1 };
-        triangle1->AddComponent<ScriptComponent>();
-
-        GameObject* rectangle = GameObject::Instantiate();
-        rectangle->AddComponent<Transform>();
-        rectangle->AddComponent<RenderComponent>()->LoadRectangle();
-        rectangle->AddComponent<Material>()->color = Color{ 0, 1, 1, 1 };
-
         gameState->AddObject(mainCamera);
-        gameState->AddObject(triangle1);
-        gameState->AddObject(rectangle);
+
+        for (size_t i = 0; i < 20; i++)
+        {
+            GameObject* circle = GameObject::Instantiate();
+            circle->AddComponent<Transform>();
+            circle->AddComponent<RenderComponent>()->LoadCircle();
+            circle->AddComponent<Material>()->color = Color{ 1, 1, 0, 1 };
+            circle->AddComponent<ScriptComponent>();
+            gameState->AddObject(circle);
+            objs.push_back(circle);
+        }
     }
 
     auto returnedValue = app->UpdateLoop([&]() 
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
         gameState->Update();
+        ScriptComponent::sp.Release();
+        for (size_t i = 0; i < objs.size(); i++)
+        {
+            ScriptComponent::sp.ConstructNode(objs[i]->GetComponent<ScriptComponent>()->aabb, objs[i]);
+        }
+        auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
+        ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, childrenColor);
     });
 
     return returnedValue;

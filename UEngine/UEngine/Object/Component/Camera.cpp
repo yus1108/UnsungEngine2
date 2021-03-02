@@ -37,8 +37,8 @@ void UEngine::Camera::Awake()
 
 void UEngine::Camera::Start()
 {
-    viewWidth = 10.0f;
-    viewHeight = 10.0f;
+    viewWidth = 40.0f;
+    viewHeight = 40.0f;
     nearZ = -1.0f;
     farZ = 10.0f;
 }

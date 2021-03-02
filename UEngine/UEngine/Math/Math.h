@@ -7,6 +7,9 @@ namespace UEngine
 		const Vector3 GetMousePosToWorld();
 		const float Clamp(float value, float min, float max);
 
+		int RndInt(int start = 0, int end = 1);
+		float RndFloat(float start = 0.0f, float end = 1.0f);
+
 		namespace Physics2D
 		{
 			bool IsVertical(LineCoords line);
@@ -15,12 +18,16 @@ namespace UEngine
 			std::vector<PointCoord> MakePointVector(PointCoord* points, size_t size);
 			TriangleCoords MakeTriangle(Matrix worldMatrix); // Make AABB of the triangle with the given world matrix
 			AABB MakeAABB(const std::vector<DXRenderer::SIMPLE_VERTEX> vertices, Matrix worldMatrix); // make aabb of any model
+			AABB MakeAABB(const std::vector<DXRenderer::SIMPLE_VERTEX> vertices); // make aabb of any model
 			AABB MakeAABB(std::vector<PointCoord> points, Matrix worldMatrix); // Make AABB of the points
 			AABB MakeAABB(std::vector<PointCoord> points); // Make AABB of the points
 			AABB MakeAABB(PointCoord point); // Make AABB of the point
-			AABB MakeAABB(LineCoords line); // Make AABB of the line with the given world matrix
+			AABB MakeAABB(LineCoords line); // Make AABB of the line
+			AABB MakeAABB(TriangleCoords triangle); // Make AABB of the triangle
+			AABB MakeAABB(CircleCoord circle); // Make AABB of the circle
 			AABB MakeAABB(Matrix worldMatrix); // Make AABB of the rectangle with the given world matrix
-			CircleCoord MakeCircle(Vector2 center, float radius); // Make AABB of the circle with the given world matrix
+			CircleCoord MakeCircle(Vector2 center, float radius);
+			bool IsAABB1Smaller(AABB aabb1, AABB aabb2);
 			bool IsColliding(PointCoord point, TriangleCoords triangle);
 			bool IsColliding(PointCoord point, AABB aabb);
 			bool IsColliding(PointCoord point, CircleCoord circle);

@@ -1,8 +1,9 @@
 #pragma once
 
 //디버그,문자집합 매크로
-#if defined UNICODE && defined _DEBUG
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
+#if defined UNICODE && defined _DEBUG
+//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
 #elif defined _MBCS && defined _DEBUG
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #endif

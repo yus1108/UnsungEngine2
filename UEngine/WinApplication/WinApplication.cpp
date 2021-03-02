@@ -64,6 +64,7 @@ namespace UEngine
         MSG message;
         ZeroMemory(&message, sizeof(MSG));
 
+        UEngine::Utility::UTime::Get()->Signal();
         while (true)
         {
             if (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE))

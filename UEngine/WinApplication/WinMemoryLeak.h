@@ -19,7 +19,7 @@ namespace UEngine
             _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
             _CrtSetBreakAlloc(goToLine); //Important!
         }
-#elif // _DEBUG
+#else // _DEBUG
         inline void Detect(long goToLine = -1) {}
 #endif
     } // namespace WMemoryLeak

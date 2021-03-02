@@ -10,6 +10,7 @@ namespace UEngine
 		float z{ 0 };
 
 		Vector3() = default;
+		Vector3(const Vector3& vector) : x(vector.x), y(vector.y), z(vector.z) {}
 		Vector3(const struct Vector2& vector2);
 		Vector3(float x, float y, float z)
 		{

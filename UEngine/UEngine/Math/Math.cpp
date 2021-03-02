@@ -103,6 +103,23 @@ UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB
 	return aabb;
 }
 
+UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(const std::vector<DXRenderer::SIMPLE_VERTEX> vertices)
+{
+	std::vector<Vector2> vertsTransformed;
+	vertsTransformed.reserve(vertices.size());
+	for (size_t i = 0; i < vertices.size(); i++)
+		vertsTransformed.push_back(Vector2(vertices[i].pos));
+	AABB aabb = AABB{ vertsTransformed[0].x, vertsTransformed[0].y, vertsTransformed[0].x, vertsTransformed[0].y };
+	for (size_t i = 1; i < vertices.size(); i++)
+	{
+		if (vertsTransformed[i].x < aabb.left) aabb.left = vertsTransformed[i].x;
+		if (vertsTransformed[i].x > aabb.right) aabb.right = vertsTransformed[i].x;
+		if (vertsTransformed[i].y < aabb.bottom) aabb.bottom = vertsTransformed[i].y;
+		if (vertsTransformed[i].y > aabb.top) aabb.top = vertsTransformed[i].y;
+	}
+	return aabb;
+}
+
 UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(std::vector<PointCoord> points, Matrix worldMatrix)
 {
 	std::vector<Vector2> vertsTransformed;
@@ -155,12 +172,44 @@ UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(LineCoords lin
 	return aabb;
 }
 
+UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(TriangleCoords triangle)
+{
+	AABB aabb = AABB{ triangle[0].x, triangle[0].y, triangle[0].x, triangle[0].y };
+	for (size_t i = 1; i < 3; i++)
+	{
+		if (triangle[i].x < aabb.left) aabb.left = triangle[i].x;
+		if (triangle[i].x > aabb.right) aabb.right = triangle[i].x;
+		if (triangle[i].y < aabb.bottom) aabb.bottom = triangle[i].y;
+		if (triangle[i].y > aabb.top) aabb.top = triangle[i].y;
+	}
+	return aabb;
+}
+
+UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(CircleCoord circle)
+{
+	AABB aabb = AABB
+	{
+		circle.center.x - circle.radius, 
+		circle.center.y + circle.radius, 
+		circle.center.x + circle.radius, 
+		circle.center.y - circle.radius };
+	return aabb;
+}
+
 UEngine::Math::Physics2D::CircleCoord UEngine::Math::Physics2D::MakeCircle(Vector2 center, float radius)
 {
 	Math::Physics2D::CircleCoord circle;
-	circle.center = DirectX::XMMatrixIdentity().r[3];
-	circle.radius = 0.5f;
+	circle.center = center;
+	circle.radius = radius;
 	return circle;
+}
+
+bool UEngine::Math::Physics2D::IsAABB1Smaller(AABB aabb1, AABB aabb2)
+{
+	if (aabb2.left < aabb1.left && aabb1.right < aabb2.right
+		&& aabb2.bottom < aabb1.bottom && aabb1.top < aabb2.top)
+		return true;
+	return false;
 }
 
 bool UEngine::Math::Physics2D::IsColliding(PointCoord point, TriangleCoords triangle)
@@ -344,3 +393,13 @@ const float UEngine::Math::Clamp(float value, float min, float max)
 {
 	return value < min ? min : value > max ? max : value;
 }
+
+int UEngine::Math::RndInt(int start, int end)
+{
+	return rand() % (end - start + 1) + start;
+};
+
+float UEngine::Math::RndFloat(float start, float end)
+{
+	return (float)rand() / (float)RAND_MAX * (end - start) + start;
+};
