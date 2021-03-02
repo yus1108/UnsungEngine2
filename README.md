@@ -8,5 +8,6 @@
 - Implemented resource managers for multi-threaded game loop sequence
 - Implemented DebugRenderer
 - Implemented basic 2D collision check functions
+- Implemented dynamic spatial partitioning and fixed time-rate update to optimize collision check to avoid worst case check of O(n^2)
 
 The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly try to change language standard.
