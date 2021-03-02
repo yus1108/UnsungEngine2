@@ -9,4 +9,4 @@
 - Implemented DebugRenderer
 - Implemented basic 2D collision check functions
 
-The engine is built in C++ ISO 17 Standatd. If the engine doesn't work properly try to change language standard.
+The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly try to change language standard.
