@@ -49,6 +49,8 @@ void SpatialPartitioning::AddNode(SpatialPartitioning::SPACE_PARTITIONING_NODE* 
 				{
 					auto script1 = collider->gameObject->GetComponent<ScriptComponent>();
 					auto script2 = oGameObject->GetComponent<ScriptComponent>();
+					script1->isAABBColliding = true;
+					script2->isAABBColliding = true;
 					if (Math::Physics2D::IsColliding(script2->circle, script1->circle))
 					{
 						script1->collideTimer = 0.0f;
@@ -100,6 +102,8 @@ void SpatialPartitioning::CheckCollision(SPACE_PARTITIONING_NODE* currNode, Coll
 				{
 					auto script1 = collider->gameObject->GetComponent<ScriptComponent>();
 					auto script2 = oGameObject->GetComponent<ScriptComponent>();
+					script1->isAABBColliding = true;
+					script2->isAABBColliding = true;
 					if (Math::Physics2D::IsColliding(script2->circle, script1->circle))
 					{
 						script1->collideTimer = 0.0f;

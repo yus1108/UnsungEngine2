@@ -21,13 +21,6 @@ void ScriptComponent::FixedUpdate()
 	isAABBColliding = false;
 	circle = Math::Physics2D::MakeCircle(GetTransform()->localPosition, GetTransform()->scale.x * 0.5f);
 	aabb = Math::Physics2D::MakeAABB(circle);
-	if (sp.head != nullptr && collider != nullptr)
-	{
-		if (collider->others.size() > 0)
-		{
-			isAABBColliding = true;
-		}
-	}
 }
 
 void ScriptComponent::Update()
@@ -64,16 +57,10 @@ void ScriptComponent::OnPreRender()
 {
 	if (collideTimer < maxTimer) GameState::Get()->debugRenderer.Add_Circle(circle, Color{ 0, 1, 0, 1 });
 	else if (isAABBColliding) GameState::Get()->debugRenderer.Add_Rectangle(aabb, Color{ 1, 0, 0, 1 });
-	if (isAABBColliding)
-	{
-		for (auto obj : collider->others)
-		{
-			Math::Physics2D::LineCoords line
-			{
-				GetTransform()->localPosition,
-				obj.second->gameObject->GetTransform()->localPosition
-			};
-			GameState::Get()->debugRenderer.Add_line(line, Color{ 1, 1, 0, 1 });
-		}
-	}
+	//Math::Physics2D::LineCoords line
+	//{
+	//	collider->gameObject->GetTransform()->localPosition,
+	//	oGameObject->GetTransform()->localPosition
+	//};
+	//GameState::Get()->debugRenderer.Add_line(line, Color{ 1, 1, 0, 1 });
 }
