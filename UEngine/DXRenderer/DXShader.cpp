@@ -5,14 +5,52 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
+		void DXShader::InitInputLayout
+		(
+			ID3D11Device* const device, 
+			D3D11_INPUT_ELEMENT_DESC* vLayout, 
+			SIZE_T vLayoutLength,
+			const void* VShaderByteCode, 
+			SIZE_T VShaderLength
+		)
+		{
+			assert(pipeline.vertexShader.Get() != nullptr && "Vertex Shader must be set");
+			device->CreateInputLayout(vLayout, vLayoutLength, VShaderByteCode, VShaderLength, pipeline.inputLayout.GetAddressOf());
+		}
+
+		void DXShader::SetShader(bool enableInitInputLayout, ID3D11Device* const device, const void* shaderByteCode, SIZE_T shaderLength, const UENGINE_DXRENDERER_SHADERTYPE& shader_type)
+		{
+			switch (shader_type)
+			{
+			case UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER:
+				device->CreateVertexShader(shaderByteCode, shaderLength, nullptr, pipeline.vertexShader.GetAddressOf());
+				InitInputLayout(enableInitInputLayout, device, shaderByteCode, shaderLength);
+				break;
+			case UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER:
+				device->CreatePixelShader(shaderByteCode, shaderLength, nullptr, pipeline.pixelShader.GetAddressOf());
+				break;
+			case UENGINE_DXRENDERER_SHADERTYPE_GEOMETRY_SHADER:
+				device->CreateGeometryShader(shaderByteCode, shaderLength, nullptr, pipeline.geometryShader.GetAddressOf());
+				break;
+			case UENGINE_DXRENDERER_SHADERTYPE_HULL_SHADER:
+				device->CreateHullShader(shaderByteCode, shaderLength, nullptr, pipeline.hullShader.GetAddressOf());
+				break;
+			case UENGINE_DXRENDERER_SHADERTYPE_DOMAIN_SHADER:
+				device->CreateDomainShader(shaderByteCode, shaderLength, nullptr, pipeline.domainShader.GetAddressOf());
+				break;
+			default:
+				assert(false && "Invalid Shader Type");
+				break;
+			}
+		}
+
 		void DXShader::SetShader(bool enableInitInputLayout, ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXRENDERER_SHADERTYPE& shader_type)
 		{
 			switch (shader_type)
 			{
 			case UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER:
 				device->CreateVertexShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.vertexShader.GetAddressOf());
-				vsShaderBlob = shaderBlob;
-				InitInputLayout(enableInitInputLayout, device, shaderBlob);
+				InitInputLayout(enableInitInputLayout, device, shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize());
 				break;
 			case UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER:
 				device->CreatePixelShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, pipeline.pixelShader.GetAddressOf());
@@ -65,7 +103,13 @@ namespace UEngine
 			SetShader(enableInitInputLayout, device, shaderBlob.Get(), shader_type);
 		}
 
-		void DXShader::InitInputLayout(bool enableInitInputLayout, ID3D11Device* const device, ID3DBlob* const vsShaderBlob)
+		void DXShader::InitInputLayout
+		(
+			bool enableInitInputLayout, 
+			ID3D11Device* const device, 
+			const void* VShaderByteCode, 
+			SIZE_T VShaderLength
+		)
 		{
 			if (enableInitInputLayout == false) return;
 			assert(pipeline.vertexShader.Get() != nullptr && "Vertex Shader must be set");
@@ -81,13 +125,12 @@ namespace UEngine
 				{ "BLENDINDICES", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 			};
 
-			device->CreateInputLayout(vLayout, ARRAYSIZE(vLayout), vsShaderBlob->GetBufferPointer(), vsShaderBlob->GetBufferSize(), pipeline.inputLayout.GetAddressOf());
-		}
-
-		void DXShader::InitInputLayout(ID3D11Device* const device, D3D11_INPUT_ELEMENT_DESC* inputLayout, UINT numElements)
-		{
-			assert(pipeline.vertexShader.Get() != nullptr && "Vertex Shader must be set");
-			device->CreateInputLayout(inputLayout, numElements, vsShaderBlob->GetBufferPointer(), vsShaderBlob->GetBufferSize(), pipeline.inputLayout.GetAddressOf());
+			device->CreateInputLayout
+			(
+				vLayout, ARRAYSIZE(vLayout), 
+				VShaderByteCode, VShaderLength, 
+				pipeline.inputLayout.GetAddressOf()
+			);
 		}
 
 		HRESULT DXShader::CompileShader(_In_ LPCWSTR srcFile, _In_ LPCSTR entryPoint, _In_ ID3D11Device* device, _Outptr_ ID3DBlob** blob, LPCSTR shader_version, bool isDebuggable)
@@ -146,6 +189,66 @@ namespace UEngine
 			DXShader* instance = new DXShader;
 			instance->SetShader(enableInitInputLayout, device, vertex_shader_file, UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER, isDebuggable);
 			instance->SetShader(false, device, pixel_shader_file, UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER, isDebuggable);
+
+			// Rasterizer State
+			renderer->InitRasterizerState
+			(
+				instance->pipeline.rasterizerState.GetAddressOf(),
+				rasterizerStateDesc->FillMode,
+				rasterizerStateDesc->CullMode,
+				rasterizerStateDesc->EnableMultisampling,
+				rasterizerStateDesc->EnableAntialisedLine,
+				rasterizerStateDesc->EnableDepthStencil
+			);
+
+			// Sampler State
+			D3D11_SAMPLER_DESC samplerDesc;
+			ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+			samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+			samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+			samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+			samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+			samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+			samplerDesc.MaxAnisotropy = 1;
+			samplerDesc.MaxLOD = FLT_MAX;
+			samplerDesc.MinLOD = -FLT_MAX;
+			samplerDesc.MipLODBias = 0;
+			device->CreateSamplerState(&samplerDesc, &instance->pipeline.samplerState);
+
+			// Blending State
+			D3D11_BLEND_DESC blendDesc;
+			ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+			blendDesc.AlphaToCoverageEnable = true;
+			blendDesc.IndependentBlendEnable = false;
+			blendDesc.RenderTarget[0].BlendEnable = true;
+			blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+			blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+			blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+			blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+			blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+			blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+			if (enableBlending) device->CreateBlendState(&blendDesc, &instance->pipeline.blendingState);
+
+			return instance;
+		}
+
+		DXShader* DXShader::Instantiate
+		(
+			DXRenderer* const renderer, 
+			const void* pVShaderByteCode, SIZE_T VShaderLength,
+			const void* pPShaderByteCode, SIZE_T PShaderLength,
+			bool isDebuggable, 
+			bool enableInitInputLayout, 
+			bool enableBlending, 
+			const RASTERIZER_DESC* const rasterizerStateDesc)
+		{
+			auto device = renderer->GetDevice();
+
+			DXShader* instance = new DXShader;
+
+			instance->SetShader(enableInitInputLayout, device, pVShaderByteCode, VShaderLength, UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER);
+			instance->SetShader(false, device, pPShaderByteCode, PShaderLength, UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER);
 
 			// Rasterizer State
 			renderer->InitRasterizerState

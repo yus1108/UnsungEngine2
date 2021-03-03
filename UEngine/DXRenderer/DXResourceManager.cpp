@@ -2,6 +2,25 @@
 #include "DXResourceManager.h"
 #include "..\Utility\UMath.h"
 
+// compiled shaders list
+#ifdef _DEBUG
+#include "Shader Files\Debug\DefaultVS.csh"
+#include "Shader Files\Debug\DebugRenderVS.csh"
+#include "Shader Files\Debug\WorldVS.csh"
+
+#include "Shader Files\Debug\DefaultPS.csh"
+#include "Shader Files\Debug\DebugRenderPS.csh"
+#include "Shader Files\Debug\ColorPS.csh"
+#else
+#include "Shader Files\RELEASE\DefaultVS.csh"
+#include "Shader Files\RELEASE\DebugRenderVS.csh"
+#include "Shader Files\RELEASE\WorldVS.csh"
+
+#include "Shader Files\RELEASE\DefaultPS.csh"
+#include "Shader Files\RELEASE\DebugRenderPS.csh"
+#include "Shader Files\RELEASE\ColorPS.csh"
+#endif
+
 namespace UEngine
 {
 	namespace DXRenderer
@@ -69,8 +88,8 @@ namespace UEngine
 			shaders["default"] = DXShader::Instantiate
 			(
 				renderer,
-				"../_Shaders/DefaultVS.hlsl",
-				"../_Shaders/DefaultPS.hlsl",
+				WorldVS, ARRAYSIZE(DefaultVS),
+				ColorPS, ARRAYSIZE(DefaultPS),
 				rendering_desc.IsDebuggable,
 				true,
 				rendering_desc.EnableBlendState,
@@ -80,8 +99,8 @@ namespace UEngine
 			shaders["color"] = DXShader::Instantiate
 			(
 				renderer,
-				"../_Shaders/WorldVS.hlsl",
-				"../_Shaders/ColorPS.hlsl",
+				WorldVS, ARRAYSIZE(WorldVS),
+				ColorPS, ARRAYSIZE(ColorPS),
 				rendering_desc.IsDebuggable,
 				true,
 				rendering_desc.EnableBlendState,
@@ -98,14 +117,19 @@ namespace UEngine
 			shaders["debug"] = DXShader::Instantiate
 			(
 				renderer,
-				"../_Shaders/DebugRenderVS.hlsl",
-				"../_Shaders/DebugRenderPS.hlsl",
+				DebugRenderVS, ARRAYSIZE(DebugRenderVS),
+				DebugRenderPS, ARRAYSIZE(DebugRenderPS),
 				rendering_desc.IsDebuggable,
 				false,
 				false,
 				&rsDesc
 			);
-			shaders["debug"]->InitInputLayout(renderer->GetDevice(), vLayout, ARRAYSIZE(vLayout));
+			shaders["debug"]->InitInputLayout
+			(
+				renderer->GetDevice(), 
+				vLayout, ARRAYSIZE(vLayout), 
+				DebugRenderVS, ARRAYSIZE(DebugRenderVS)
+			);
 		}
 
 		void DXResourceManager::InitRenderMesh()

@@ -12,14 +12,13 @@ namespace UEngine
 			~DXShader() = default;
 		private:
 			Pipeline pipeline;
-			Microsoft::WRL::ComPtr<ID3DBlob> vsShaderBlob;
 			std::string shader_files[5];
 
-			void InitInputLayout(bool enableInitInputLayout, ID3D11Device* const device, ID3DBlob* const vsShaderBlob);
+			void InitInputLayout(bool enableInitInputLayout, ID3D11Device* const device, const void* VShaderByteCode, SIZE_T VShaderLength);
 
 		public:
-			void InitInputLayout(ID3D11Device* const device, D3D11_INPUT_ELEMENT_DESC* inputLayout, UINT numElements);
-
+			void InitInputLayout(ID3D11Device* const device, D3D11_INPUT_ELEMENT_DESC* vLayout, SIZE_T vLayoutLength, const void* VShaderByteCode, SIZE_T VShaderLength);
+			void SetShader(bool enableInitInputLayout, ID3D11Device* const device, const void* shaderByteCode, SIZE_T shaderLength, const UENGINE_DXRENDERER_SHADERTYPE& shader_type);
 			void SetShader(bool enableInitInputLayout, ID3D11Device* const device, ID3DBlob* const shaderBlob, const UENGINE_DXRENDERER_SHADERTYPE& shader_type);
 			void SetShader(bool enableInitInputLayout, ID3D11Device* const device, const std::string& shader_file, const UENGINE_DXRENDERER_SHADERTYPE& shader_type,
 				bool isDebuggable, const std::string& entry_point = "main");
@@ -33,6 +32,16 @@ namespace UEngine
 				DXRenderer* const renderer,
 				const std::string& vertex_shader_file,
 				const std::string& pixel_shader_file,
+				bool isDebuggable,
+				bool enableInitInputLayout,
+				bool enableBlending,
+				const RASTERIZER_DESC* const rasterizerStateDesc
+			);
+			static DXShader* Instantiate
+			(
+				DXRenderer* const renderer,
+				const void* pVShaderByteCode, SIZE_T VShaderLength,
+				const void* pPShaderByteCode, SIZE_T PShaderLength,
 				bool isDebuggable,
 				bool enableInitInputLayout,
 				bool enableBlending,

@@ -5,27 +5,48 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{9cfa382b-5884-41d7-9551-839843ecda85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ResourceManager">
-      <UniqueIdentifier>{e4c1e6c0-36e0-4fcc-bae0-0bbbe7a28896}</UniqueIdentifier>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{2d1c400f-b888-43e7-8d76-ba5213f91d0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\Pixel Shader">
+      <UniqueIdentifier>{5c396ecf-3492-4e56-bdeb-7b7b1e034f26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\Vertex Shader">
+      <UniqueIdentifier>{38d5d671-8d99-4e3b-aec2-683ba890893a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DXConstantBuffer.h" />
-    <ClInclude Include="DXRDefinitions.h" />
-    <ClInclude Include="DXRenderer.h" />
-    <ClInclude Include="DXRenderMesh.h" />
-    <ClInclude Include="DXRenderObject.h" />
-    <ClInclude Include="DXRenderObjectPool.h" />
-    <ClInclude Include="DXRFramework.h" />
-    <ClInclude Include="DXShader.h" />
-    <ClInclude Include="DXView.h" />
-    <ClInclude Include="DXResourceManager.h">
-      <Filter>ResourceManager</Filter>
+    <ClInclude Include="DXConstantBuffer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DXRDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderObjectPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRFramework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXRenderer.cpp">
@@ -52,8 +73,26 @@
     <ClCompile Include="DXRenderObjectPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DXResourceManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
+    <ClCompile Include="DXResourceManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader Files\ColorPS.hlsl">
+      <Filter>Shader Files\Pixel Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader Files\DebugRenderPS.hlsl">
+      <Filter>Shader Files\Pixel Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader Files\DebugRenderVS.hlsl">
+      <Filter>Shader Files\Vertex Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader Files\DefaultPS.hlsl">
+      <Filter>Shader Files\Pixel Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader Files\DefaultVS.hlsl">
+      <Filter>Shader Files\Vertex Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader Files\WorldVS.hlsl">
+      <Filter>Shader Files\Vertex Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
