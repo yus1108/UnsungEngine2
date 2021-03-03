@@ -89,7 +89,7 @@ void SpatialPartitioning::CheckCollision(SPACE_PARTITIONING_NODE* currNode, Coll
 {
 	if (IsColliding(currNode->aabb, collider->aabb))
 	{
-		for (auto colliderPair : currNode->colliders)
+		for (auto otherPair : currNode->colliders)
 		{
 			auto other = otherPair.second;
 			auto oGameObject = otherPair.second->gameObject;
