@@ -13,7 +13,7 @@ namespace UEngine
 		DXRenderer::ViewContext* viewContext{ nullptr };
 		DXRenderer::DXShader* shader{ nullptr };
 
-		static const unsigned MAX_VERTS{ 100000 };
+		static const unsigned MAX_VERTS{ 500000 };
 		ID3D11Buffer* gpu_side_buffer{ nullptr };
 		UEngine::DebugRenderPoint cpu_side_buffer[MAX_VERTS];
 		unsigned vert_count{ 0 };

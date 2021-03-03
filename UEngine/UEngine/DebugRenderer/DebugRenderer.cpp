@@ -49,8 +49,8 @@ namespace UEngine
 
 	void DebugRenderer::Add_line(UEngine::DebugRenderPoint a, UEngine::DebugRenderPoint b)
 	{
-		if (vert_count + 1 == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
-		if (vert_count + 2 == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+		if (vert_count + 1 == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
+		if (vert_count + 2 == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
 
 		cpu_side_buffer[vert_count++] = a;
 		cpu_side_buffer[vert_count++] = b;
@@ -78,7 +78,7 @@ namespace UEngine
 	void DebugRenderer::Add_Triangle(UEngine::Math::Physics2D::TriangleCoords triangle, UEngine::Color color)
 	{
 		for (size_t i = 1; i <= 6; i++)
-			if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+			if (vert_count + i == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
 		Add_line(triangle[0], triangle[1], color);
 		Add_line(triangle[1], triangle[2], color);
 		Add_line(triangle[2], triangle[0], color);
@@ -87,7 +87,7 @@ namespace UEngine
 	void DebugRenderer::Add_Rectangle(UEngine::Math::Physics2D::AABB aabb, UEngine::Color color)
 	{
 		for (size_t i = 1; i <= 8; i++)
-			if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+			if (vert_count + i == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
 
 		UEngine::DebugRenderPoint debugVertices[] =
 		{
@@ -106,7 +106,7 @@ namespace UEngine
 	{
 		unsigned slice = 360;
 		for (size_t i = 1; i <= slice * 2; i++)
-			if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+			if (vert_count + i == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
 		std::vector<UEngine::DebugRenderPoint> vertices;
 		vertices.reserve(slice);
 
@@ -330,7 +330,7 @@ namespace UEngine
 void DebugRenderer::Add_Axis(Matrix worldMatrix)
 {
 	for (size_t i = 1; i <= 6; i++)
-		if (vert_count + i == UINT_MAX) throw std::out_of_range("Cannot add more vertices!");
+		if (vert_count + i == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
 
 	DebugRenderPoint center, right, up, front;
 	DirectX::XMVECTOR vCenter, vRight, vUp, vFront;

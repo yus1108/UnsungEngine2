@@ -38,15 +38,34 @@ void SpatialPartitioning::AddNode(SpatialPartitioning::SPACE_PARTITIONING_NODE* 
 {
 	if (IsColliding(currNode->aabb, collider->aabb))
 	{
-		for (auto colliderPair : currNode->colliders)
+		for (auto otherPair : currNode->colliders)
 		{
-			if (colliderPair.second->gameObject != collider->gameObject)
+			auto other = otherPair.second;
+			auto oGameObject = otherPair.second->gameObject;
+			if (oGameObject != collider->gameObject)
 			{
-				// 面倒眉农
-				// if true, add current colider to newCollider
-				// current collider also gets newCollider
-				collider->others[colliderPair.first] = colliderPair.second;
-				colliderPair.second->others[collider] = collider;
+				// TODO: need to change to proper collider component
+				if (collider->others.find(other) == collider->others.end())
+				{
+					auto script1 = collider->gameObject->GetComponent<ScriptComponent>();
+					auto script2 = oGameObject->GetComponent<ScriptComponent>();
+					if (Math::Physics2D::IsColliding(script2->circle, script1->circle))
+					{
+						script1->collideTimer = 0.0f;
+						script2->collideTimer = 0.0f;
+						auto transform = collider->gameObject->GetTransform();
+						script1->dir = (transform->localPosition - oGameObject->GetTransform()->localPosition).Normalize();
+						script2->dir = script1->dir * -1.0f;
+						if (script1->dir.Magnitude() == 0)
+						{
+							script1->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
+							script2->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
+						}
+
+						collider->others[other] = other;
+						other->others[collider] = collider;
+					}
+				}
 			}
 		}
 		auto result = CompareAABBSize(currNode->aabb, collider->aabb);
@@ -72,13 +91,32 @@ void SpatialPartitioning::CheckCollision(SPACE_PARTITIONING_NODE* currNode, Coll
 	{
 		for (auto colliderPair : currNode->colliders)
 		{
-			if (colliderPair.second->gameObject != collider->gameObject)
+			auto other = otherPair.second;
+			auto oGameObject = otherPair.second->gameObject;
+			if (oGameObject != collider->gameObject)
 			{
-				// 面倒眉农
-				// if true, add current colider to newCollider
-				// current collider also gets newCollider
-				collider->others[colliderPair.first] = colliderPair.second;
-				colliderPair.second->others[collider] = collider;
+				// TODO: need to change to proper collider component
+				if (collider->others.find(other) == collider->others.end())
+				{
+					auto script1 = collider->gameObject->GetComponent<ScriptComponent>();
+					auto script2 = oGameObject->GetComponent<ScriptComponent>();
+					if (Math::Physics2D::IsColliding(script2->circle, script1->circle))
+					{
+						script1->collideTimer = 0.0f;
+						script2->collideTimer = 0.0f;
+						auto transform = collider->gameObject->GetTransform();
+						script1->dir = (transform->localPosition - oGameObject->GetTransform()->localPosition).Normalize();
+						script2->dir = script1->dir * -1.0f;
+						if (script1->dir.Magnitude() == 0)
+						{
+							script1->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
+							script2->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
+						}
+
+						collider->others[other] = other;
+						other->others[collider] = collider;
+					}
+				}
 			}
 		}
 		for (auto child : currNode->children)

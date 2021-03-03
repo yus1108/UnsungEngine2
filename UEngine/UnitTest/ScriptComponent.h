@@ -4,9 +4,8 @@
 using namespace UEngine;
 class ScriptComponent : public Component
 {
-private:
-	Vector2 dir;
 public:
+	Vector2 dir;
 	bool isAABBColliding{ false };
 	float speed{ 0 };
 	float collideTimer{ 0.5f };

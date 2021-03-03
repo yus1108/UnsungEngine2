@@ -23,18 +23,9 @@ void ScriptComponent::FixedUpdate()
 	aabb = Math::Physics2D::MakeAABB(circle);
 	if (sp.head != nullptr && collider != nullptr)
 	{
-		for (auto obj : collider->others)
+		if (collider->others.size() > 0)
 		{
 			isAABBColliding = true;
-			auto script = obj.second->gameObject->GetComponent<ScriptComponent>();
-			if (Math::Physics2D::IsColliding(script->circle, circle))
-			{
-				collideTimer = 0.0f;
-				auto transform = GetTransform();
-				dir = (transform->localPosition - obj.second->gameObject->GetTransform()->localPosition).Normalize();
-				if (dir.Magnitude() == 0)
-					dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
-			}
 		}
 	}
 }
