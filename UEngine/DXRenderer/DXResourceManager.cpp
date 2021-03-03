@@ -88,8 +88,8 @@ namespace UEngine
 			shaders["default"] = DXShader::Instantiate
 			(
 				renderer,
-				WorldVS, ARRAYSIZE(DefaultVS),
-				ColorPS, ARRAYSIZE(DefaultPS),
+				DefaultVS, ARRAYSIZE(DefaultVS),
+				DefaultPS, ARRAYSIZE(DefaultPS),
 				rendering_desc.IsDebuggable,
 				true,
 				rendering_desc.EnableBlendState,
