@@ -8,11 +8,12 @@ private:
 	Vector2 dir;
 public:
 	bool isAABBColliding{ false };
-	bool isColliding{ false };
 	float speed{ 0 };
+	float collideTimer{ 0.5f };
+	float maxTimer{ 0.5f };
 	Math::Physics2D::CircleCoord circle;
 	Math::Physics2D::AABB aabb;
-	std::list<GameObject*> objs;
+	SpatialPartitioning::Collider* collider;
 
 	static SpatialPartitioning sp;
 

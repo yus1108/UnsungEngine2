@@ -2,317 +2,172 @@
 #include "SpatialPartitioning.h"
 
 using namespace UEngine;
-SpatialPartitioning::SpatialPartitioning() : head(nullptr)
+
+SpatialPartitioning::COMPARE_AABB_SIZE_RESULT SpatialPartitioning::CompareAABBSize(AABB aabb1, AABB aabb2)
 {
+	auto width1 = abs(aabb1.right - aabb1.left);
+	auto height1 = abs(aabb1.top - aabb1.bottom);
+	auto width2 = abs(aabb2.right - aabb2.left);
+	auto height2 = abs(aabb2.top - aabb2.bottom);
+
+	if (width1 > width2 && height1 > height2)
+		return COMPARE_AABB_SIZE_RESULT_BIGGER;
+	else if (width1 < width2 && height1 < height2)
+		return COMPARE_AABB_SIZE_RESULT_SMALLER;
+	else if (width1 == width2 && height1 == height2)
+		return COMPARE_AABB_SIZE_RESULT_EQUAL;
+	return COMPARE_AABB_SIZE_RESULT_DIFFERENT;
 }
 
-SpatialPartitioning::~SpatialPartitioning()
-{
-	for (auto item : manager)
-		delete item;
-}
 
-void SpatialPartitioning::DrawGrid(GRID grid, UEngine::Color color)
+void SpatialPartitioning::ConstructNode(AABB worldAABB, const std::vector<Collider*>& collider)
 {
-	UEngine::Math::Physics2D::AABB aabb;
-	aabb.left = static_cast<float>(grid.left);
-	aabb.right = static_cast<float>(grid.right);
-	aabb.top = static_cast<float>(grid.top);
-	aabb.bottom = static_cast<float>(grid.bottom);
-	GameState::Get()->debugRenderer.Add_Rectangle(aabb, color);
-}
+	Release();
+	head = new SPACE_PARTITIONING_NODE;
+	head->aabb = worldAABB;
+	nodeManager.emplace_back(head);
 
-void SpatialPartitioning::DrawGrid(int x, int y)
-{
-	auto color = Color{ 1, 0, 0, 1 };
-	auto worldMatrix = MatrixIdentity();
-	worldMatrix.r[3] = DirectX::XMVectorSet(x + 0.5f, y + 0.5f, 0, 1);
-	auto aabb = Math::Physics2D::MakeAABB(worldMatrix);
-	GameState::Get()->debugRenderer.Add_Rectangle(aabb, color);
-}
-
-int SpatialPartitioning::CompareGrid(SpatialPartitioning::GRID grid1, SpatialPartitioning::GRID grid2)
-{
-	if (grid2.left < grid1.left && grid1.right < grid2.right
-		&& grid2.bottom < grid1.bottom && grid1.top < grid2.top)
-		return -1;
-	else if (grid1.left < grid2.left && grid2.right < grid1.right
-		&& grid1.bottom < grid2.bottom && grid2.top < grid1.top)
-		return 1;
-	else if (grid1.left == grid2.left && grid2.right == grid1.right
-		&& grid1.bottom == grid2.bottom && grid2.top == grid1.top)
-		return 0;
-	return 2;
-}
-
-bool SpatialPartitioning::IsColliding(GRID grid1, GRID grid2)
-{
-	if (grid1.right < grid2.left || grid1.left > grid2.right) return false;
-	if (grid1.top < grid2.bottom || grid1.bottom > grid2.top) return false;
-	return true;
-}
-
-void SpatialPartitioning::ConstructNode(UEngine::Math::Physics2D::AABB aabb, UEngine::GameObject* gameObject)
-{
-	auto newNode = new SPACE_PARTITIONING_NODE;
-	manager.emplace_back(newNode);
-	newNode->parent = nullptr;
-	newNode->grid = MakeGrid(aabb);
-	newNode->gameObjects.emplace_back(gameObject);
-	if (head == nullptr)
+	for (size_t i = 0; i < collider.size(); i++)
 	{
-		head = newNode;
-		return;
+		collider[i]->others.clear();
+		AddNode(head, collider[i]);
 	}
-
-	AddNode(head, newNode);
 }
 
-void SpatialPartitioning::AddNode(SPACE_PARTITIONING_NODE* currNode, SPACE_PARTITIONING_NODE* newNode)
+void SpatialPartitioning::AddNode(SpatialPartitioning::SPACE_PARTITIONING_NODE* currNode, Collider* collider)
 {
-	if (IsColliding(currNode->grid, newNode->grid))
+	if (IsColliding(currNode->aabb, collider->aabb))
 	{
-		if (currNode->children.size() == 0)
+		for (auto colliderPair : currNode->colliders)
 		{
-			auto comp = CompareGrid(newNode->grid, currNode->grid);
-			if (comp == -1)
+			if (colliderPair.second->gameObject != collider->gameObject)
 			{
-				currNode->children.emplace_back(newNode);
-				newNode->parent = currNode;
+				// 面倒眉农
+				// if true, add current colider to newCollider
+				// current collider also gets newCollider
+				collider->others[colliderPair.first] = colliderPair.second;
+				colliderPair.second->others[collider] = collider;
 			}
-			else if (comp == 1)
-			{
-				auto parent = currNode->parent;
-				newNode->children.emplace_back(currNode);
-				newNode->parent = parent;
-				currNode->parent = newNode;
-				if (parent == nullptr) head = newNode;
-				else
-				{
-					for (auto node = parent->children.begin(); node != parent->children.end(); node++)
-					{
-						if (*node == currNode)
-						{
-							currNode->parent->children.erase(node);
-							break;
-						}
-					}
-					auto node = parent;
-					while (node != nullptr)
-					{
-						node->grid = EnlargeGrid(node->grid, newNode->grid);
-						node = node->parent;
-					}
-				}
-			}
-			else
-			{
-				auto parent = currNode->parent;
-				SPACE_PARTITIONING_NODE* upperNode = new SPACE_PARTITIONING_NODE;
-				manager.emplace_back(upperNode);
-				upperNode->children.emplace_back(newNode);
-				upperNode->children.emplace_back(currNode);
-				upperNode->parent = parent;
-				upperNode->grid = newNode->grid;
-				newNode->parent = upperNode;
-				currNode->parent = upperNode;
-				if (parent == nullptr) head = upperNode;
-				else
-				{
-					for (auto node = parent->children.begin(); node != parent->children.end(); node++)
-					{
-						if (*node == currNode)
-						{
-							parent->children.erase(node);
-							break;
-						}
-					}
-				}
-				if (comp == 2)
-				{
-					upperNode->grid = EnlargeGrid(currNode->grid, upperNode->grid);
-					auto node = upperNode->parent;
-					while (node != nullptr)
-					{
-						node->grid = EnlargeGrid(node->grid, upperNode->grid);
-						node = node->parent;
-					}
-				}
-			}
+		}
+		auto result = CompareAABBSize(currNode->aabb, collider->aabb);
+		if (result == COMPARE_AABB_SIZE_RESULT_BIGGER)
+		{
+			if (currNode->children.size() == 0) { MakeQuadGrid(currNode); }
+			for (auto child : currNode->children)
+				AddNode(child, collider);
 		}
 		else
 		{
-			auto parent = currNode;
-			bool noCollision = true;
-			SPACE_PARTITIONING_NODE* enlargedNode = nullptr;
-			std::queue<std::list<SPACE_PARTITIONING_NODE*>::iterator> reservedDeletion;
-			for (auto childNode = currNode->children.begin(); childNode != currNode->children.end(); childNode++)
-			{
-				if (IsColliding((*childNode)->grid, newNode->grid))
-				{
-					noCollision = false;
-					auto comp = CompareGrid(newNode->grid, (*childNode)->grid);
-					if (comp == -1)
-					{
-						AddNode((*childNode), newNode);
-						return;
-					}
-					else if (comp == 1)
-					{
-						newNode->parent = parent;
-						newNode->children.emplace_back((*childNode));
-						(*childNode)->parent = newNode;
-						parent->children.emplace_back(newNode);
-						parent->children.erase(childNode);
-						auto node = parent;
-						while (node != nullptr)
-						{
-							node->grid = EnlargeGrid(node->grid, newNode->grid);
-							node = node->parent;
-						}
-						return;
-					}
-					else
-					{
-						if (enlargedNode == nullptr)
-						{
-							enlargedNode = new SPACE_PARTITIONING_NODE;
-							manager.emplace_back(enlargedNode);
-							enlargedNode->grid = newNode->grid;
-							enlargedNode->parent = parent;
-							enlargedNode->children.emplace_back(newNode);
-							newNode->parent = enlargedNode;
-						}
-						(*childNode)->parent = enlargedNode;
-						enlargedNode->children.emplace_back((*childNode));
-						reservedDeletion.push(childNode);
-
-						if (comp == 2) enlargedNode->grid = EnlargeGrid(currNode->grid, enlargedNode->grid);
-					}
-				}
-			}
-			if (enlargedNode != nullptr)
-			{
-				parent->children.emplace_back(enlargedNode);
-				auto node = enlargedNode->parent;
-				while (node != nullptr)
-				{
-					node->grid = EnlargeGrid(node->grid, enlargedNode->grid);
-					node = node->parent;
-				}
-			}
-			while (!reservedDeletion.empty())
-			{
-				currNode->children.erase(reservedDeletion.front());
-				reservedDeletion.pop();
-			}
-			if (noCollision)
-			{
-				currNode->children.emplace_back(newNode);
-				newNode->parent = currNode;
-				currNode->grid = EnlargeGrid(currNode->grid, newNode->grid);
-				auto node = currNode->parent;
-				while (node != nullptr)
-				{
-					node->grid = EnlargeGrid(node->grid, newNode->grid);
-					node = node->parent;
-				}
-			}
+			currNode->colliders[collider] = collider;
+			for (auto child : currNode->children)
+				CheckCollision(child, collider);
 		}
-	}
-	else
-	{
-		auto parent = currNode->parent;
-		SPACE_PARTITIONING_NODE* upperNode = new SPACE_PARTITIONING_NODE;
-		manager.emplace_back(upperNode);
-		upperNode->children.emplace_back(newNode);
-		upperNode->children.emplace_back(currNode);
-		upperNode->parent = parent;
-		upperNode->grid = EnlargeGrid(currNode->grid, newNode->grid);
-		newNode->parent = upperNode;
-		currNode->parent = upperNode;
-		if (parent == nullptr) head = upperNode;
-		else
-		{
-			for (auto node = parent->children.begin(); node != parent->children.end(); node++)
-			{
-				if (*node == currNode)
-				{
-					parent->children.erase(node);
-					break;
-				}
-			}
-			auto node = upperNode->parent;
-			while (node != nullptr)
-			{
-				node->grid = EnlargeGrid(node->grid, upperNode->grid);
-				node = node->parent;
-			}
-		}
+		
 	}
 }
 
-void SpatialPartitioning::DebugRender(SPACE_PARTITIONING_NODE* node, UEngine::Color color)
+void SpatialPartitioning::CheckCollision(SPACE_PARTITIONING_NODE* currNode, Collider* collider)
 {
-	if (node != nullptr)
+	if (IsColliding(currNode->aabb, collider->aabb))
 	{
-		DrawGrid(node->grid, color);
-		auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
-		for (auto childPair : node->children)
-			DebugRender(childPair, childrenColor);
+		for (auto colliderPair : currNode->colliders)
+		{
+			if (colliderPair.second->gameObject != collider->gameObject)
+			{
+				// 面倒眉农
+				// if true, add current colider to newCollider
+				// current collider also gets newCollider
+				collider->others[colliderPair.first] = colliderPair.second;
+				colliderPair.second->others[collider] = collider;
+			}
+		}
+		for (auto child : currNode->children)
+			CheckCollision(child, collider);
 	}
 }
 
-void SpatialPartitioning::Traverse
+void SpatialPartitioning::DebugRender
 (
-	std::list<UEngine::GameObject*>& out, 
 	SPACE_PARTITIONING_NODE* currNode, 
-	UEngine::GameObject* gameObject
+	Collider* collider, 
+	UEngine::Color nodeColor, 
+	UEngine::Color colliderColor
 )
 {
-	auto grid = MakeGrid(gameObject->GetComponent<ScriptComponent>()->aabb);
-	if (IsColliding(grid, currNode->grid))
+	if (currNode == nullptr) return;
+	if (IsColliding(currNode->aabb, collider->aabb))
 	{
-		for (auto obj : currNode->gameObjects)
-			if (obj != gameObject) out.emplace_back(obj);
+		GameState::Get()->debugRenderer.Add_Rectangle(currNode->aabb, nodeColor);
+		for (auto colliderPair : currNode->colliders)
+			GameState::Get()->debugRenderer.Add_Rectangle(colliderPair.second->aabb, colliderColor);
 		for (auto child : currNode->children)
-			Traverse(out, child, gameObject);
+			DebugRender(child, collider, nodeColor, colliderColor);
 	}
 }
 
 void SpatialPartitioning::Release()
 {
-	for (auto item : manager)
+	for (auto item : nodeManager)
 		delete item;
-	manager.clear();
+	nodeManager.clear();
 	head = nullptr;
 }
 
-SpatialPartitioning::GRID SpatialPartitioning::MakeGrid(UEngine::Math::Physics2D::AABB aabb)
+void SpatialPartitioning::MakeQuadGrid(SpatialPartitioning::SPACE_PARTITIONING_NODE* node)
 {
-	GRID grid;
-	grid.left = static_cast<int>(floorf(aabb.left));
-	grid.right = static_cast<int>(ceil(aabb.right));
-	grid.bottom = static_cast<int>(floorf(aabb.bottom));
-	grid.top = static_cast<int>(ceil(aabb.top));
-	return grid;
+	auto width = abs(node->aabb.right - node->aabb.left);
+	auto height = abs(node->aabb.top - node->aabb.bottom);
+	auto midX = node->aabb.left + width / 2.0f;
+	auto midY = node->aabb.bottom + height / 2.0f;
+
+	AABB alb, alt, art, arb;
+	alb.left = node->aabb.left;
+	alb.top = midY;
+	alb.right = midX;
+	alb.bottom = node->aabb.bottom;
+
+	alt.left = node->aabb.left;
+	alt.top = node->aabb.top;
+	alt.right = midX;
+	alt.bottom = midY;
+
+	art.left = midX;
+	art.top = node->aabb.top;
+	art.right = node->aabb.right;
+	art.bottom = midY;
+
+	arb.left = midX;
+	arb.top = midY;
+	arb.right = node->aabb.right;
+	arb.bottom = node->aabb.bottom;
+
+	node->children.reserve(4);
+	node->children.emplace_back(new SPACE_PARTITIONING_NODE);
+	node->children.emplace_back(new SPACE_PARTITIONING_NODE);
+	node->children.emplace_back(new SPACE_PARTITIONING_NODE);
+	node->children.emplace_back(new SPACE_PARTITIONING_NODE);
+
+	nodeManager.emplace_back(node->children[0]);
+	nodeManager.emplace_back(node->children[1]);
+	nodeManager.emplace_back(node->children[2]);
+	nodeManager.emplace_back(node->children[3]);
+
+	node->children[0]->aabb = alb;
+	node->children[1]->aabb = alt;
+	node->children[2]->aabb = art;
+	node->children[3]->aabb = arb;
+
+	node->children[0]->parent = node;
+	node->children[1]->parent = node;
+	node->children[2]->parent = node;
+	node->children[3]->parent = node;
 }
 
-SpatialPartitioning::GRID SpatialPartitioning::EnlargeGrid(GRID grid1, GRID grid2)
+AABB SpatialPartitioning::EnlargeGrid(AABB aabb1, AABB aabb2)
 {
-	GRID newGrid;
-	newGrid.left = min(grid1.left, grid2.left);
-	newGrid.right = max(grid1.right, grid2.right);
-	newGrid.bottom = min(grid1.bottom, grid2.bottom);
-	newGrid.top = max(grid1.top, grid2.top);
-	return newGrid;
-}
-
-UEngine::Math::Physics2D::AABB SpatialPartitioning::MakeAABB(UEngine::Math::Physics2D::AABB aabb)
-{
-	aabb.left = floorf(aabb.left);
-	aabb.right = ceil(aabb.right);
-	aabb.bottom = floorf(aabb.bottom);
-	aabb.top = ceil(aabb.top);
-	return aabb;
+	aabb1.left = min(aabb1.left, aabb2.left);
+	aabb1.right = max(aabb1.right, aabb2.right);
+	aabb1.bottom = min(aabb1.bottom, aabb2.bottom);
+	aabb1.top = max(aabb1.top, aabb2.top);
+	return aabb1;
 }

@@ -19,22 +19,19 @@ void ScriptComponent::Start()
 void ScriptComponent::FixedUpdate()
 {
 	isAABBColliding = false;
-	isColliding = false;
 	circle = Math::Physics2D::MakeCircle(GetTransform()->localPosition, GetTransform()->scale.x * 0.5f);
 	aabb = Math::Physics2D::MakeAABB(circle);
-	objs.clear();
-	if (sp.head != nullptr)
+	if (sp.head != nullptr && collider != nullptr)
 	{
-		sp.Traverse(objs, sp.head, GetGameObject());
-		for (auto obj : objs)
+		for (auto obj : collider->others)
 		{
 			isAABBColliding = true;
-			auto script = obj->GetComponent<ScriptComponent>();
+			auto script = obj.second->gameObject->GetComponent<ScriptComponent>();
 			if (Math::Physics2D::IsColliding(script->circle, circle))
 			{
-				isColliding = true;
+				collideTimer = 0.0f;
 				auto transform = GetTransform();
-				dir = (transform->localPosition - obj->GetTransform()->localPosition).Normalize();
+				dir = (transform->localPosition - obj.second->gameObject->GetTransform()->localPosition).Normalize();
 				if (dir.Magnitude() == 0)
 					dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
 			}
@@ -45,6 +42,8 @@ void ScriptComponent::FixedUpdate()
 void ScriptComponent::Update()
 {
 	using namespace std;
+
+	collideTimer += Utility::UTime::Get()->DeltaTimeF();
 
 	/*if (WinInput::Get()->GetKey(VK_RIGHT))
 		GetTransform()->localPosition.x += Utility::UTime::Get()->DeltaTimeF();
@@ -72,16 +71,16 @@ void ScriptComponent::Update()
 
 void ScriptComponent::OnPreRender()
 {
-	if (isColliding) GameState::Get()->debugRenderer.Add_Circle(circle, Color{ 0, 0, 1, 1 });
+	if (collideTimer < maxTimer) GameState::Get()->debugRenderer.Add_Circle(circle, Color{ 0, 1, 0, 1 });
 	else if (isAABBColliding) GameState::Get()->debugRenderer.Add_Rectangle(aabb, Color{ 1, 0, 0, 1 });
 	if (isAABBColliding)
 	{
-		for (auto obj : objs)
+		for (auto obj : collider->others)
 		{
 			Math::Physics2D::LineCoords line
 			{
 				GetTransform()->localPosition,
-				obj->GetTransform()->localPosition
+				obj.second->gameObject->GetTransform()->localPosition
 			};
 			GameState::Get()->debugRenderer.Add_line(line, Color{ 1, 1, 0, 1 });
 		}

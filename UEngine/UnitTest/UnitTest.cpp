@@ -77,8 +77,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto gameState = UEngine::GameState::Get();
     gameState->Init(app, renderer);
     srand((unsigned)time(nullptr));
-    std::vector<GameObject*> objs;
-    // TODO: Place code here.
+    std::vector<SpatialPartitioning::Collider*> colliders;
+        // TODO: Place code here.
     {
         // basic load
         using namespace UEngine;
@@ -90,15 +90,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         cameraScript->viewHeight = 60;
         gameState->AddObject(mainCamera);
 
-        for (size_t i = 0; i < 50; i++)
+        for (size_t i = 0; i < 20; i++)
         {
             GameObject* circle = GameObject::Instantiate();
             circle->AddComponent<Transform>();
             circle->AddComponent<RenderComponent>()->LoadCircle();
             circle->AddComponent<Material>()->color = Color{ 0.5f, 0.5f, 0.5f, 1 };
-            circle->AddComponent<ScriptComponent>();
+            auto script = circle->AddComponent<ScriptComponent>();
             gameState->AddObject(circle);
-            objs.push_back(circle);
+            auto collider = new SpatialPartitioning::Collider;
+            collider->gameObject = circle;
+            script->collider = collider;
+            colliders.push_back(collider);
         }
     }
 
@@ -114,17 +117,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         gameState->Update();
         if (counter > UEngine::Math::Clamp(deltatime, 0.02f, 0.1f))
         {
-            ScriptComponent::sp.Release();
-            for (size_t i = 0; i < objs.size(); i++)
+            Math::Physics2D::AABB worldAABB = colliders[0]->gameObject->GetComponent<ScriptComponent>()->aabb;
+            colliders[0]->aabb = worldAABB;
+            for (size_t i = 1; i < colliders.size(); i++)
             {
-                ScriptComponent::sp.ConstructNode(objs[i]->GetComponent<ScriptComponent>()->aabb, objs[i]);
+                colliders[i]->aabb = colliders[i]->gameObject->GetComponent<ScriptComponent>()->aabb;
+                worldAABB = ScriptComponent::sp.EnlargeGrid(worldAABB, colliders[i]->aabb);
             }
+            ScriptComponent::sp.ConstructNode(worldAABB, colliders);
             counter -= 0.02f;
         }
 
         auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
-        //ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, childrenColor);
+        ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, colliders[0], Color{ 1, 0, 0, 1 }, Color{ 0,0,1,1 });
     });
+
+    for (size_t i = 0; i < colliders.size(); i++)
+    {
+        delete colliders[i];
+    }
 
     return returnedValue;
 }
