@@ -47,6 +47,7 @@ public:
 	void ConstructNode(AABB worldAABB, const std::vector<Collider*>& collider);
 	void CheckCollision(SPACE_PARTITIONING_NODE* currNode, Collider* collider);
 	void DebugRender(SPACE_PARTITIONING_NODE* currNode, Collider* collider, UEngine::Color nodeColor, UEngine::Color colliderColor);
+	void DebugRender(SPACE_PARTITIONING_NODE* currNode, Collider* collider, UEngine::Color color);
 
 };
 

@@ -130,6 +130,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
         ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, colliders[0], Color{ 1, 0, 0, 1 }, Color{ 0,0,1,1 });
+        for (auto collider : colliders)
+            ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, collider, Color{ 1, 1, 0, 1 });
     });
 
     for (size_t i = 0; i < colliders.size(); i++)

@@ -147,6 +147,32 @@ void SpatialPartitioning::DebugRender
 	}
 }
 
+void SpatialPartitioning::DebugRender
+(
+	SPACE_PARTITIONING_NODE* currNode,
+	Collider* collider,
+	UEngine::Color color
+)
+{
+	if (currNode == nullptr) return;
+	if (IsColliding(currNode->aabb, collider->aabb))
+	{
+		for (auto colliderPair : currNode->colliders)
+		{
+			GameState::Get()->debugRenderer.Add_line
+			(
+				{ 
+					colliderPair.second->gameObject->GetTransform()->localPosition, 
+					collider->gameObject->GetTransform()->localPosition 
+				},
+				color
+			);
+		}
+		for (auto child : currNode->children)
+			DebugRender(child, collider, color);
+	}
+}
+
 void SpatialPartitioning::Release()
 {
 	for (auto item : nodeManager)
