@@ -361,8 +361,8 @@ bool UEngine::Math::Physics2D::IsColliding(AABB aabb, CircleCoord circle)
 {
 	if (IsColliding(circle.center, aabb)) return true;
 	Vector2 closestPoint;
-	closestPoint.x = Clamp(closestPoint.x, aabb.left, aabb.right);
-	closestPoint.y = Clamp(closestPoint.y, aabb.bottom, aabb.top);
+	closestPoint.x = Clamp(circle.center.x, aabb.left, aabb.right);
+	closestPoint.y = Clamp(circle.center.y, aabb.bottom, aabb.top);
 	float distance = (circle.center - closestPoint).Magnitude();
 	return distance <= circle.radius;
 }
