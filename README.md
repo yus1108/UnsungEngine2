@@ -8,6 +8,10 @@
 - Implemented resource managers for multi-threaded game loop sequence
 - Implemented DebugRenderer
 - Implemented basic 2D collision check functions
-- Implemented dynamic spatial partitioning and fixed time-rate update to optimize collision check to avoid worst case check of O(n^2)
+- Implemented dynamic spatial partitioning and fixed time-rate update to optimize collision check
+- Implemented image texture loading using WICTextureLoader and DDSTextureLoader from DirectXTK
 
 The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly try to change language standard.
+
+## Libraries License
+- DirectXTK (WICTextureLoader, DDSTextureLoader) Copyright (c) 2012-2021 Microsoft Corp
