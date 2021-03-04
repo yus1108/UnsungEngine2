@@ -80,10 +80,10 @@ namespace UEngine
 		{
 			if (targetHz > 1)
 			{
-				unsigned int slow = 0;
-				while (elapsedSignal / (TotalTimeExact() - lastSecond) > targetHz)
+				double framerate = elapsedSignal / (TotalTimeExact() - lastSecond);
+				while (framerate > targetHz)
 				{
-					Sleep(slow++);
+					framerate = elapsedSignal / (TotalTimeExact() - lastSecond);
 				}
 			}
 		}

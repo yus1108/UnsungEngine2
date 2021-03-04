@@ -110,7 +110,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     float deltatime = 0.0f;
     auto returnedValue = app->UpdateLoop([&]() 
     {
-        //UEngine::Utility::UTime::Get()->Throttle(200);
+        UEngine::Utility::UTime::Get()->Throttle(200);
         deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
         counter += deltatime;
 
