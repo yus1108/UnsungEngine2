@@ -10,6 +10,7 @@
 - Implemented basic 2D collision check functions
 - Implemented dynamic spatial partitioning and fixed time-rate update to optimize collision check
 - Implemented image texture loading using WICTextureLoader and DDSTextureLoader from DirectXTK
+- Added an example game
 
 The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly try to change language standard.
 
