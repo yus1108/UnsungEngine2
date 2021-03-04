@@ -23,15 +23,17 @@ namespace UEngine
 		float fixedUpdateTimer{ 0 };
 		float deltatime{ 0 };
 
-		Utility::Sync::UThreadPool threadPool;
 		std::list<class GameObject*> gameObjects;
 		ConstantBufferPool constantBufferPool;
+		SpatialPartition2D spatialPartition2d;
+		DebugRenderer debugRenderer;
 
 	public:
 		float FixedTimestep{ 0.02f };
 		float MaxFixedTimestep{ 0.1f };
+
 		GameScene gameScene;
-		DebugRenderer debugRenderer;
+		Utility::Sync::UThreadPool threadPool;
 
 	private:
 		class WinApplication* app{ nullptr };
@@ -43,6 +45,8 @@ namespace UEngine
 
 		bool GetTerminate() { return terminate; }
 		const std::list<class GameObject*>& GetGameObjects() { return gameObjects; }
+		SpatialPartition2D* const GetSpatialPartition2D() { return &spatialPartition2d; }
+		DebugRenderer* const GetDebugRenderer() { return &debugRenderer; }
 
 		void AddObject(GameObject* gameObject) { gameObjects.emplace_back(gameObject); }
 

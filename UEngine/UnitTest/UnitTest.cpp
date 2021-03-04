@@ -77,7 +77,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     auto gameState = UEngine::GameState::Get();
     gameState->Init(app, renderer);
     srand((unsigned)time(nullptr));
-    std::vector<SpatialPartitioning::Collider*> colliders;
         // TODO: Place code here.
     {
         // basic load
@@ -96,48 +95,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             circle->AddComponent<Transform>();
             circle->AddComponent<RenderComponent>()->Load("rectangle", "basicTexture");
             circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
-            auto script = circle->AddComponent<ScriptComponent>();
+            circle->AddComponent<ScriptComponent>();
+            circle->AddComponent<Collider>();
+            if (i == 0) circle->AddComponent<DebugRenderScript>();
             gameState->AddObject(circle);
-            auto collider = new SpatialPartitioning::Collider;
-            collider->gameObject = circle;
-            script->collider = collider;
-            colliders.push_back(collider);
         }
     }
 
-    float counter = 0.0f;
-    float timestep = 0.02f;
-    float deltatime = 0.0f;
     auto returnedValue = app->UpdateLoop([&]() 
     {
-        UEngine::Utility::UTime::Get()->Throttle(200);
-        deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
-        counter += deltatime;
-
+        //UEngine::Utility::UTime::Get()->Throttle(200);
         gameState->Update();
-        if (counter > UEngine::Math::Clamp(deltatime, 0.02f, 0.1f))
-        {
-            Math::Physics2D::AABB worldAABB = colliders[0]->gameObject->GetComponent<ScriptComponent>()->aabb;
-            colliders[0]->aabb = worldAABB;
-            for (size_t i = 1; i < colliders.size(); i++)
-            {
-                colliders[i]->aabb = colliders[i]->gameObject->GetComponent<ScriptComponent>()->aabb;
-                worldAABB = ScriptComponent::sp.EnlargeGrid(worldAABB, colliders[i]->aabb);
-            }
-            ScriptComponent::sp.ConstructNode(worldAABB, colliders);
-            counter -= 0.02f;
-        }
-
-        auto childrenColor = UEngine::Color{ UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), UEngine::Math::RndFloat(), 1 };
-        ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, colliders[0], Color{ 1, 0, 0, 1 }, Color{ 0,0,1,1 });
-        for (auto collider : colliders)
-            ScriptComponent::sp.DebugRender(ScriptComponent::sp.head, collider, Color{ 1, 1, 0, 1 });
     });
-
-    for (size_t i = 0; i < colliders.size(); i++)
-    {
-        delete colliders[i];
-    }
 
     return returnedValue;
 }

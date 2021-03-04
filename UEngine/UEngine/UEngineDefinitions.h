@@ -60,6 +60,14 @@ namespace UEngine
 
 	namespace Math
 	{
+		enum COMPARE_AABB_SIZE_RESULT
+		{
+			COMPARE_AABB_SIZE_RESULT_EQUAL,
+			COMPARE_AABB_SIZE_RESULT_SMALLER,
+			COMPARE_AABB_SIZE_RESULT_BIGGER,
+			COMPARE_AABB_SIZE_RESULT_DIFFERENT
+		};
+
 		namespace Physics2D
 		{
 			struct CollisionResult

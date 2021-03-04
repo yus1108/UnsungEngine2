@@ -29,3 +29,4 @@
 #include "../WinApplication/WinMemoryLeak.h"
 
 #include "ScriptComponent.h"
+#include "DebugRenderScript.h"

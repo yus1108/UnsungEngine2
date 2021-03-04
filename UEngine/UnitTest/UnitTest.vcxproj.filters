@@ -26,7 +26,7 @@
     <ClInclude Include="ScriptComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpatialPartitioning.h">
+    <ClInclude Include="DebugRenderScript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -46,6 +46,6 @@
   <ItemGroup>
     <ClCompile Include="UnitTest.cpp" />
     <ClCompile Include="ScriptComponent.cpp" />
-    <ClCompile Include="SpatialPartitioning.cpp" />
+    <ClCompile Include="DebugRenderScript.cpp" />
   </ItemGroup>
 </Project>

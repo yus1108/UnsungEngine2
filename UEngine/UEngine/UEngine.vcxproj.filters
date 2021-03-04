@@ -39,6 +39,12 @@
     <ClInclude Include="Game\GameScene.h">
       <Filter>Game Architecture\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Game Architecture\Collision\SpatialPartition2D.h">
+      <Filter>Game Architecture\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Collision\Component\Collider.h">
+      <Filter>Game Architecture\Collision\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -75,6 +81,12 @@
     <ClCompile Include="Game\GameScene.cpp">
       <Filter>Game Architecture\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Game Architecture\Collision\SpatialPartition2D.cpp">
+      <Filter>Game Architecture\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Collision\Component\Collider.cpp">
+      <Filter>Game Architecture\Collision\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DebugRenderer">
@@ -97,6 +109,12 @@
     </Filter>
     <Filter Include="Game Architecture\Object\Component">
       <UniqueIdentifier>{2158d01c-ba89-4df4-aaf5-72befc680cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Collision">
+      <UniqueIdentifier>{af833c8f-e123-4dff-9409-83f0bcaabbf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Collision\Component">
+      <UniqueIdentifier>{a9105e1d-0924-455a-9b38-6c5dd4896038}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

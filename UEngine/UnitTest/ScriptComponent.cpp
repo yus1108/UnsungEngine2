@@ -1,8 +1,6 @@
 #include "framework.h"
 #include "ScriptComponent.h"
 
-SpatialPartitioning ScriptComponent::sp;
-
 void ScriptComponent::Start()
 {
 	auto x = (float)rand() / (rand() % INT_MAX);
@@ -18,7 +16,6 @@ void ScriptComponent::Start()
 
 void ScriptComponent::FixedUpdate()
 {
-	isAABBColliding = false;
 	circle = Math::Physics2D::MakeCircle(GetTransform()->localPosition, GetTransform()->scale.x * 0.5f);
 	aabb = Math::Physics2D::MakeAABB(circle);
 }
@@ -55,8 +52,12 @@ void ScriptComponent::Update()
 
 void ScriptComponent::OnPreRender()
 {
-	if (collideTimer < maxTimer) GameState::Get()->debugRenderer.Add_Circle(circle, Color{ 0, 1, 0, 1 });
-	else if (isAABBColliding) GameState::Get()->debugRenderer.Add_Rectangle(aabb, Color{ 1, 0, 0, 1 });
+	auto sp = GameState::Get()->GetSpatialPartition2D();
+	auto debugRenderer = GameState::Get()->GetDebugRenderer();
+	auto collider = GetComponent<Collider>();
+	if (collideTimer < maxTimer) debugRenderer->Add_Circle(circle, Color{ 0, 1, 0, 1 });
+	else if (collider->isAABBColliding) debugRenderer->Add_Rectangle(aabb, Color{ 1, 0, 0, 1 });
+	sp->DebugRender(sp->head, collider, Color{ 1, 1, 0, 1 });
 	//Math::Physics2D::LineCoords line
 	//{
 	//	collider->gameObject->GetTransform()->localPosition,

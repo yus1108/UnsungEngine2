@@ -156,6 +156,18 @@ UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(Matrix worldMa
 	return MakeAABB(rectVertices, worldMatrix);
 }
 
+UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(AABB local, Matrix worldMatrix)
+{
+	std::vector<PointCoord> points = std::vector<PointCoord>
+	{
+		PointCoord(local.left, local.bottom),
+		PointCoord(local.left, local.top),
+		PointCoord(local.right, local.top),
+		PointCoord(local.right, local.bottom)
+	};
+	return MakeAABB(points, worldMatrix);
+}
+
 UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(PointCoord point)
 {
 	AABB aabb = AABB{ point.x, point.y, point.x, point.y };

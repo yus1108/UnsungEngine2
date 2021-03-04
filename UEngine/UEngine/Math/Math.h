@@ -26,6 +26,7 @@ namespace UEngine
 			AABB MakeAABB(TriangleCoords triangle); // Make AABB of the triangle
 			AABB MakeAABB(CircleCoord circle); // Make AABB of the circle
 			AABB MakeAABB(Matrix worldMatrix); // Make AABB of the rectangle with the given world matrix
+			AABB MakeAABB(AABB local, Matrix worldMatrix); // Make AABB of the rectangle with the given world matrix
 			CircleCoord MakeCircle(Vector2 center, float radius);
 			bool IsAABB1Smaller(AABB aabb1, AABB aabb2);
 			bool IsColliding(PointCoord point, TriangleCoords triangle);

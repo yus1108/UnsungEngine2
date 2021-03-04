@@ -1,6 +1,6 @@
 #pragma once
 #include "Object\GameObject.h"
-#include <iostream>
+
 namespace UEngine
 {
 	class Component
@@ -12,10 +12,6 @@ namespace UEngine
 		GameObject* gameObject{ nullptr };
 		bool enabled{ false };
 		bool isStart{ false };
-
-	protected:
-		GameObject* const GetGameObject() { return gameObject; }
-		Transform* const GetTransform() { return gameObject->GetTransform(); }
 
 	private:
 		virtual void Awake() {}
@@ -32,6 +28,9 @@ namespace UEngine
 		virtual void OnDestroy() {}
 
 	public:
+		GameObject* const GetGameObject() { return gameObject; }
+		Transform* const GetTransform() { return gameObject->GetTransform(); }
+
 		void SetEnable(bool enable)
 		{
 			if (gameObject->GetActive())

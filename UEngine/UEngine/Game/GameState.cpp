@@ -24,41 +24,38 @@ void UEngine::GameState::Release()
 
 void UEngine::GameState::Update()
 {
-    deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
-    fixedUpdateTimer += deltatime;
-
     // cpu-gpu transfer
     gameScene.OnPreRender();
     constantBufferPool.OnPreRender();
+
     // resources mapping
     for (auto obj : gameObjects)
         obj->OnPreRender();
 
     // rendering thread
-    gameScene.OnRender();
-    // post render thread
-    gameScene.OnPostRender();
+    threadPool.AddSyncTask([&]()
+    {
+        gameScene.OnRender();
+        gameScene.OnPostRender();
 
-    debugRenderer.Flush(gameScene.GetMainViewCBuffer());
+        debugRenderer.Flush(gameScene.GetMainViewCBuffer());
 
-    renderer->Begin();
-    renderer->Draw(gameScene.GetMainView()->GetAddressOfViewResource());
-    renderer->Draw(debugRenderer.GetViewResource());
-    renderer->End();
-    
+        renderer->Begin();
+        renderer->Draw(gameScene.GetMainView()->GetAddressOfViewResource());
+        renderer->Draw(debugRenderer.GetViewResource());
+        renderer->End();
+    });
 
     // update in main thread
     {
-        UEngine::WinConsole::ResetCursorPos();
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        std::cout << "\t\t" << std::endl;
-        UEngine::WinConsole::ResetCursorPos();
+        deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
+        fixedUpdateTimer += deltatime;
 
-        /*if (UEngine::WinInput::Get()->GetKey(VK_LEFT))
-        {
-            std::cout << "key pressed" << std::endl;
-        }*/
+        UEngine::WinConsole::ResetCursorPos();
+        std::cout << "\t\t" << std::endl;
+        std::cout << "\t\t" << std::endl;
+        std::cout << "\t\t" << std::endl;
+        UEngine::WinConsole::ResetCursorPos();
 
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
@@ -69,6 +66,7 @@ void UEngine::GameState::Update()
         while (fixedUpdateTimer > currentFixedTimestep)
         {
             currentFixedTimestep = UEngine::Math::Clamp(deltatime, FixedTimestep, MaxFixedTimestep);
+            spatialPartition2d.Release();
             for (auto obj : gameObjects)
                 obj->FixedUpdate();
             for (auto obj : gameObjects)
@@ -90,8 +88,4 @@ void UEngine::GameState::Update()
     // post render update thread
     for (auto obj : gameObjects)
         obj->OnPostRender();
-
-
-    // thread join
-    threadPool.Join();
 }
