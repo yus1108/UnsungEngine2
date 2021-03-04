@@ -14,4 +14,4 @@
 The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly try to change language standard.
 
 ## Libraries License
-- DirectXTK (WICTextureLoader, DDSTextureLoader) Copyright (c) 2012-2021 Microsoft Corp, The MIT License (MIT)
+- DirectXTK (WICTextureLoader, DDSTextureLoader) <br/> Copyright (c) 2012-2021 Microsoft Corp <br/> The MIT License (MIT)
