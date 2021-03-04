@@ -30,6 +30,8 @@ namespace UEngine
 			class DXRenderObject* default_renderObject{ nullptr };
 			class DXConstantBuffer* default_colorBuffer{ nullptr };
 
+			Microsoft::WRL::ComPtr<ID3D11DeviceContext> textureContext;
+			Microsoft::WRL::ComPtr<ID3D11CommandList> textureCommands;
 		public:
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
 			void Release();
@@ -43,6 +45,7 @@ namespace UEngine
 			D3D_FEATURE_LEVEL GetFeatureLevel() { return featureLevel; }
 			ID3D11Device* const GetDevice() { return device.Get(); }
 			ID3D11DeviceContext* const GetImmediateDeviceContext() { return immediate.DeviceContext.Get(); }
+			ID3D11DeviceContext* const GetTextureLoadDeviceContext() { return textureContext.Get(); }
 
 			void InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
 

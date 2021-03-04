@@ -30,6 +30,9 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 
+#include "Texture Loader\DDSTextureLoader.h"
+#include "Texture Loader\WICTextureLoader.h"
+
 #include "DXRDefinitions.h"
 #include "DXRenderer.h"
 #include "DXShader.h"
@@ -39,3 +42,4 @@
 #include "DXRenderObject.h"
 #include "DXRenderObjectPool.h"
 #include "DXView.h"
+#include "RenderComponents\DXTexture.h"

@@ -90,6 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>dxrframework.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -124,6 +125,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>dxrframework.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -169,6 +171,9 @@
     <ClInclude Include="DXRFramework.h" />
     <ClInclude Include="DXShader.h" />
     <ClInclude Include="DXView.h" />
+    <ClInclude Include="RenderComponents\DXTexture.h" />
+    <ClInclude Include="Texture Loader\DDSTextureLoader.h" />
+    <ClInclude Include="Texture Loader\WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXConstantBuffer.cpp" />
@@ -185,6 +190,12 @@
     </ClCompile>
     <ClCompile Include="DXShader.cpp" />
     <ClCompile Include="DXView.cpp" />
+    <ClCompile Include="RenderComponents\DXTexture.cpp" />
+    <ClCompile Include="Texture Loader\DDSTextureLoader.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dxrframework.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxrframework.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Texture Loader\WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader Files\ColorPS.hlsl">

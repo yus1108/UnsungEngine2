@@ -94,8 +94,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         {
             GameObject* circle = GameObject::Instantiate();
             circle->AddComponent<Transform>();
-            circle->AddComponent<RenderComponent>()->LoadCircle();
-            circle->AddComponent<Material>()->color = Color{ 0.5f, 0.5f, 0.5f, 1 };
+            circle->AddComponent<RenderComponent>()->Load("rectangle", "basicTexture");
+            circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
             auto script = circle->AddComponent<ScriptComponent>();
             gameState->AddObject(circle);
             auto collider = new SpatialPartitioning::Collider;

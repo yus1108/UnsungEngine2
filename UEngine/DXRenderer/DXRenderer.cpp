@@ -30,6 +30,9 @@ namespace UEngine
 				// Render Target View
 				InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 
+				// Create device context for texture loading
+				device->CreateDeferredContext(NULL, textureContext.GetAddressOf());
+
 				{
 					Color color{ 1,1,1,1 };
 					auto manager = DXResourceManager::Get();
@@ -50,6 +53,10 @@ namespace UEngine
 
 		void DXRenderer::Begin(const float clearRGBA[4])
 		{
+			textureContext->FinishCommandList(false, textureCommands.GetAddressOf());
+			immediate.DeviceContext->ExecuteCommandList(textureCommands.Get(), false);
+			textureCommands.ReleaseAndGetAddressOf();
+
 			immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
 
 			immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
@@ -290,7 +297,7 @@ namespace UEngine
 				(*context)->OutputShaderResourceView.GetAddressOf()
 			);
 
-			device->CreateDeferredContext(NULL, &(*context)->DeviceContext);
+			device->CreateDeferredContext(NULL, (*context)->DeviceContext.GetAddressOf());
 		}
 
 		void DXRenderer::InitRasterizerState

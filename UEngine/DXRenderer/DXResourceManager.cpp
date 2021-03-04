@@ -96,6 +96,17 @@ namespace UEngine
 				&rsDesc
 			);
 
+			shaders["basicTexture"] = DXShader::Instantiate
+			(
+				renderer,
+				WorldVS, ARRAYSIZE(WorldVS),
+				DefaultPS, ARRAYSIZE(DefaultPS),
+				rendering_desc.IsDebuggable,
+				true,
+				rendering_desc.EnableBlendState,
+				&rsDesc
+			);
+
 			shaders["color"] = DXShader::Instantiate
 			(
 				renderer,
@@ -196,9 +207,9 @@ namespace UEngine
 				float startRadian = Utility::UMath::PI / 2.0f;
 				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian), 0.5f * sin(startRadian + radian), 0}},
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0.5f * sin(startRadian), 0}},
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian * 2.0f), 0.5f * sin(startRadian + radian * 2.0f), 0}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian), 0.5f * sin(startRadian + radian), 0}, DirectX::XMFLOAT2{ 0, 1 }},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0.5f * sin(startRadian), 0}, DirectX::XMFLOAT2{ 0.5f, 0 }},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian * 2.0f), 0.5f * sin(startRadian + radian * 2.0f), 0}, DirectX::XMFLOAT2{ 1, 1 }},
 				};
 				vertices.shrink_to_fit();
 				vertexInfo["triangle"] = vertices;
@@ -214,10 +225,10 @@ namespace UEngine
 			{
 				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}},
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}},
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}},
-					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, -0.5f, 0}, DirectX::XMFLOAT2{0, 1}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{-0.5f, 0.5f, 0}, DirectX::XMFLOAT2{0, 0}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, -0.5f, 0}, DirectX::XMFLOAT2{1, 1}},
+					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
 				};
 				vertices.shrink_to_fit();
 				vertexInfo["rectangle"] = vertices;

@@ -74,6 +74,8 @@ void UEngine::RenderObjectPool::OnRender(ID3D11DeviceContext* deviceContext)
 		{
 			for (auto bufferPair : objectPair.second->constantBuffers)
 				bufferPair.second->Set(deviceContext);
+			if (objectPair.second->imageTexture != nullptr) 
+				deviceContext->PSSetShaderResources(0, 1, objectPair.second->imageTexture->GetTextureAddressOf());
 			model->Draw(deviceContext);
 		}
 	}

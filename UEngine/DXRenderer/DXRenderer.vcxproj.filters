@@ -1,13 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{9cfa382b-5884-41d7-9551-839843ecda85}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shader Files">
       <UniqueIdentifier>{2d1c400f-b888-43e7-8d76-ba5213f91d0f}</UniqueIdentifier>
     </Filter>
@@ -17,63 +10,84 @@
     <Filter Include="Shader Files\Vertex Shader">
       <UniqueIdentifier>{38d5d671-8d99-4e3b-aec2-683ba890893a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderComponents">
+      <UniqueIdentifier>{aa1ec628-c660-4c7d-a0b5-853331cb2f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{0f29363b-bde9-4107-bec7-1a2795c2e7b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture Loader">
+      <UniqueIdentifier>{24f610e2-1652-43b6-88aa-8546d028f527}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXConstantBuffer.h">
-      <Filter>Header Files</Filter>
+      <Filter>RenderComponents</Filter>
     </ClInclude>
-    <ClInclude Include="DXRDefinitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRenderMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRenderObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRenderObjectPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DXRFramework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="DXRenderer.h" />
     <ClInclude Include="DXShader.h">
-      <Filter>Header Files</Filter>
+      <Filter>RenderComponents</Filter>
     </ClInclude>
     <ClInclude Include="DXView.h">
-      <Filter>Header Files</Filter>
+      <Filter>RenderComponents</Filter>
     </ClInclude>
-    <ClInclude Include="DXResourceManager.h" />
+    <ClInclude Include="DXRenderObject.h">
+      <Filter>RenderComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderObjectPool.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRenderMesh.h">
+      <Filter>RenderComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="DXResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DXRDefinitions.h" />
+    <ClInclude Include="DXRFramework.h" />
+    <ClInclude Include="Texture Loader\DDSTextureLoader.h">
+      <Filter>Texture Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture Loader\WICTextureLoader.h">
+      <Filter>Texture Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponents\DXTexture.h">
+      <Filter>RenderComponents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DXRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DXShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DXConstantBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DXRFramework.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>RenderComponents</Filter>
     </ClCompile>
     <ClCompile Include="DXRenderMesh.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>RenderComponents</Filter>
     </ClCompile>
-    <ClCompile Include="DXRenderObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DXRenderer.cpp" />
+    <ClCompile Include="DXShader.cpp">
+      <Filter>RenderComponents</Filter>
     </ClCompile>
     <ClCompile Include="DXView.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>RenderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="DXRenderObject.cpp">
+      <Filter>RenderComponents</Filter>
     </ClCompile>
     <ClCompile Include="DXRenderObjectPool.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="DXResourceManager.cpp" />
+    <ClCompile Include="DXResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DXRFramework.cpp" />
+    <ClCompile Include="Texture Loader\DDSTextureLoader.cpp">
+      <Filter>Texture Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture Loader\WICTextureLoader.cpp">
+      <Filter>Texture Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponents\DXTexture.cpp">
+      <Filter>RenderComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader Files\ColorPS.hlsl">

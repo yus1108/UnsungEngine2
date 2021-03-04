@@ -394,12 +394,23 @@ const float UEngine::Math::Clamp(float value, float min, float max)
 	return value < min ? min : value > max ? max : value;
 }
 
+bool randInstantiated = false;
 int UEngine::Math::RndInt(int start, int end)
 {
+	if (!randInstantiated)
+	{
+		srand((unsigned)time(nullptr));
+		randInstantiated = true;
+	}
 	return rand() % (end - start + 1) + start;
 };
 
 float UEngine::Math::RndFloat(float start, float end)
 {
+	if (!randInstantiated)
+	{
+		srand((unsigned)time(nullptr));
+		randInstantiated = true;
+	}
 	return (float)rand() / (float)RAND_MAX * (end - start) + start;
 };

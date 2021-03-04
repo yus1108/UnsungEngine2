@@ -13,6 +13,7 @@ namespace UEngine
 			key: std::string = typeid(T).raw_name()
 			value: class DXConstantBuffer*
 		*/
+		DXRenderer::DXTexture* imageTexture;
 		std::map<std::string, DXRenderer::DXConstantBuffer*> constantBuffers;
 	};
 
