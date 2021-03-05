@@ -20,10 +20,7 @@ namespace UEngine
 			std::map<std::string, std::vector<SIMPLE_VERTEX>> vertexInfo;
 
 			std::unordered_map<std::string, SHARED_RENDERMESH*> shared_rendermesh;
-			std::unordered_map<std::string, DXRenderMesh*> loadedRenderMeshes;
-			std::unordered_map<std::string, std::vector<SIMPLE_VERTEX>> loadedVertexInfo;
-
-			std::unordered_map<std::string, class DXScene*> scenes;
+			std::unordered_map<std::string, DXScene*> scenes;
 
 		public:
 			DXResourceManager() = default;
@@ -36,10 +33,10 @@ namespace UEngine
 			void SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices);
 			void SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer);
 
-			DXShader* GetShaders(std::string resource_name) { return shaders[resource_name]; }
-			DXRenderMesh* GetRenderMesh(std::string resource_name);
 			// resource_name : typeid(cpu_buffer_struct).raw_name()
 			CONSTANT_BUFFER_DESC GetConstantBuffer(std::string resource_name) { return constantBuffers[resource_name]; }
+			DXShader* GetShaders(std::string resource_name) { return shaders[resource_name]; }
+			DXRenderMesh* GetRenderMesh(std::string resource_name);
 			std::vector<SIMPLE_VERTEX> GetVertices(std::string resource_name);
 
 			void Init();
@@ -49,19 +46,7 @@ namespace UEngine
 			void InitShader();
 			void InitConstantBuffer();
 
-			void Release()
-			{
-				for (auto resource : shaders)
-					DXShader::Release(&resource.second);
-				for (auto resource : renderMeshes)
-					DXRenderMesh::Release(&resource.second);
-				for (auto resource : loadedRenderMeshes)
-					DXRenderMesh::Release(&resource.second);
-				for (auto resource : constantBuffers)
-					delete resource.second.StartSlots;
-				vertexInfo.clear();
-				loadedVertexInfo.clear();
-			}
+			void Release();
 		};
 	}
 }

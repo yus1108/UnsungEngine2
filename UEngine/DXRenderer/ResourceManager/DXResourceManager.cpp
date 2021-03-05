@@ -1,6 +1,7 @@
 #include "dxrframework.h"
 #include "DXResourceManager.h"
 #include "..\Utility\UMath.h"
+#include "DXScene.h"
 
 // compiled shaders list
 #ifdef _DEBUG
@@ -37,15 +38,15 @@ namespace UEngine
 
 		void DXResourceManager::SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh)
 		{
-			if (loadedRenderMeshes[resource_name] != nullptr)
-				DXRenderMesh::Release(&loadedRenderMeshes[resource_name]);
+			if (shared_rendermesh[resource_name]->renderMesh != nullptr)
+				DXRenderMesh::Release(&shared_rendermesh[resource_name]->renderMesh);
 
-			loadedRenderMeshes[resource_name] = renderMesh;
+			shared_rendermesh[resource_name]->renderMesh = renderMesh;
 		}
 
 		void DXResourceManager::SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices)
 		{
-			loadedVertexInfo[resource_name] = vertices;
+			shared_rendermesh[resource_name]->vertices = vertices;
 		}
 
 		void DXResourceManager::SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer)
@@ -55,15 +56,15 @@ namespace UEngine
 
 		DXRenderMesh* DXResourceManager::GetRenderMesh(std::string resource_name)
 		{
-			if (renderMeshes[resource_name] == nullptr)
-				return loadedRenderMeshes[resource_name];
+	/*		if (renderMeshes[resource_name] == nullptr)
+				return loadedRenderMeshes[resource_name];*/
 			return renderMeshes[resource_name];
 		}
 
 		std::vector<SIMPLE_VERTEX> DXResourceManager::GetVertices(std::string resource_name)
 		{
-			if (vertexInfo[resource_name].size() == 0)
-				return loadedVertexInfo[resource_name];
+			//if (vertexInfo[resource_name].size() == 0)
+				//return loadedVertexInfo[resource_name];
 			return vertexInfo[resource_name];
 		}
 
@@ -321,6 +322,24 @@ namespace UEngine
 				UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
 				new UINT[1] { 1 }
 			};
+		}
+
+		void DXResourceManager::Release()
+		{
+			{
+				for (auto resource : shaders)
+					DXShader::Release(&resource.second);
+				for (auto resource : renderMeshes)
+					DXRenderMesh::Release(&resource.second);
+				for (auto resource : constantBuffers)
+					delete resource.second.StartSlots;
+				for (auto resource : shared_rendermesh)
+					DXRenderMesh::Release(&resource.second->renderMesh);
+				for (auto resource : scenes)
+					delete resource.second;
+				shared_rendermesh.clear();
+				scenes.clear();
+			}
 		}
 	}
 }

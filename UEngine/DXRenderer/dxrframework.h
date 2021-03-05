@@ -30,6 +30,7 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 
+
 #include "Texture Loader\DDSTextureLoader.h"
 #include "Texture Loader\WICTextureLoader.h"
 

@@ -1,10 +1,19 @@
 #pragma once
 
-namespace DXRenderer
+namespace UEngine
 {
-	class DXScene final
+	namespace DXRenderer
 	{
-	public:
-		std::unordered_map<std::string, const struct SHARED_RENDERMESH*> loadedRenderMeshes;
-	};
+		class DXScene final
+		{
+			friend class DXResourceManager;
+		private:
+			DXScene() = default;
+			~DXScene() = default;
+
+		public:
+			std::unordered_map<std::string, const struct SHARED_RENDERMESH*> loadedRenderMeshes;
+		};
+	}
 }
+
