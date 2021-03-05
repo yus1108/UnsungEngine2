@@ -6,6 +6,8 @@ namespace UEngine
 	{
 	private:
 		RenderObject* renderObject{ nullptr };
+		std::string renderMesh_name;
+		std::string shader_name;
 
 		void Awake() override { renderObject = nullptr; }
 		void OnEnable() override;

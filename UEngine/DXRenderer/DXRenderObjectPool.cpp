@@ -5,6 +5,30 @@ UEngine::DXRenderer::DXRenderObjectPool UEngine::DXRenderer::DXRenderObjectPool:
 
 UEngine::DXRenderer::DXRenderObject* UEngine::DXRenderer::DXRenderObjectPool::LoadObject(std::string renderMesh, std::string shader)
 {
+	std::queue<DXRenderObject*> tempQueue;
+	while (!creationQueue.empty())
+	{
+		auto object = creationQueue.front();
+		creationQueue.pop();
+		if (object->GetName() == renderMesh + shader)
+		{
+			while (!tempQueue.empty())
+			{
+				auto tempObject = tempQueue.front();
+				tempQueue.pop();
+				creationQueue.push(tempObject);
+			}
+			creationQueue.push(object);
+			return object;
+		}
+		tempQueue.push(object);
+	}
+	while (!tempQueue.empty())
+	{
+		auto object = tempQueue.front();
+		tempQueue.pop();
+		creationQueue.push(object);
+	}
 	if (poolMap[renderMesh + shader] != nullptr)
 		return poolMap[renderMesh + shader];
 

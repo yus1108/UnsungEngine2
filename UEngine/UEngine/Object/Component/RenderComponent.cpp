@@ -4,6 +4,8 @@
 void UEngine::RenderComponent::OnEnable()
 {
 	if (renderObject) GameState::Get()->gameScene.AddObject(renderObject);
+	else if (!renderMesh_name.empty() && !shader_name.empty())
+		Load(renderMesh_name, shader_name);
 }
 
 void UEngine::RenderComponent::OnDisable()
@@ -11,7 +13,7 @@ void UEngine::RenderComponent::OnDisable()
 	if (renderObject)
 	{
 		GameState::Get()->gameScene.RemoveObject(renderObject);
-		//renderObject = nullptr;
+		renderObject = nullptr;
 	}
 }
 
@@ -19,6 +21,8 @@ void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string sha
 {
 	OnDisable();
 	renderObject = GameState::Get()->gameScene.LoadObject(renderMesh_name, shader_name);
+	this->renderMesh_name = renderMesh_name;
+	this->shader_name = shader_name;
 	if (GetGameObject()->GetActive() && GetEnable())
 	{
 		GameState::Get()->gameScene.AddObject(renderObject);

@@ -37,6 +37,7 @@ namespace UEngine
 			{
 				if (enable && !enabled)
 				{
+					enabled = true;
 					OnEnable();
 					if (!isStart)
 					{
@@ -44,9 +45,14 @@ namespace UEngine
 						isStart = true;
 					}
 				}
-				else if (!enable && enabled) OnDisable();
+				else if (!enable && enabled)
+				{
+					enabled = false;
+					OnDisable();
+				}
 			}
-			enabled = enable;
+			else
+				enabled = enable;
 		}
 		bool GetEnable() { return enabled; }
 
