@@ -52,13 +52,13 @@ void UEngine::RenderObjectPool::OnPreRender()
 	for (auto objectPair : deletionMap)
 	{
 		auto object = objectPair.second;
-		delete (*pool[object->objectNumber])[object];
 		pool[object->objectNumber]->erase(object);
 		if (pool[object->objectNumber]->size() == 0)
 		{
 			delete pool[object->objectNumber];
 			pool.erase(object->objectNumber);
 		}
+		delete object;
 	}
 	deletionMap.clear();
 }

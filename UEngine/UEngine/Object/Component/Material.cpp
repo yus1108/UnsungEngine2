@@ -13,9 +13,10 @@ void UEngine::Material::LateUpdate()
 {
 	auto renderComponent = GetComponent<RenderComponent>();
 	if (renderComponent == nullptr) return;
-	if (renderObject == nullptr || renderObject != renderComponent->GetRenderObject())
+	if (renderObject != renderComponent->GetRenderObject())
 	{
 		renderObject = renderComponent->GetRenderObject();
+		if (renderObject == nullptr) return;
 		renderComponent->AddConstantBuffer(typeid(Color).raw_name(), colorBuffer);
 		renderComponent->AddConstantBuffer(typeid(UV).raw_name(), spriteBuffer);
 		renderComponent->AddImageTexture(imageTexture);

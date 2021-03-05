@@ -24,9 +24,10 @@ void UEngine::Transform::LateUpdate()
 
 	auto renderComponent = GetComponent<RenderComponent>();
 	if (renderComponent == nullptr) return;
-	if (renderObject == nullptr || renderObject != renderComponent->GetRenderObject())
+	if (renderObject != renderComponent->GetRenderObject())
 	{
 		renderObject = renderComponent->GetRenderObject();
+		if (renderObject == nullptr) return;
 		renderComponent->AddConstantBuffer(typeid(this).raw_name(), worldBuffer);
 	}
 }

@@ -41,7 +41,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         desc.InitWinInput = true;
         desc.NCmdShow = nCmdShow;
         desc.TitleName = L"Puzzle";
-        desc.WindowSize = { 1280, 853 };
+        desc.WindowSize = { 800, 600 };
         desc.Wcex = &Wcex;
 
         app->Create(desc);

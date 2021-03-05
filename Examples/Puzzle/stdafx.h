@@ -33,3 +33,4 @@
 using namespace UEngine;
 
 #include "Scene.h"
+#include "Puzzle.h"
