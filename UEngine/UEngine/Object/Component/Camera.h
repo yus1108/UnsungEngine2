@@ -1,11 +1,10 @@
 #pragma once
-#include <iostream>
 
 namespace UEngine
 {
 	class Camera : public Component
 	{
-		friend class GameScene;
+		friend class GameView;
 	private:
 		DXRenderer::DXView* view{ nullptr };
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };

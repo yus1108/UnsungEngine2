@@ -1,5 +1,9 @@
 #pragma once
 
+#include "ResourceManager\ResourceManager.h"
+#include "Game\Render\GameView.h"
+#include "Game Architecture\Collision\SpatialPartition2D.h"
+
 namespace UEngine
 {
 	class GameState
@@ -24,7 +28,8 @@ namespace UEngine
 		float deltatime{ 0 };
 
 		std::list<class GameObject*> gameObjects;
-		ConstantBufferPool constantBufferPool;
+
+
 		SpatialPartition2D spatialPartition2d;
 		DebugRenderer debugRenderer;
 
@@ -32,7 +37,8 @@ namespace UEngine
 		float FixedTimestep{ 0.02f };
 		float MaxFixedTimestep{ 0.1f };
 
-		GameScene gameScene;
+		GameView gameScene;
+		ResourceManager ResourceManager{ this };
 		Utility::Sync::UThreadPool threadPool;
 
 	private:

@@ -1,7 +1,7 @@
 #include "UEngine.h"
-#include "GameScene.h"
+#include "GameView.h"
 
-UEngine::GameScene::~GameScene()
+UEngine::GameView::~GameView()
 {
 	while (!viewCreationQueue.empty())
 	{
@@ -20,9 +20,24 @@ UEngine::GameScene::~GameScene()
 	}
 }
 
-void UEngine::GameScene::OnPreRender()
+UEngine::RenderObject* UEngine::GameView::LoadObject(std::string renderMesh_name, std::string shader_name)
+{ 
+	return GameState::Get()->ResourceManager.renderObjectPool.LoadObject(renderMesh_name, shader_name);
+}
+
+void UEngine::GameView::AddObject(RenderObject* const renderObject)
+{ 
+	GameState::Get()->ResourceManager.renderObjectPool.Add(renderObject);
+}
+
+void UEngine::GameView::RemoveObject(RenderObject* const renderObject)
+{ 
+	GameState::Get()->ResourceManager.renderObjectPool.Remove(renderObject);
+}
+
+void UEngine::GameView::OnPreRender()
 {
-	renderObjectPool.OnPreRender();
+	GameState::Get()->ResourceManager.renderObjectPool.OnPreRender();
 	if (mainView == nullptr)
 	{
 		mainView = Camera::mainCamera->view;
@@ -44,16 +59,16 @@ void UEngine::GameScene::OnPreRender()
 	
 }
 
-void UEngine::GameScene::OnRender()
+void UEngine::GameView::OnRender()
 {
 	if (!mainView) throw std::out_of_range("there is no main view");
 	mainView->Begin();
 	mainCameraBuffer->Set(mainView->GetDeviceContext());
-	renderObjectPool.OnRender(mainView->GetDeviceContext());
+	GameState::Get()->ResourceManager.renderObjectPool.OnRender(mainView->GetDeviceContext());
 	mainView->End();
 }
 
-void UEngine::GameScene::OnPostRender()
+void UEngine::GameView::OnPostRender()
 {
 	mainView->Execute(DXRenderer::Get()->GetImmediateDeviceContext());
 }

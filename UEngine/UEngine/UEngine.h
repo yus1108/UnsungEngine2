@@ -12,17 +12,34 @@
 #include "../WinApplication/uengine_winapp.h"
 #include "../DXRenderer/dxrframework.h"
 
+#ifdef _DEBUG
+
+#ifdef _WIN64
+#else
+
+#pragma comment(lib, "../Debug/Utility.lib")
+#pragma comment(lib, "../Debug/WinApplication.lib")
+#pragma comment(lib, "../Debug/DXRenderer.lib")
+
+#endif
+
+#else
+
+#ifdef _WIN64
+
+#else
+
+#endif
+
+#endif
+
 
 #include "UEngineDefinitions.h"
 #include "Math\Math.h"
 #include "DebugRenderer\DebugRenderer.h"
 
-#include "Pool\RenderObjectPool.h"
-#include "Pool\ConstantBufferPool.h"
-
 #include "Game Architecture\Collision\Component\Collider.h"
-#include "Game Architecture\Collision\SpatialPartition2D.h"
-#include "Game\GameScene.h"
+
 #include "Game\GameState.h"
 
 #include "Object\Component\Component.h"
@@ -31,3 +48,4 @@
 #include "Object\Component\Material.h"
 #include "Object\Component\RenderComponent.h"
 #include "Object\GameObject.h"
+

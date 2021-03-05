@@ -6,9 +6,6 @@
     <ClInclude Include="Game\GameState.h">
       <Filter>Game Architecture</Filter>
     </ClInclude>
-    <ClInclude Include="Pool\RenderObjectPool.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
     <ClInclude Include="Object\GameObject.h">
       <Filter>Game Architecture\Object</Filter>
     </ClInclude>
@@ -20,9 +17,6 @@
     </ClInclude>
     <ClInclude Include="Object\Component\RenderComponent.h">
       <Filter>Game Architecture\Object\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Pool\ConstantBufferPool.h">
-      <Filter>ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Object\Component\Transform.h">
       <Filter>Game Architecture\Object\Component</Filter>
@@ -36,23 +30,29 @@
     <ClInclude Include="Math\Math.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameScene.h">
-      <Filter>Game Architecture\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Game Architecture\Collision\SpatialPartition2D.h">
       <Filter>Game Architecture\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Game Architecture\Collision\Component\Collider.h">
       <Filter>Game Architecture\Collision\Component</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager\ResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Render\GameView.h">
+      <Filter>Game Architecture\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\ConstantBufferPool.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\RenderObjectPool.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
     <ClCompile Include="Game\GameState.cpp">
       <Filter>Game Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Pool\RenderObjectPool.cpp">
-      <Filter>ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Object\GameObject.cpp">
       <Filter>Game Architecture\Object</Filter>
@@ -62,9 +62,6 @@
     </ClCompile>
     <ClCompile Include="Object\Component\RenderComponent.cpp">
       <Filter>Game Architecture\Object\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Pool\ConstantBufferPool.cpp">
-      <Filter>ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Object\Component\Transform.cpp">
       <Filter>Game Architecture\Object\Component</Filter>
@@ -78,14 +75,23 @@
     <ClCompile Include="Math\Math.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameScene.cpp">
-      <Filter>Game Architecture\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Game Architecture\Collision\SpatialPartition2D.cpp">
       <Filter>Game Architecture\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Game Architecture\Collision\Component\Collider.cpp">
       <Filter>Game Architecture\Collision\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\ResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Render\GameView.cpp">
+      <Filter>Game Architecture\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\ConstantBufferPool.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\RenderObjectPool.cpp">
+      <Filter>ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </Filter>
     <Filter Include="Game Architecture\Collision\Component">
       <UniqueIdentifier>{a9105e1d-0924-455a-9b38-6c5dd4896038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Render">
+      <UniqueIdentifier>{4a7e18a7-3862-4659-918d-8a4d840ea273}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

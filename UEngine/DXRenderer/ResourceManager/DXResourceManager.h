@@ -1,5 +1,6 @@
 #pragma once
 #include "dxrframework.h"
+#include "DXRenderObjectPool.h"
 
 namespace UEngine
 {
@@ -30,6 +31,8 @@ namespace UEngine
 			std::unordered_map<std::string, CONSTANT_BUFFER_DESC> constantBuffers;
 
 		public:
+			DXRenderObjectPool RenderObjectPool = DXRenderObjectPool(this);
+
 			void SetShaders(std::string resource_name, DXShader* shader);
 			void SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh);
 			void SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices);

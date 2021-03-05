@@ -161,36 +161,36 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DXConstantBuffer.h" />
     <ClInclude Include="DXRDefinitions.h" />
     <ClInclude Include="DXRenderer.h" />
-    <ClInclude Include="DXRenderMesh.h" />
-    <ClInclude Include="DXRenderObject.h" />
-    <ClInclude Include="DXRenderObjectPool.h" />
-    <ClInclude Include="DXResourceManager.h" />
     <ClInclude Include="DXRFramework.h" />
-    <ClInclude Include="DXShader.h" />
-    <ClInclude Include="DXView.h" />
+    <ClInclude Include="RenderComponents\DXConstantBuffer.h" />
+    <ClInclude Include="RenderComponents\DXRenderMesh.h" />
+    <ClInclude Include="RenderComponents\DXRenderObject.h" />
+    <ClInclude Include="RenderComponents\DXShader.h" />
     <ClInclude Include="RenderComponents\DXTexture.h" />
+    <ClInclude Include="RenderComponents\DXView.h" />
+    <ClInclude Include="ResourceManager\DXRenderObjectPool.h" />
+    <ClInclude Include="ResourceManager\DXResourceManager.h" />
     <ClInclude Include="Texture Loader\DDSTextureLoader.h" />
     <ClInclude Include="Texture Loader\WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DXConstantBuffer.cpp" />
     <ClCompile Include="DXRenderer.cpp" />
-    <ClCompile Include="DXRenderMesh.cpp" />
-    <ClCompile Include="DXRenderObject.cpp" />
-    <ClCompile Include="DXRenderObjectPool.cpp" />
-    <ClCompile Include="DXResourceManager.cpp" />
     <ClCompile Include="DXRFramework.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="DXShader.cpp" />
-    <ClCompile Include="DXView.cpp" />
+    <ClCompile Include="RenderComponents\DXConstantBuffer.cpp" />
+    <ClCompile Include="RenderComponents\DXRenderMesh.cpp" />
+    <ClCompile Include="RenderComponents\DXRenderObject.cpp" />
+    <ClCompile Include="RenderComponents\DXShader.cpp" />
     <ClCompile Include="RenderComponents\DXTexture.cpp" />
+    <ClCompile Include="RenderComponents\DXView.cpp" />
+    <ClCompile Include="ResourceManager\DXRenderObjectPool.cpp" />
+    <ClCompile Include="ResourceManager\DXResourceManager.cpp" />
     <ClCompile Include="Texture Loader\DDSTextureLoader.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dxrframework.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxrframework.h</PrecompiledHeaderFile>

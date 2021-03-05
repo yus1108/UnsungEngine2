@@ -14,7 +14,7 @@ namespace UEngine
 		void Awake() override;
 		void LateUpdate() override;
 		void OnPreRender() override;
-		virtual void OnDestroy() override { GameState::Get()->constantBufferPool.Remove(worldBuffer); }
+		virtual void OnDestroy() override { GameState::Get()->ResourceManager.ConstantBufferPool.Remove(worldBuffer); }
 
 	public:
 		Vector3 localPosition{ 0, 0, 0 };

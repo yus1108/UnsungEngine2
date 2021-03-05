@@ -38,7 +38,7 @@ namespace UEngine
 					auto manager = DXResourceManager::Get();
 					manager->Init();
 
-					default_renderObject = DXRenderObjectPool::Get()->LoadObject("default", "default");
+					default_renderObject = DXResourceManager::Get()->RenderObjectPool.LoadObject("default", "default");
 					default_colorBuffer = DXConstantBuffer::Instantiate(this, manager->GetConstantBuffer(typeid(Color).raw_name()));
 					default_colorBuffer->CopyData<Color>(&color, sizeof(color));
 					default_colorBuffer->Update(immediate.DeviceContext.Get());

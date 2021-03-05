@@ -26,7 +26,7 @@ void UEngine::GameState::Update()
 {
     // cpu-gpu transfer
     gameScene.OnPreRender();
-    constantBufferPool.OnPreRender();
+    ResourceManager.ConstantBufferPool.OnPreRender();
 
     // resources mapping
     for (auto obj : gameObjects)

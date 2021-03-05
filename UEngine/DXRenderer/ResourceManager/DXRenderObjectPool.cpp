@@ -1,8 +1,6 @@
 #include "dxrframework.h"
 #include "DXRenderObjectPool.h"
 
-UEngine::DXRenderer::DXRenderObjectPool UEngine::DXRenderer::DXRenderObjectPool::instance;
-
 UEngine::DXRenderer::DXRenderObject* UEngine::DXRenderer::DXRenderObjectPool::LoadObject(std::string renderMesh, std::string shader)
 {
 	std::queue<DXRenderObject*> tempQueue;

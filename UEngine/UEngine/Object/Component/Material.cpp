@@ -5,8 +5,8 @@ void UEngine::Material::Awake()
 {
 	colorBuffer->AttachData(&color, sizeof(Color));
 	spriteBuffer->AttachData(&uv, sizeof(UV));
-	GameState::Get()->constantBufferPool.Add(colorBuffer);
-	GameState::Get()->constantBufferPool.Add(spriteBuffer);
+	GameState::Get()->ResourceManager.ConstantBufferPool.Add(colorBuffer);
+	GameState::Get()->ResourceManager.ConstantBufferPool.Add(spriteBuffer);
 }
 
 void UEngine::Material::LateUpdate()
@@ -31,8 +31,8 @@ void UEngine::Material::OnPreRender()
 
 void UEngine::Material::OnDestroy()
 {
-	GameState::Get()->constantBufferPool.Remove(colorBuffer);
-	GameState::Get()->constantBufferPool.Remove(spriteBuffer);
+	GameState::Get()->ResourceManager.ConstantBufferPool.Remove(colorBuffer);
+	GameState::Get()->ResourceManager.ConstantBufferPool.Remove(spriteBuffer);
 	DXRenderer::DXTexture::Release(&imageTexture);
 }
 

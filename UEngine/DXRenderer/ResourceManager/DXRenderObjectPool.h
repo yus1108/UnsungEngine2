@@ -1,4 +1,5 @@
 #pragma once
+#include "DXResourceManager.h"
 
 namespace UEngine
 {
@@ -6,15 +7,8 @@ namespace UEngine
 	{
 		class DXRenderObjectPool
 		{
-#pragma region Singleton
-		public:
-			static DXRenderObjectPool* Get() { return &instance; }
-
 		private:
-			DXRenderObjectPool() = default;
-			~DXRenderObjectPool() { Clear(); }
-			static DXRenderObjectPool instance;
-#pragma endregion
+			class DXResourceManager* parent_dxResourceManager;
 
 		private:
 			std::map<std::string, DXRenderObject*> poolMap;
@@ -23,6 +17,9 @@ namespace UEngine
 			std::queue<DXRenderObject*> deletionQueue;
 
 		public:
+			DXRenderObjectPool(DXResourceManager* parent) : parent_dxResourceManager(parent) {}
+			~DXRenderObjectPool() { Clear(); }
+
 			DXRenderObject* LoadObject(std::string renderMesh, std::string shader);
 			void Clear();
 

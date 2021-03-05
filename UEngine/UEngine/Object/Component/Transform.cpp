@@ -4,7 +4,7 @@
 void UEngine::Transform::Awake()
 {
 	worldBuffer->AttachData(&world, sizeof(CPU_WORLD));
-	GameState::Get()->constantBufferPool.Add(worldBuffer);
+	GameState::Get()->ResourceManager.ConstantBufferPool.Add(worldBuffer);
 }
 
 void UEngine::Transform::LateUpdate()

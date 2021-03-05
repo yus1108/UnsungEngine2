@@ -1,6 +1,5 @@
 #pragma once
 #include "dxrframework.h"
-#include "DXRenderMesh.h"
 
 namespace UEngine
 {

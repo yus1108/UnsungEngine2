@@ -35,11 +35,12 @@
 
 #include "DXRDefinitions.h"
 #include "DXRenderer.h"
-#include "DXShader.h"
-#include "DXRenderMesh.h"
-#include "DXConstantBuffer.h"
-#include "DXResourceManager.h"
-#include "DXRenderObject.h"
-#include "DXRenderObjectPool.h"
-#include "DXView.h"
+
+#include "RenderComponents\DXShader.h"
+#include "RenderComponents\DXRenderMesh.h"
+#include "RenderComponents\DXConstantBuffer.h"
+#include "RenderComponents\DXRenderObject.h"
+#include "RenderComponents\DXView.h"
 #include "RenderComponents\DXTexture.h"
+
+#include "ResourceManager\DXResourceManager.h"

@@ -31,7 +31,7 @@ void UEngine::Camera::Awake()
     );
     cameraBuffer->AttachData(&cpu_camera, sizeof(CPU_CAMERA));
 
-    GameState::Get()->constantBufferPool.Add(cameraBuffer);
+    GameState::Get()->ResourceManager.ConstantBufferPool.Add(cameraBuffer);
     GameState::Get()->gameScene.AddView(view);
 }
 
@@ -69,7 +69,7 @@ void UEngine::Camera::OnPreRender()
 void UEngine::Camera::OnDestroy()
 {
     GameState::Get()->gameScene.RemoveView(view);
-    GameState::Get()->constantBufferPool.Remove(cameraBuffer);
+    GameState::Get()->ResourceManager.ConstantBufferPool.Remove(cameraBuffer);
 }
 
 

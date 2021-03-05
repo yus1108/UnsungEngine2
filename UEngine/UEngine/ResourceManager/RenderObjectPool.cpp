@@ -3,7 +3,7 @@
 
 UEngine::RenderObject* UEngine::RenderObjectPool::LoadObject(std::string renderMesh, std::string shader)
 {
-	auto DXRObject = modelPool->LoadObject(renderMesh, shader);
+	auto DXRObject = DXRenderer::DXResourceManager::Get()->RenderObjectPool.LoadObject(renderMesh, shader);
 	RenderObject* renderObject = new RenderObject();
 	renderObject->objectNumber = DXRObject->GetID();
 	return renderObject;
@@ -40,7 +40,7 @@ void UEngine::RenderObjectPool::Clear()
 
 void UEngine::RenderObjectPool::OnPreRender()
 {
-	modelPool->OnPreRender();
+	DXRenderer::DXResourceManager::Get()->RenderObjectPool.OnPreRender();
 	while (!creationQueue.empty())
 	{
 		auto curr = creationQueue.front();
@@ -68,7 +68,7 @@ void UEngine::RenderObjectPool::OnRender(ID3D11DeviceContext* deviceContext)
 	// render
 	for (auto desc : pool)
 	{
-		auto model = modelPool->GetObjectByID(desc.first);
+		auto model = DXRenderer::DXResourceManager::Get()->RenderObjectPool.GetObjectByID(desc.first);
 		model->Set(deviceContext);
 		for (auto objectPair : *desc.second)
 		{
