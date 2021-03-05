@@ -167,12 +167,16 @@
     <ClInclude Include="RenderComponents\DXConstantBuffer.h" />
     <ClInclude Include="RenderComponents\DXRenderMesh.h" />
     <ClInclude Include="RenderComponents\DXRenderObject.h" />
+    <ClInclude Include="RenderComponents\DXScene.h" />
     <ClInclude Include="RenderComponents\DXShader.h" />
     <ClInclude Include="RenderComponents\DXTexture.h" />
     <ClInclude Include="RenderComponents\DXView.h" />
+    <ClInclude Include="ResourceManager\DXRenderMeshManager.h" />
     <ClInclude Include="ResourceManager\DXRenderObjectPool.h" />
     <ClInclude Include="ResourceManager\DXResourceManager.h" />
-    <ClInclude Include="ResourceManager\DXScene.h" />
+    <ClInclude Include="ResourceManager\DXSceneManager.h" />
+    <ClInclude Include="ResourceManager\DXRenderObjectManager.h" />
+    <ClInclude Include="ResourceManager\DXViewManager.h" />
     <ClInclude Include="Texture Loader\DDSTextureLoader.h" />
     <ClInclude Include="Texture Loader\WICTextureLoader.h" />
   </ItemGroup>
@@ -187,12 +191,16 @@
     <ClCompile Include="RenderComponents\DXConstantBuffer.cpp" />
     <ClCompile Include="RenderComponents\DXRenderMesh.cpp" />
     <ClCompile Include="RenderComponents\DXRenderObject.cpp" />
+    <ClCompile Include="RenderComponents\DXScene.cpp" />
     <ClCompile Include="RenderComponents\DXShader.cpp" />
     <ClCompile Include="RenderComponents\DXTexture.cpp" />
     <ClCompile Include="RenderComponents\DXView.cpp" />
+    <ClCompile Include="ResourceManager\DXRenderMeshManager.cpp" />
+    <ClCompile Include="ResourceManager\DXRenderObjectManager.cpp" />
     <ClCompile Include="ResourceManager\DXRenderObjectPool.cpp" />
     <ClCompile Include="ResourceManager\DXResourceManager.cpp" />
-    <ClCompile Include="ResourceManager\DXScene.cpp" />
+    <ClCompile Include="ResourceManager\DXSceneManager.cpp" />
+    <ClCompile Include="ResourceManager\DXViewManager.cpp" />
     <ClCompile Include="Texture Loader\DDSTextureLoader.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dxrframework.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxrframework.h</PrecompiledHeaderFile>

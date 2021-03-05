@@ -101,7 +101,7 @@ namespace UEngine
 		{
 			class DXRenderMesh* renderMesh;
 			std::vector<SIMPLE_VERTEX> vertices;
-			std::vector<class DXScene*> scenes;
+			std::vector<class DXRenderObject*> renderObjects;
 		};
 	}
 }

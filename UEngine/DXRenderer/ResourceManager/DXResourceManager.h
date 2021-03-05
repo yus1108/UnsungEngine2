@@ -1,6 +1,7 @@
 #pragma once
-#include "dxrframework.h"
-#include "DXRenderObjectPool.h"
+#include "DXSceneManager.h"
+#include "DXViewManager.h"
+#include "DXRenderObjectManager.h"
 
 namespace UEngine
 {
@@ -8,37 +9,22 @@ namespace UEngine
 	{
 		class DXResourceManager
 		{
+			friend class DXRenderer;
 		private:
-			
 			/*
 				key: std::string - typeid(cpu_buffer_struct).raw_name()
 				value: CONSTANT_BUFFER_DESC - description to create a buffer
 			*/
 			std::unordered_map<std::string, CONSTANT_BUFFER_DESC> constantBuffers;
 			std::unordered_map<std::string, DXShader*> shaders;
-			std::map<std::string, DXRenderMesh*> renderMeshes;
-			std::map<std::string, std::vector<SIMPLE_VERTEX>> vertexInfo;
+			std::unordered_map<std::string, SHARED_RENDERMESH> defaultRenderMeshes;
+			ResourceManager::DXRenderObjectManager renderObjectManager;
+			ResourceManager::DXViewManager viewManager{ this };
+			ResourceManager::DXSceneManager sceneManager{ this };
 
-			std::unordered_map<std::string, SHARED_RENDERMESH*> shared_rendermesh;
-			std::unordered_map<std::string, DXScene*> scenes;
-
-		public:
-			DXResourceManager() = default;
+			DXResourceManager() {}
 			~DXResourceManager() { Release(); }
-
-			DXRenderObjectPool RenderObjectPool = DXRenderObjectPool(this);
-
-			void SetShaders(std::string resource_name, DXShader* shader);
-			void SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh);
-			void SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices);
-			void SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer);
-
-			// resource_name : typeid(cpu_buffer_struct).raw_name()
-			CONSTANT_BUFFER_DESC GetConstantBuffer(std::string resource_name) { return constantBuffers[resource_name]; }
-			DXShader* GetShaders(std::string resource_name) { return shaders[resource_name]; }
-			DXRenderMesh* GetRenderMesh(std::string resource_name);
-			std::vector<SIMPLE_VERTEX> GetVertices(std::string resource_name);
-
+		public:
 			void Init();
 
 		private:
@@ -50,3 +36,15 @@ namespace UEngine
 		};
 	}
 }
+
+///*
+		//	key: std::string - typeid(cpu_buffer_struct).raw_name()
+		//	value: CONSTANT_BUFFER_DESC - description to create a buffer
+		//*/
+		//
+		//std::unordered_map<std::string, DXShader*> shaders;
+		//std::map<std::string, DXRenderMesh*> renderMeshes;
+		//std::map<std::string, std::vector<SIMPLE_VERTEX>> vertexInfo;
+
+		//std::unordered_map<std::string, SHARED_RENDERMESH*> shared_rendermesh;
+		//std::unordered_map<std::string, DXScene*> scenes;

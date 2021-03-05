@@ -54,8 +54,20 @@
     <ClInclude Include="RenderComponents\DXConstantBuffer.h">
       <Filter>RenderComponents</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager\DXScene.h">
+    <ClInclude Include="ResourceManager\DXSceneManager.h">
       <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\DXRenderObjectManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\DXViewManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\DXRenderMeshManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponents\DXScene.h">
+      <Filter>RenderComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -91,8 +103,20 @@
     <ClCompile Include="RenderComponents\DXConstantBuffer.cpp">
       <Filter>RenderComponents</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\DXScene.cpp">
+    <ClCompile Include="ResourceManager\DXSceneManager.cpp">
       <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\DXRenderObjectManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\DXViewManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\DXRenderMeshManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponents\DXScene.cpp">
+      <Filter>RenderComponents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

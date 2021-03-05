@@ -1,7 +1,5 @@
 #include "dxrframework.h"
 #include "DXResourceManager.h"
-#include "..\Utility\UMath.h"
-#include "DXScene.h"
 
 // compiled shaders list
 #ifdef _DEBUG
@@ -28,46 +26,6 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		void DXResourceManager::SetShaders(std::string resource_name, DXShader* shader)
-		{
-			if (shaders[resource_name] != nullptr)
-				DXShader::Release(&shaders[resource_name]);
-
-			shaders[resource_name] = shader;
-		}
-
-		void DXResourceManager::SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh)
-		{
-			if (shared_rendermesh[resource_name]->renderMesh != nullptr)
-				DXRenderMesh::Release(&shared_rendermesh[resource_name]->renderMesh);
-
-			shared_rendermesh[resource_name]->renderMesh = renderMesh;
-		}
-
-		void DXResourceManager::SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices)
-		{
-			shared_rendermesh[resource_name]->vertices = vertices;
-		}
-
-		void DXResourceManager::SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer)
-		{
-			constantBuffers[resource_name] = constantBuffer;
-		}
-
-		DXRenderMesh* DXResourceManager::GetRenderMesh(std::string resource_name)
-		{
-	/*		if (renderMeshes[resource_name] == nullptr)
-				return loadedRenderMeshes[resource_name];*/
-			return renderMeshes[resource_name];
-		}
-
-		std::vector<SIMPLE_VERTEX> DXResourceManager::GetVertices(std::string resource_name)
-		{
-			//if (vertexInfo[resource_name].size() == 0)
-				//return loadedVertexInfo[resource_name];
-			return vertexInfo[resource_name];
-		}
-
 		void DXResourceManager::Init()
 		{
 			Release();
@@ -157,7 +115,7 @@ namespace UEngine
 
 		void DXResourceManager::InitRenderMesh()
 		{
-			auto device = DXRenderer::Get()->GetDevice();
+			/*auto device = DXRenderer::Get()->GetDevice();
 
 			{
 				auto vertices = std::vector<SIMPLE_VERTEX>
@@ -284,12 +242,12 @@ namespace UEngine
 						&indices[0],
 						indices.size()
 						);
-			}
+			}*/
 		}
 
 		void DXResourceManager::InitConstantBuffer()
 		{
-			auto renderer = DXRenderer::Get();
+			/*auto renderer = DXRenderer::Get();
 
 			constantBuffers[typeid(Color).raw_name()] = CONSTANT_BUFFER_DESC
 			{
@@ -321,7 +279,7 @@ namespace UEngine
 				sizeof(CPU_CAMERA),
 				UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
 				new UINT[1] { 1 }
-			};
+			};*/
 		}
 
 		void DXResourceManager::Release()
@@ -329,16 +287,15 @@ namespace UEngine
 			{
 				for (auto resource : shaders)
 					DXShader::Release(&resource.second);
-				for (auto resource : renderMeshes)
-					DXRenderMesh::Release(&resource.second);
 				for (auto resource : constantBuffers)
 					delete resource.second.StartSlots;
+				/*for (auto resource : renderMeshes)
+					DXRenderMesh::Release(&resource.second);
 				for (auto resource : shared_rendermesh)
 					DXRenderMesh::Release(&resource.second->renderMesh);
 				for (auto resource : scenes)
 					delete resource.second;
-				shared_rendermesh.clear();
-				scenes.clear();
+				shared_rendermesh.clear();*/
 			}
 		}
 	}

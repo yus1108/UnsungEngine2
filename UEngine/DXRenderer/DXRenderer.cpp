@@ -41,8 +41,9 @@ namespace UEngine
 					Color color{ 1,1,1,1 };
 					ResourceManager->Init();
 
-					default_renderObject = ResourceManager->RenderObjectPool.LoadObject("default", "default");
-					default_colorBuffer = DXConstantBuffer::Instantiate(this, ResourceManager->GetConstantBuffer(typeid(Color).raw_name()));
+					// TODO:
+					/*default_renderObject = ResourceManager->RenderObjectPool.LoadObject("default", "default");
+					default_colorBuffer = DXConstantBuffer::Instantiate(this, ResourceManager->GetConstantBuffer(typeid(Color).raw_name()));*/
 					default_colorBuffer->CopyData<Color>(&color, sizeof(color));
 					default_colorBuffer->Update(immediate.DeviceContext.Get());
 				}

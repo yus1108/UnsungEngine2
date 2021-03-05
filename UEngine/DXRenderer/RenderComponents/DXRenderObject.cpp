@@ -11,8 +11,9 @@ namespace UEngine
 		{
 			auto resourceManager = DXRenderer::Get()->ResourceManager;
 			DXRenderObject* instance = new DXRenderObject;
-			instance->renderMesh = resourceManager->GetRenderMesh(renderMesh);
-			instance->shader = resourceManager->GetShaders(shader);
+			// TODO:
+			/*instance->renderMesh = resourceManager->GetRenderMesh(renderMesh);
+			instance->shader = resourceManager->GetShaders(shader);*/
 			instance->objectID = NextObjectID++;
 			instance->objectName = renderMesh + shader;
 			return instance;
