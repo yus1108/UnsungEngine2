@@ -8,16 +8,6 @@ namespace UEngine
 	{
 		class DXResourceManager
 		{
-#pragma region Singleton
-		public:
-			static DXResourceManager* Get() { return &instance; }
-
-		private:
-			DXResourceManager() = default;
-			~DXResourceManager() { Release(); }
-			static DXResourceManager instance;
-#pragma endregion
-
 		private:
 			std::unordered_map<std::string, DXShader*> shaders;
 			std::map<std::string, DXRenderMesh*> renderMeshes;
@@ -31,6 +21,9 @@ namespace UEngine
 			std::unordered_map<std::string, CONSTANT_BUFFER_DESC> constantBuffers;
 
 		public:
+			DXResourceManager() = default;
+			~DXResourceManager() { Release(); }
+
 			DXRenderObjectPool RenderObjectPool = DXRenderObjectPool(this);
 
 			void SetShaders(std::string resource_name, DXShader* shader);

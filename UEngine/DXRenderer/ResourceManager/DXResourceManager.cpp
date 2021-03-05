@@ -27,8 +27,6 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		DXResourceManager DXResourceManager::instance;
-
 		void DXResourceManager::SetShaders(std::string resource_name, DXShader* shader)
 		{
 			if (shaders[resource_name] != nullptr)

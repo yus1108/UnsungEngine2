@@ -9,7 +9,7 @@ namespace UEngine
 
 		DXRenderObject* const DXRenderObject::Instantiate(std::string renderMesh, std::string shader)
 		{
-			auto resourceManager = DXResourceManager::Get();
+			auto resourceManager = DXRenderer::Get()->ResourceManager;
 			DXRenderObject* instance = new DXRenderObject;
 			instance->renderMesh = resourceManager->GetRenderMesh(renderMesh);
 			instance->shader = resourceManager->GetShaders(shader);

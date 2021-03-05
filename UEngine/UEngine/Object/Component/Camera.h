@@ -34,7 +34,7 @@ namespace UEngine
 			: cameraBuffer
 			(
 				DXRenderer::DXConstantBuffer::Instantiate(DXRenderer::Get(),
-				DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(CPU_CAMERA).raw_name()))
+				DXRenderer::Get()->ResourceManager->GetConstantBuffer(typeid(CPU_CAMERA).raw_name()))
 			) {}
 
 

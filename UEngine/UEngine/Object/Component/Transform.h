@@ -35,7 +35,7 @@ namespace UEngine
 		Transform() : worldBuffer(DXRenderer::DXConstantBuffer::Instantiate
 		(
 			DXRenderer::Get(),
-			DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(CPU_WORLD).raw_name())
+			DXRenderer::Get()->ResourceManager->GetConstantBuffer(typeid(CPU_WORLD).raw_name())
 		)) {}
 	};
 }

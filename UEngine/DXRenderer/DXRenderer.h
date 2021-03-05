@@ -12,7 +12,7 @@ namespace UEngine
 			static DXRenderer* Get() { return &instance; }
 
 		private:
-			DXRenderer() = default;
+			DXRenderer();
 			~DXRenderer() { Release(); }
 			static DXRenderer instance;
 	#pragma endregion
@@ -32,6 +32,8 @@ namespace UEngine
 			Microsoft::WRL::ComPtr<ID3D11DeviceContext> textureContext;
 			Microsoft::WRL::ComPtr<ID3D11CommandList> textureCommands;
 		public:
+			class DXResourceManager* const ResourceManager;
+
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
 			void Release();
 			void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);

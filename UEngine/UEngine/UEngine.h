@@ -12,28 +12,6 @@
 #include "../WinApplication/uengine_winapp.h"
 #include "../DXRenderer/dxrframework.h"
 
-#ifdef _DEBUG
-
-#ifdef _WIN64
-#else
-
-#pragma comment(lib, "../Debug/Utility.lib")
-#pragma comment(lib, "../Debug/WinApplication.lib")
-#pragma comment(lib, "../Debug/DXRenderer.lib")
-
-#endif
-
-#else
-
-#ifdef _WIN64
-
-#else
-
-#endif
-
-#endif
-
-
 #include "UEngineDefinitions.h"
 #include "Math\Math.h"
 #include "DebugRenderer\DebugRenderer.h"

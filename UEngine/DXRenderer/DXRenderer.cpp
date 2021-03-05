@@ -9,6 +9,10 @@ namespace UEngine
 	{
 		DXRenderer DXRenderer::instance;
 
+		DXRenderer::DXRenderer() : ResourceManager(new DXResourceManager())
+		{
+		}
+
 		void DXRenderer::Init
 		(
 			HWND outputWindow,
@@ -35,11 +39,10 @@ namespace UEngine
 
 				{
 					Color color{ 1,1,1,1 };
-					auto manager = DXResourceManager::Get();
-					manager->Init();
+					ResourceManager->Init();
 
-					default_renderObject = DXResourceManager::Get()->RenderObjectPool.LoadObject("default", "default");
-					default_colorBuffer = DXConstantBuffer::Instantiate(this, manager->GetConstantBuffer(typeid(Color).raw_name()));
+					default_renderObject = ResourceManager->RenderObjectPool.LoadObject("default", "default");
+					default_colorBuffer = DXConstantBuffer::Instantiate(this, ResourceManager->GetConstantBuffer(typeid(Color).raw_name()));
 					default_colorBuffer->CopyData<Color>(&color, sizeof(color));
 					default_colorBuffer->Update(immediate.DeviceContext.Get());
 				}
@@ -49,6 +52,7 @@ namespace UEngine
 		void DXRenderer::Release()
 		{
 			DXConstantBuffer::Release(&default_colorBuffer);
+			delete ResourceManager;
 		}
 
 		void DXRenderer::Begin(const float clearRGBA[4])

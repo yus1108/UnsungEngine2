@@ -76,7 +76,7 @@ std::vector<UEngine::Math::Physics2D::PointCoord> UEngine::Math::Physics2D::Make
 UEngine::Math::Physics2D::TriangleCoords UEngine::Math::Physics2D::MakeTriangle(Matrix worldMatrix)
 {
 	Math::Physics2D::TriangleCoords triangle;
-	auto triVertices = DXRenderer::DXResourceManager::Get()->GetVertices("triangle");
+	auto triVertices = DXRenderer::Get()->ResourceManager->GetVertices("triangle");
 	for (size_t i = 0; i < triangle.size(); i++)
 		triangle[i] = Vector2(triVertices[i].pos) * worldMatrix;
 	return triangle;
@@ -152,7 +152,7 @@ UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(std::vector<Po
 
 UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(Matrix worldMatrix)
 {
-	auto rectVertices = DXRenderer::DXResourceManager::Get()->GetVertices("rectangle");
+	auto rectVertices = DXRenderer::Get()->ResourceManager->GetVertices("rectangle");
 	return MakeAABB(rectVertices, worldMatrix);
 }
 

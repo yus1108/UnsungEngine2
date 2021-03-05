@@ -47,7 +47,7 @@ void UEngine::RenderComponent::LoadCircle(UINT slice)
 		return;
 	}
 
-	if (DXRenderer::DXResourceManager::Get()->GetRenderMesh("circle" + slice) == nullptr)
+	if (DXRenderer::Get()->ResourceManager->GetRenderMesh("circle" + slice) == nullptr)
 	{
 		std::vector<DXRenderer::SIMPLE_VERTEX> vertices = std::vector<DXRenderer::SIMPLE_VERTEX>
 		{
@@ -57,7 +57,7 @@ void UEngine::RenderComponent::LoadCircle(UINT slice)
 		for (size_t i = 0; i < slice; i++)
 			vertices.emplace_back(DXRenderer::SIMPLE_VERTEX{ DirectX::XMFLOAT3{0.5f * cos(radian * (slice - i)), 0.5f * sin(radian * (slice - i)), 0} });
 		vertices.shrink_to_fit();
-		DXRenderer::DXResourceManager::Get()->SetVertices("circle" + slice, vertices);
+		DXRenderer::Get()->ResourceManager->SetVertices("circle" + slice, vertices);
 		std::vector<unsigned> indices;
 		for (size_t i = 0; i < slice - 1; i++)
 		{
@@ -68,7 +68,7 @@ void UEngine::RenderComponent::LoadCircle(UINT slice)
 		indices.emplace_back(0);
 		indices.emplace_back(slice);
 		indices.emplace_back(1);
-		DXRenderer::DXResourceManager::Get()->SetRenderMesh("circle" + slice, DXRenderer::DXRenderMesh::Instantiate<DXRenderer::SIMPLE_VERTEX>
+		DXRenderer::Get()->ResourceManager->SetRenderMesh("circle" + slice, DXRenderer::DXRenderMesh::Instantiate<DXRenderer::SIMPLE_VERTEX>
 			(
 				DXRenderer::Get()->GetDevice(),
 				&vertices[0],

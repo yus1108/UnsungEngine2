@@ -25,11 +25,11 @@ namespace UEngine
 			: colorBuffer(DXRenderer::DXConstantBuffer::Instantiate
 			(
 				DXRenderer::Get(),
-				DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(Color).raw_name())
+				DXRenderer::Get()->ResourceManager->GetConstantBuffer(typeid(Color).raw_name())
 			)), spriteBuffer(DXRenderer::DXConstantBuffer::Instantiate
 			(
 				DXRenderer::Get(),
-				DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(UV).raw_name())
+				DXRenderer::Get()->ResourceManager->GetConstantBuffer(typeid(UV).raw_name())
 			))
 		{}
 	};
