@@ -38,9 +38,11 @@ namespace UEngine
 				if (enable && !enabled)
 				{
 					OnEnable();
-					if (isStart) return;
-					Start();
-					isStart = true;
+					if (!isStart)
+					{
+						Start();
+						isStart = true;
+					}
 				}
 				else if (!enable && enabled) OnDisable();
 			}

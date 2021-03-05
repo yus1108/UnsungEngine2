@@ -7,4 +7,8 @@ void Puzzle::Update()
 	{
 		pieces[0][0]->GetComponent<RenderComponent>()->SetEnable(false);
 	}
+	if (WinInput::Get()->GetKey('2'))
+	{
+		pieces[0][0]->GetComponent<RenderComponent>()->SetEnable(true);
+	}
 }

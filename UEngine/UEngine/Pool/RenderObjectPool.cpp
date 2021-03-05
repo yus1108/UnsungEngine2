@@ -58,7 +58,6 @@ void UEngine::RenderObjectPool::OnPreRender()
 			delete pool[object->objectNumber];
 			pool.erase(object->objectNumber);
 		}
-		delete object;
 	}
 	deletionMap.clear();
 }

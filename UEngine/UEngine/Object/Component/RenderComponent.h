@@ -8,7 +8,7 @@ namespace UEngine
 		RenderObject* renderObject{ nullptr };
 
 		void Awake() override { renderObject = nullptr; }
-		void OnEnable() override { if (renderObject) GameState::Get()->gameScene.AddObject(renderObject); }
+		void OnEnable() override;
 		void OnDisable() override;
 	public:
 		void Load(std::string renderMesh_name, std::string shader_name);

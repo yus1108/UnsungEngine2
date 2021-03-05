@@ -1,12 +1,17 @@
 #include "UEngine.h"
 #include "RenderComponent.h"
 
+void UEngine::RenderComponent::OnEnable()
+{
+	if (renderObject) GameState::Get()->gameScene.AddObject(renderObject);
+}
+
 void UEngine::RenderComponent::OnDisable()
 {
 	if (renderObject)
 	{
 		GameState::Get()->gameScene.RemoveObject(renderObject);
-		renderObject = nullptr;
+		//renderObject = nullptr;
 	}
 }
 
