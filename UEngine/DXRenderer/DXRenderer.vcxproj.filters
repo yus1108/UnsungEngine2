@@ -108,5 +108,8 @@
     <FxCompile Include="Shader Files\WorldVS.hlsl">
       <Filter>Shader Files\Vertex Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Shader Files\SpriteVS.hlsl">
+      <Filter>Shader Files\Vertex Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

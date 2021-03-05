@@ -9,6 +9,7 @@ namespace UEngine
 		const RenderObject* renderObject{ nullptr };
 		DXRenderer::DXTexture* imageTexture{ nullptr };
 		DXRenderer::DXConstantBuffer* colorBuffer;
+		DXRenderer::DXConstantBuffer* spriteBuffer;
 
 		void Awake() override;
 		void LateUpdate() override;
@@ -16,13 +17,20 @@ namespace UEngine
 		virtual void OnDestroy() override;
 	public:
 		Color color{ 0.5f, 0.5f, 0.5f, 1 };
+		UV uv{ 0, 0, 1, 1 };
 		void Load(std::wstring fileName);
 
 	public:
-		Material() : colorBuffer(DXRenderer::DXConstantBuffer::Instantiate
-		(
-			DXRenderer::Get(),
-			DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(Color).raw_name())
-		)) {}
+		Material()
+			: colorBuffer(DXRenderer::DXConstantBuffer::Instantiate
+			(
+				DXRenderer::Get(),
+				DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(Color).raw_name())
+			)), spriteBuffer(DXRenderer::DXConstantBuffer::Instantiate
+			(
+				DXRenderer::Get(),
+				DXRenderer::DXResourceManager::Get()->GetConstantBuffer(typeid(UV).raw_name())
+			))
+		{}
 	};
 }

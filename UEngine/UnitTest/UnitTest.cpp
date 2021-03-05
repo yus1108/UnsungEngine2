@@ -93,7 +93,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         {
             GameObject* circle = GameObject::Instantiate();
             circle->AddComponent<Transform>();
-            circle->AddComponent<RenderComponent>()->Load("rectangle", "basicTexture");
+            circle->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
             circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
             circle->AddComponent<ScriptComponent>();
             circle->AddComponent<Collider>();

@@ -7,6 +7,7 @@
 #include "Shader Files\Debug\DefaultVS.csh"
 #include "Shader Files\Debug\DebugRenderVS.csh"
 #include "Shader Files\Debug\WorldVS.csh"
+#include "Shader Files\Debug\SpriteVS.csh"
 
 #include "Shader Files\Debug\DefaultPS.csh"
 #include "Shader Files\Debug\DebugRenderPS.csh"
@@ -15,6 +16,7 @@
 #include "Shader Files\RELEASE\DefaultVS.csh"
 #include "Shader Files\RELEASE\DebugRenderVS.csh"
 #include "Shader Files\RELEASE\WorldVS.csh"
+#include "Shader Files\RELEASE\SpriteVS.csh"
 
 #include "Shader Files\RELEASE\DefaultPS.csh"
 #include "Shader Files\RELEASE\DebugRenderPS.csh"
@@ -96,10 +98,21 @@ namespace UEngine
 				&rsDesc
 			);
 
-			shaders["basicTexture"] = DXShader::Instantiate
+			shaders["image"] = DXShader::Instantiate
 			(
 				renderer,
 				WorldVS, ARRAYSIZE(WorldVS),
+				DefaultPS, ARRAYSIZE(DefaultPS),
+				rendering_desc.IsDebuggable,
+				true,
+				rendering_desc.EnableBlendState,
+				&rsDesc
+			);
+
+			shaders["sprite"] = DXShader::Instantiate
+			(
+				renderer,
+				SpriteVS, ARRAYSIZE(SpriteVS),
 				DefaultPS, ARRAYSIZE(DefaultPS),
 				rendering_desc.IsDebuggable,
 				true,
@@ -285,6 +298,14 @@ namespace UEngine
 				sizeof(Color),
 				UENGINE_DXRENDERER_SHADERTYPE_PIXEL_SHADER,
 				nullptr
+			};
+
+			constantBuffers[typeid(UV).raw_name()] = CONSTANT_BUFFER_DESC
+			{
+				typeid(UV).raw_name(),
+				sizeof(UV),
+				UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER,
+				new UINT[1] { 2 }
 			};
 
 			constantBuffers[typeid(CPU_WORLD).raw_name()] = CONSTANT_BUFFER_DESC

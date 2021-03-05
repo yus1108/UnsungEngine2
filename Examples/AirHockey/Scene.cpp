@@ -34,7 +34,7 @@ void Scene::Load()
         GameObject* background = GameObject::Instantiate();
         background->AddComponent<Transform>();
         background->GetTransform()->scale = Vector2(15, 30);
-        background->AddComponent<RenderComponent>()->Load("rectangle", "basicTexture");
+        background->AddComponent<RenderComponent>()->Load("rectangle", "image");
         background->AddComponent<Material>()->Load(L"./Assets/soccer-field-4321814_640.jpg");
         gameState->AddObject(background);
 
@@ -59,7 +59,7 @@ void Scene::Load()
         GameObject* ball = GameObject::Instantiate();
         ball->name = "ball";
         ball->AddComponent<Transform>();
-        ball->AddComponent<RenderComponent>()->Load("rectangle", "basicTexture");
+        ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
         ball->AddComponent<Material>()->Load(L"./Assets/football-157930_640.png");
         ball->AddComponent<Ball>();
         gameState->AddObject(ball);
@@ -67,7 +67,7 @@ void Scene::Load()
         GameObject* p1 = GameObject::Instantiate();
         p1->name = "p1";
         p1->AddComponent<Transform>();
-        p1->AddComponent<RenderComponent>()->Load("rectangle", "basicTexture");
+        p1->AddComponent<RenderComponent>()->Load("rectangle", "image");
         p1->AddComponent<Material>()->Load(L"./Assets/football-157930_640.png");
         p1->GetComponent<Material>()->color = Color{ 1, 0, 0, 1 };
         p1->AddComponent<Player1>();
@@ -78,7 +78,7 @@ void Scene::Load()
         GameObject* p2 = GameObject::Instantiate();
         p2->name = "p2";
         p2->AddComponent<Transform>();
-        p2->AddComponent<RenderComponent>()->Load("rectangle", "basicTexture");
+        p2->AddComponent<RenderComponent>()->Load("rectangle", "image");
         p2->AddComponent<Material>()->Load(L"./Assets/football-157930_640.png");
         p2->GetComponent<Material>()->color = Color{ 0, 0, 1, 1 };
         p2->AddComponent<Player2>();

@@ -22,6 +22,14 @@ namespace UEngine
 		float b;
 		float a;
 	};
+
+	struct UV
+	{
+		float minX;
+		float minY;
+		float maxX;
+		float maxY;
+	};
 }
 
 #include "Math\Vector2.h"

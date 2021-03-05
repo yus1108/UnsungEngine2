@@ -40,8 +40,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         desc.InitUTime = true;
         desc.InitWinInput = true;
         desc.NCmdShow = nCmdShow;
-        desc.TitleName = L"Air Hockey";
-        desc.WindowSize = { 400, 800 };
+        desc.TitleName = L"Puzzle";
+        desc.WindowSize = { 1280, 853 };
         desc.Wcex = &Wcex;
 
         app->Create(desc);
