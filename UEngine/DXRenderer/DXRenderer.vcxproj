@@ -172,6 +172,7 @@
     <ClInclude Include="RenderComponents\DXView.h" />
     <ClInclude Include="ResourceManager\DXRenderObjectPool.h" />
     <ClInclude Include="ResourceManager\DXResourceManager.h" />
+    <ClInclude Include="ResourceManager\DXScene.h" />
     <ClInclude Include="Texture Loader\DDSTextureLoader.h" />
     <ClInclude Include="Texture Loader\WICTextureLoader.h" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClCompile Include="RenderComponents\DXView.cpp" />
     <ClCompile Include="ResourceManager\DXRenderObjectPool.cpp" />
     <ClCompile Include="ResourceManager\DXResourceManager.cpp" />
+    <ClCompile Include="ResourceManager\DXScene.cpp" />
     <ClCompile Include="Texture Loader\DDSTextureLoader.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dxrframework.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxrframework.h</PrecompiledHeaderFile>

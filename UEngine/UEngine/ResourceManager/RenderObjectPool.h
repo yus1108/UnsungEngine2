@@ -19,7 +19,7 @@ namespace UEngine
 		void Remove(RenderObject* const renderObject) { deletionMap[renderObject] = renderObject; }
 		RenderObject* LoadObject(std::string renderMesh, std::string shader);
 		void Clear();
-		void ClearModels() { /*.Clear();*/ Clear(); }
+		void ClearModels() { DXRenderer::Get()->ResourceManager->RenderObjectPool.Clear(); Clear(); }
 		void OnPreRender();
 		void OnRender(ID3D11DeviceContext* const deviceContext);
 	};

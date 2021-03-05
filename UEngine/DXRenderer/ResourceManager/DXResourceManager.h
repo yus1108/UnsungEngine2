@@ -9,16 +9,21 @@ namespace UEngine
 		class DXResourceManager
 		{
 		private:
-			std::unordered_map<std::string, DXShader*> shaders;
-			std::map<std::string, DXRenderMesh*> renderMeshes;
-			std::unordered_map<std::string, DXRenderMesh*> loadedRenderMeshes;
-			std::map<std::string, std::vector<SIMPLE_VERTEX>> vertexInfo;
-			std::unordered_map<std::string, std::vector<SIMPLE_VERTEX>> loadedVertexInfo;
+			
 			/*
 				key: std::string - typeid(cpu_buffer_struct).raw_name()
 				value: CONSTANT_BUFFER_DESC - description to create a buffer
 			*/
 			std::unordered_map<std::string, CONSTANT_BUFFER_DESC> constantBuffers;
+			std::unordered_map<std::string, DXShader*> shaders;
+			std::map<std::string, DXRenderMesh*> renderMeshes;
+			std::map<std::string, std::vector<SIMPLE_VERTEX>> vertexInfo;
+
+			std::unordered_map<std::string, SHARED_RENDERMESH*> shared_rendermesh;
+			std::unordered_map<std::string, DXRenderMesh*> loadedRenderMeshes;
+			std::unordered_map<std::string, std::vector<SIMPLE_VERTEX>> loadedVertexInfo;
+
+			std::unordered_map<std::string, class DXScene*> scenes;
 
 		public:
 			DXResourceManager() = default;

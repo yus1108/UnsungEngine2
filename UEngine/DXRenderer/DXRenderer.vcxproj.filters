@@ -54,6 +54,9 @@
     <ClInclude Include="RenderComponents\DXConstantBuffer.h">
       <Filter>RenderComponents</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager\DXScene.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXRenderer.cpp" />
@@ -87,6 +90,9 @@
     </ClCompile>
     <ClCompile Include="RenderComponents\DXConstantBuffer.cpp">
       <Filter>RenderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\DXScene.cpp">
+      <Filter>ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -96,6 +96,13 @@ namespace UEngine
 			*/
 			UINT* StartSlots{ nullptr };
 		};
+
+		struct SHARED_RENDERMESH
+		{
+			class DXRenderMesh* renderMesh;
+			std::vector<SIMPLE_VERTEX> vertices;
+			std::vector<class DXScene*> scenes;
+		};
 	}
 }
 
