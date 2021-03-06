@@ -43,5 +43,4 @@
 #include "RenderComponents\DXView.h"
 #include "RenderComponents\DXTexture.h"
 
-#include "ResourceManager\DXScene.h"
 #include "ResourceManager\DXResourceManager.h"
