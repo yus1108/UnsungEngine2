@@ -45,17 +45,6 @@ void Scene::Load()
             camera->viewHeight = 30;
         });
 
-        gameState->LoadObject([this](GameObject* line)
-        {
-            line->name = "line";
-            auto lineTransform = line->GetTransform();
-            lineTransform->scale = Vector2(1, 15);
-            lineTransform->localRotation = Vector3(0, Utility::UMath::PI / 2.0f, 0);
-            lineTransform->localPosition = Vector3(7.5f, 0, 0);
-            line->AddComponent<RenderComponent>()->Load("line", "color");
-            line->AddComponent<Material>()->color = Color{ 0, 0, 0, 1 };
-        });
-
         gameState->LoadObject([this](GameObject* ball)
         {
             ball->name = "ball";
