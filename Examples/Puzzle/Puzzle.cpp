@@ -1,6 +1,17 @@
 #include "stdafx.h"
 #include "Puzzle.h"
 
+void Puzzle::Start()
+{
+	for (size_t i = 0; i < 100; i++)
+	{
+		Direction dir = static_cast<Direction>(Math::RndInt(0, 4));
+		Swap(dir);
+	}
+	pieces[currPos.x][currPos.y]->GetComponent<RenderComponent>()->SetEnable(false);
+	start = true;
+}
+
 void Puzzle::Update()
 {
 	if (!start)

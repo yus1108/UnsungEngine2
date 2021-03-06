@@ -17,6 +17,7 @@ public:
     std::stack<Direction> stack;
     bool start = false;
 
+    void Start() override;
     void Update() override;
 
     bool Swap(Direction dir);

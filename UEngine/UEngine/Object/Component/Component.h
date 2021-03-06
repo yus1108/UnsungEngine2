@@ -48,7 +48,7 @@ namespace UEngine
 		GameObject* const GetGameObject() { return gameObject; }
 		Transform* const GetTransform() { return gameObject->GetTransform(); }
 
-		void SetEnable(bool enable)
+		virtual void SetEnable(bool enable)
 		{
 			if (gameObject->GetActive() && initialized)
 			{

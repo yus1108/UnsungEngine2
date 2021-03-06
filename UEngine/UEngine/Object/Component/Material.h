@@ -15,6 +15,8 @@ namespace UEngine
 		void LateUpdate() override;
 		void OnPreRender() override;
 		virtual void OnDestroy() override;
+
+		virtual void SetEnable(bool enable) override {}
 	public:
 		Color color{ 0.5f, 0.5f, 0.5f, 1 };
 		UV uv{ 0, 0, 1, 1 };
