@@ -22,6 +22,27 @@ void UEngine::GameState::Release()
     gameObjects.clear();
 }
 
+void UEngine::GameState::LoadObject(std::function<void(GameObject*)> function)
+{
+    auto gameObject = GameObject::Instantiate();
+    std::pair<GameObject*, std::function<void(GameObject*)>> pair;
+    pair.first = gameObject;
+    pair.second = function;
+    loads.push(pair);
+}
+
+void UEngine::GameState::StartGame()
+{
+    while (!loads.empty())
+    {
+        auto pair = loads.front();
+        pair.second(pair.first);
+        loads.pop();
+    }
+    for (auto obj : gameObjects)
+        obj->Initialize();
+}
+
 void UEngine::GameState::Update()
 {
     // cpu-gpu transfer
@@ -61,6 +82,9 @@ void UEngine::GameState::Update()
         std::cout << UEngine::Utility::UTime::Get()->DeltaTime() << std::endl;
     }
     {
+        for (auto obj : gameObjects)
+            obj->Initialize();
+
         // fixed timestamp update
         currentFixedTimestep = UEngine::Math::Clamp(deltatime, FixedTimestep, MaxFixedTimestep);
         while (fixedUpdateTimer > currentFixedTimestep)

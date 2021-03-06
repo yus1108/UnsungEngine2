@@ -11,6 +11,7 @@ namespace UEngine
 		friend class Transform;
 		friend class Material;
 		friend class Camera;
+		friend class GameObject;
 #pragma region Singleton
 	public:
 		static GameState* Get() { return &instance; }
@@ -28,6 +29,7 @@ namespace UEngine
 		float deltatime{ 0 };
 
 		std::list<class GameObject*> gameObjects;
+		std::queue<std::pair<GameObject*, std::function<void(GameObject*)>>> loads;
 
 
 		SpatialPartition2D spatialPartition2d;
@@ -45,6 +47,7 @@ namespace UEngine
 		class WinApplication* app{ nullptr };
 		class DXRenderer::DXRenderer* renderer{ nullptr };
 
+		void AddObject(GameObject* gameObject) { gameObjects.emplace_back(gameObject); }
 	public:
 		void Init(WinApplication* app, DXRenderer::DXRenderer* const renderer, size_t numThreads = 8);
 		void Release();
@@ -54,7 +57,8 @@ namespace UEngine
 		SpatialPartition2D* const GetSpatialPartition2D() { return &spatialPartition2d; }
 		DebugRenderer* const GetDebugRenderer() { return &debugRenderer; }
 
-		void AddObject(GameObject* gameObject) { gameObjects.emplace_back(gameObject); }
+		void LoadObject(std::function<void(GameObject*)> function);
+		void StartGame();
 
 		void Update();
 	};

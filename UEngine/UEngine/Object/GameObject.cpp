@@ -45,6 +45,15 @@ void UEngine::GameObject::Start()
 	isStart = true;
 }
 
+void UEngine::GameObject::Initialize()
+{
+	for (auto componentListPair : components)
+	{
+		for (auto component : *componentListPair.second)
+			component->Initialize();
+	}
+}
+
 void UEngine::GameObject::FixedUpdate()
 {
 	for (auto componentListPair : components)
@@ -172,9 +181,11 @@ UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::string n
 	return nullptr;
 }
 
-UEngine::GameObject* UEngine::GameObject::Instantiate()
+UEngine::GameObject* UEngine::GameObject::Instantiate(std::wstring name)
 {
 	UEngine::GameObject* obj = new UEngine::GameObject();
+	obj->AddComponent<Transform>();
+	GameState::Get()->AddObject(obj);
 	return obj;
 }
 

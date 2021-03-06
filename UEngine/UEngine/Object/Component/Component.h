@@ -10,10 +10,27 @@ namespace UEngine
 
 	private:
 		GameObject* gameObject{ nullptr };
-		bool enabled{ false };
+		bool initialized{ false };
+		bool enabled{ true };
 		bool isStart{ false };
 
 	private:
+		void Initialize() 
+		{
+			if (!initialized)
+			{
+				if (enabled)
+				{
+					OnEnable();
+					if (!isStart)
+					{
+						Start();
+						isStart = true;
+					}
+				}
+			}
+			initialized = true;
+		}
 		virtual void Awake() {}
 		virtual void Start() {}
 		virtual void OnEnable() {}
@@ -33,7 +50,7 @@ namespace UEngine
 
 		void SetEnable(bool enable)
 		{
-			if (gameObject->GetActive())
+			if (gameObject->GetActive() && initialized)
 			{
 				if (enable && !enabled)
 				{

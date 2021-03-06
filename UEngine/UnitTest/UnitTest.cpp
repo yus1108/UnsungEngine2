@@ -3,7 +3,6 @@
 
 #include "framework.h"
 #include "UnitTest.h"
-#include "ScriptComponent.h"
 
 #define MAX_LOADSTRING 100
 
@@ -82,24 +81,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         // basic load
         using namespace UEngine;
 
-        GameObject* mainCamera = GameObject::Instantiate();
-        mainCamera->AddComponent<Transform>();
-        auto cameraScript = mainCamera->AddComponent<Camera>();
-        cameraScript->viewWidth = 80;
-        cameraScript->viewHeight = 60;
-        gameState->AddObject(mainCamera);
+        gameState->LoadObject([](GameObject* camera)
+        {
+            auto cameraScript = camera->AddComponent<Camera>();
+            cameraScript->viewWidth = 80;
+            cameraScript->viewHeight = 60;
+        });
+        
 
         for (size_t i = 0; i < 20; i++)
         {
-            GameObject* circle = GameObject::Instantiate();
-            circle->AddComponent<Transform>();
-            circle->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-            circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
-            circle->AddComponent<ScriptComponent>();
-            circle->AddComponent<Collider>();
-            if (i == 0) circle->AddComponent<DebugRenderScript>();
-            gameState->AddObject(circle);
+            gameState->LoadObject([](GameObject* circle)
+            {
+                circle->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+                circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
+                circle->AddComponent<Collider>();
+            });
         }
+
+        gameState->StartGame();
     }
 
     auto returnedValue = app->UpdateLoop([&]() 

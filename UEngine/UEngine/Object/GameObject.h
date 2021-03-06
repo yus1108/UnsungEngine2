@@ -26,6 +26,7 @@ namespace UEngine
 		void Awake();
 		void OnEnable();
 		void Start();
+		void Initialize();
 		void FixedUpdate();
 		void PhysicsUpdate();
 		void Update();
@@ -61,7 +62,7 @@ namespace UEngine
 
 		GameObject* const FindObjectWithName(std::string name);
 
-		static GameObject* Instantiate();
+		static GameObject* Instantiate(std::wstring name = L"GameObject");
 		static void Release(GameObject** const gameObject);
 	};
 
@@ -134,7 +135,6 @@ namespace UEngine
 		}
 
 		static_cast<Component*>(component)->Awake();
-		component->SetEnable(true);
 		std::string typeName = typeid(T*).raw_name();
 		if (components[typeName] == nullptr) components[typeName] = new std::list<Component*>();
 		components[typeName]->push_back(component);

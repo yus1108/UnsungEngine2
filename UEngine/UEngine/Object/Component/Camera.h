@@ -15,7 +15,6 @@ namespace UEngine
 		void OnEnable() override;
 		void OnDisable() override;
 		void Awake() override;
-		void Start() override;
 		void LateUpdate() override;
 		void OnPreRender() override;
 		void OnDestroy() override;
