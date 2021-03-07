@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugRenderer\DebugRenderer.h" />
+    <ClInclude Include="Game Architecture\Collision\Component\CircleCollider.h" />
     <ClInclude Include="Game Architecture\Collision\Component\Collider.h" />
     <ClInclude Include="Game Architecture\Collision\SpatialPartition2D.h" />
     <ClInclude Include="Game\GameState.h" />
@@ -190,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DebugRenderer\DebugRenderer.cpp" />
+    <ClCompile Include="Game Architecture\Collision\Component\CircleCollider.cpp" />
     <ClCompile Include="Game Architecture\Collision\Component\Collider.cpp" />
     <ClCompile Include="Game Architecture\Collision\SpatialPartition2D.cpp" />
     <ClCompile Include="Game\GameState.cpp" />

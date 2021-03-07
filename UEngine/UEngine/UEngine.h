@@ -13,11 +13,12 @@
 #include "../DXRenderer/dxrframework.h"
 
 #include "UEngineDefinitions.h"
-#include "Math\Math.h"
 #include "DebugRenderer\DebugRenderer.h"
 
 #include "Game Architecture\Collision\Component\Collider.h"
+#include "Game Architecture\Collision\Component\CircleCollider.h"
 
+#include "Math\Math.h"
 #include "Game\GameState.h"
 
 #include "Object\Component\Component.h"

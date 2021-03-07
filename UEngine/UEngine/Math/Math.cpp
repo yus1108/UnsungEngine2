@@ -386,6 +386,33 @@ bool UEngine::Math::Physics2D::IsColliding(CircleCoord circle1, CircleCoord circ
 	return distance <= maxDistance;
 }
 
+UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindColliding(UEngine::CircleCollider* circle1, UEngine::CircleCollider* circle2)
+{
+	CollisionResult result;
+	
+	auto transform = circle1->GetTransform();
+	result.distance1 = transform->localPosition - circle2->GetTransform()->localPosition;
+	float magnitude = result.distance1.Magnitude();
+	float maxDistance = circle1->GetCollider().radius + circle2->GetCollider().radius;
+	result.isColliding = magnitude <= maxDistance;
+
+	if (!result.isColliding) return result;
+
+	result.distance2 = result.distance1 * -1.0f;
+
+	float distance = (maxDistance - abs(magnitude)) / 2.0f;
+	if (magnitude == 0)
+	{
+		result.distance1 = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f);
+		result.distance2 = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f);
+	}
+
+	result.distance1 = result.distance1.Normalize() * distance;
+	result.distance2 = result.distance2.Normalize() * distance;
+
+	return result;
+}
+
 const UEngine::Vector3 UEngine::Math::GetMousePosToWorld()
 {
 	using namespace DirectX;

@@ -39,30 +39,42 @@ namespace UEngine
 			for (auto otherPair : currNode->colliders)
 			{
 				auto other = otherPair.second;
-				auto oGameObject = otherPair.second->GetGameObject();
-				if (oGameObject != collider->GetGameObject())
+				if (other->GetGameObject() != collider->GetGameObject())
 				{
 					// TODO: need to change to proper collider component
-					if (collider->others.find(other) == collider->others.end())
+					if (collider->GetColliderType() == typeid(CircleCollider*).raw_name())
 					{
-						collider->isAABBColliding = true;
-						otherPair.second->isAABBColliding = true;
-						/*if (Math::Physics2D::IsColliding(script2->circle, script1->circle))
+						auto circle1 = static_cast<CircleCollider*>(collider);
+						auto circle2 = static_cast<CircleCollider*>(other);
+						if (collider->IsTrigger || other->IsTrigger)
 						{
-							script1->collideTimer = 0.0f;
-							script2->collideTimer = 0.0f;
-							auto transform = collider->gameObject->GetTransform();
-							script1->dir = (transform->localPosition - oGameObject->GetTransform()->localPosition).Normalize();
-							script2->dir = script1->dir * -1.0f;
-							if (script1->dir.Magnitude() == 0)
+							if (collider->others.find(other) == collider->others.end())
 							{
-								script1->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
-								script2->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
+								if (Math::Physics2D::IsColliding(circle1->GetCollider(), circle2->GetCollider()))
+								{
+									collider->others[other] = other;
+									other->others[collider] = collider;
+								}
 							}
+						}
+						else
+						{
+							if (collider->collisions.find(other) == collider->collisions.end())
+							{
+								auto result = FindColliding(circle1, circle2);
+								if (result.isColliding)
+								{
+									circle1->dir = result.distance1;
+									circle2->dir = result.distance2;
 
-							collider->others[other] = other;
-							other->others[collider] = collider;
-						}*/
+									collider->RigidBodyUpdate();
+									other->RigidBodyUpdate();
+
+									collider->collisions[other] = other;
+									other->collisions[collider] = collider;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -94,26 +106,39 @@ namespace UEngine
 				if (oGameObject != collider->GetGameObject())
 				{
 					// TODO: need to change to proper collider component
-					if (collider->others.find(other) == collider->others.end())
+					if (collider->GetColliderType() == typeid(CircleCollider*).raw_name())
 					{
-						collider->isAABBColliding = true;
-						otherPair.second->isAABBColliding = true;
-						/*if (Math::Physics2D::IsColliding(script2->circle, script1->circle))
+						auto circle1 = static_cast<CircleCollider*>(collider);
+						auto circle2 = static_cast<CircleCollider*>(other);
+						if (collider->IsTrigger || other->IsTrigger)
 						{
-							script1->collideTimer = 0.0f;
-							script2->collideTimer = 0.0f;
-							auto transform = collider->gameObject->GetTransform();
-							script1->dir = (transform->localPosition - oGameObject->GetTransform()->localPosition).Normalize();
-							script2->dir = script1->dir * -1.0f;
-							if (script1->dir.Magnitude() == 0)
+							if (collider->others.find(other) == collider->others.end())
 							{
-								script1->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
-								script2->dir = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f).Normalize();
+								if (Math::Physics2D::IsColliding(circle1->GetCollider(), circle2->GetCollider()))
+								{
+									collider->others[other] = other;
+									other->others[collider] = collider;
+								}
 							}
+						}
+						else
+						{
+							if (collider->collisions.find(other) == collider->collisions.end())
+							{
+								auto result = FindColliding(circle1, circle2);
+								if (result.isColliding)
+								{
+									circle1->dir = result.distance1;
+									circle2->dir = result.distance2;
 
-							collider->others[other] = other;
-							other->others[collider] = collider;
-						}*/
+									collider->RigidBodyUpdate();
+									other->RigidBodyUpdate();
+
+									collider->collisions[other] = other;
+									other->collisions[collider] = collider;
+								}
+							}
+						}
 					}
 				}
 			}

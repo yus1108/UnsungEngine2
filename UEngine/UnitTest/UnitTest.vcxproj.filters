@@ -23,6 +23,9 @@
     <ClInclude Include="UnitTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DebugScript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="UnitTest.rc">
@@ -39,5 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest.cpp" />
+    <ClCompile Include="DebugScript.cpp" />
   </ItemGroup>
 </Project>

@@ -48,6 +48,9 @@
     <ClInclude Include="ResourceManager\RenderObjectPool.h">
       <Filter>ResourceManager</Filter>
     </ClInclude>
+    <ClInclude Include="Game Architecture\Collision\Component\CircleCollider.h">
+      <Filter>Game Architecture\Collision\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -92,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="ResourceManager\RenderObjectPool.cpp">
       <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Collision\Component\CircleCollider.cpp">
+      <Filter>Game Architecture\Collision\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

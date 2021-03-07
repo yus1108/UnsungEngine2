@@ -73,7 +73,8 @@ namespace UEngine
 			struct CollisionResult
 			{
 				bool isColliding;
-				Vector2 coord;
+				Vector2 distance1;
+				Vector2 distance2;
 			};
 
 			typedef Vector2 PointCoord;

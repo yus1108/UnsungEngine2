@@ -84,7 +84,7 @@ namespace UEngine
 
 		GameObject* const FindObjectWithName(std::string name) { return gameObject->FindObjectWithName(name); }
 
-		Component() = default;
+		//Component() = default;
 		virtual ~Component() { SetEnable(false); OnDestroy(); };
 	};
 	template<typename T>

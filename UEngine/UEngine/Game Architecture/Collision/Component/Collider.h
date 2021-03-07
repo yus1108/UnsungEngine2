@@ -7,19 +7,26 @@ namespace UEngine
 	using namespace Math::Physics2D;
 	class Collider : public Component
 	{
+		friend class SpatialPartition2D;
 	private:
+		Vector3 dir{ 0, 0, 0 };
 		AABB worldAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
-		AABB localAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
-
-	public:
-		bool isAABBColliding{ false };
-		std::map<Collider*, Collider*> others;
-		// 충돌체 변수
 
 		AABB GetWorldAABB() { return worldAABB; }
-
-	private:
-		void FixedUpdate() override;
 		void PhysicsUpdate() override;
+		void RigidBodyUpdate();
+
+	protected:
+		std::string typeName;
+		AABB localAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
+
+		void FixedUpdate() override;
+
+	public:
+		bool IsTrigger{ false };
+		std::map<Collider*, Collider*> others;
+		std::map<Collider*, Collider*> collisions;
+
+		std::string GetColliderType() { return typeName; }
 	};
 }

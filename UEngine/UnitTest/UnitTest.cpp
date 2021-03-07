@@ -95,7 +95,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             {
                 circle->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                 circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
-                circle->AddComponent<Collider>();
+                circle->AddComponent<CircleCollider>()->SetCollider(Vector2(), 2.5f);
+                circle->AddComponent<DebugScript>();
+                circle->GetTransform()->scale = Vector2(5, 5);
             });
         }
 
