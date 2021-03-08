@@ -91,13 +91,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         for (size_t i = 0; i < 20; i++)
         {
-            gameState->LoadObject([](GameObject* circle)
+            gameState->LoadObject([i](GameObject* circle)
             {
                 circle->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                 circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
                 circle->AddComponent<CircleCollider>()->SetCollider(Vector2(), 2.5f);
                 circle->AddComponent<DebugScript>();
                 circle->GetTransform()->scale = Vector2(5, 5);
+                if (i == 19) circle->IsStatic = true;
             });
         }
 

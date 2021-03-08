@@ -16,11 +16,4 @@ namespace UEngine
         GameState::Get()->GetSpatialPartition2D()->ConstructNode(this);
         
 	}
-
-    void Collider::RigidBodyUpdate()
-    {
-        auto transform = GetTransform();
-        transform->localPosition = transform->localPosition + dir;
-        dir = Vector2();
-    }
 }

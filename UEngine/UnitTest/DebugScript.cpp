@@ -24,16 +24,15 @@ void DebugScript::OnPreRender()
 	GameState* gameState = GameState::Get();
 	auto sp = gameState->GetSpatialPartition2D();
 	if (id == sid)
-	{
-		//sp->DebugRender(sp->head, GetComponent<CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-	}
-	//sp->DebugRender(sp->head, GetComponent<CircleCollider>(), Color{ 1, 1, 0, 1 });
+		sp->DebugRender(sp->head, GetComponent<CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+	sp->DebugRender(sp->head, GetComponent<CircleCollider>(), Color{ 1, 1, 0, 1 });
 }
 
 void DebugScript::Update()
 {
 	using namespace std;
 
+	if (GetGameObject()->IsStatic) return;
 	auto transform = GetTransform();
 	auto value = dir * speed * Utility::UTime::Get()->DeltaTimeF();
 	transform->localPosition = transform->localPosition + value;

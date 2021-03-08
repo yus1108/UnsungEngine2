@@ -39,6 +39,8 @@ namespace UEngine
 
 	public:
 		std::string name{ "GameObject" };
+		bool IsStatic{ false };
+
 		void SetActive(bool isActive);
 		bool GetActive() { return isActive; }
 

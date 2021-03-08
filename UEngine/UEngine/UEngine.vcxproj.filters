@@ -31,10 +31,10 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Game Architecture\Collision\SpatialPartition2D.h">
-      <Filter>Game Architecture\Collision</Filter>
+      <Filter>Game Architecture\Physics2D\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Game Architecture\Collision\Component\Collider.h">
-      <Filter>Game Architecture\Collision\Component</Filter>
+      <Filter>Game Architecture\Physics2D\Component</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\ResourceManager.h">
       <Filter>ResourceManager</Filter>
@@ -49,7 +49,7 @@
       <Filter>ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Game Architecture\Collision\Component\CircleCollider.h">
-      <Filter>Game Architecture\Collision\Component</Filter>
+      <Filter>Game Architecture\Physics2D\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -79,10 +79,10 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Game Architecture\Collision\SpatialPartition2D.cpp">
-      <Filter>Game Architecture\Collision</Filter>
+      <Filter>Game Architecture\Physics2D\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Game Architecture\Collision\Component\Collider.cpp">
-      <Filter>Game Architecture\Collision\Component</Filter>
+      <Filter>Game Architecture\Physics2D\Component</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\ResourceManager.cpp">
       <Filter>ResourceManager</Filter>
@@ -97,7 +97,7 @@
       <Filter>ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Game Architecture\Collision\Component\CircleCollider.cpp">
-      <Filter>Game Architecture\Collision\Component</Filter>
+      <Filter>Game Architecture\Physics2D\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,14 +122,17 @@
     <Filter Include="Game Architecture\Object\Component">
       <UniqueIdentifier>{2158d01c-ba89-4df4-aaf5-72befc680cd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game Architecture\Collision">
-      <UniqueIdentifier>{af833c8f-e123-4dff-9409-83f0bcaabbf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game Architecture\Collision\Component">
-      <UniqueIdentifier>{a9105e1d-0924-455a-9b38-6c5dd4896038}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game Architecture\Render">
       <UniqueIdentifier>{4a7e18a7-3862-4659-918d-8a4d840ea273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Physics2D">
+      <UniqueIdentifier>{6652a197-0991-4f54-ad8c-9ea42f292ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Physics2D\Component">
+      <UniqueIdentifier>{a9105e1d-0924-455a-9b38-6c5dd4896038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Physics2D\Collision">
+      <UniqueIdentifier>{af833c8f-e123-4dff-9409-83f0bcaabbf5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

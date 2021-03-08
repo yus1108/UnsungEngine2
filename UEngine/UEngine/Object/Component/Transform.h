@@ -12,6 +12,7 @@ namespace UEngine
 		Matrix RTP{ DirectX::XMMatrixIdentity() };
 
 		void Awake() override;
+		void Start() override;
 		void LateUpdate() override;
 		void OnPreRender() override;
 		virtual void OnDestroy() override { GameState::Get()->ResourceManager.ConstantBufferPool.Remove(worldBuffer); }

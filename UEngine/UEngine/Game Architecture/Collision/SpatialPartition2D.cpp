@@ -42,40 +42,7 @@ namespace UEngine
 				if (other->GetGameObject() != collider->GetGameObject())
 				{
 					// TODO: need to change to proper collider component
-					if (collider->GetColliderType() == typeid(CircleCollider*).raw_name())
-					{
-						auto circle1 = static_cast<CircleCollider*>(collider);
-						auto circle2 = static_cast<CircleCollider*>(other);
-						if (collider->IsTrigger || other->IsTrigger)
-						{
-							if (collider->others.find(other) == collider->others.end())
-							{
-								if (Math::Physics2D::IsColliding(circle1->GetCollider(), circle2->GetCollider()))
-								{
-									collider->others[other] = other;
-									other->others[collider] = collider;
-								}
-							}
-						}
-						else
-						{
-							if (collider->collisions.find(other) == collider->collisions.end())
-							{
-								auto result = FindColliding(circle1, circle2);
-								if (result.isColliding)
-								{
-									circle1->dir = result.distance1;
-									circle2->dir = result.distance2;
-
-									collider->RigidBodyUpdate();
-									other->RigidBodyUpdate();
-
-									collider->collisions[other] = other;
-									other->collisions[collider] = collider;
-								}
-							}
-						}
-					}
+					collider->CalculateImpact(other);
 				}
 			}
 			auto result = CompareAABBSize(currNode->aabb, collider->GetWorldAABB());
@@ -102,44 +69,10 @@ namespace UEngine
 			for (auto otherPair : currNode->colliders)
 			{
 				auto other = otherPair.second;
-				auto oGameObject = otherPair.second->GetGameObject();
-				if (oGameObject != collider->GetGameObject())
+				if (other->GetGameObject() != collider->GetGameObject())
 				{
 					// TODO: need to change to proper collider component
-					if (collider->GetColliderType() == typeid(CircleCollider*).raw_name())
-					{
-						auto circle1 = static_cast<CircleCollider*>(collider);
-						auto circle2 = static_cast<CircleCollider*>(other);
-						if (collider->IsTrigger || other->IsTrigger)
-						{
-							if (collider->others.find(other) == collider->others.end())
-							{
-								if (Math::Physics2D::IsColliding(circle1->GetCollider(), circle2->GetCollider()))
-								{
-									collider->others[other] = other;
-									other->others[collider] = collider;
-								}
-							}
-						}
-						else
-						{
-							if (collider->collisions.find(other) == collider->collisions.end())
-							{
-								auto result = FindColliding(circle1, circle2);
-								if (result.isColliding)
-								{
-									circle1->dir = result.distance1;
-									circle2->dir = result.distance2;
-
-									collider->RigidBodyUpdate();
-									other->RigidBodyUpdate();
-
-									collider->collisions[other] = other;
-									other->collisions[collider] = collider;
-								}
-							}
-						}
-					}
+					collider->CalculateImpact(other);
 				}
 			}
 			for (auto child : currNode->children)

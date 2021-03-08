@@ -16,5 +16,10 @@ namespace UEngine
 	private:
 		void Awake() override;
 		void FixedUpdate() override;
+
+		void CalculateImpact(Collider* other) override;
+		void RigidBodyUpdate() override;
+
+		static void Calc_Vs_Circle(CircleCollider* circle1, CircleCollider* circle2);
 	};
 }
