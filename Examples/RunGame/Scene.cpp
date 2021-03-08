@@ -43,7 +43,7 @@ void Scene::Load()
         {
             background->name = "background";
             background->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-            background->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/background.png");
+            background->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/background.png", D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_MIN_MAG_MIP_LINEAR);
             background->AddComponent<Background>();
             background->GetTransform()->scale = Vector2{
                 static_cast<float>(screenSize.x),
@@ -53,10 +53,10 @@ void Scene::Load()
             {
                 0,
                 0,
-                1.0f / 6.0f,
+                1.0f / 5.0f,
                 1
             };
-            background->GetComponent<Background>()->maxMapIndex = POINT{ 5, 1 };
+            background->GetComponent<Background>()->speed = 0.5f;
         });
 
         for (size_t i = 0; i < 13; i++)

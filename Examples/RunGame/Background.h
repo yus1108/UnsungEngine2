@@ -4,13 +4,12 @@ using namespace UEngine;
 class Background : public Component
 {
 private:
-	int frame = 0;
-	POINT currMapIndex{ 0, 0 };
+	float timer = 0;
 	Material* material{ nullptr };
 
 public:
-	POINT maxMapIndex{ 6, 1 };
-	int maxSpriteFrame = 30;
+	float speed = 1;
+	float mapSize = 1.0f / 5.0f;
 private:
 	void Start() override;
 	void Update() override;

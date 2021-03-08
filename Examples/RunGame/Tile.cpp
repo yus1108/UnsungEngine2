@@ -3,7 +3,7 @@
 
 void Tile::Update()
 {
-	GetTransform()->localPosition.x -= 500 * Utility::UTime::Get()->DeltaTimeF();
+	GetTransform()->localPosition.x -= 1200 * Utility::UTime::Get()->DeltaTimeF();
 	if (GetTransform()->localPosition.x < -650)
 	{
 		GetTransform()->localPosition.x += 1300;
