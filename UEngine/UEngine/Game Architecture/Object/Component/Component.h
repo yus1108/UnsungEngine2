@@ -1,5 +1,5 @@
 #pragma once
-#include "Object\GameObject.h"
+#include "Game Architecture\Object\GameObject.h"
 
 namespace UEngine
 {

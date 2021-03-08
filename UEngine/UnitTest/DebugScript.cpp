@@ -12,7 +12,7 @@ void DebugScript::Start()
 	speed = UEngine::Math::RndFloat(1.0f, 5.0f);
 	float scale = UEngine::Math::RndFloat(1.0f, 3.0f);
 	GetTransform()->scale = Vector3(scale, scale, 1);
-	GetComponent<CircleCollider>()->SetCollider(GetTransform()->localPosition, scale / 2.0f);
+	GetComponent<Physics2D::CircleCollider>()->SetCollider(GetTransform()->localPosition, scale / 2.0f);
 	dir.x = x;
 	dir.y = y;
 	dir = dir.Normalize();
@@ -24,8 +24,8 @@ void DebugScript::OnPreRender()
 	GameState* gameState = GameState::Get();
 	auto sp = gameState->GetSpatialPartition2D();
 	if (id == sid)
-		sp->DebugRender(sp->head, GetComponent<CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-	sp->DebugRender(sp->head, GetComponent<CircleCollider>(), Color{ 1, 1, 0, 1 });
+		sp->DebugRender(sp->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+	sp->DebugRender(sp->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 1, 0, 1 });
 }
 
 void DebugScript::Update()

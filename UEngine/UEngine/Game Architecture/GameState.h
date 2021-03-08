@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ResourceManager\ResourceManager.h"
-#include "Game\Render\GameView.h"
-#include "Game Architecture\Collision\SpatialPartition2D.h"
+#include "Game Architecture\Render\GameView.h"
+#include "Game Architecture\Physics2D\Collision\SpatialPartition2D.h"
 
 namespace UEngine
 {
@@ -32,7 +32,7 @@ namespace UEngine
 		std::queue<std::pair<GameObject*, std::function<void(GameObject*)>>> loads;
 
 
-		SpatialPartition2D spatialPartition2d;
+		UEngine::Physics2D::SpatialPartition2D spatialPartition2d;
 		DebugRenderer debugRenderer;
 
 	public:
@@ -54,7 +54,7 @@ namespace UEngine
 
 		bool GetTerminate() { return terminate; }
 		const std::list<class GameObject*>& GetGameObjects() { return gameObjects; }
-		SpatialPartition2D* const GetSpatialPartition2D() { return &spatialPartition2d; }
+		UEngine::Physics2D::SpatialPartition2D* const GetSpatialPartition2D() { return &spatialPartition2d; }
 		DebugRenderer* const GetDebugRenderer() { return &debugRenderer; }
 
 		void LoadObject(std::function<void(GameObject*)> function);

@@ -171,18 +171,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugRenderer\DebugRenderer.h" />
-    <ClInclude Include="Game Architecture\Collision\Component\CircleCollider.h" />
-    <ClInclude Include="Game Architecture\Collision\Component\Collider.h" />
-    <ClInclude Include="Game Architecture\Collision\SpatialPartition2D.h" />
-    <ClInclude Include="Game\GameState.h" />
-    <ClInclude Include="Game\Render\GameView.h" />
+    <ClInclude Include="Game Architecture\GameState.h" />
+    <ClInclude Include="Game Architecture\Object\Component\Camera.h" />
+    <ClInclude Include="Game Architecture\Object\Component\Component.h" />
+    <ClInclude Include="Game Architecture\Object\Component\Material.h" />
+    <ClInclude Include="Game Architecture\Object\Component\RenderComponent.h" />
+    <ClInclude Include="Game Architecture\Object\Component\Transform.h" />
+    <ClInclude Include="Game Architecture\Object\GameObject.h" />
+    <ClInclude Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.h" />
+    <ClInclude Include="Game Architecture\Physics2D\Component\CircleCollider.h" />
+    <ClInclude Include="Game Architecture\Physics2D\Component\Collider.h" />
+    <ClInclude Include="Game Architecture\Render\GameView.h" />
     <ClInclude Include="Math\Math.h" />
-    <ClInclude Include="Object\Component\Camera.h" />
-    <ClInclude Include="Object\Component\Component.h" />
-    <ClInclude Include="Object\Component\Material.h" />
-    <ClInclude Include="Object\Component\RenderComponent.h" />
-    <ClInclude Include="Object\Component\Transform.h" />
-    <ClInclude Include="Object\GameObject.h" />
     <ClInclude Include="ResourceManager\ConstantBufferPool.h" />
     <ClInclude Include="ResourceManager\RenderObjectPool.h" />
     <ClInclude Include="ResourceManager\ResourceManager.h" />
@@ -191,17 +191,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DebugRenderer\DebugRenderer.cpp" />
-    <ClCompile Include="Game Architecture\Collision\Component\CircleCollider.cpp" />
-    <ClCompile Include="Game Architecture\Collision\Component\Collider.cpp" />
-    <ClCompile Include="Game Architecture\Collision\SpatialPartition2D.cpp" />
-    <ClCompile Include="Game\GameState.cpp" />
-    <ClCompile Include="Game\Render\GameView.cpp" />
+    <ClCompile Include="Game Architecture\GameState.cpp" />
+    <ClCompile Include="Game Architecture\Object\Component\Camera.cpp" />
+    <ClCompile Include="Game Architecture\Object\Component\Material.cpp" />
+    <ClCompile Include="Game Architecture\Object\Component\RenderComponent.cpp" />
+    <ClCompile Include="Game Architecture\Object\Component\Transform.cpp" />
+    <ClCompile Include="Game Architecture\Object\GameObject.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\Component\CircleCollider.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\Component\Collider.cpp" />
+    <ClCompile Include="Game Architecture\Render\GameView.cpp" />
     <ClCompile Include="Math\Math.cpp" />
-    <ClCompile Include="Object\Component\Camera.cpp" />
-    <ClCompile Include="Object\Component\Material.cpp" />
-    <ClCompile Include="Object\Component\RenderComponent.cpp" />
-    <ClCompile Include="Object\Component\Transform.cpp" />
-    <ClCompile Include="Object\GameObject.cpp" />
     <ClCompile Include="ResourceManager\ConstantBufferPool.cpp" />
     <ClCompile Include="ResourceManager\RenderObjectPool.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />

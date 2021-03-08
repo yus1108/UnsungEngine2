@@ -3,44 +3,14 @@
   <ItemGroup>
     <ClInclude Include="UEngine.h" />
     <ClInclude Include="UEngineDefinitions.h" />
-    <ClInclude Include="Game\GameState.h">
-      <Filter>Game Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\GameObject.h">
-      <Filter>Game Architecture\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Component\Camera.h">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Component\Material.h">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Component\RenderComponent.h">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Component\Transform.h">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Component\Component.h">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClInclude>
     <ClInclude Include="DebugRenderer\DebugRenderer.h">
       <Filter>DebugRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Math\Math.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Game Architecture\Collision\SpatialPartition2D.h">
-      <Filter>Game Architecture\Physics2D\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Architecture\Collision\Component\Collider.h">
-      <Filter>Game Architecture\Physics2D\Component</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager\ResourceManager.h">
       <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Render\GameView.h">
-      <Filter>Game Architecture\Render</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\ConstantBufferPool.h">
       <Filter>ResourceManager</Filter>
@@ -48,47 +18,50 @@
     <ClInclude Include="ResourceManager\RenderObjectPool.h">
       <Filter>ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="Game Architecture\Collision\Component\CircleCollider.h">
+    <ClInclude Include="Game Architecture\GameState.h">
+      <Filter>Game Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Render\GameView.h">
+      <Filter>Game Architecture\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Object\GameObject.h">
+      <Filter>Game Architecture\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Object\Component\Camera.h">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Object\Component\Component.h">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Object\Component\Material.h">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Object\Component\RenderComponent.h">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Object\Component\Transform.h">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Component\CircleCollider.h">
       <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Component\Collider.h">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.h">
+      <Filter>Game Architecture\Physics2D\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
-    <ClCompile Include="Game\GameState.cpp">
-      <Filter>Game Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\GameObject.cpp">
-      <Filter>Game Architecture\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Component\Camera.cpp">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Component\RenderComponent.cpp">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Component\Transform.cpp">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Component\Material.cpp">
-      <Filter>Game Architecture\Object\Component</Filter>
-    </ClCompile>
     <ClCompile Include="DebugRenderer\DebugRenderer.cpp">
       <Filter>DebugRenderer</Filter>
     </ClCompile>
     <ClCompile Include="Math\Math.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Game Architecture\Collision\SpatialPartition2D.cpp">
-      <Filter>Game Architecture\Physics2D\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Game Architecture\Collision\Component\Collider.cpp">
-      <Filter>Game Architecture\Physics2D\Component</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager\ResourceManager.cpp">
       <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Render\GameView.cpp">
-      <Filter>Game Architecture\Render</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager\ConstantBufferPool.cpp">
       <Filter>ResourceManager</Filter>
@@ -96,8 +69,35 @@
     <ClCompile Include="ResourceManager\RenderObjectPool.cpp">
       <Filter>ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="Game Architecture\Collision\Component\CircleCollider.cpp">
+    <ClCompile Include="Game Architecture\GameState.cpp">
+      <Filter>Game Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Render\GameView.cpp">
+      <Filter>Game Architecture\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Object\GameObject.cpp">
+      <Filter>Game Architecture\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Object\Component\Camera.cpp">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Object\Component\Material.cpp">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Object\Component\RenderComponent.cpp">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Object\Component\Transform.cpp">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Physics2D\Component\CircleCollider.cpp">
       <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Physics2D\Component\Collider.cpp">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.cpp">
+      <Filter>Game Architecture\Physics2D\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +122,6 @@
     <Filter Include="Game Architecture\Object\Component">
       <UniqueIdentifier>{2158d01c-ba89-4df4-aaf5-72befc680cd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game Architecture\Render">
-      <UniqueIdentifier>{4a7e18a7-3862-4659-918d-8a4d840ea273}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game Architecture\Physics2D">
       <UniqueIdentifier>{6652a197-0991-4f54-ad8c-9ea42f292ae0}</UniqueIdentifier>
     </Filter>
@@ -133,6 +130,9 @@
     </Filter>
     <Filter Include="Game Architecture\Physics2D\Collision">
       <UniqueIdentifier>{af833c8f-e123-4dff-9409-83f0bcaabbf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Render">
+      <UniqueIdentifier>{b0d37779-eb39-483d-85a4-03045d9aec84}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

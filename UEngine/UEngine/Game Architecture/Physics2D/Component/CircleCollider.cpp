@@ -1,26 +1,26 @@
 #include "UEngine.h"
 #include "CircleCollider.h"
 
-std::string Type_Circle = typeid(UEngine::CircleCollider*).raw_name();
+std::string Type_Circle = typeid(UEngine::Physics2D::CircleCollider*).raw_name();
 
-void UEngine::CircleCollider::SetCollider(Vector2 center, float radius)
+void UEngine::Physics2D::CircleCollider::SetCollider(Vector2 center, float radius)
 {
 	localCollider = CircleCoord{ center, radius };
 	localAABB = AABB{ -radius, radius, radius, -radius };
 }
 
-void UEngine::CircleCollider::Awake()
+void UEngine::Physics2D::CircleCollider::Awake()
 {
 	typeName = Type_Circle;
 }
 
-void UEngine::CircleCollider::FixedUpdate()
+void UEngine::Physics2D::CircleCollider::FixedUpdate()
 {
 	worldCollider = MakeCircle(localCollider.center + GetTransform()->GetWorld().r[3], localCollider.radius);
 	Collider::FixedUpdate();
 }
 
-void UEngine::CircleCollider::CalculateImpact(Collider* other)
+void UEngine::Physics2D::CircleCollider::CalculateImpact(Collider* other)
 {
 	// TODO: need to change to proper collider component
 	if (other->GetColliderType() == Type_Circle)
@@ -33,14 +33,14 @@ void UEngine::CircleCollider::CalculateImpact(Collider* other)
 	}
 }
 
-void UEngine::CircleCollider::RigidBodyUpdate()
+void UEngine::Physics2D::CircleCollider::RigidBodyUpdate()
 {
 	if (GetGameObject()->IsStatic) return;
 	auto transform = GetTransform();
 	transform->localPosition = transform->localPosition + impact;
 }
 
-void UEngine::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1, CircleCollider* circle2)
+void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1, CircleCollider* circle2)
 {
 	if (circle1->IsTrigger || circle2->IsTrigger)
 	{

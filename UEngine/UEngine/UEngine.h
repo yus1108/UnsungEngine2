@@ -15,16 +15,16 @@
 #include "UEngineDefinitions.h"
 #include "DebugRenderer\DebugRenderer.h"
 
-#include "Game Architecture\Collision\Component\Collider.h"
-#include "Game Architecture\Collision\Component\CircleCollider.h"
+#include "Game Architecture\Physics2D\Component\Collider.h"
+#include "Game Architecture\Physics2D\Component\CircleCollider.h"
 
 #include "Math\Math.h"
-#include "Game\GameState.h"
+#include "Game Architecture\GameState.h"
 
-#include "Object\Component\Component.h"
-#include "Object\Component\Transform.h"
-#include "Object\Component\Camera.h"
-#include "Object\Component\Material.h"
-#include "Object\Component\RenderComponent.h"
-#include "Object\GameObject.h"
+#include "Game Architecture\Object\Component\Component.h"
+#include "Game Architecture\Object\Component\Transform.h"
+#include "Game Architecture\Object\Component\Camera.h"
+#include "Game Architecture\Object\Component\Material.h"
+#include "Game Architecture\Object\Component\RenderComponent.h"
+#include "Game Architecture\Object\GameObject.h"
 

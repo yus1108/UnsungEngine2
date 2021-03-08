@@ -1,5 +1,5 @@
 #pragma once
-#include "Game\GameState.h"
+#include "Game Architecture\GameState.h"
 
 namespace UEngine
 {

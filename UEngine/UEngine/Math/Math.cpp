@@ -386,7 +386,7 @@ bool UEngine::Math::Physics2D::IsColliding(CircleCoord circle1, CircleCoord circ
 	return distance <= maxDistance;
 }
 
-UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindColliding(UEngine::CircleCollider* circle1, UEngine::CircleCollider* circle2)
+UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindColliding(UEngine::Physics2D::CircleCollider* circle1, UEngine::Physics2D::CircleCollider* circle2)
 {
 	CollisionResult result;
 	
