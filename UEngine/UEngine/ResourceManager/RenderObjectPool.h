@@ -9,6 +9,7 @@ namespace UEngine
 
 	private:
 		std::map<UINT, std::unordered_map<RenderObject*, RenderObject*>*> pool;
+		std::vector<RenderObject*> orderPool;
 		std::queue<RenderObject*> creationQueue;
 		std::map<RenderObject*, RenderObject*> deletionMap;
 

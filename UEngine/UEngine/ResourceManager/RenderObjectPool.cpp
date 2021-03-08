@@ -36,6 +36,7 @@ void UEngine::RenderObjectPool::Clear()
 	}
 	deletionMap.clear();
 	pool.clear();
+	orderPool.clear();
 }
 
 void UEngine::RenderObjectPool::OnPreRender()
@@ -48,6 +49,7 @@ void UEngine::RenderObjectPool::OnPreRender()
 		if (curr == nullptr) continue;
 		if (pool[curr->objectNumber] == nullptr) pool[curr->objectNumber] = new std::unordered_map<RenderObject*, RenderObject*>();
 		(*pool[curr->objectNumber])[curr] = curr;
+		orderPool.emplace_back(curr);
 	}
 	for (auto objectPair : deletionMap)
 	{
@@ -58,6 +60,14 @@ void UEngine::RenderObjectPool::OnPreRender()
 			delete pool[object->objectNumber];
 			pool.erase(object->objectNumber);
 		}
+		for (auto iter = orderPool.begin(); iter != orderPool.end(); iter++)
+		{
+			if (*iter == object)
+			{
+				orderPool.erase(iter);
+				break;
+			}
+		}
 		delete object;
 	}
 	deletionMap.clear();
@@ -66,17 +76,14 @@ void UEngine::RenderObjectPool::OnPreRender()
 void UEngine::RenderObjectPool::OnRender(ID3D11DeviceContext* deviceContext)
 {
 	// render
-	for (auto desc : pool)
+	for (auto object : orderPool)
 	{
-		auto model = DXRenderer::Get()->ResourceManager->RenderObjectPool.GetObjectByID(desc.first);
+		auto model = DXRenderer::Get()->ResourceManager->RenderObjectPool.GetObjectByID(object->objectNumber);
 		model->Set(deviceContext);
-		for (auto objectPair : *desc.second)
-		{
-			for (auto bufferPair : objectPair.second->constantBuffers)
-				bufferPair.second->Set(deviceContext);
-			if (objectPair.second->imageTexture != nullptr)
-				objectPair.second->imageTexture->Set(deviceContext);
-			model->Draw(deviceContext);
-		}
+		for (auto bufferPair : object->constantBuffers)
+			bufferPair.second->Set(deviceContext);
+		if (object->imageTexture != nullptr)
+			object->imageTexture->Set(deviceContext);
+		model->Draw(deviceContext);
 	}
 }
