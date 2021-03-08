@@ -16,11 +16,13 @@ namespace UEngine
 		void OnPreRender() override;
 		virtual void OnDestroy() override;
 
+
 		virtual void SetEnable(bool enable) override {}
 	public:
 		Color color{ 0.5f, 0.5f, 0.5f, 1 };
 		UV uv{ 0, 0, 1, 1 };
 		void Load(std::wstring fileName);
+		void Load(std::wstring fileName, D3D11_TEXTURE_ADDRESS_MODE addressMode, D3D11_FILTER filter);
 
 	public:
 		Material()

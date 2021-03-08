@@ -69,7 +69,6 @@ namespace UEngine
 			Microsoft::WRL::ComPtr<ID3D11HullShader> hullShader;
 			Microsoft::WRL::ComPtr<ID3D11DomainShader> domainShader;
 			Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
-			Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
 			Microsoft::WRL::ComPtr<ID3D11BlendState> blendingState;
 		};
 

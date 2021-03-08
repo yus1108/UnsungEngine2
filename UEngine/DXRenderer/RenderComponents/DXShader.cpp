@@ -201,20 +201,6 @@ namespace UEngine
 				rasterizerStateDesc->EnableDepthStencil
 			);
 
-			// Sampler State
-			D3D11_SAMPLER_DESC samplerDesc;
-			ZeroMemory(&samplerDesc, sizeof(samplerDesc));
-			samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-			samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-			samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-			samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-			samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-			samplerDesc.MaxAnisotropy = 1;
-			samplerDesc.MaxLOD = FLT_MAX;
-			samplerDesc.MinLOD = -FLT_MAX;
-			samplerDesc.MipLODBias = 0;
-			device->CreateSamplerState(&samplerDesc, &instance->pipeline.samplerState);
-
 			// Blending State
 			D3D11_BLEND_DESC blendDesc;
 			ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
@@ -261,20 +247,6 @@ namespace UEngine
 				rasterizerStateDesc->EnableDepthStencil
 			);
 
-			// Sampler State
-			D3D11_SAMPLER_DESC samplerDesc;
-			ZeroMemory(&samplerDesc, sizeof(samplerDesc));
-			samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-			samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-			samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-			samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-			samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-			samplerDesc.MaxAnisotropy = 1;
-			samplerDesc.MaxLOD = FLT_MAX;
-			samplerDesc.MinLOD = -FLT_MAX;
-			samplerDesc.MipLODBias = 0;
-			device->CreateSamplerState(&samplerDesc, &instance->pipeline.samplerState);
-
 			// Blending State
 			D3D11_BLEND_DESC blendDesc;
 			ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
@@ -313,7 +285,6 @@ namespace UEngine
 
 			deviceContext->RSSetState(pipeline.rasterizerState.Get());
 
-			deviceContext->PSSetSamplers(0, 1, pipeline.samplerState.GetAddressOf());
 			deviceContext->PSSetShader(pipeline.pixelShader.Get(), 0, 0);
 
 			deviceContext->OMSetBlendState(pipeline.blendingState.Get(), NULL, 0xffffffff);
