@@ -9,16 +9,46 @@ void Player::Start()
 
 void Player::FixedUpdate()
 {
+	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump)
+	{
+		ableToJump = false;
+		weight = 20;
+	}
+	if (GetComponent<Physics2D::RectCollider>()->collisions.size() > 0)
+	{
+		ableToJump = true;
+		if (weight < 0)
+		{
+			weight = 0;
+		}
+	}
+	else
+	{
+		ableToJump = false;
+		if (GetTransform()->localPosition.y < -150)
+		{
+			throw std::runtime_error("");
+		}
+	}
+	GetTransform()->localPosition.y += weight;
+	weight += gravity;
+	lastpos = GetTransform()->localPosition;
 }
 
 void Player::Update()
 {
-	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump)
-	{
-		ableToJump = false;
-		weight = 1500;
-	}
+	Vector2 dir1 = GetTransform()->localPosition - GetComponent<Physics2D::RectCollider>()->GetLastPos();
+	std::cout << dir1.x << std::endl;
+	std::cout << dir1.y << std::endl;
+	
+
 	auto transform = GetTransform();
+	if (WinInput::Get()->GetKey('1'))
+	{
+		GetTransform()->localPosition.x = -450;
+		GetTransform()->localPosition.y = -100;
+		weight = 0;
+	}
 	if (WinInput::Get()->GetKey(VK_DOWN))
 	{
 		auto value = Vector2(0, -1) * 100 * Utility::UTime::Get()->DeltaTimeF();
@@ -39,23 +69,7 @@ void Player::Update()
 		auto value = Vector2(-1, 0) * 100 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition = transform->localPosition + value;
 	}
-	weight += gravity;
-	GetTransform()->localPosition.y += weight * Utility::UTime::Get()->DeltaTimeF();
-	if (GetComponent<Physics2D::RectCollider>()->collisions.size() > 0)
-	{
-		/*if (GetTransform()->localPosition.y < -150)
-			GetTransform()->localPosition.y = -150;*/
-		ableToJump = true;
-		if (weight < 0)
-		{
-			weight = 0;
-		}
-	}
-	else
-	{
-		ableToJump = false;
-	}
-	lastpos = GetTransform()->localPosition;
+	
 
 	if (frame == static_cast<float>(maxSpriteFrame) / maxMapIndex.x)
 		currMapIndex.x = (currMapIndex.x + 1) % maxMapIndex.x;

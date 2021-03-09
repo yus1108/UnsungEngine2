@@ -73,7 +73,7 @@ void Scene::Load()
                 tile->GetTransform()->localPosition.y = -250;
                 tile->GetTransform()->scale = Vector2{
                     100,
-                     100
+                    100
                 };
                 tile->GetComponent<Material>()->uv = UV
                 {
@@ -91,12 +91,12 @@ void Scene::Load()
             player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
             player->AddComponent<Material>()->Load(L"./Assets/herochar sprites(new)/herochar_run_anim_strip_6.png");
             player->AddComponent<Player>();
-            player->AddComponent<Physics2D::RectCollider>()->SetCollider(50, 100);
+            player->AddComponent<Physics2D::RectCollider>()->SetCollider(80, 80);
             player->GetTransform()->localPosition.x = -450;
-            player->GetTransform()->localPosition.y = -100;
+            player->GetTransform()->localPosition.y = -50;
             player->GetTransform()->scale = Vector2{
-                100,
-                 100
+                80,
+                 80
             };
             player->GetComponent<Material>()->uv = UV
             {

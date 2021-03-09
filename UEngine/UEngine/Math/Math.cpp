@@ -411,46 +411,49 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 		(rect2->GetCollider().top + rect2->GetCollider().bottom) / 2.0f
 	);
 
+	Vector2 dir1 = center1 - rect1->GetLastPos();
+	Vector2 dir2 = center2 - rect2->GetLastPos();
+
 	Vector2 closestPoint1;
 	closestPoint1.x = Clamp(center1.x, rect2->GetCollider().left, rect2->GetCollider().right);
 	closestPoint1.y = Clamp(center1.y, rect2->GetCollider().bottom, rect2->GetCollider().top);
 
-	Vector2 closestPoint2;
-	closestPoint2.x = Clamp(center2.x, rect1->GetCollider().left, rect1->GetCollider().right);
-	closestPoint2.y = Clamp(center2.y, rect1->GetCollider().bottom, rect1->GetCollider().top);
+	Vector2 lb, lt, rt, rb;
+	lb = Vector2(rect2->GetCollider().left, rect2->GetCollider().bottom);
+	lt = Vector2(rect2->GetCollider().left, rect2->GetCollider().top);
+	rt = Vector2(rect2->GetCollider().right, rect2->GetCollider().top);
+	rb = Vector2(rect2->GetCollider().right, rect2->GetCollider().bottom);
 
 	Vector2 dist1 = closestPoint1 - center1;
 	float scaleX = dist1.x > 0 ? rect1->GetTransform()->scale.x : -rect1->GetTransform()->scale.x;
 	float scaleY = dist1.y > 0 ? rect1->GetTransform()->scale.y : -rect1->GetTransform()->scale.y;
 
-	Vector2 dir1 = center1 - rect1->GetLastPos();
-	Vector2 dir2 = center2 - rect2->GetLastPos();
-	if (dist1.x != 0 && dist1.y != 0)
+	/*if (closestPoint1.x == lb.x && closestPoint1.y == lb.y)
+		throw std::runtime_error("error");
+	if (closestPoint1.x == lt.x && closestPoint1.y == lt.y)
 	{
-		if (abs(dir1.x) == abs(dir1.y))
-		{
-			if (abs(dir2.x) == abs(dir2.y))
-			{
-				return result;
-			}
-			else if (abs(dir2.x) > abs(dir2.y))
-			{
-				dist1.y = 0;
-			}
-			else
-			{
-				dist1.x = 0;
-			}
-		}
-		else if (abs(dir1.x) > abs(dir1.y))
-		{
-			dist1.y = 0;
-		}
-		else
-		{
-			dist1.x = 0;
-		}
+		dist1 = dist1.Normalize() - dir1.Normalize();
+		throw std::runtime_error("error");
 	}
+	if (closestPoint1.x == rt.x && closestPoint1.y == rt.y)
+	{
+		throw std::runtime_error("error");
+	}
+	if (closestPoint1.x == rb.x && closestPoint1.y == rb.y)
+		throw std::runtime_error("error");*/
+
+	if (closestPoint1.x == lb.x && closestPoint1.y == lb.y)
+		return result;
+	if (closestPoint1.x == lt.x && closestPoint1.y == lt.y)
+		return result;
+	if (closestPoint1.x == rt.x && closestPoint1.y == rt.y)
+		return result;
+	if (closestPoint1.x == rb.x && closestPoint1.y == rb.y)
+		return result;
+
+	Vector2 closestPoint2;
+	closestPoint2.x = Clamp(center2.x, rect1->GetCollider().left, rect1->GetCollider().right);
+	closestPoint2.y = Clamp(center2.y, rect1->GetCollider().bottom, rect1->GetCollider().top);
 
 	if (dist1.x != 0)
 		dist1.x = scaleX / 2.0f - dist1.x;

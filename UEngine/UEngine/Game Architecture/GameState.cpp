@@ -76,6 +76,7 @@ void UEngine::GameState::Update()
         std::cout << "\t\t" << std::endl;
         std::cout << "\t\t" << std::endl;
         std::cout << "\t\t" << std::endl;
+        std::cout << "\t\t" << std::endl;
         UEngine::WinConsole::ResetCursorPos();
 
         std::cout << UEngine::Utility::UTime::Get()->FramePerSecond() << std::endl;

@@ -8,7 +8,7 @@ private:
 	POINT currMapIndex{ 0, 0 };
 	Material* material{ nullptr };
 	Vector2 lastpos;
-	float gravity = -20;
+	float gravity = -1;
 	float weight = 0;
 	bool ableToJump = false;
 
