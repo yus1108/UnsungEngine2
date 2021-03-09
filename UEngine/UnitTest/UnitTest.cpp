@@ -98,7 +98,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 circle->AddComponent<Physics2D::RectCollider>();
                 circle->GetTransform()->scale = Vector2(5, 5);
                 circle->AddComponent<DebugScript>();
-                if (i == 19) circle->IsStatic = true;
+                if (i == 19) circle->AddComponent<Physics2D::RectCollider>();
             });
         }
 

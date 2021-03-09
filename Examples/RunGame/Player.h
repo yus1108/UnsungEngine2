@@ -7,7 +7,8 @@ private:
 	int frame = 0;
 	POINT currMapIndex{ 0, 0 };
 	Material* material{ nullptr };
-	float gravity = -9.81f;
+	Vector2 lastpos;
+	float gravity = -20;
 	float weight = 0;
 	bool ableToJump = false;
 
@@ -18,5 +19,6 @@ private:
 	void Start() override;
 	void FixedUpdate() override;
 	void Update() override;
+	void OnPreRender() override;
 };
 

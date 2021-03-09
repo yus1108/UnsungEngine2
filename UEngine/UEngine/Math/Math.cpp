@@ -474,11 +474,6 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 		result.distance1 = dist1 * -0.5f;
 		result.distance2 = dist1 * 0.5f;
 	}
-	
-
-	
-
-	
 
 	return result;
 }

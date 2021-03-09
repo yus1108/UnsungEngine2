@@ -55,18 +55,29 @@ void UEngine::RenderObjectPool::OnPreRender()
 	{
 		auto object = objectPair.second;
 		pool[object->objectNumber]->erase(object);
-		if (pool[object->objectNumber]->size() == 0)
-		{
-			delete pool[object->objectNumber];
-			pool.erase(object->objectNumber);
-		}
+		std::vector<std::vector<RenderObject*>::iterator> iters;
 		for (auto iter = orderPool.begin(); iter != orderPool.end(); iter++)
 		{
 			if (*iter == object)
 			{
-				orderPool.erase(iter);
-				break;
+				iters.push_back(iter);
 			}
+		}
+		for (size_t i = 0; i < iters.size(); i++)
+		{
+			for (auto iter = orderPool.begin(); iter != orderPool.end(); iter++)
+			{
+				if (*iter == object)
+				{
+					orderPool.erase(iter);
+					break;
+				}
+			}
+		}
+		if (pool[object->objectNumber]->size() == 0)
+		{
+			delete pool[object->objectNumber];
+			pool.erase(object->objectNumber);
 		}
 		delete object;
 	}

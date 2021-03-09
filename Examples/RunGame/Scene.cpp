@@ -68,6 +68,8 @@ void Scene::Load()
                 tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                 tile->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/tileset.png");
                 tile->AddComponent<Tile>();
+                tile->AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
+                tile->GetComponent<Physics2D::RectCollider>()->IsTrigger = true;
                 tile->GetTransform()->localPosition.x = -550 + index * 100;
                 tile->GetTransform()->localPosition.y = -250;
                 tile->GetTransform()->scale = Vector2{
@@ -90,6 +92,7 @@ void Scene::Load()
             player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
             player->AddComponent<Material>()->Load(L"./Assets/herochar sprites(new)/herochar_run_anim_strip_6.png");
             player->AddComponent<Player>();
+            player->AddComponent<Physics2D::RectCollider>()->SetCollider(50, 100);
             player->GetTransform()->localPosition.x = -450;
             player->GetTransform()->localPosition.y = -100;
             player->GetTransform()->scale = Vector2{

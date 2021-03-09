@@ -153,7 +153,7 @@ namespace UEngine
 
 		std::string typeName = typeid(T*).raw_name();
 		if (components[typeName] == nullptr || components[typeName]->size() == 0)
-			throw std::runtime_error(typeid(T).name() + " doesn't exist in the GameObject!");
+			throw std::runtime_error("doesn't exist in the GameObject!");
 
 		auto component = components[typeName]->back();
 		components[typeName]->pop_back();

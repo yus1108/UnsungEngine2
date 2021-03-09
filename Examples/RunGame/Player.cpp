@@ -4,18 +4,12 @@
 void Player::Start()
 {
 	material = GetComponent<Material>();
+	lastpos = GetTransform()->localPosition;
 }
 
 void Player::FixedUpdate()
 {
-	weight += gravity;
-	GetTransform()->localPosition.y += weight;
-	if (GetTransform()->localPosition.y <= -150)
-	{
-		GetTransform()->localPosition.y = -150;
-		weight = 0;
-		ableToJump = true;
-	}
+	
 }
 
 void Player::Update()
@@ -23,8 +17,26 @@ void Player::Update()
 	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump)
 	{
 		ableToJump = false;
-		weight = 80;
+		weight = 1500;
 	}
+	weight += gravity;
+	GetTransform()->localPosition.y += weight * Utility::UTime::Get()->DeltaTimeF();
+	if (GetComponent<Physics2D::RectCollider>()->others.size() > 0)
+	{
+		if (GetTransform()->localPosition.y < -150)
+			GetTransform()->localPosition.y = -150;
+		ableToJump = true;
+		if (weight < 0)
+		{
+			weight = 0;
+		}
+	}
+	else
+	{
+		ableToJump = false;
+	}
+	lastpos = GetTransform()->localPosition;
+
 	if (frame == static_cast<float>(maxSpriteFrame) / maxMapIndex.x)
 		currMapIndex.x = (currMapIndex.x + 1) % maxMapIndex.x;
 
@@ -42,4 +54,12 @@ void Player::Update()
 	if (frame == maxSpriteFrame)
 		frame = 0;
 	frame++;
+}
+
+void Player::OnPreRender()
+{
+	GameState* gameState = GameState::Get();
+	auto sp = gameState->GetSpatialPartition2D();
+	sp->DebugRender(sp->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+	sp->DebugRender(sp->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 1, 0, 1 });
 }
