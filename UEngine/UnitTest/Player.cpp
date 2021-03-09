@@ -5,6 +5,7 @@ void Player::Start()
 {
 	material = GetComponent<Material>();
 	lastpos = GetTransform()->localPosition;
+	collider = GetComponent<Physics2D::RectCollider>();
 }
 
 void Player::FixedUpdate()
@@ -14,7 +15,7 @@ void Player::FixedUpdate()
 		ableToJump = false;
 		weight = 20;
 	}
-	if (GetComponent<Physics2D::RectCollider>()->collisions.size() > 0)
+	if (collider->collisions.size() > 0)
 	{
 		ableToJump = true;
 		if (weight < 0)
@@ -27,7 +28,7 @@ void Player::FixedUpdate()
 		ableToJump = false;
 		if (GetTransform()->localPosition.y < -150)
 		{
-			throw std::runtime_error("");
+			weight += gravity * 10;
 		}
 	}
 	GetTransform()->localPosition.y += weight;

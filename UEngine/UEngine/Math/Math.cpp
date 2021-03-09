@@ -428,20 +428,6 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 	float scaleX = dist1.x > 0 ? rect1->GetTransform()->scale.x : -rect1->GetTransform()->scale.x;
 	float scaleY = dist1.y > 0 ? rect1->GetTransform()->scale.y : -rect1->GetTransform()->scale.y;
 
-	/*if (closestPoint1.x == lb.x && closestPoint1.y == lb.y)
-		throw std::runtime_error("error");
-	if (closestPoint1.x == lt.x && closestPoint1.y == lt.y)
-	{
-		dist1 = dist1.Normalize() - dir1.Normalize();
-		throw std::runtime_error("error");
-	}
-	if (closestPoint1.x == rt.x && closestPoint1.y == rt.y)
-	{
-		throw std::runtime_error("error");
-	}
-	if (closestPoint1.x == rb.x && closestPoint1.y == rb.y)
-		throw std::runtime_error("error");*/
-
 	if (closestPoint1.x == lb.x && closestPoint1.y == lb.y)
 		return result;
 	if (closestPoint1.x == lt.x && closestPoint1.y == lt.y)
