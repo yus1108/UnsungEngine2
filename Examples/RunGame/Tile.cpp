@@ -3,7 +3,6 @@
 
 void Tile::FixedUpdate()
 {
-	GetTransform()->localPosition.x -= 10;
 	if (GetTransform()->localPosition.x < -650)
 	{
 		GetTransform()->localPosition.x += 1300;

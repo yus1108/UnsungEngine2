@@ -69,7 +69,6 @@ void Scene::Load()
                 tile->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/tileset.png");
                 tile->AddComponent<Tile>();
                 tile->AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
-                tile->GetComponent<Physics2D::RectCollider>()->IsTrigger = true;
                 tile->GetTransform()->localPosition.x = -550 + index * 100;
                 tile->GetTransform()->localPosition.y = -250;
                 tile->GetTransform()->scale = Vector2{

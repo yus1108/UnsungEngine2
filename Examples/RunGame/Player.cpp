@@ -9,7 +9,6 @@ void Player::Start()
 
 void Player::FixedUpdate()
 {
-	
 }
 
 void Player::Update()
@@ -19,12 +18,33 @@ void Player::Update()
 		ableToJump = false;
 		weight = 1500;
 	}
+	auto transform = GetTransform();
+	if (WinInput::Get()->GetKey(VK_DOWN))
+	{
+		auto value = Vector2(0, -1) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		transform->localPosition = transform->localPosition + value;
+	}
+	if (WinInput::Get()->GetKey(VK_UP))
+	{
+		auto value = Vector2(0, 1) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		transform->localPosition = transform->localPosition + value;
+	}
+	if (WinInput::Get()->GetKey(VK_RIGHT))
+	{
+		auto value = Vector2(1, 0) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		transform->localPosition = transform->localPosition + value;
+	}
+	if (WinInput::Get()->GetKey(VK_LEFT))
+	{
+		auto value = Vector2(-1, 0) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		transform->localPosition = transform->localPosition + value;
+	}
 	weight += gravity;
 	GetTransform()->localPosition.y += weight * Utility::UTime::Get()->DeltaTimeF();
-	if (GetComponent<Physics2D::RectCollider>()->others.size() > 0)
+	if (GetComponent<Physics2D::RectCollider>()->collisions.size() > 0)
 	{
-		if (GetTransform()->localPosition.y < -150)
-			GetTransform()->localPosition.y = -150;
+		/*if (GetTransform()->localPosition.y < -150)
+			GetTransform()->localPosition.y = -150;*/
 		ableToJump = true;
 		if (weight < 0)
 		{
