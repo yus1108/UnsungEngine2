@@ -51,6 +51,12 @@
     <ClInclude Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.h">
       <Filter>Game Architecture\Physics2D\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionType.h">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Component\RectCollider.h">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -98,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.cpp">
       <Filter>Game Architecture\Physics2D\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Physics2D\Component\RectCollider.cpp">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -93,11 +93,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         {
             gameState->LoadObject([i](GameObject* circle)
             {
-                circle->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-                circle->AddComponent<Material>()->Load(L"../_Assets/Textures/football-157930_640.png");
-                circle->AddComponent<Physics2D::CircleCollider>()->SetCollider(Vector2(), 2.5f);
-                circle->AddComponent<DebugScript>();
+                circle->AddComponent<RenderComponent>()->Load("rectangle", "color");
+                circle->AddComponent<Material>();
+                circle->AddComponent<Physics2D::RectCollider>();
                 circle->GetTransform()->scale = Vector2(5, 5);
+                circle->AddComponent<DebugScript>();
                 if (i == 19) circle->IsStatic = true;
             });
         }

@@ -1,7 +1,7 @@
 #include "UEngine.h"
+#include "CollisionType.h"
 #include "CircleCollider.h"
 
-std::string Type_Circle = typeid(UEngine::Physics2D::CircleCollider*).raw_name();
 
 void UEngine::Physics2D::CircleCollider::SetCollider(Vector2 center, float radius)
 {
@@ -27,9 +27,9 @@ void UEngine::Physics2D::CircleCollider::CalculateImpact(Collider* other)
 	{
 		Calc_Vs_Circle(this, static_cast<CircleCollider*>(other));
 	}
-	else // if other collider type
+	else if (other->GetColliderType() == Type_Rectangle)
 	{
-
+		Calc_Vs_Rect(this, static_cast<RectCollider*>(other));
 	}
 }
 
@@ -79,3 +79,44 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1,
 		}
 	}
 }
+
+void UEngine::Physics2D::CircleCollider::Calc_Vs_Rect(CircleCollider* circle, RectCollider* rect)
+{
+	if (circle->IsTrigger || rect->IsTrigger)
+	{
+		if (circle->others.find(rect) == circle->others.end())
+		{
+			if (Math::Physics2D::IsColliding(rect->GetCollider(), circle->GetCollider()))
+			{
+				circle->others[rect] = rect;
+				rect->others[circle] = circle;
+			}
+		}
+	}
+	else
+	{
+		if (circle->collisions.find(rect) == circle->collisions.end())
+		{
+			auto result = FindColliding(rect, circle);
+			if (result.isColliding)
+			{
+				if (circle->GetGameObject()->IsStatic)
+					result.distance2 * 2.0f;
+				if (rect->GetGameObject()->IsStatic)
+					result.distance1 * 2.0f;
+
+				if (!circle->GetGameObject()->IsStatic)
+					circle->impact = result.distance1;
+				if (!rect->GetGameObject()->IsStatic)
+					rect->impact = result.distance2;
+
+				circle->RigidBodyUpdate();
+				rect->RigidBodyUpdate();
+
+				circle->collisions[rect] = rect;
+				rect->collisions[circle] = circle;
+			}
+		}
+	}
+}
+

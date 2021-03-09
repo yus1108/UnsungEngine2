@@ -12,7 +12,7 @@ void DebugScript::Start()
 	speed = UEngine::Math::RndFloat(1.0f, 5.0f);
 	float scale = UEngine::Math::RndFloat(1.0f, 3.0f);
 	GetTransform()->scale = Vector3(scale, scale, 1);
-	GetComponent<Physics2D::CircleCollider>()->SetCollider(GetTransform()->localPosition, scale / 2.0f);
+	GetComponent<Physics2D::RectCollider>()->SetCollider(scale, scale);
 	dir.x = x;
 	dir.y = y;
 	dir = dir.Normalize();
@@ -24,8 +24,8 @@ void DebugScript::OnPreRender()
 	GameState* gameState = GameState::Get();
 	auto sp = gameState->GetSpatialPartition2D();
 	if (id == sid)
-		sp->DebugRender(sp->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-	sp->DebugRender(sp->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 1, 0, 1 });
+		sp->DebugRender(sp->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+	sp->DebugRender(sp->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 1, 0, 1 });
 }
 
 void DebugScript::Update()
@@ -33,7 +33,32 @@ void DebugScript::Update()
 	using namespace std;
 
 	if (GetGameObject()->IsStatic) return;
+
 	auto transform = GetTransform();
+	if (id == 1)
+	{
+		if (WinInput::Get()->GetKey(VK_DOWN))
+		{
+			auto value = Vector2(0, -1) * 5 * Utility::UTime::Get()->DeltaTimeF();
+			transform->localPosition = transform->localPosition + value;
+		}
+		if (WinInput::Get()->GetKey(VK_UP))
+		{
+			auto value = Vector2(0, 1) * 5 * Utility::UTime::Get()->DeltaTimeF();
+			transform->localPosition = transform->localPosition + value;
+		}
+		if (WinInput::Get()->GetKey(VK_RIGHT))
+		{
+			auto value = Vector2(1, 0) * 5 * Utility::UTime::Get()->DeltaTimeF();
+			transform->localPosition = transform->localPosition + value;
+		}
+		if (WinInput::Get()->GetKey(VK_LEFT))
+		{
+			auto value = Vector2(-1, 0) * 5 * Utility::UTime::Get()->DeltaTimeF();
+			transform->localPosition = transform->localPosition + value;
+		}
+	}
+
 	auto value = dir * speed * Utility::UTime::Get()->DeltaTimeF();
 	transform->localPosition = transform->localPosition + value;
 

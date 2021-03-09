@@ -41,6 +41,8 @@ namespace UEngine
 			bool IsColliding(AABB aabb1, AABB aabb2);
 			bool IsColliding(AABB aabb, CircleCoord circle);
 			bool IsColliding(CircleCoord circle1, CircleCoord circle2);
+			CollisionResult FindColliding(UEngine::Physics2D::RectCollider* rect1, UEngine::Physics2D::RectCollider* rect2);
+			CollisionResult FindColliding(UEngine::Physics2D::RectCollider* rectangle, UEngine::Physics2D::CircleCollider* circle);
 			CollisionResult FindColliding(UEngine::Physics2D::CircleCollider* circle1, UEngine::Physics2D::CircleCollider* circle2);
 		}
 	}

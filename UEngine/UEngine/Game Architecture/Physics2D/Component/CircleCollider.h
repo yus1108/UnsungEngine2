@@ -8,6 +8,7 @@ namespace UEngine
 		using namespace Math::Physics2D;
 		class CircleCollider : public Collider
 		{
+			friend class RectCollider;
 		private:
 			CircleCoord localCollider{ Vector2(), 0.5f };
 			CircleCoord worldCollider{ Vector2(), 0.5f };
@@ -23,6 +24,7 @@ namespace UEngine
 			void RigidBodyUpdate() override;
 
 			static void Calc_Vs_Circle(CircleCollider* circle1, CircleCollider* circle2);
+			static void Calc_Vs_Rect(CircleCollider* circle, class RectCollider* rect);
 		};
 	}
 }

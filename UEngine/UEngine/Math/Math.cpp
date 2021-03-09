@@ -386,6 +386,123 @@ bool UEngine::Math::Physics2D::IsColliding(CircleCoord circle1, CircleCoord circ
 	return distance <= maxDistance;
 }
 
+UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindColliding(UEngine::Physics2D::RectCollider* rect1, UEngine::Physics2D::RectCollider* rect2)
+{
+	CollisionResult result;
+	if (rect1->GetCollider().right < rect2->GetCollider().left || rect1->GetCollider().left > rect2->GetCollider().right)
+	{
+		result.isColliding = false;
+		return result;
+	}
+	if (rect1->GetCollider().top < rect2->GetCollider().bottom || rect1->GetCollider().bottom > rect2->GetCollider().top)
+	{
+		result.isColliding = false;
+		return result;
+	}
+
+	Vector2 center1 = Vector2
+	(
+		(rect1->GetCollider().right + rect1->GetCollider().left) / 2.0f,
+		(rect1->GetCollider().top + rect1->GetCollider().bottom) / 2.0f
+	);
+	Vector2 center2 = Vector2
+	(
+		(rect2->GetCollider().right + rect2->GetCollider().left) / 2.0f,
+		(rect2->GetCollider().top + rect2->GetCollider().bottom) / 2.0f
+	);
+
+	Vector2 closestPoint1;
+	closestPoint1.x = Clamp(center1.x, rect2->GetCollider().left, rect2->GetCollider().right);
+	closestPoint1.y = Clamp(center1.y, rect2->GetCollider().bottom, rect2->GetCollider().top);
+
+	Vector2 closestPoint2;
+	closestPoint2.x = Clamp(center2.x, rect1->GetCollider().left, rect1->GetCollider().right);
+	closestPoint2.y = Clamp(center2.y, rect1->GetCollider().bottom, rect1->GetCollider().top);
+
+	Vector2 dist1 = closestPoint1 - center1;
+	float scaleX = dist1.x > 0 ? rect1->GetTransform()->scale.x : -rect1->GetTransform()->scale.x;
+	float scaleY = dist1.y > 0 ? rect1->GetTransform()->scale.y : -rect1->GetTransform()->scale.y;
+
+	Vector2 dir1 = center1 - rect1->GetLastPos();
+	Vector2 dir2 = center2 - rect2->GetLastPos();
+	if (dist1.x != 0 && dist1.y != 0)
+	{
+		if (abs(dir1.x) == abs(dir1.y))
+		{
+			if (abs(dir2.x) == abs(dir2.y))
+			{
+				return result;
+			}
+			else if (abs(dir2.x) > abs(dir2.y))
+			{
+				dist1.y = 0;
+			}
+			else
+			{
+				dist1.x = 0;
+			}
+		}
+		else if (abs(dir1.x) > abs(dir1.y))
+		{
+			dist1.y = 0;
+		}
+		else
+		{
+			dist1.x = 0;
+		}
+	}
+
+	if (dist1.x != 0)
+		dist1.x = scaleX / 2.0f - dist1.x;
+	if (dist1.y != 0)
+		dist1.y = scaleY / 2.0f - dist1.y;
+
+	float speed1 = dir1.Magnitude();
+	float speed2 = dir2.Magnitude();
+
+	if (speed1 > speed2 || rect2->GetGameObject()->IsStatic)
+	{
+		result.distance1 = dist1 * -1.0f;
+
+	}
+	else if (speed1 < speed2 || rect1->GetGameObject()->IsStatic)
+	{
+		result.distance2 = dist1;
+	}
+	else 
+	{
+		result.distance1 = dist1 * -0.5f;
+		result.distance2 = dist1 * 0.5f;
+	}
+	
+
+	
+
+	
+
+	return result;
+}
+
+UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindColliding(UEngine::Physics2D::RectCollider* rectangle, UEngine::Physics2D::CircleCollider* circle)
+{
+	CollisionResult result;
+
+	Vector2 closestPoint;
+	closestPoint.x = Clamp(circle->GetCollider().center.x, rectangle->GetCollider().left, rectangle->GetCollider().right);
+	closestPoint.y = Clamp(circle->GetCollider().center.y, rectangle->GetCollider().bottom, rectangle->GetCollider().top);
+	Vector2 dir = closestPoint - circle->GetCollider().center;
+	float distance = dir.Magnitude();
+	result.isColliding = distance <= circle->GetCollider().radius;
+
+	if (!result.isColliding) return result;
+
+	float distToMove = (circle->GetCollider().radius - distance) / 2.0f;
+	result.distance1 = dir.Normalize() * distToMove;
+	result.distance2 = dir.Normalize() * -distToMove;
+
+	return result;
+}
+
 UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindColliding(UEngine::Physics2D::CircleCollider* circle1, UEngine::Physics2D::CircleCollider* circle2)
 {
 	CollisionResult result;

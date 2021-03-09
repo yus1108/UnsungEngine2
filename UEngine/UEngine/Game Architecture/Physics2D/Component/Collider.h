@@ -12,9 +12,7 @@ namespace UEngine
 			friend class SpatialPartition2D;
 		private:
 			AABB worldAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
-
 			AABB GetWorldAABB() { return worldAABB; }
-			void PhysicsUpdate() override;
 
 		protected:
 			std::string typeName;
@@ -23,6 +21,7 @@ namespace UEngine
 			Vector3 impact{ 0, 0, 0 };
 
 			void FixedUpdate() override;
+			void PhysicsUpdate() override;
 
 			virtual void CalculateImpact(Collider* other) = 0;
 			virtual void RigidBodyUpdate() = 0;
