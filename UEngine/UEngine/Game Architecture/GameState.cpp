@@ -63,7 +63,7 @@ void UEngine::GameState::Update()
 
         renderer->Begin();
         renderer->Draw(gameScene.GetMainView()->GetAddressOfViewResource());
-        renderer->Draw(debugRenderer.GetViewResource());
+        renderer->Draw(debugRenderer.GetAddressOfViewResource());
         renderer->End();
     });
 
@@ -113,4 +113,69 @@ void UEngine::GameState::Update()
     // post render update thread
     for (auto obj : gameObjects)
         obj->OnPostRender();
+}
+
+ID3D11ShaderResourceView** UEngine::GameState::EditorUpdate()
+{
+    // cpu-gpu transfer
+    gameScene.OnPreRender();
+    ResourceManager.ConstantBufferPool.OnPreRender();
+
+    // resources mapping
+    for (auto obj : gameObjects)
+        obj->OnPreRender();
+
+    // rendering thread
+    threadPool.AddSyncTask([&]()
+    {
+        gameScene.OnRender();
+        gameScene.OnPostRender();
+
+        debugRenderer.Flush(gameScene.GetMainViewCBuffer());
+
+        renderer->Begin();
+
+        finalViewResources[0] = gameScene.GetMainView()->GetViewResource();
+        finalViewResources[1] = debugRenderer.GetViewResource();
+    });
+
+    // update in main thread
+    {
+        for (auto obj : gameObjects)
+            obj->Initialize();
+
+        // fixed timestamp update
+        currentFixedTimestep = UEngine::Math::Clamp(deltatime, FixedTimestep, MaxFixedTimestep);
+        while (fixedUpdateTimer > currentFixedTimestep)
+        {
+            currentFixedTimestep = UEngine::Math::Clamp(deltatime, FixedTimestep, MaxFixedTimestep);
+            spatialPartition2d.Release();
+            for (auto obj : gameObjects)
+                obj->FixedUpdate();
+            for (auto obj : gameObjects)
+                obj->PhysicsUpdate();
+
+            fixedUpdateTimer -= currentFixedTimestep;
+        }
+        for (auto obj : gameObjects)
+            obj->Update();
+        for (auto obj : gameObjects)
+            obj->LateUpdate();
+        for (auto obj : gameObjects)
+            obj->AnimationUpdate();
+    }
+
+    // thread join
+    threadPool.Join();
+
+    // post render update thread
+    for (auto obj : gameObjects)
+        obj->OnPostRender();
+
+    return finalViewResources;
+}
+
+void UEngine::GameState::EditorRender()
+{
+    renderer->End();
 }

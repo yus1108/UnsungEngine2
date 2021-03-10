@@ -11,6 +11,7 @@
 - Implemented dynamic spatial partitioning and fixed time-rate update to optimize collision check
 - Implemented image texture loading using WICTextureLoader and DDSTextureLoader from DirectXTK
 - Added example games (air hockey, puzzle, run game)
+- Integrated GUI library(ImGui) to make editor
 
 The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly try to change language standard.
 
@@ -18,4 +19,7 @@ The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly 
 - RunGame art credit by o_robster
 
 ## Library License
-- DirectXTK (WICTextureLoader, DDSTextureLoader) <br/> Copyright (c) 2012-2021 Microsoft Corp <br/> The MIT License (MIT)
+- DirectXTK (WICTextureLoader, DDSTextureLoader)<br/>Copyright (c) 2012-2021 Microsoft Corp
+  The MIT License (MIT)
+- ImGui<br/>The MIT License (MIT)
+  Copyright (c) 2014-2021 Omar Cornut

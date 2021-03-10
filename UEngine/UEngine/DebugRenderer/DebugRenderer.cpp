@@ -383,7 +383,26 @@ void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 		viewContext->DeviceContext->FinishCommandList(true, viewContext->CommandList.GetAddressOf());
 	}
 
-	ID3D11ShaderResourceView** DebugRenderer::GetViewResource()
+ID3D11ShaderResourceView** DebugRenderer::GetAddressOfViewResource()
+{
+	if (vert_count == 0) return nullptr;
+	m_pImmediateContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
+	viewContext->CommandList.ReleaseAndGetAddressOf();
+
+	m_pImmediateContext->ResolveSubresource
+	(
+		(ID3D11Resource*)viewContext->OutputTexture2D.Get(),
+		D3D11CalcSubresource(0, 0, 1),
+		(ID3D11Resource*)viewContext->RenderTargetViewTexture2D.Get(),
+		D3D11CalcSubresource(0, 0, 1),
+		DXGI_FORMAT_R32G32B32A32_FLOAT
+	);
+
+	vert_count = 0;
+	return viewContext->OutputShaderResourceView.GetAddressOf();
+}
+
+ID3D11ShaderResourceView* DebugRenderer::GetViewResource()
 	{
 		if (vert_count == 0) return nullptr;
 		m_pImmediateContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
@@ -399,7 +418,7 @@ void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 		);
 
 		vert_count = 0;
-		return viewContext->OutputShaderResourceView.GetAddressOf();
+		return viewContext->OutputShaderResourceView.Get();
 	}
 
 

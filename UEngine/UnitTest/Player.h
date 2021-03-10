@@ -7,7 +7,7 @@ private:
 	int frame = 0;
 	POINT currMapIndex{ 0, 0 };
 	Material* material{ nullptr };
-	Physics2D::RectCollider* collider;
+	Physics2D::RectCollider* collider{ nullptr };
 	Vector2 lastpos;
 	float gravity = -1.5f;
 	float weight = 0;

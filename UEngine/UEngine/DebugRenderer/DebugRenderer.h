@@ -41,6 +41,7 @@ namespace UEngine
 		void Add_Axis(Matrix worldMatrix);
 		void Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer);
 
-		ID3D11ShaderResourceView** GetViewResource();
+		ID3D11ShaderResourceView** GetAddressOfViewResource();
+		ID3D11ShaderResourceView* GetViewResource();
 	};
 }

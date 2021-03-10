@@ -35,6 +35,8 @@ namespace UEngine
 		UEngine::Physics2D::SpatialPartition2D spatialPartition2d;
 		DebugRenderer debugRenderer;
 
+		ID3D11ShaderResourceView* finalViewResources[2];
+
 	public:
 		float FixedTimestep{ 0.02f };
 		float MaxFixedTimestep{ 0.1f };
@@ -61,5 +63,7 @@ namespace UEngine
 		void StartGame();
 
 		void Update();
+		ID3D11ShaderResourceView** EditorUpdate();
+		void EditorRender();
 	};
 }
