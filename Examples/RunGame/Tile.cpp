@@ -3,16 +3,16 @@
 
 void Tile::FixedUpdate()
 {
-	GetTransform()->localPosition.x -= 7;
+	fixedPosition.x -= 7;
 	if (GetTransform()->localPosition.x < -650)
 	{
-		GetTransform()->localPosition.x += 1300;
-		if (Math::RndInt())
+		fixedPosition.x += 1300;
+		/*if (Math::RndInt())
 		{
 			if (GetComponent<RenderComponent>()->GetEnable())
 			{
 				GetComponent<RenderComponent>()->SetEnable(false);
-				GetComponent<Physics2D::RectCollider>()->IsTrigger = true;
+				RemoveComponent<Physics2D::RectCollider>();
 			}
 		}
 		else
@@ -20,14 +20,14 @@ void Tile::FixedUpdate()
 			if (!GetComponent<RenderComponent>()->GetEnable())
 			{
 				GetComponent<RenderComponent>()->SetEnable(true);
-				GetComponent<Physics2D::RectCollider>()->IsTrigger = false;
+				AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
 			}
-		}
+		}*/
 	}
 }
 
 void Tile::Update()
 {
-	lastpos = GetTransform()->localPosition;
+	GetTransform()->localPosition.x = fixedPosition.x;
 	GetTransform()->localPosition.y = -250;
 }
