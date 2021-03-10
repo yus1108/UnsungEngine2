@@ -63,7 +63,10 @@ namespace UEngine
 		void StartGame();
 
 		void Update();
-		ID3D11ShaderResourceView** EditorUpdate();
-		void EditorRender();
+
+		void EditorUpdate();
+		void EditorRenderBegin();
+		ID3D11ShaderResourceView** EditorRenderEnd();
+		void EditorSyncData();
 	};
 }

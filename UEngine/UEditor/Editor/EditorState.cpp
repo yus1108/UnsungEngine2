@@ -152,13 +152,14 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
         
 
         UEngine::Utility::UTime::Get()->Throttle(targetHz);
-        auto viewResources = gameState->EditorUpdate();
+        gameState->EditorSyncData();
 
+        gameState->EditorUpdate();
+        gameState->EditorRenderBegin();
         // Rendering
         ImGui::Render();
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-        gameState->EditorRender();
+        gameState->EditorRenderEnd();
     });
 
     return returnedValue;
