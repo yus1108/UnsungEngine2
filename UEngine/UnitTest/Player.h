@@ -9,7 +9,7 @@ private:
 	Material* material{ nullptr };
 	Physics2D::RectCollider* collider;
 	Vector2 lastpos;
-	float gravity = -1;
+	float gravity = -1.5f;
 	float weight = 0;
 	bool ableToJump = false;
 

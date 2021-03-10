@@ -3,10 +3,10 @@
 
 void Tile::FixedUpdate()
 {
-	GetTransform()->localPosition.x -= 7;
+	fixedPosition.x -= 7;
 	if (GetTransform()->localPosition.x < -650)
 	{
-		GetTransform()->localPosition.x += 1300;
+		fixedPosition.x += 1300;
 		if (Math::RndInt())
 		{
 			if (GetComponent<RenderComponent>()->GetEnable())
@@ -28,6 +28,6 @@ void Tile::FixedUpdate()
 
 void Tile::Update()
 {
-	lastpos = GetTransform()->localPosition;
+	GetTransform()->localPosition.x = fixedPosition.x;
 	GetTransform()->localPosition.y = -250;
 }

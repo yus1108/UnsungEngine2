@@ -35,8 +35,8 @@ void Scene::Load()
         gameState->LoadObject([this](GameObject* cameraObject)
         {
             auto camera = cameraObject->AddComponent<Camera>();
-            camera->viewWidth = static_cast<float>(screenSize.x);
-            camera->viewHeight = static_cast<float>(screenSize.y);
+            camera->viewWidth = 2000;
+            camera->viewHeight =2000;
         });
 
         gameState->LoadObject([this](GameObject* background)
@@ -67,10 +67,10 @@ void Scene::Load()
                 tile->name = "tile";
                 tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                 tile->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/tileset.png");
-                tile->AddComponent<Tile>();
+                auto tileScript = tile->AddComponent<Tile>();
                 tile->AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
-                tile->GetTransform()->localPosition.x = -550 + index * 100;
-                tile->GetTransform()->localPosition.y = -250;
+                tileScript->fixedPosition.x = -550 + index * 100;
+                tileScript->fixedPosition.y = -250;
                 tile->GetTransform()->scale = Vector2{
                     100,
                     100
@@ -91,7 +91,7 @@ void Scene::Load()
             player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
             player->AddComponent<Material>()->Load(L"./Assets/herochar sprites(new)/herochar_run_anim_strip_6.png");
             player->AddComponent<Player>();
-            player->AddComponent<Physics2D::RectCollider>()->SetCollider(80, 80);
+            player->AddComponent<Physics2D::RectCollider>()->SetCollider(50, 50);
             player->GetTransform()->localPosition.x = -450;
             player->GetTransform()->localPosition.y = -50;
             player->GetTransform()->scale = Vector2{

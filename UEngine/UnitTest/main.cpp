@@ -40,7 +40,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         desc.InitUTime = true;
         desc.InitWinInput = true;
         desc.NCmdShow = nCmdShow;
-        desc.TitleName = L"Puzzle";
+        desc.TitleName = L"Unit Test";
         desc.WindowSize = { 1200, 600 };
         desc.Wcex = &Wcex;
 

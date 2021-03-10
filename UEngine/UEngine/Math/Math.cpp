@@ -424,46 +424,281 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 	rt = Vector2(rect2->GetCollider().right, rect2->GetCollider().top);
 	rb = Vector2(rect2->GetCollider().right, rect2->GetCollider().bottom);
 
+	float prevBottom = rect1->GetPrevCollider().bottom;
+	float prevTop = rect1->GetPrevCollider().top;
+	float prevRight = rect1->GetPrevCollider().right;
+	float prevLeft = rect1->GetPrevCollider().left;
+	float bottom = rect1->GetCollider().bottom;
+	float top = rect1->GetCollider().top;
+	float right = rect1->GetCollider().right;
+	float left = rect1->GetCollider().left;
+	Vector2 prevCenter = rect1->GetLastPos();
+
+	if (closestPoint1.x == lt.x && closestPoint1.y == lt.y)
+	{
+		// 바깥에서 안쪽으로
+		if (prevRight < lt.x &&
+			right >= lt.x)
+		{
+			if (prevBottom < lt.y &&
+				bottom <= lt.y)
+			{
+				result.distance1.x = (rect1->GetCollider().right - lt.x) * -0.5f;
+				result.distance2.x = (rect1->GetCollider().right - lt.x) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				//throw std::runtime_error("");
+			}
+		}
+		// 안쪽에서 바깥으로
+		else if (prevCenter.x > lt.x &&
+			center1.x <= lt.x)
+		{
+			if (prevBottom < lt.y &&
+				bottom <= lt.y)
+			{
+				result.distance1.y = (rect1->GetCollider().bottom - lt.y) * -0.5f;
+				result.distance2.y = (rect1->GetCollider().bottom - lt.y) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				//throw std::runtime_error("");
+			}
+		}
+		// 위에서 아래로 푸시
+		else if (prevBottom > lt.y &&
+			bottom <= lt.y)
+		{
+			result.distance1.y = (rect1->GetCollider().bottom - lt.y) * -0.5f;
+			result.distance2.y = (rect1->GetCollider().bottom - lt.y) * 0.5f;
+			rect1->lastImpacts[rect2] = result.distance1;
+		}
+		else
+		{
+			Vector2 nLastImpact = rect1->lastImpacts[rect2].Normalize();
+			result.distance1 = Vector2
+			(
+				(rect1->GetCollider().right - lt.x) * 0.5f * nLastImpact.x,
+				(rect1->GetCollider().bottom - lt.y) * -0.5f * nLastImpact.y
+			);
+			result.distance2 = result.distance1 * -1.0f;
+		}
+		return result;
+	}
+	else if (closestPoint1.x == rt.x && closestPoint1.y == rt.y)
+	{
+		// 바깥에서 안쪽으로
+		if (prevLeft > rt.x &&
+			left <= rt.x)
+		{
+			if (prevBottom < rt.y &&
+				bottom <= rt.y)
+			{
+				result.distance1.x = (rt.x - rect1->GetCollider().left) * -0.5f;
+				result.distance2.x = (rt.x - rect1->GetCollider().left) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				//throw std::runtime_error("");
+			}
+		}
+		// 안쪽에서 바깥으로
+		else if (prevCenter.x < rt.x &&
+			center1.x >= rt.x)
+		{
+			if (prevBottom < rt.y &&
+				bottom <= rt.y)
+			{
+				result.distance1.y = (rect1->GetCollider().bottom - rt.y) * -0.5f;
+				result.distance2.y = (rect1->GetCollider().bottom - rt.y) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				//throw std::runtime_error("");
+			}
+		}
+		// 위에서 아래로 푸시
+		else if (prevBottom > rt.y &&
+			bottom <= rt.y)
+		{
+			result.distance1.y = (rect1->GetCollider().bottom - rt.y) * -0.5f;
+			result.distance2.y = (rect1->GetCollider().bottom - rt.y) * 0.5f;
+			rect1->lastImpacts[rect2] = result.distance1;
+		}
+		else
+		{
+			Vector2 nLastImpact = rect1->lastImpacts[rect2].Normalize();
+			result.distance1 = Vector2
+			(
+				(rect1->GetCollider().left - rt.x) * 0.5f * nLastImpact.x,
+				(rect1->GetCollider().bottom - rt.y) * -0.5f * nLastImpact.y
+			);
+			result.distance2 = result.distance1 * -1.0f;
+		}
+		return result;
+	}
+	else if (closestPoint1.x == lb.x && closestPoint1.y == lb.y)
+	{
+		// 바깥에서 안쪽으로
+		if (prevRight < lb.x &&
+			right >= lb.x)
+		{
+			if (prevTop < lb.y &&
+				top >= lb.y)
+			{
+				result.distance1.x = (rect1->GetCollider().right - lb.x) * -0.5f;
+				result.distance2.x = (rect1->GetCollider().right - lb.x) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				result.distance1.x = (rect1->GetCollider().right - lb.x) * -0.5f;
+				result.distance2.x = (rect1->GetCollider().right - lb.x) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+		}
+		// 안쪽에서 바깥으로
+		else if (prevCenter.x > lb.x &&
+			center1.x <= lb.x)
+		{
+			if (prevTop < lb.y &&
+				top <= lb.y)
+			{
+				result.distance1.y = (rect1->GetCollider().top - lb.y) * -0.5f;
+				result.distance2.y = (rect1->GetCollider().top - lb.y) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				//throw std::runtime_error("");
+			}
+		}
+		// 아래서 위로 푸시
+		else if (prevTop < lb.y &&
+			top >= lb.y)
+		{
+			if (prevRight < lb.x &&
+				right >= lb.x)
+			{
+			}
+			else
+			{
+			}
+			result.distance1.y = (rect1->GetCollider().top - lb.y) * -0.5f;
+			result.distance2.y = (rect1->GetCollider().top - lb.y) * 0.5f;
+			rect1->lastImpacts[rect2] = result.distance1;
+		}
+		else
+		{
+			Vector2 nLastImpact = rect1->lastImpacts[rect2].Normalize();
+			result.distance1 = Vector2
+			(
+				(rect1->GetCollider().right - lb.x) * 0.5f * nLastImpact.x,
+				(rect1->GetCollider().top - lb.y) * 0.5f * nLastImpact.y
+			);
+			result.distance2 = result.distance1 * -1.0f;
+		}
+		return result;
+	}
+	else if (closestPoint1.x == rb.x && closestPoint1.y == rb.y)
+	{
+		// 바깥에서 안쪽으로
+		if (prevLeft > rb.x &&
+			left <= rb.x)
+		{
+			if (prevTop < rb.y &&
+				top >= rb.y)
+			{
+				result.distance1.x = (rect1->GetCollider().right - rb.x) * -0.5f;
+				result.distance2.x = (rect1->GetCollider().right - rb.x) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				result.distance1.x = (rect1->GetCollider().right - rb.x) * -0.5f;
+				result.distance2.x = (rect1->GetCollider().right - rb.x) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+		}
+		// 안쪽에서 바깥으로
+		else if (prevCenter.x < rb.x &&
+			center1.x >= rb.x)
+		{
+			if (prevTop < rb.y &&
+				top <= rb.y)
+			{
+				result.distance1.y = (rect1->GetCollider().top - rb.y) * -0.5f;
+				result.distance2.y = (rect1->GetCollider().top - rb.y) * 0.5f;
+				rect1->lastImpacts[rect2] = result.distance1;
+			}
+			else
+			{
+				//throw std::runtime_error("");
+			}
+		}
+		// 아래서 위로 푸시
+		else if (prevTop < rb.y &&
+			top >= rb.y)
+		{
+			if (prevRight < rb.x &&
+				right >= rb.x)
+			{
+			}
+			else
+			{
+			}
+			result.distance1.y = (rect1->GetCollider().top - rb.y) * -0.5f;
+			result.distance2.y = (rect1->GetCollider().top - rb.y) * 0.5f;
+			rect1->lastImpacts[rect2] = result.distance1;
+		}
+		else
+		{
+			Vector2 nLastImpact = rect1->lastImpacts[rect2].Normalize();
+			result.distance1 = Vector2
+			(
+				(rect1->GetCollider().right - lb.x) * 0.5f * nLastImpact.x,
+				(rect1->GetCollider().top - lb.y) * 0.5f * nLastImpact.y
+			);
+			result.distance2 = result.distance1 * -1.0f;
+		}
+		return result;
+	}
+
 	Vector2 dist1 = closestPoint1 - center1;
 	float scaleX = dist1.x > 0 ? rect1->GetTransform()->scale.x : -rect1->GetTransform()->scale.x;
 	float scaleY = dist1.y > 0 ? rect1->GetTransform()->scale.y : -rect1->GetTransform()->scale.y;
 
-	if (closestPoint1.x == lb.x && closestPoint1.y == lb.y)
-		return result;
-	if (closestPoint1.x == lt.x && closestPoint1.y == lt.y)
-		return result;
-	if (closestPoint1.x == rt.x && closestPoint1.y == rt.y)
-		return result;
-	if (closestPoint1.x == rb.x && closestPoint1.y == rb.y)
-		return result;
-
-	Vector2 closestPoint2;
-	closestPoint2.x = Clamp(center2.x, rect1->GetCollider().left, rect1->GetCollider().right);
-	closestPoint2.y = Clamp(center2.y, rect1->GetCollider().bottom, rect1->GetCollider().top);
+	float speed1 = dir1.Magnitude();
+	float speed2 = dir2.Magnitude();
+	float totalSeped = speed1 + speed2;
 
 	if (dist1.x != 0)
 		dist1.x = scaleX / 2.0f - dist1.x;
 	if (dist1.y != 0)
 		dist1.y = scaleY / 2.0f - dist1.y;
 
-	float speed1 = dir1.Magnitude();
-	float speed2 = dir2.Magnitude();
+	/*if (speed1 > speed2 || rect2->GetGameObject()->IsStatic)
+{
+	result.distance1 = dist1.Normalize() * -1.0f;
 
-	if (speed1 > speed2 || rect2->GetGameObject()->IsStatic)
-	{
-		result.distance1 = dist1 * -1.0f;
+}
+else if (speed1 < speed2 || rect1->GetGameObject()->IsStatic)
+{
+	result.distance2 = dist1.Normalize() * 1.0f;
+}
+else
+{
+	result.distance1 = dist1.Normalize() * -1.0f;
+	result.distance2 = dist1.Normalize() * 1.0f;
+}*/
 
-	}
-	else if (speed1 < speed2 || rect1->GetGameObject()->IsStatic)
-	{
-		result.distance2 = dist1;
-	}
-	else 
-	{
-		result.distance1 = dist1 * -0.5f;
-		result.distance2 = dist1 * 0.5f;
-	}
-
+	result.distance1 = dist1 * -0.5f;
+	result.distance2 = dist1 * 0.5f;
 	return result;
 }
 

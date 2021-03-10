@@ -10,11 +10,6 @@ void Player::Start()
 
 void Player::FixedUpdate()
 {
-	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump)
-	{
-		ableToJump = false;
-		weight = 20;
-	}
 	if (collider->collisions.size() > 0)
 	{
 		ableToJump = true;
@@ -25,19 +20,21 @@ void Player::FixedUpdate()
 	}
 	else
 	{
-		ableToJump = false;
-		if (GetTransform()->localPosition.y < -150)
-		{
-			weight += gravity * 10;
-		}
+		GetTransform()->localPosition.y += weight;
+		weight += gravity;
+		lastpos = GetTransform()->localPosition;
 	}
-	GetTransform()->localPosition.y += weight;
-	weight += gravity;
-	lastpos = GetTransform()->localPosition;
+	
 }
 
 void Player::Update()
 {
+	
+	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump && GetTransform()->localPosition.y < -155.0f)
+	{
+		ableToJump = false;
+		weight = 20;
+	}
 	Vector2 dir1 = GetTransform()->localPosition - GetComponent<Physics2D::RectCollider>()->GetLastPos();
 	std::cout << dir1.x << std::endl;
 	std::cout << dir1.y << std::endl;
@@ -52,22 +49,22 @@ void Player::Update()
 	}
 	if (WinInput::Get()->GetKey(VK_DOWN))
 	{
-		auto value = Vector2(0, -1) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		auto value = Vector2(0, -1) * 200 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition = transform->localPosition + value;
 	}
 	if (WinInput::Get()->GetKey(VK_UP))
 	{
-		auto value = Vector2(0, 1) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		auto value = Vector2(0, 1) * 200 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition = transform->localPosition + value;
 	}
 	if (WinInput::Get()->GetKey(VK_RIGHT))
 	{
-		auto value = Vector2(1, 0) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		auto value = Vector2(1, 0) * 200 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition = transform->localPosition + value;
 	}
 	if (WinInput::Get()->GetKey(VK_LEFT))
 	{
-		auto value = Vector2(-1, 0) * 100 * Utility::UTime::Get()->DeltaTimeF();
+		auto value = Vector2(-1, 0) * 200 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition = transform->localPosition + value;
 	}
 	
