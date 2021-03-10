@@ -4,7 +4,7 @@ namespace UEngine
 {
 	namespace Math
 	{
-		const Vector3 GetMousePosToWorld();
+		const Vector2 GetMousePosToWorld();
 		const float Clamp(float value, float min, float max);
 
 		int RndInt(int start = 0, int end = 1);

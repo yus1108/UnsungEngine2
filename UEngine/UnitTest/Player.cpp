@@ -24,21 +24,43 @@ void Player::FixedUpdate()
 		weight += gravity;
 		lastpos = GetTransform()->localPosition;
 	}
-	
+	if (hitCounter <= 0)
+	{
+		material->color = Color{ 1, 1, 1, 1 };
+	}
+	else
+	{
+		if (hitColor)
+		{
+			material->color = Color{ 1, 0, 0, 1 };
+		}
+		else
+		{
+			material->color = Color{ 1, 1, 1, 1 };
+		}
+		hitColor = !hitColor;
+	}
 }
 
 void Player::Update()
 {
+	Vector2 mousepos = Math::GetMousePosToWorld();
+	if (WinInput::Get()->GetKeyDown(VK_LBUTTON))
+	{
+		if (Math::Physics2D::IsColliding(mousepos, collider->GetCollider()))
+		{
+			hitCounter = hitMaxTimer;
+		}
+		
+	}
+	hitCounter -= Utility::UTime::Get()->DeltaTimeF();
 	
+
 	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump && GetTransform()->localPosition.y < -155.0f)
 	{
 		ableToJump = false;
 		weight = 20;
 	}
-	Vector2 dir1 = GetTransform()->localPosition - GetComponent<Physics2D::RectCollider>()->GetLastPos();
-	std::cout << dir1.x << std::endl;
-	std::cout << dir1.y << std::endl;
-	
 
 	auto transform = GetTransform();
 	if (WinInput::Get()->GetKey('1'))

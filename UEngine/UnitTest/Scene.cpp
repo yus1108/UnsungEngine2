@@ -35,8 +35,8 @@ void Scene::Load()
         gameState->LoadObject([this](GameObject* cameraObject)
         {
             auto camera = cameraObject->AddComponent<Camera>();
-            camera->viewWidth = 2000;
-            camera->viewHeight =2000;
+            camera->viewWidth = static_cast<float>(screenSize.x);
+            camera->viewHeight = static_cast<float>(screenSize.y);
         });
 
         gameState->LoadObject([this](GameObject* background)

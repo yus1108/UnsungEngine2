@@ -749,11 +749,12 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 	return result;
 }
 
-const UEngine::Vector3 UEngine::Math::GetMousePosToWorld()
+const UEngine::Vector2 UEngine::Math::GetMousePosToWorld()
 {
 	using namespace DirectX;
 	// mouse ndc position to world position = mousePos * Projection^-1 * View^-1
 	auto mousePos = Utility::UMath::ConvertPixelToNDC(WinInput::Get()->GetMousePos(), WinApplication::Get()->GetHandler());
+	
 	auto cpu_camera = Camera::mainCamera->GetCameraMatrix();
 	Vector3 vMousePos = mousePos;
 	auto pDet = XMMatrixDeterminant(cpu_camera.projection);

@@ -1,5 +1,6 @@
 #include "uengine_winapp.h"
 #include "WinInput.h"
+#include <iostream>
 
 UEngine::WinInput UEngine::WinInput::instance;
 
@@ -61,8 +62,8 @@ const UEngine::Utility::Coordinate2D UEngine::WinInput::GetMousePos() const
     rc.top = 0;
     rc.right = clientSize.right;
     rc.bottom = clientSize.bottom;
-    
-    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, true);
+    //WinApplication::Get()->GetClientSize(&rc);
+    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, false);
 
     point.x = point.x - windowSize.left + rc.left;
     point.x = point.x < clientSize.left ? clientSize.left : point.x;

@@ -7,7 +7,7 @@ void Tile::FixedUpdate()
 	if (GetTransform()->localPosition.x < -650)
 	{
 		fixedPosition.x += 1300;
-		if (Math::RndInt())
+		/*if (Math::RndInt())
 		{
 			if (GetComponent<RenderComponent>()->GetEnable())
 			{
@@ -22,7 +22,7 @@ void Tile::FixedUpdate()
 				GetComponent<RenderComponent>()->SetEnable(true);
 				AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
 			}
-		}
+		}*/
 	}
 }
 
