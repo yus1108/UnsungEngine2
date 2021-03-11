@@ -108,7 +108,7 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
     auto returnedValue = app->UpdateLoop([&]()
     {
         // Start the Dear ImGui frame
-        
+
         // Start the Dear ImGui frame
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
@@ -149,12 +149,14 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             ImGui::End();
         }
 
-        
+
 
         UEngine::Utility::UTime::Get()->Throttle(targetHz);
         gameState->EditorSyncData();
 
         gameState->EditorUpdate();
+        auto mousePos = Math::GetMousePosToWorld();
+
         gameState->EditorRenderBegin();
         // Rendering
         ImGui::Render();
@@ -176,13 +178,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
+    case WM_MOUSEMOVE:
+        break;
     case WM_SIZE:
-       /* if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-        }*/
+        UEngine::DXRenderer::Get()->ResizeMainRenderTarget((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
         return 0;
     case WM_SYSCOMMAND:
         if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu

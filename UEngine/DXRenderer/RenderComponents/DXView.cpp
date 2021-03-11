@@ -19,7 +19,7 @@ namespace UEngine
             DXView* instance = new DXView;
             ViewContext* contextAddressOf[] = { &instance->context };
             ZeroMemory(&instance->context, sizeof(ViewContext));
-            renderer->InitRenderViewContext(contextAddressOf, 400, 400, EnableDepthStencil, sampleDesc);
+            renderer->InitRenderViewContext(contextAddressOf, width, height, EnableDepthStencil, sampleDesc);
 
             return instance;
         }
