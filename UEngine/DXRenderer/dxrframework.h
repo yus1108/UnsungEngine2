@@ -39,7 +39,6 @@
 #include "RenderComponents\DXShader.h"
 #include "RenderComponents\DXRenderMesh.h"
 #include "RenderComponents\DXConstantBuffer.h"
-#include "RenderComponents\DXRenderObject.h"
 #include "RenderComponents\DXView.h"
 #include "RenderComponents\DXTexture.h"
 

@@ -20,9 +20,11 @@ namespace UEngine
 			void Init(size_t numThreads = 0);
 			void Release();
 
+		protected:
+			size_t numThreads{ 0 };
+
 		private:
 			bool stop_all{ false };
-			size_t numThreads{ 0 };
 			std::vector<std::thread> pool;
 			std::queue<std::function<void()>> tasks;
 			std::condition_variable condition_variable;

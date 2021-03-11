@@ -13,12 +13,11 @@ namespace UEngine
     {
     }
 
-    void WinApplication::Create(HINSTANCE hInstance)
+    void WinApplication::Create(HINSTANCE hInstance, size_t numThreads)
     {
+
         WNDCLASSEXW Wcex;
-
         Wcex.cbSize = sizeof(WNDCLASSEX);
-
         Wcex.style = CS_HREDRAW | CS_VREDRAW;
         Wcex.lpfnWndProc = WndProc;
         Wcex.cbClsExtra = 0;
@@ -33,7 +32,6 @@ namespace UEngine
 
         UEngine::WINDOWS_APPLICATION_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-
         
         desc.HInstance = hInstance;
         desc.HasTitleBar = true;
@@ -44,11 +42,11 @@ namespace UEngine
         desc.WindowSize = { 800, 600 };
         desc.Wcex = &Wcex;
 
-        Create(desc);
+        Create(desc, numThreads);
         isDefaultDesc = true;
     }
 
-    void WinApplication::Create(const WINDOWS_APPLICATION_DESC& desc)
+    void WinApplication::Create(const WINDOWS_APPLICATION_DESC& desc, size_t numThreads)
     {
         appDesc = desc;
         if (appDesc.Wcex->lpfnWndProc == nullptr)
@@ -57,6 +55,7 @@ namespace UEngine
         RegisterClassEx(desc.Wcex);
         // Perform application initialization:
         InitInstance(desc.HInstance, desc.NCmdShow, desc.TitleName, desc.Wcex->lpszClassName, desc.WindowSize);
+        threadPool.Init(numThreads);
     }
 
     int WinApplication::UpdateLoop(std::function<void()> f)

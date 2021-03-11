@@ -33,15 +33,6 @@
     <ClInclude Include="RenderComponents\DXTexture.h">
       <Filter>RenderComponents</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager\DXRenderObjectPool.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager\DXResourceManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderComponents\DXRenderObject.h">
-      <Filter>RenderComponents</Filter>
-    </ClInclude>
     <ClInclude Include="RenderComponents\DXShader.h">
       <Filter>RenderComponents</Filter>
     </ClInclude>
@@ -53,6 +44,9 @@
     </ClInclude>
     <ClInclude Include="RenderComponents\DXConstantBuffer.h">
       <Filter>RenderComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager\DXResourceManager.h">
+      <Filter>ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -67,15 +61,6 @@
     <ClCompile Include="RenderComponents\DXTexture.cpp">
       <Filter>RenderComponents</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager\DXRenderObjectPool.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager\DXResourceManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderComponents\DXRenderObject.cpp">
-      <Filter>RenderComponents</Filter>
-    </ClCompile>
     <ClCompile Include="RenderComponents\DXShader.cpp">
       <Filter>RenderComponents</Filter>
     </ClCompile>
@@ -87,6 +72,9 @@
     </ClCompile>
     <ClCompile Include="RenderComponents\DXConstantBuffer.cpp">
       <Filter>RenderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager\DXResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

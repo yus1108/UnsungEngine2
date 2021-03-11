@@ -7,12 +7,14 @@ namespace UEngine
 		class DXView final
 		{
 		private:
-			DXView() {}
+			DXView() { UID = nextId++; }
 			~DXView() = default;
 		private:
+			static long long nextId;
 			ViewContext context;
 
 		public:
+			std::wstring UID;
 			static DXView* const Instantiate
 			(
 				DXRenderer* renderer,
@@ -21,6 +23,7 @@ namespace UEngine
 				bool EnableDepthStencil,
 				DXGI_SAMPLE_DESC sampleDesc
 			);
+			static void Release(DXView* const view);
 			static void Release(DXView** const view);
 
 			ID3D11DeviceContext* const GetDeviceContext() { return context.DeviceContext.Get(); }

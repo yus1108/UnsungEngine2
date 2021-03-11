@@ -5,6 +5,8 @@ namespace UEngine
 {
     namespace DXRenderer
     {
+        long long DXView::nextId = 0;
+
         DXView* const DXView::Instantiate
         (
             DXRenderer* renderer,
@@ -20,6 +22,12 @@ namespace UEngine
             renderer->InitRenderViewContext(contextAddressOf, 400, 400, EnableDepthStencil, sampleDesc);
 
             return instance;
+        }
+
+        void DXView::Release(DXView* const view)
+        {
+            view->context.CommandList.ReleaseAndGetAddressOf();
+            delete view;
         }
 
         void DXView::Release(DXView** const view)

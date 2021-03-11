@@ -271,6 +271,11 @@ namespace UEngine
 			*shader = nullptr;
 		}
 
+		void DXShader::Release(DXShader* const shader)
+		{
+			delete shader;
+		}
+
 		void DXShader::Set(ID3D11DeviceContext* const deviceContext)
 		{
 			deviceContext->IASetInputLayout(pipeline.inputLayout.Get());

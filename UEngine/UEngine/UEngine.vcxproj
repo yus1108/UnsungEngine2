@@ -170,7 +170,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionType.h" />
     <ClInclude Include="DebugRenderer\DebugRenderer.h" />
     <ClInclude Include="Game Architecture\GameState.h" />
     <ClInclude Include="Game Architecture\Object\Component\Camera.h" />
@@ -179,15 +178,6 @@
     <ClInclude Include="Game Architecture\Object\Component\RenderComponent.h" />
     <ClInclude Include="Game Architecture\Object\Component\Transform.h" />
     <ClInclude Include="Game Architecture\Object\GameObject.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Component\CircleCollider.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Component\Collider.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Component\RectCollider.h" />
-    <ClInclude Include="Game Architecture\Render\GameView.h" />
-    <ClInclude Include="Math\Math.h" />
-    <ClInclude Include="ResourceManager\ConstantBufferPool.h" />
-    <ClInclude Include="ResourceManager\RenderObjectPool.h" />
-    <ClInclude Include="ResourceManager\ResourceManager.h" />
     <ClInclude Include="UEngine.h" />
     <ClInclude Include="UEngineDefinitions.h" />
   </ItemGroup>
@@ -199,15 +189,6 @@
     <ClCompile Include="Game Architecture\Object\Component\RenderComponent.cpp" />
     <ClCompile Include="Game Architecture\Object\Component\Transform.cpp" />
     <ClCompile Include="Game Architecture\Object\GameObject.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\Collision\SpatialPartition2D.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\Component\CircleCollider.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\Component\Collider.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\Component\RectCollider.cpp" />
-    <ClCompile Include="Game Architecture\Render\GameView.cpp" />
-    <ClCompile Include="Math\Math.cpp" />
-    <ClCompile Include="ResourceManager\ConstantBufferPool.cpp" />
-    <ClCompile Include="ResourceManager\RenderObjectPool.cpp" />
-    <ClCompile Include="ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="UEngine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

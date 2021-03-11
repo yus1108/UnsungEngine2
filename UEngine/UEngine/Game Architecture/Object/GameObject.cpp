@@ -173,19 +173,17 @@ void UEngine::GameObject::RemoveChild(GameObject* child)
 	}
 }
 
-UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::string name)
+UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::wstring name)
 {
-	auto objs = GameState::Get()->GetGameObjects();
-	for (auto obj : objs)
-		if (obj->name == name) return obj;
-	return nullptr;
+	return scene->GetGameObject(name);
 }
 
 UEngine::GameObject* UEngine::GameObject::Instantiate(std::wstring name)
 {
 	UEngine::GameObject* obj = new UEngine::GameObject();
+	obj->scene = GameState::GetCurrentScene();
 	obj->AddComponent<Transform>();
-	GameState::Get()->AddObject(obj);
+	obj->scene->AddGameObject(obj);
 	return obj;
 }
 

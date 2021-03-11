@@ -24,6 +24,7 @@ namespace UEngine
 
 			static DXTexture* Load(std::wstring fileName, D3D11_SAMPLER_DESC samplerDesc);
 			static void Release(DXTexture** const texture);
+			static void Release(DXTexture* const texture);
 		};
 	}
 }

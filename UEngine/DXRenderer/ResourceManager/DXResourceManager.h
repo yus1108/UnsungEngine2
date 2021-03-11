@@ -1,6 +1,4 @@
 #pragma once
-#include "dxrframework.h"
-#include "DXRenderObjectPool.h"
 
 namespace UEngine
 {
@@ -9,59 +7,100 @@ namespace UEngine
 		class DXResourceManager
 		{
 		private:
-			
-			/*
-				key: std::string - typeid(cpu_buffer_struct).raw_name()
-				value: CONSTANT_BUFFER_DESC - description to create a buffer
-			*/
-			std::unordered_map<std::string, CONSTANT_BUFFER_DESC> constantBuffers;
-			std::unordered_map<std::string, DXShader*> shaders;
-			std::map<std::string, DXRenderMesh*> renderMeshes;
-			std::map<std::string, std::vector<SIMPLE_VERTEX>> vertexInfo;
+			std::map<std::string, std::unordered_map<std::wstring, void*>> creationQueue, deletionQueue, resources;
+			std::map<std::string, CONSTANT_BUFFER_DESC> cBufferPreset;
 
-			std::unordered_map<std::string, SHARED_RENDERMESH*> shared_rendermesh;
-			std::unordered_map<std::string, DXRenderMesh*> loadedRenderMeshes;
-			std::unordered_map<std::string, std::vector<SIMPLE_VERTEX>> loadedVertexInfo;
-
-			std::unordered_map<std::string, class DXScene*> scenes;
+			void InitShaders();
+			void InitMeshes();
+			void InitCBuffers();
 
 		public:
+			std::string TYPE_VIEW = typeid(UEngine::DXRenderer::DXView).raw_name();
+			std::string TYPE_TEXTURE = typeid(UEngine::DXRenderer::DXTexture).raw_name();
+			std::string TYPE_SHADER = typeid(UEngine::DXRenderer::DXShader).raw_name();
+			std::string TYPE_RENDERMESH = typeid(UEngine::DXRenderer::DXRenderMesh).raw_name();
+			std::string TYPE_CONSTANT_BUFFER = typeid(UEngine::DXRenderer::DXConstantBuffer).raw_name();
+
 			DXResourceManager() = default;
 			~DXResourceManager() { Release(); }
 
-			DXRenderObjectPool RenderObjectPool = DXRenderObjectPool(this);
+			template <typename T>
+			void AddResource(std::wstring name, T* resource);
+			template <typename T>
+			void RemoveResource(std::wstring name);
+			template <typename T>
+			T* GetResource(std::wstring name);
 
-			void SetShaders(std::string resource_name, DXShader* shader);
-			void SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh);
-			void SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices);
-			void SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer);
+			const CONSTANT_BUFFER_DESC& GetCBufferPreset(std::string typeName) { return cBufferPreset[typeName]; }
 
-			DXShader* GetShaders(std::string resource_name) { return shaders[resource_name]; }
-			DXRenderMesh* GetRenderMesh(std::string resource_name);
-			// resource_name : typeid(cpu_buffer_struct).raw_name()
-			CONSTANT_BUFFER_DESC GetConstantBuffer(std::string resource_name) { return constantBuffers[resource_name]; }
-			std::vector<SIMPLE_VERTEX> GetVertices(std::string resource_name);
-
+			void ApplyChange();
 			void Init();
-
-		private:
-			void InitRenderMesh();
-			void InitShader();
-			void InitConstantBuffer();
-
-			void Release()
-			{
-				for (auto resource : shaders)
-					DXShader::Release(&resource.second);
-				for (auto resource : renderMeshes)
-					DXRenderMesh::Release(&resource.second);
-				for (auto resource : loadedRenderMeshes)
-					DXRenderMesh::Release(&resource.second);
-				for (auto resource : constantBuffers)
-					delete resource.second.StartSlots;
-				vertexInfo.clear();
-				loadedVertexInfo.clear();
-			}
+			void Release();
 		};
+
+		template<typename T>
+		inline void DXResourceManager::AddResource(std::wstring name, T* resource)
+		{
+			std::string typeName = typeid(T).raw_name();
+
+			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXTexture>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXShader>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
+				throw std::runtime_error("Invalid resource type");
+
+
+			if (creationQueue[typeName].size() > 0 &&
+				creationQueue[typeName].find(name) != creationQueue[typeName].end())
+				throw std::runtime_error("A resource with the given name is already queued");
+			creationQueue[typeName][name] = resource;
+		}
+
+		template<typename T>
+		inline void DXResourceManager::RemoveResource(std::wstring name)
+		{
+			std::string typeName = typeid(T).raw_name();
+
+			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXTexture>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXShader>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value)
+				throw std::runtime_error("Invalid resource type");
+			if (!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
+				throw std::runtime_error("Invalid resource type");
+
+			if (deletionQueue[typeName].size() > 0 &&
+				deletionQueue[typeName].find(name) != deletionQueue[typeName].end())
+				throw std::runtime_error("A resource with the given name already queued");
+
+			if (resources[typeName].size() == 0 &&
+				resources[typeName].find(name) == resources[typeName].end())
+				throw std::runtime_error("A resource with the given name doesn't exists");
+
+			deletionQueue[typeName][name] = resources[typeName][name];
+		}
+
+		template<typename T>
+		T* DXResourceManager::GetResource(std::wstring name)
+		{
+			std::string typeName = typeid(T).raw_name();
+
+			if (typeName != TYPE_VIEW &&
+				typeName != TYPE_TEXTURE &&
+				typeName != TYPE_SHADER &&
+				typeName != TYPE_RENDERMESH &&
+				typeName != TYPE_CONSTANT_BUFFER)
+				throw std::runtime_error("A resource with the given type doesn't exists");
+
+			return static_cast<T*>(resources[typeName][name]);
+		}
 	}
 }

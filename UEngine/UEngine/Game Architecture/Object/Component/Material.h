@@ -29,11 +29,11 @@ namespace UEngine
 			: colorBuffer(DXRenderer::DXConstantBuffer::Instantiate
 			(
 				DXRenderer::Get(),
-				DXRenderer::Get()->ResourceManager->GetConstantBuffer(typeid(Color).raw_name())
+				GameState::GetCurrentScene()->ResourceManager.GetCBufferPreset(typeid(Color).raw_name())
 			)), spriteBuffer(DXRenderer::DXConstantBuffer::Instantiate
 			(
 				DXRenderer::Get(),
-				DXRenderer::Get()->ResourceManager->GetConstantBuffer(typeid(UV).raw_name())
+				GameState::GetCurrentScene()->ResourceManager.GetCBufferPreset(typeid(UV).raw_name())
 			))
 		{}
 	};

@@ -34,3 +34,8 @@ void UEngine::DXRenderer::DXTexture::Release(DXTexture** const texture)
 	delete *texture;
 	*texture = nullptr;
 }
+
+void UEngine::DXRenderer::DXTexture::Release(DXTexture* const texture)
+{
+	delete texture;
+}

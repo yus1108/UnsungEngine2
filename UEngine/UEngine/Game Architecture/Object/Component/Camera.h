@@ -6,6 +6,7 @@ namespace UEngine
 	{
 		friend class GameView;
 	private:
+		GameView* gameView{ nullptr };
 		DXRenderer::DXView* view{ nullptr };
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };
 
@@ -33,7 +34,7 @@ namespace UEngine
 			: cameraBuffer
 			(
 				DXRenderer::DXConstantBuffer::Instantiate(DXRenderer::Get(),
-				DXRenderer::Get()->ResourceManager->GetConstantBuffer(typeid(CPU_CAMERA).raw_name()))
+				GameState::GetCurrentScene()->ResourceManager.GetCBufferPreset(typeid(CPU_CAMERA).raw_name()))
 			) {}
 
 

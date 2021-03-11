@@ -1,53 +1,58 @@
 #include "UEngine.h"
 #include "RenderComponent.h"
 
-void UEngine::RenderComponent::OnEnable()
+void UEngine::RenderComponent::Update()
 {
-	if (renderObject) GameState::Get()->gameScene.AddObject(renderObject);
-	else if (!renderMesh_name.empty() && !shader_name.empty())
-		Load(renderMesh_name, shader_name);
+	if (renderObject == nullptr) return;
+
+	auto scene = GetGameObject()->GetScene();
+	for (auto view : scene->cpu_view)
+		view->renderObjects.emplace_back(renderObject);
 }
 
-void UEngine::RenderComponent::OnDisable()
+void UEngine::RenderComponent::Load(std::wstring renderMesh_name, std::wstring shader_name)
 {
-	if (renderObject)
-	{
-		GameState::Get()->gameScene.RemoveObject(renderObject);
-		renderObject = nullptr;
-	}
-}
-
-void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string shader_name)
-{
-	OnDisable();
-	renderObject = GameState::Get()->gameScene.LoadObject(renderMesh_name, shader_name);
+	auto scene = GetGameObject()->GetScene();
+	renderObject = scene->GetRenderObject(renderMesh_name + shader_name);
 	this->renderMesh_name = renderMesh_name;
 	this->shader_name = shader_name;
-	if (GetGameObject()->GetActive() && GetEnable())
+
+	if (renderObject != nullptr) return;
+
+	renderObject = new RenderObject;
+	renderObject->name = renderMesh_name + shader_name;
+	renderObject->shader = scene->ResourceManager.GetResource<DXRenderer::DXShader>(shader_name);
+	if (renderObject->shader == nullptr)
 	{
-		GameState::Get()->gameScene.AddObject(renderObject);
 	}
+	renderObject->renderMesh = scene->ResourceManager.GetResource<DXRenderer::DXRenderMesh>(renderMesh_name);
+	if (renderObject->renderMesh == nullptr)
+	{
+		// load mesh file
+	}
+	scene->AddRenderObject(renderObject);
 }
 
 void UEngine::RenderComponent::LoadTriangle()
 {
-	Load("triangle", "color");
+	Load(L"triangle", L"color");
 }
 
 void UEngine::RenderComponent::LoadRectangle()
 {
-	Load("rectangle", "color");
+	Load(L"rectangle", L"color");
 }
 
 void UEngine::RenderComponent::LoadCircle(UINT slice)
 {
-	if (slice == 360)
+	Load(L"circle", L"color");
+	/*if (slice == 360)
 	{
-		Load("circle", "color");
+		Load(L"circle", L"color");
 		return;
-	}
+	}*/
 
-	if (DXRenderer::Get()->ResourceManager->GetRenderMesh("circle" + slice) == nullptr)
+	/*if (DXRenderer::Get()->ResourceManager->GetRenderMesh("circle" + slice) == nullptr)
 	{
 		std::vector<DXRenderer::SIMPLE_VERTEX> vertices = std::vector<DXRenderer::SIMPLE_VERTEX>
 		{
@@ -77,7 +82,7 @@ void UEngine::RenderComponent::LoadCircle(UINT slice)
 				indices.size()
 				));
 	}
-	Load("circle" + slice, "color");
+	Load("circle" + slice, "color");*/
 }
 
 void UEngine::RenderComponent::AddConstantBuffer(std::string type_raw_name, DXRenderer::DXConstantBuffer* buffer)
@@ -87,5 +92,5 @@ void UEngine::RenderComponent::AddConstantBuffer(std::string type_raw_name, DXRe
 
 void UEngine::RenderComponent::AddImageTexture(DXRenderer::DXTexture* imageTexture)
 {
-	renderObject->imageTexture = imageTexture;
+	renderObject->textures["image"] = imageTexture;
 }

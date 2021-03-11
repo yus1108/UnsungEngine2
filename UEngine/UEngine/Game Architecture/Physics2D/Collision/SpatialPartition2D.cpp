@@ -93,11 +93,12 @@ namespace UEngine
 			if (currNode == nullptr) return;
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				GameState::Get()->GetDebugRenderer()->Add_Rectangle(currNode->aabb, nodeColor);
+				// TODO:
+			/*	GameState::Get()->GetDebugRenderer()->Add_Rectangle(currNode->aabb, nodeColor);
 				for (auto colliderPair : currNode->colliders)
 					GameState::Get()->GetDebugRenderer()->Add_Rectangle(colliderPair.second->GetWorldAABB(), colliderColor);
 				for (auto child : currNode->children)
-					DebugRender(child, collider, nodeColor, colliderColor);
+					DebugRender(child, collider, nodeColor, colliderColor);*/
 			}
 		}
 
@@ -111,7 +112,8 @@ namespace UEngine
 			if (currNode == nullptr) return;
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				for (auto colliderPair : currNode->colliders)
+				// TODO:
+				/*for (auto colliderPair : currNode->colliders)
 				{
 					GameState::Get()->GetDebugRenderer()->Add_line
 					(
@@ -123,7 +125,7 @@ namespace UEngine
 					);
 				}
 				for (auto child : currNode->children)
-					DebugRender(child, collider, color);
+					DebugRender(child, collider, color);*/
 			}
 		}
 

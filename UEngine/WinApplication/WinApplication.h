@@ -1,7 +1,8 @@
 #pragma once
 #include <tchar.h>
-#include "../Utility/UTime.h"
 #include <functional>
+#include "../Utility/UTime.h"
+#include "../Utility/UThreadPool.h"
 
 namespace UEngine
 {
@@ -30,8 +31,10 @@ namespace UEngine
 #pragma endregion
 
 	public:
-		void Create(HINSTANCE hInstance);
-		void Create(const WINDOWS_APPLICATION_DESC& desc);
+		Utility::Sync::UThreadPool threadPool;
+
+		void Create(HINSTANCE hInstance, size_t numThreads = 0);
+		void Create(const WINDOWS_APPLICATION_DESC& desc, size_t numThreads = 0);
 
 		int UpdateLoop(std::function<void()> f = nullptr);
 		void Close();

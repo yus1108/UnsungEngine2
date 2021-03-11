@@ -14,6 +14,7 @@ void UEngine::Physics2D::CircleCollider::Awake()
 	typeName = Type_Circle;
 }
 
+// TODO:
 void UEngine::Physics2D::CircleCollider::FixedUpdate()
 {
 	worldCollider = MakeCircle(localCollider.center + GetTransform()->GetWorld().r[3], localCollider.radius);

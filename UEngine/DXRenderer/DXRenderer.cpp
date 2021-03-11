@@ -37,12 +37,12 @@ namespace UEngine
 				// Create device context for texture loading
 				device->CreateDeferredContext(NULL, textureContext.GetAddressOf());
 
+				ResourceManager->Init();
 				{
 					Color color{ 1,1,1,1 };
-					ResourceManager->Init();
-
-					default_renderObject = ResourceManager->RenderObjectPool.LoadObject("default", "default");
-					default_colorBuffer = DXConstantBuffer::Instantiate(this, ResourceManager->GetConstantBuffer(typeid(Color).raw_name()));
+					default_shader = ResourceManager->GetResource<DXShader>(L"default");
+					default_renderMesh = ResourceManager->GetResource<DXRenderMesh>(L"default");
+					default_colorBuffer = DXConstantBuffer::Instantiate(this, ResourceManager->GetCBufferPreset(typeid(Color).raw_name()));
 					default_colorBuffer->CopyData<Color>(&color, sizeof(color));
 					default_colorBuffer->Update(immediate.DeviceContext.Get());
 				}
@@ -65,7 +65,8 @@ namespace UEngine
 
 			immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
 
-			default_renderObject->Set(immediate.DeviceContext.Get());
+			default_shader->Set(immediate.DeviceContext.Get());
+			default_renderMesh->Set(immediate.DeviceContext.Get());
 			default_colorBuffer->Set(immediate.DeviceContext.Get());
 
 			immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
@@ -75,7 +76,7 @@ namespace UEngine
 		{
 			if (sceneTexture == nullptr) return;
 			immediate.DeviceContext->PSSetShaderResources(0, 1, sceneTexture);
-			default_renderObject->Draw(immediate.DeviceContext.Get());
+			default_renderMesh->Draw(immediate.DeviceContext.Get());
 		}
 
 		void DXRenderer::End()

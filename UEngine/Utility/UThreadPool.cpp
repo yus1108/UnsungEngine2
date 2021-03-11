@@ -40,6 +40,12 @@ void UEngine::Utility::UThreadPool::WorkerThread()
 
 void UEngine::Utility::UThreadPool::AddTask(std::function<void()> task)
 {
+	if (numThreads == 0)
+	{
+		task();
+		return;
+	}
+
 	std::unique_lock<std::mutex> lock(mutex);
 	bool stop = stop_all;
 	lock.unlock();
@@ -55,6 +61,12 @@ void UEngine::Utility::UThreadPool::AddTask(std::function<void()> task)
 
 void UEngine::Utility::Sync::UThreadPool::AddSyncTask(std::function<void()> task)
 {
+	if (numThreads == 0)
+	{
+		task();
+		return;
+	}
+
 	std::unique_lock<std::mutex> lock(mutex);
 	count++;
 	lock.unlock();
@@ -75,6 +87,7 @@ void UEngine::Utility::Sync::UThreadPool::AddSyncTask(std::function<void()> task
 
 void UEngine::Utility::Sync::UThreadPool::Join()
 {
+	if (numThreads == 0) return;
 	std::unique_lock<std::mutex> lock(mutex);
 	condition_variable.wait(lock, [this]() { return count == 0; });
 }

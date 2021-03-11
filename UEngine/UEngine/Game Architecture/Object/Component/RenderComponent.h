@@ -6,14 +6,13 @@ namespace UEngine
 	{
 	private:
 		RenderObject* renderObject{ nullptr };
-		std::string renderMesh_name;
-		std::string shader_name;
+		std::wstring renderMesh_name;
+		std::wstring shader_name;
 
 		void Awake() override { renderObject = nullptr; }
-		void OnEnable() override;
-		void OnDisable() override;
+		void Update() override;
 	public:
-		void Load(std::string renderMesh_name, std::string shader_name);
+		void Load(std::wstring renderMesh_name, std::wstring shader_name);
 		void LoadTriangle();
 		void LoadRectangle();
 		void LoadCircle(UINT slice = 360);

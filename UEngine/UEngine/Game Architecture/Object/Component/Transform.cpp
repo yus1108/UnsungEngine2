@@ -4,7 +4,7 @@
 void UEngine::Transform::Awake()
 {
 	worldBuffer->AttachData(&world, sizeof(CPU_WORLD));
-	GameState::Get()->ResourceManager.ConstantBufferPool.Add(worldBuffer);
+	GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(worldBuffer->UID, worldBuffer);
 }
 
 void UEngine::Transform::Start()

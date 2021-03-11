@@ -1,5 +1,7 @@
 #pragma once
 #include "dxrframework.h"
+#include "RenderComponents\DXShader.h"
+#include "RenderComponents\DXRenderMesh.h"
 
 namespace UEngine
 {
@@ -26,7 +28,8 @@ namespace UEngine
 			RENDERER_DESC rendering_desc;
 
 			ViewContext immediate; // main render view
-			class DXRenderObject* default_renderObject{ nullptr };
+			class DXShader* default_shader{ nullptr };
+			class DXRenderMesh* default_renderMesh{ nullptr };
 			class DXConstantBuffer* default_colorBuffer{ nullptr };
 
 			Microsoft::WRL::ComPtr<ID3D11DeviceContext> textureContext;

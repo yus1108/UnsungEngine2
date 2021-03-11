@@ -6,6 +6,8 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
+		long long DXConstantBuffer::nextId = 0;
+
 		DXConstantBuffer* DXConstantBuffer::Instantiate
 		(
 			DXRenderer* const renderer,
@@ -23,6 +25,11 @@ namespace UEngine
 		{
 			delete* constantBuffer;
 			*constantBuffer = nullptr;
+		}
+
+		void DXConstantBuffer::Release(DXConstantBuffer* const constantBuffer)
+		{
+			delete constantBuffer;
 		}
 
 		void DXConstantBuffer::AttachData(const void* data, size_t Size)

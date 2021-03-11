@@ -11,7 +11,9 @@ namespace UEngine
 			~DXRenderMesh() = default;
 		private:
 			UINT stride{ 0 };
+			std::vector<SIMPLE_VERTEX> vertices;
 			UINT vertexCount{ 0 };
+			std::vector<unsigned> indices;
 			UINT indexCount{ 0 };
 
 			D3D11_PRIMITIVE_TOPOLOGY topology{ D3D_PRIMITIVE_TOPOLOGY_UNDEFINED };
@@ -25,33 +27,32 @@ namespace UEngine
 			void SetTopology(D3D11_PRIMITIVE_TOPOLOGY topology) { this->topology = topology; }
 
 			unsigned GetStride() { return stride; }
+			const std::vector<SIMPLE_VERTEX>& GetVertices() { return vertices; }
 			unsigned GetVertexCount() { return vertexCount; }
+			const std::vector<unsigned>& GetIndices() { return indices; }
 			unsigned GetIndexCount() { return indexCount; }
 
 			// Initialize to Draw line strip with only vertices
-			template <typename T>
 			static DXRenderMesh* const Instantiate
 			(
 				ID3D11Device* const device,
-				const T* const vertices,
-				UINT vertexCount,
+				const std::vector<SIMPLE_VERTEX>& vertices,
 				D3D11_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
 			);
 
 			// Initialize to Draw with vertices, indices, and the given topology
-			template <typename T>
 			static DXRenderMesh* const Instantiate
 			(
 				ID3D11Device* const device, 
-				const T* const vertices,
-				UINT vertexCount,
-				const unsigned* const indices,
-				UINT indexCount,
+				const std::vector<SIMPLE_VERTEX>& vertices,
+				const std::vector<unsigned>& indices,
 				D3D11_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 			);
 			static void Release(DXRenderMesh** const renderMesh);
+			static void Release(DXRenderMesh* const renderMesh);
 			void Set(ID3D11DeviceContext* const deviceContext);
-		};	
+			void Draw(ID3D11DeviceContext* const deviceContext);
+		};
 
 		template <typename T>
 		void DXRenderMesh::SetVertices(ID3D11Device* const device, const T* const vertices, UINT vertexCount)
@@ -70,39 +71,6 @@ namespace UEngine
 			ZeroMemory(&initData, sizeof(D3D11_SUBRESOURCE_DATA));
 			initData.pSysMem = vertices;
 			device->CreateBuffer(&bufferDesc, &initData, vertexBuffer.GetAddressOf());
-		}
-
-		template <typename T>
-		DXRenderMesh* const DXRenderMesh::Instantiate
-		(
-			ID3D11Device* const device,
-			const T* const vertices,
-			UINT vertexCount,
-			D3D11_PRIMITIVE_TOPOLOGY topology
-		)
-		{
-			DXRenderMesh* instance = new DXRenderMesh;
-			instance->SetVertices<T>(device, vertices, vertexCount);
-			instance->SetTopology(topology);
-			return instance;
-		}
-
-		template <typename T>
-		DXRenderMesh* const DXRenderMesh::Instantiate
-		(
-			ID3D11Device* const device,
-			const T* const vertices,
-			UINT vertexCount,
-			const unsigned* const indices,
-			UINT indexCount,
-			D3D11_PRIMITIVE_TOPOLOGY topology
-		)
-		{
-			DXRenderMesh* instance = new DXRenderMesh;
-			instance->SetVertices<T>(device, vertices, vertexCount);
-			instance->SetIndices(device, indices, indexCount);
-			instance->SetTopology(topology);
-			return instance;
 		}
 	}
 }

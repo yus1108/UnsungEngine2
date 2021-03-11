@@ -1,6 +1,6 @@
 #include "dxrframework.h"
 #include "DXResourceManager.h"
-#include "..\Utility\UMath.h"
+#include "../Utility/UMath.h"
 
 // compiled shaders list
 #ifdef _DEBUG
@@ -27,55 +27,47 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		void DXResourceManager::SetShaders(std::string resource_name, DXShader* shader)
-		{
-			if (shaders[resource_name] != nullptr)
-				DXShader::Release(&shaders[resource_name]);
-
-			shaders[resource_name] = shader;
-		}
-
-		void DXResourceManager::SetRenderMesh(std::string resource_name, DXRenderMesh* renderMesh)
-		{
-			if (loadedRenderMeshes[resource_name] != nullptr)
-				DXRenderMesh::Release(&loadedRenderMeshes[resource_name]);
-
-			loadedRenderMeshes[resource_name] = renderMesh;
-		}
-
-		void DXResourceManager::SetVertices(std::string resource_name, const std::vector<SIMPLE_VERTEX>& vertices)
-		{
-			loadedVertexInfo[resource_name] = vertices;
-		}
-
-		void DXResourceManager::SetConstantBuffer(std::string resource_name, CONSTANT_BUFFER_DESC constantBuffer)
-		{
-			constantBuffers[resource_name] = constantBuffer;
-		}
-
-		DXRenderMesh* DXResourceManager::GetRenderMesh(std::string resource_name)
-		{
-			if (renderMeshes[resource_name] == nullptr)
-				return loadedRenderMeshes[resource_name];
-			return renderMeshes[resource_name];
-		}
-
-		std::vector<SIMPLE_VERTEX> DXResourceManager::GetVertices(std::string resource_name)
-		{
-			if (vertexInfo[resource_name].size() == 0)
-				return loadedVertexInfo[resource_name];
-			return vertexInfo[resource_name];
-		}
-
 		void DXResourceManager::Init()
 		{
-			Release();
-			InitShader();
-			InitRenderMesh();
-			InitConstantBuffer();
+			DXResourceManager::TYPE_VIEW = typeid(UEngine::DXRenderer::DXView).raw_name();
+			DXResourceManager::TYPE_TEXTURE = typeid(UEngine::DXRenderer::DXTexture).raw_name();
+			DXResourceManager::TYPE_SHADER = typeid(UEngine::DXRenderer::DXShader).raw_name();
+			DXResourceManager::TYPE_RENDERMESH = typeid(UEngine::DXRenderer::DXRenderMesh).raw_name();
+			DXResourceManager::TYPE_CONSTANT_BUFFER = typeid(UEngine::DXRenderer::DXConstantBuffer).raw_name();
+			InitShaders();
+			InitMeshes();
+			InitCBuffers();
 		}
 
-		void DXResourceManager::InitShader()
+		void DXResourceManager::Release()
+		{
+			ApplyChange();
+			for (auto map : resources)
+			{
+				std::string resourceType = map.first;
+				auto list = map.second;
+
+				for (auto resource : list)
+				{
+					if (resourceType == TYPE_VIEW)
+						DXView::Release(static_cast<DXView*>(resource.second));
+					if (resourceType == TYPE_TEXTURE)
+						DXTexture::Release(static_cast<DXTexture*>(resource.second));
+					if (resourceType == TYPE_SHADER)
+						DXShader::Release(static_cast<DXShader*>(resource.second));
+					if (resourceType == TYPE_RENDERMESH)
+						DXRenderMesh::Release(static_cast<DXRenderMesh*>(resource.second));
+					if (resourceType == TYPE_CONSTANT_BUFFER)
+						DXConstantBuffer::Release(static_cast<DXConstantBuffer*>(resource.second));
+				}
+			}
+			resources.clear();
+			for (auto desc : cBufferPreset)
+				delete desc.second.StartSlots;
+			cBufferPreset.clear();
+		}
+
+		void DXResourceManager::InitShaders()
 		{
 			auto renderer = DXRenderer::Get();
 			auto rendering_desc = renderer->GetDescription();
@@ -85,7 +77,7 @@ namespace UEngine
 			rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
 			rsDesc.EnableMultisampling = rendering_desc.EnableMultisampling;
 
-			shaders["default"] = DXShader::Instantiate
+			resources[TYPE_SHADER][L"default"] = DXShader::Instantiate
 			(
 				renderer,
 				DefaultVS, ARRAYSIZE(DefaultVS),
@@ -96,7 +88,7 @@ namespace UEngine
 				&rsDesc
 			);
 
-			shaders["image"] = DXShader::Instantiate
+			resources[TYPE_SHADER][L"image"] = DXShader::Instantiate
 			(
 				renderer,
 				WorldVS, ARRAYSIZE(WorldVS),
@@ -107,7 +99,7 @@ namespace UEngine
 				&rsDesc
 			);
 
-			shaders["sprite"] = DXShader::Instantiate
+			resources[TYPE_SHADER][L"sprite"] = DXShader::Instantiate
 			(
 				renderer,
 				SpriteVS, ARRAYSIZE(SpriteVS),
@@ -118,7 +110,7 @@ namespace UEngine
 				&rsDesc
 			);
 
-			shaders["color"] = DXShader::Instantiate
+			resources[TYPE_SHADER][L"color"] = DXShader::Instantiate
 			(
 				renderer,
 				WorldVS, ARRAYSIZE(WorldVS),
@@ -136,7 +128,7 @@ namespace UEngine
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
-			shaders["debug"] = DXShader::Instantiate
+			resources[TYPE_SHADER][L"debug"] = DXShader::Instantiate
 			(
 				renderer,
 				DebugRenderVS, ARRAYSIZE(DebugRenderVS),
@@ -146,18 +138,17 @@ namespace UEngine
 				false,
 				&rsDesc
 			);
-			shaders["debug"]->InitInputLayout
+			static_cast<DXShader*>(resources[TYPE_SHADER][L"debug"])->InitInputLayout
 			(
-				renderer->GetDevice(), 
-				vLayout, ARRAYSIZE(vLayout), 
+				renderer->GetDevice(),
+				vLayout, ARRAYSIZE(vLayout),
 				DebugRenderVS, ARRAYSIZE(DebugRenderVS)
 			);
 		}
 
-		void DXResourceManager::InitRenderMesh()
+		void DXResourceManager::InitMeshes()
 		{
 			auto device = DXRenderer::Get()->GetDevice();
-
 			{
 				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
@@ -167,32 +158,27 @@ namespace UEngine
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{1, 1, 0}, DirectX::XMFLOAT2{1, 0}},
 				};
 				vertices.shrink_to_fit();
-				vertexInfo["default"] = vertices;
-				unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
-				renderMeshes["default"] =
-					DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+				std::vector<unsigned> indices = { 0, 1, 2, 2, 1, 3 };
+				resources[TYPE_RENDERMESH][L"default"] =
+					DXRenderMesh::Instantiate
 					(
 						device,
-						&vertices[0],
-						vertices.size(),
-						indices,
-						ARRAYSIZE(indices)
+						vertices,
+						indices
 						);
 			}
-			
+
 			{
 				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}},
 				};
 				vertices.shrink_to_fit();
-				vertexInfo["point"] = vertices;
-				renderMeshes["point"] =
-					DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+				resources[TYPE_RENDERMESH][L"point"] =
+					DXRenderMesh::Instantiate
 					(
 						device,
-						&vertices[0],
-						vertices.size(),
+						vertices,
 						D3D11_PRIMITIVE_TOPOLOGY_POINTLIST
 						);
 			}
@@ -204,18 +190,16 @@ namespace UEngine
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 1.0f, 0}},
 				};
 				vertices.shrink_to_fit();
-				vertexInfo["line"] = vertices;
-				renderMeshes["line"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+				resources[TYPE_RENDERMESH][L"line"] = DXRenderMesh::Instantiate
 					(
 						device,
-						&vertices[0],
-						vertices.size()
+						vertices
 						);
 			}
 
 			{
-				float radian = Utility::UMath::PI * 2.0f / 3.0f;
-				float startRadian = Utility::UMath::PI / 2.0f;
+				float radian = UEngine::Utility::UMath::PI * 2.0f / 3.0f;
+				float startRadian = UEngine::Utility::UMath::PI / 2.0f;
 				auto vertices = std::vector<SIMPLE_VERTEX>
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian), 0.5f * sin(startRadian + radian), 0}, DirectX::XMFLOAT2{ 0, 1 }},
@@ -223,12 +207,10 @@ namespace UEngine
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian * 2.0f), 0.5f * sin(startRadian + radian * 2.0f), 0}, DirectX::XMFLOAT2{ 1, 1 }},
 				};
 				vertices.shrink_to_fit();
-				vertexInfo["triangle"] = vertices;
-				renderMeshes["triangle"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+				resources[TYPE_RENDERMESH][L"triangle"] = DXRenderMesh::Instantiate
 					(
 						device,
-						&vertices[0],
-						vertices.size(),
+						vertices,
 						D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 						);
 			}
@@ -242,15 +224,12 @@ namespace UEngine
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f, 0.5f, 0}, DirectX::XMFLOAT2{1, 0}},
 				};
 				vertices.shrink_to_fit();
-				vertexInfo["rectangle"] = vertices;
-				unsigned indices[] = { 0, 1, 2, 2, 1, 3 };
-				renderMeshes["rectangle"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+				std::vector<unsigned> indices = { 0, 1, 2, 2, 1, 3 };
+				resources[TYPE_RENDERMESH][L"rectangle"] = DXRenderMesh::Instantiate
 					(
 						device,
-						&vertices[0],
-						vertices.size(),
-						indices,
-						ARRAYSIZE(indices)
+						vertices,
+						indices
 						);
 			}
 
@@ -260,11 +239,10 @@ namespace UEngine
 				{
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}}
 				};
-				float radian = Utility::UMath::PI * 2.0f / slice;
+				float radian = UEngine::Utility::UMath::PI * 2.0f / slice;
 				for (size_t i = 0; i < slice; i++)
 					vertices.emplace_back(SIMPLE_VERTEX{ DirectX::XMFLOAT3{0.5f * cos(radian * (slice - i)), 0.5f * sin(radian * (slice - i)), 0} });
 				vertices.shrink_to_fit();
-				vertexInfo["circle"] = vertices;
 				std::vector<unsigned> indices;
 				for (size_t i = 0; i < slice - 1; i++)
 				{
@@ -275,22 +253,20 @@ namespace UEngine
 				indices.emplace_back(0);
 				indices.emplace_back(slice);
 				indices.emplace_back(1);
-				renderMeshes["circle"] = DXRenderMesh::Instantiate<SIMPLE_VERTEX>
+				resources[TYPE_RENDERMESH][L"circle"] = DXRenderMesh::Instantiate
 					(
 						device,
-						&vertices[0],
-						vertices.size(),
-						&indices[0],
-						indices.size()
+						vertices,
+						indices
 						);
 			}
 		}
 
-		void DXResourceManager::InitConstantBuffer()
+		void DXResourceManager::InitCBuffers()
 		{
 			auto renderer = DXRenderer::Get();
 
-			constantBuffers[typeid(Color).raw_name()] = CONSTANT_BUFFER_DESC
+			cBufferPreset[typeid(Color).raw_name()] = CONSTANT_BUFFER_DESC
 			{
 				typeid(Color).raw_name(),
 				sizeof(Color),
@@ -298,7 +274,7 @@ namespace UEngine
 				nullptr
 			};
 
-			constantBuffers[typeid(UV).raw_name()] = CONSTANT_BUFFER_DESC
+			cBufferPreset[typeid(UV).raw_name()] = CONSTANT_BUFFER_DESC
 			{
 				typeid(UV).raw_name(),
 				sizeof(UV),
@@ -306,7 +282,7 @@ namespace UEngine
 				new UINT[1] { 2 }
 			};
 
-			constantBuffers[typeid(CPU_WORLD).raw_name()] = CONSTANT_BUFFER_DESC
+			cBufferPreset[typeid(CPU_WORLD).raw_name()] = CONSTANT_BUFFER_DESC
 			{
 				typeid(CPU_WORLD).raw_name(),
 				sizeof(CPU_WORLD),
@@ -314,7 +290,7 @@ namespace UEngine
 				nullptr
 			};
 
-			constantBuffers[typeid(CPU_CAMERA).raw_name()] = CONSTANT_BUFFER_DESC
+			cBufferPreset[typeid(CPU_CAMERA).raw_name()] = CONSTANT_BUFFER_DESC
 			{
 				typeid(CPU_CAMERA).raw_name(),
 				sizeof(CPU_CAMERA),
@@ -322,5 +298,53 @@ namespace UEngine
 				new UINT[1] { 1 }
 			};
 		}
+
+		void DXResourceManager::ApplyChange()
+		{
+			using namespace UEngine::DXRenderer;
+			for (auto map : creationQueue)
+			{
+				std::string resourceType = map.first;
+				auto list = map.second;
+
+				for (auto resource : list)
+				{
+					if (resources[resourceType].size() > 0 &&
+						resources[resourceType].find(resource.first) != resources[resourceType].end())
+						throw std::runtime_error("A resource with the given name already exists");
+
+					resources[resourceType][resource.first] = resource.second;
+				}
+			}
+			creationQueue.clear();
+
+			for (auto map : deletionQueue)
+			{
+				std::string resourceType = map.first;
+				auto list = map.second;
+
+				for (auto resource : list)
+				{
+					if (resources[resourceType].size() == 0 &&
+						resources[resourceType].find(resource.first) == resources[resourceType].end())
+						throw std::runtime_error("A resource with the given name doesn't exists");
+
+					resources[resourceType].erase(resource.first);
+
+					if (resourceType == TYPE_VIEW)
+						DXView::Release(static_cast<DXView*>(resource.second));
+					if (resourceType == TYPE_TEXTURE)
+						DXTexture::Release(static_cast<DXTexture*>(resource.second));
+					if (resourceType == TYPE_SHADER)
+						DXShader::Release(static_cast<DXShader*>(resource.second));
+					if (resourceType == TYPE_RENDERMESH)
+						DXRenderMesh::Release(static_cast<DXRenderMesh*>(resource.second));
+					if (resourceType == TYPE_CONSTANT_BUFFER)
+						DXConstantBuffer::Release(static_cast<DXConstantBuffer*>(resource.second));
+				}
+			}
+			deletionQueue.clear();
+		}
+
 	}
 }

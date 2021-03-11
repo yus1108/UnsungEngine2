@@ -29,7 +29,7 @@ namespace UEngine
 			// init DXShader with minimum requirements (Setting VS and PS with entrypoint = "main")
 			static DXShader* Instantiate
 			(
-				DXRenderer* const renderer,
+				class DXRenderer* const renderer,
 				const std::string& vertex_shader_file,
 				const std::string& pixel_shader_file,
 				bool isDebuggable,
@@ -39,7 +39,7 @@ namespace UEngine
 			);
 			static DXShader* Instantiate
 			(
-				DXRenderer* const renderer,
+				class DXRenderer* const renderer,
 				const void* pVShaderByteCode, SIZE_T VShaderLength,
 				const void* pPShaderByteCode, SIZE_T PShaderLength,
 				bool isDebuggable,
@@ -48,6 +48,7 @@ namespace UEngine
 				const RASTERIZER_DESC* const rasterizerStateDesc
 			);
 			static void Release(DXShader** const shader);
+			static void Release(DXShader* const shader);
 			void Set(ID3D11DeviceContext* const deviceContext);
 		};
 	}

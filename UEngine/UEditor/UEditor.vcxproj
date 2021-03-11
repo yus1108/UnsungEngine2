@@ -221,9 +221,6 @@
     <ProjectReference Include="..\DXRenderer\DXRenderer.vcxproj">
       <Project>{9d244782-39df-490e-8068-eeb44ee826a2}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\UEngine\UEngine.vcxproj">
-      <Project>{4b4d66c9-796c-4bc1-84aa-543fb3786f12}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.vcxproj">
       <Project>{1e6e9e7f-5741-42e3-8ba6-8de45e1cf4df}</Project>
     </ProjectReference>

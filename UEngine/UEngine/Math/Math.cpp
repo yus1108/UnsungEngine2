@@ -76,7 +76,7 @@ std::vector<UEngine::Math::Physics2D::PointCoord> UEngine::Math::Physics2D::Make
 UEngine::Math::Physics2D::TriangleCoords UEngine::Math::Physics2D::MakeTriangle(Matrix worldMatrix)
 {
 	Math::Physics2D::TriangleCoords triangle;
-	auto triVertices = DXRenderer::Get()->ResourceManager->GetVertices("triangle");
+	auto triVertices = static_cast<DXRenderer::SIMPLE_VERTEX>(DXRenderer::Get()->ResourceManager->GetResource<DXRenderer::DXRenderMesh>(L"triangle")->GetVertices());
 	for (size_t i = 0; i < triangle.size(); i++)
 		triangle[i] = Vector2(triVertices[i].pos) * worldMatrix;
 	return triangle;
@@ -755,12 +755,13 @@ const UEngine::Vector2 UEngine::Math::GetMousePosToWorld()
 	// mouse ndc position to world position = mousePos * Projection^-1 * View^-1
 	auto mousePos = Utility::UMath::ConvertPixelToNDC(WinInput::Get()->GetMousePos(), WinApplication::Get()->GetHandler());
 	
-	auto cpu_camera = Camera::mainCamera->GetCameraMatrix();
+	// TODO: Need to set main camera
+	//auto cpu_camera = Camera::mainCamera->GetCameraMatrix();
 	Vector3 vMousePos = mousePos;
-	auto pDet = XMMatrixDeterminant(cpu_camera.projection);
+	/*auto pDet = XMMatrixDeterminant(cpu_camera.projection);
 	auto vDet = XMMatrixDeterminant(cpu_camera.view);
 	vMousePos = vMousePos * XMMatrixInverse(&pDet, cpu_camera.projection);
-	vMousePos = vMousePos * XMMatrixInverse(&vDet, cpu_camera.view);
+	vMousePos = vMousePos * XMMatrixInverse(&vDet, cpu_camera.view);*/
 	vMousePos.z = 0;
 	return Vector3(vMousePos);
 }

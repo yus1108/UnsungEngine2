@@ -8,15 +8,17 @@ namespace UEngine
 		class DXConstantBuffer final
 		{
 		private:
-			DXConstantBuffer() {}
+			DXConstantBuffer() { UID = nextId++; }
 			~DXConstantBuffer() { if (!attached) delete data; };
 		private:
+			static long long nextId;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
 			void* data{ nullptr };
 			size_t Size{ 0 };
 			bool attached{ false };
 
 		public:
+			std::wstring UID;
 			/*
 				Start slot of each pipeline in order of UENGINE_DXRENDERER_SHADERTYPE
 				i.e) if Flag = UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER | UENGINE_DXRENDERER_SHADERTYPE_GEOMETRY_SHADER,
@@ -31,6 +33,7 @@ namespace UEngine
 				CONSTANT_BUFFER_DESC desc
 			);
 			static void Release(DXConstantBuffer** const constantBuffer);
+			static void Release(DXConstantBuffer* const constantBuffer);
 
 			ID3D11Buffer* GetBuffer() { return constBuffer.Get(); }
 			ID3D11Buffer* const * GetBufferAddressOf() { return constBuffer.GetAddressOf(); }

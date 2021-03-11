@@ -3,27 +3,13 @@
 
 namespace UEngine
 {
-	struct RenderObject
-	{
-		/*
-			It is the number of DXRenderObject to access the resource by refering this number
-		*/
-		UINT objectNumber;
-		/*
-			key: std::string = typeid(T).raw_name()
-			value: class DXConstantBuffer*
-		*/
-		DXRenderer::DXTexture* imageTexture;
-		std::map<std::string, DXRenderer::DXConstantBuffer*> constantBuffers;
-	};
-
 	struct DebugRenderPoint
 	{
 		Vector3 position;
-		Color color{ 0 };
+		Color color{0};
 
 		DebugRenderPoint() = default;
-		DebugRenderPoint(const DebugRenderPoint& point)
+		DebugRenderPoint(const DebugRenderPoint &point)
 		{
 			position = point.position;
 			color = point.color;
@@ -42,7 +28,7 @@ namespace UEngine
 		Color color;
 
 		DebugRenderLine() = default;
-		DebugRenderLine(DebugRenderLine& line)
+		DebugRenderLine(DebugRenderLine &line)
 		{
 			lineStart = line.lineStart;
 			lineEnd = line.lineEnd;

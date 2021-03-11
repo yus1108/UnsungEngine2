@@ -4,7 +4,6 @@ namespace UEngine
 {
 	class GameObject final
 	{
-		friend class GameState;
 		friend class Component;
 	private:
 		GameObject() { Awake(); SetActive(true); }
@@ -18,6 +17,7 @@ namespace UEngine
 		GameObject* parent{ nullptr };
 		std::vector<GameObject*> children;
 
+		class GameScene* scene{ nullptr };
 		class Transform* transform{ nullptr };
 		class RenderComponent* renderComponent{ nullptr };
 		class Material* material{ nullptr };
@@ -38,12 +38,13 @@ namespace UEngine
 		void OnDestroy();
 
 	public:
-		std::string name{ "GameObject" };
+		std::wstring name{ L"GameObject" };
 		bool IsStatic{ false };
 
 		void SetActive(bool isActive);
 		bool GetActive() { return isActive; }
 
+		GameScene* const GetScene() { return scene; }
 		GameObject* const GetParent() { return parent; }
 		GameObject* const GetChild(UINT index) { return children[index]; }
 		const std::vector<GameObject*>& GetChildren() { return children; }
@@ -62,7 +63,7 @@ namespace UEngine
 		template <typename T>
 		void RemoveComponent();
 
-		GameObject* const FindObjectWithName(std::string name);
+		GameObject* const FindObjectWithName(std::wstring name);
 
 		static GameObject* Instantiate(std::wstring name = L"GameObject");
 		static void Release(GameObject** const gameObject);
@@ -125,7 +126,8 @@ namespace UEngine
 			if (transform != nullptr) throw std::runtime_error("Cannot add Transform component more than one!");
 			transform = component;
 		}
-		if constexpr (std::is_same<T, class RenderComponent>::value)
+		// TODO:
+	/*	if constexpr (std::is_same<T, class RenderComponent>::value)
 		{
 			if (renderComponent != nullptr) throw std::runtime_error("Cannot add RenderComponent component more than one!");
 			renderComponent = component;
@@ -134,7 +136,7 @@ namespace UEngine
 		{
 			if (material != nullptr) throw std::runtime_error("Cannot add Material component more than one!");
 			material = component;
-		}
+		}*/
 
 		static_cast<Component*>(component)->Awake();
 		std::string typeName = typeid(T*).raw_name();
@@ -161,10 +163,10 @@ namespace UEngine
 		static_cast<Component*>(component)->OnDestroy();
 		delete component;
 		
-		if constexpr (std::is_same<T, class RenderComponent>::value)
+		/*if constexpr (std::is_same<T, class RenderComponent>::value)
 			renderComponent = nullptr;
 		if constexpr (std::is_same<T, class Material>::value)
-			material = nullptr;
+			material = nullptr;*/
 	}
 }
 
