@@ -85,6 +85,8 @@ namespace UEngine
 
 		void DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)
 		{
+			if (swapchain == nullptr) return;
+			immediate.RenderTargetView.ReleaseAndGetAddressOf();
 			swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
 			InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
 		}
@@ -163,6 +165,7 @@ namespace UEngine
 			Microsoft::WRL::ComPtr<ID3D11Texture2D> pSwapChainBuffer;
 			swapchain->GetBuffer(0, __uuidof(pSwapChainBuffer), (void**)&pSwapChainBuffer);
 			device->CreateRenderTargetView(pSwapChainBuffer.Get(), nullptr, rtv);
+			pSwapChainBuffer.ReleaseAndGetAddressOf();
 		}
 
 		void DXRenderer::InitDepthStencil
