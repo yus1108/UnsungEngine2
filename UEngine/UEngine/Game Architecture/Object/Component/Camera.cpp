@@ -6,14 +6,14 @@ UEngine::Camera* UEngine::Camera::mainCamera = nullptr;
 void UEngine::Camera::OnEnable()
 {
     if (mainCamera == nullptr) SetMainCamera();
-    if (gameView != nullptr) gameView->isRenderable = true;
+    gameView.isRenderable = true;
 }
 
 void UEngine::Camera::OnDisable()
 {
     if (!GameState::GetTerminate() && mainCamera == this) 
         throw std::runtime_error("You cannot remove main camera!");
-    if (gameView != nullptr) gameView->isRenderable = false;
+    gameView.isRenderable = false;
 }
 
 void UEngine::Camera::Awake()
@@ -33,8 +33,7 @@ void UEngine::Camera::Awake()
     );
     cameraBuffer->AttachData(&cpu_camera, sizeof(CPU_CAMERA));
 
-    gameView = new GameView;
-    gameView->view = view;
+    gameView.view = view;
 
     GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(cameraBuffer->UID, cameraBuffer);
     GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXView>(view->UID, view);

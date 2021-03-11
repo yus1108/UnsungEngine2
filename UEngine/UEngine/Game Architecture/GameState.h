@@ -22,12 +22,29 @@ namespace UEngine
 
 	class GameScene
 	{
+		friend class RenderComponent;
+	private:
 		std::list<class GameObject*> gameObjects;
 		std::map<std::wstring, RenderObject*> renderObjects;
-		std::vector<GameView*> gpu_view;
+		std::vector<GameView> gpu_view;
+
+		void AddRenderObject(RenderObject* obj)
+		{
+			if (GetRenderObject(obj->name) != nullptr)
+				throw std::runtime_error("This object already exsits");
+			renderObjects[obj->name] = obj;
+		}
+		void RemoveRenderObject(RenderObject* obj)
+		{
+			if (GetRenderObject(obj->name) == nullptr)
+				throw std::runtime_error("This object doesn't exsits");
+			renderObjects.erase(obj->name);
+			delete obj;
+		}
 
 	public:
-		std::vector<GameView*> cpu_view;
+		std::wstring name;
+		std::vector<GameView> cpu_view;
 		UEngine::DXRenderer::DXResourceManager ResourceManager;
 		DebugRenderer DebugRenderer;
 		// TODO: Add collisions
@@ -43,28 +60,15 @@ namespace UEngine
 		void Render() {}
 		void Sync() {}
 
-		RenderObject* GetRenderObject(std::wstring name)
+		RenderObject* const GetRenderObject(std::wstring name)
 		{
 			auto obj = renderObjects.find(name);
 			if (obj == renderObjects.end()) return nullptr;
 			return obj->second;
 		}
-		void AddRenderObject(RenderObject* obj) 
-		{ 
-			if (GetRenderObject(obj->name) != nullptr)
-				throw std::runtime_error("This object already exsits");
-			renderObjects[obj->name] = obj;
-		}
-		void RemoveRenderObject(RenderObject* obj)
-		{
-			if (GetRenderObject(obj->name) == nullptr)
-				throw std::runtime_error("This object doesn't exsits");
-			renderObjects.erase(obj->name);
-			delete obj;
-		}
 
 		void AddGameObject(GameObject* obj) { gameObjects.emplace_back(obj); }
-		GameObject* GetGameObject(std::wstring name)
+		GameObject* const GetGameObject(std::wstring name)
 		{
 			for (auto obj : gameObjects)
 				if (obj->name == name) return obj;
@@ -108,12 +112,13 @@ namespace UEngine
 		static GameState* Get() { return &instance; }
 		static GameScene* GetCurrentScene() { return instance.currentScene; }
 		static bool GetTerminate() { return instance.isTerminate; }
+		static void Init(GameScene* scene);
+		static void Release();
 
 	private:
 		GameState() = default;
 		~GameState() { Release(); }
 		static GameState instance;
-		void Release();
 #pragma endregion
 	};
 

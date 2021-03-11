@@ -6,8 +6,12 @@ void UEngine::RenderComponent::Update()
 	if (renderObject == nullptr) return;
 
 	auto scene = GetGameObject()->GetScene();
+	// TODO: Calculate whether to draw or not
 	for (auto view : scene->cpu_view)
-		view->renderObjects.emplace_back(renderObject);
+	{
+		if (!view.isRenderable) continue;
+		view.renderObjects.emplace_back(renderObject);
+	}
 }
 
 void UEngine::RenderComponent::Load(std::wstring renderMesh_name, std::wstring shader_name)

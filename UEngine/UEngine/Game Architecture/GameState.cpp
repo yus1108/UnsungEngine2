@@ -3,11 +3,18 @@
 
 UEngine::GameState UEngine::GameState::instance;
 
+void UEngine::GameState::Init(GameScene* scene)
+{
+	instance.isTerminate = false;
+	instance.currentScene = scene;
+	instance.scenes[scene->name] = scene;
+}
+
 void UEngine::GameState::Release()
 {
-	isTerminate = true;
-	for (auto scene : scenes)
+	instance.isTerminate = true;
+	for (auto scene : instance.scenes)
 		delete scene.second;
-	scenes.clear();
-	currentScene = nullptr;
+	instance.scenes.clear();
+	instance.currentScene = nullptr;
 }

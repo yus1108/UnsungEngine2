@@ -6,7 +6,7 @@ namespace UEngine
 	{
 		friend class GameView;
 	private:
-		GameView* gameView{ nullptr };
+		GameView gameView;
 		DXRenderer::DXView* view{ nullptr };
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };
 
