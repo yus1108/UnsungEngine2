@@ -16,7 +16,7 @@ namespace UEngine
 			EditorState(HINSTANCE hInstance, int width = 800, int height = 600);
 			~EditorState();
 			void Load();
-			int Run(double targetHz = 200);
+			int Run(double targetHz = -1);
 		};
 	}
 }

@@ -9,7 +9,7 @@ void UEngine::Material::Awake()
 	GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(spriteBuffer->UID, spriteBuffer);
 }
 
-void UEngine::Material::LateUpdate()
+void UEngine::Material::Update()
 {
 	auto renderComponent = GetComponent<RenderComponent>();
 	if (renderComponent == nullptr) return;

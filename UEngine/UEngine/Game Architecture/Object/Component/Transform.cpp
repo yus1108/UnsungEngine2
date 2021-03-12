@@ -21,7 +21,10 @@ void UEngine::Transform::Start()
 
 	world.matrix = XMMatrixMultiply(XMMatrixScaling(scale.x, scale.y, scale.z), RTP);
 	world.matrix = XMMatrixTranspose(world.matrix);
+}
 
+void UEngine::Transform::Update()
+{
 	auto renderComponent = GetComponent<RenderComponent>();
 	if (renderComponent == nullptr) return;
 	if (renderObject != renderComponent->GetRenderObject())
@@ -48,15 +51,6 @@ void UEngine::Transform::LateUpdate()
 
 	world.matrix = XMMatrixMultiply(XMMatrixScaling(scale.x, scale.y, scale.z), RTP);
 	world.matrix = XMMatrixTranspose(world.matrix);
-
-	auto renderComponent = GetComponent<RenderComponent>();
-	if (renderComponent == nullptr) return;
-	if (renderObject != renderComponent->GetRenderObject())
-	{
-		renderObject = renderComponent->GetRenderObject();
-		if (renderObject == nullptr) return;
-		renderComponent->AddConstantBuffer(typeid(this).raw_name(), worldBuffer);
-	}
 }
 
 void UEngine::Transform::OnPreRender()

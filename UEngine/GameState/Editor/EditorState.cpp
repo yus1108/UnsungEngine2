@@ -54,11 +54,29 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
         rendererDesc.MultisampleDesc = { 4, 0 };
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
+
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplWin32_Init(app->GetHandler());
+    ImGui_ImplDX11_Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
 }
 
 UEngine::UEditor::EditorState::~EditorState()
 {
-    
+    // Cleanup
+    ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
 }
 
 void UEngine::UEditor::EditorState::Load()
@@ -67,15 +85,79 @@ void UEngine::UEditor::EditorState::Load()
     {
         // basic load
         using namespace UEngine;
+        GameScene* currentScene = new GameScene();
+        currentScene->Init(true);
 
+        {
+            auto cameraObject = GameObject::Instantiate(currentScene, L"camera");
+            auto camera = cameraObject->AddComponent<Camera>();
+            camera->viewWidth = 15;
+            camera->viewHeight = 30;
+
+            auto ball = GameObject::Instantiate(currentScene, L"ball");
+            ball->AddComponent<RenderComponent>()->Load(L"rectangle", L"image");
+            ball->AddComponent<Material>()->Load(L"./football-157930_640.png");
+        }
+
+        GameState::Init(currentScene);
     }
 }
 
 int UEngine::UEditor::EditorState::Run(double targetHz)
 {
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
     auto returnedValue = app->UpdateLoop([&]()
     {
-        UEngine::Utility::UTime::Get()->Throttle(targetHz);
+        if (targetHz > 0) UEngine::Utility::UTime::Get()->Throttle(targetHz);
+        GameState::Update(nullptr, [&]()
+        {
+            // Start the Dear ImGui frame
+            ImGui_ImplDX11_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
+
+            ImGui::ShowDemoWindow(&show_demo_window);
+
+            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+            {
+                static float f = 0.0f;
+                static int counter = 0;
+
+                ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+                ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+                ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+                ImGui::Checkbox("Another Window", &show_another_window);
+
+                ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+                ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+                if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                    counter++;
+                ImGui::SameLine();
+                ImGui::Text("counter = %d", counter);
+
+                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+                ImGui::End();
+            }
+
+            // 3. Show another simple window.
+            if (show_another_window)
+            {
+                ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+                ImGui::Text("Hello from another window!");
+                if (ImGui::Button("Close Me"))
+                    show_another_window = false;
+                ImGui::End();
+            }
+
+            // Rendering
+            ImGui::Render();
+            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+        });
     });
 
     return returnedValue;
@@ -93,12 +175,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_SIZE:
-       /* if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-        }*/
+        UEngine::DXRenderer::Get()->ResizeMainRenderTarget((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
         return 0;
     case WM_SYSCOMMAND:
         if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu

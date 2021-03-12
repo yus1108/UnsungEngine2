@@ -1,16 +1,15 @@
 #include "UEngine.h"
 #include "RenderComponent.h"
 
-void UEngine::RenderComponent::Update()
+void UEngine::RenderComponent::LateUpdate()
 {
 	if (renderObject == nullptr) return;
-
 	auto scene = GetGameObject()->GetScene();
 	// TODO: Calculate whether to draw or not
-	for (auto view : scene->cpu_view)
+	for (size_t i = 0; i < scene->cpu_view.size(); i++)
 	{
-		if (!view.isRenderable) continue;
-		view.renderObjects.emplace_back(renderObject);
+		if (!scene->cpu_view[i].isRenderable) continue;
+		scene->cpu_view[i].renderObjects.emplace_back(renderObject);
 	}
 }
 

@@ -13,6 +13,7 @@ namespace UEngine
 
 		void Awake() override;
 		void Start() override;
+		void Update() override;
 		void LateUpdate() override;
 		void OnPreRender() override;
 		virtual void OnDestroy() override { GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(worldBuffer->UID); }
@@ -36,7 +37,7 @@ namespace UEngine
 		Transform() : worldBuffer(DXRenderer::DXConstantBuffer::Instantiate
 		(
 			DXRenderer::Get(),
-			GameState::GetCurrentScene()->ResourceManager.GetCBufferPreset(typeid(CPU_WORLD).raw_name())
+			DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(CPU_WORLD).raw_name())
 		)) {}
 	};
 }

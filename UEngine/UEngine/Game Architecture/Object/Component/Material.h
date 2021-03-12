@@ -12,7 +12,7 @@ namespace UEngine
 		DXRenderer::DXConstantBuffer* spriteBuffer;
 
 		void Awake() override;
-		void LateUpdate() override;
+		void Update() override;
 		void OnPreRender() override;
 		virtual void OnDestroy() override;
 
@@ -29,11 +29,11 @@ namespace UEngine
 			: colorBuffer(DXRenderer::DXConstantBuffer::Instantiate
 			(
 				DXRenderer::Get(),
-				GameState::GetCurrentScene()->ResourceManager.GetCBufferPreset(typeid(Color).raw_name())
+				DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(Color).raw_name())
 			)), spriteBuffer(DXRenderer::DXConstantBuffer::Instantiate
 			(
 				DXRenderer::Get(),
-				GameState::GetCurrentScene()->ResourceManager.GetCBufferPreset(typeid(UV).raw_name())
+				DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(UV).raw_name())
 			))
 		{}
 	};

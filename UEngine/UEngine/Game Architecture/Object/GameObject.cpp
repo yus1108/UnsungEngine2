@@ -108,6 +108,15 @@ void UEngine::GameObject::OnPreRender()
 	}
 }
 
+void UEngine::GameObject::OnRender()
+{
+	for (auto componentListPair : components)
+	{
+		for (auto component : *componentListPair.second)
+			component->OnRender();
+	}
+}
+
 void UEngine::GameObject::OnPostRender()
 {
 	for (auto componentListPair : components)
@@ -182,8 +191,17 @@ UEngine::GameObject* UEngine::GameObject::Instantiate(std::wstring name)
 {
 	UEngine::GameObject* obj = new UEngine::GameObject();
 	obj->scene = GameState::GetCurrentScene();
-	obj->AddComponent<Transform>();
 	obj->scene->AddGameObject(obj);
+	obj->AddComponent<Transform>();
+	return obj;
+}
+
+UEngine::GameObject* UEngine::GameObject::Instantiate(GameScene* scene, std::wstring name)
+{
+	UEngine::GameObject* obj = new UEngine::GameObject();
+	obj->scene = scene;
+	obj->scene->AddGameObject(obj);
+	obj->AddComponent<Transform>();
 	return obj;
 }
 

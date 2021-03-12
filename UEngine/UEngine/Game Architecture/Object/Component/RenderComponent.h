@@ -10,7 +10,7 @@ namespace UEngine
 		std::wstring shader_name;
 
 		void Awake() override { renderObject = nullptr; }
-		void Update() override;
+		void LateUpdate() override;
 	public:
 		void Load(std::wstring renderMesh_name, std::wstring shader_name);
 		void LoadTriangle();

@@ -7,7 +7,7 @@ namespace UEngine
 		class DXView final
 		{
 		private:
-			DXView() { UID = nextId++; }
+			DXView() { UID = std::to_wstring(nextId++); }
 			~DXView() = default;
 		private:
 			static long long nextId;

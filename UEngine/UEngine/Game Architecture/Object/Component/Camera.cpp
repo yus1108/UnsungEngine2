@@ -1,17 +1,21 @@
 #include "UEngine.h"
 #include "Camera.h"
 
-UEngine::Camera* UEngine::Camera::mainCamera = nullptr;
+void UEngine::Camera::SetMainCamera()
+{ 
+    GetGameObject()->GetScene()->MainCamera = this;
+    GetGameObject()->GetScene()->MainView = &gameView;
+}
 
 void UEngine::Camera::OnEnable()
 {
-    if (mainCamera == nullptr) SetMainCamera();
+    if (GetGameObject()->GetScene()->MainCamera == nullptr) SetMainCamera();
     gameView.isRenderable = true;
 }
 
 void UEngine::Camera::OnDisable()
 {
-    if (!GameState::GetTerminate() && mainCamera == this) 
+    if (!GameState::IsTerminate() && GetGameObject()->GetScene()->MainCamera == this)
         throw std::runtime_error("You cannot remove main camera!");
     gameView.isRenderable = false;
 }
@@ -34,15 +38,20 @@ void UEngine::Camera::Awake()
     cameraBuffer->AttachData(&cpu_camera, sizeof(CPU_CAMERA));
 
     gameView.view = view;
+    gameView.cameraBuffer = cameraBuffer;
 
     GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(cameraBuffer->UID, cameraBuffer);
     GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXView>(view->UID, view);
-    GetGameObject()->GetScene()->cpu_view.emplace_back(gameView);
 
     viewWidth = 40.0f;
     viewHeight = 40.0f;
     nearZ = -1.0f;
     farZ = 10.0f;
+}
+
+void UEngine::Camera::Update()
+{
+    GetGameObject()->GetScene()->cpu_view.emplace_back(gameView);
 }
 
 void UEngine::Camera::LateUpdate()

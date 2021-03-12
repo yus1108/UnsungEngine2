@@ -8,7 +8,7 @@ namespace UEngine
 		class DXConstantBuffer final
 		{
 		private:
-			DXConstantBuffer() { UID = nextId++; }
+			DXConstantBuffer() { UID = std::to_wstring(nextId++); }
 			~DXConstantBuffer() { if (!attached) delete data; };
 		private:
 			static long long nextId;

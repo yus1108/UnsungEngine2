@@ -3,6 +3,15 @@
 
 namespace UEngine
 {
+	struct RenderObject
+	{
+		std::wstring name;
+		UEngine::DXRenderer::DXShader* shader{ nullptr };
+		UEngine::DXRenderer::DXRenderMesh* renderMesh{ nullptr };
+		std::map<std::string, UEngine::DXRenderer::DXConstantBuffer*> constantBuffers;
+		std::map<std::string, UEngine::DXRenderer::DXTexture*> textures;
+	};
+
 	struct DebugRenderPoint
 	{
 		Vector3 position;

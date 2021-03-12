@@ -27,6 +27,15 @@
     <ClInclude Include="Game Architecture\Object\Component\Camera.h">
       <Filter>Game Architecture\Object\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Game Architecture\Scene\GameScene.h">
+      <Filter>Game Architecture\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Scene\GameView.h">
+      <Filter>Game Architecture\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -51,6 +60,13 @@
     <ClCompile Include="Game Architecture\Object\Component\Camera.cpp">
       <Filter>Game Architecture\Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Game Architecture\Scene\GameScene.cpp">
+      <Filter>Game Architecture\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Math.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Scene\GameView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DebugRenderer">
@@ -64,6 +80,12 @@
     </Filter>
     <Filter Include="Game Architecture\Object\Component">
       <UniqueIdentifier>{c681b41e-2f2b-4b2a-91d3-546c29a1a405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Scene">
+      <UniqueIdentifier>{ceff178a-95a5-4cc6-a68a-88256883f61e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{2d3ed35c-35ba-49e2-91fa-631c780801b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

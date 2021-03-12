@@ -40,6 +40,7 @@ namespace UEngine
 		virtual void LateUpdate() {}
 		virtual void AnimationUpdate() {}
 		virtual void OnPreRender() {}
+		virtual void OnRender() {}
 		virtual void OnPostRender() {}
 		virtual void OnDisable() {}
 		virtual void OnDestroy() {}

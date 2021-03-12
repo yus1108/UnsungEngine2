@@ -43,15 +43,11 @@ namespace UEngine
 		{
 			std::string typeName = typeid(T).raw_name();
 
-			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXTexture>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXShader>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
+			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXTexture>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXShader>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
 				throw std::runtime_error("Invalid resource type");
 
 
@@ -66,15 +62,11 @@ namespace UEngine
 		{
 			std::string typeName = typeid(T).raw_name();
 
-			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXTexture>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXShader>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value)
-				throw std::runtime_error("Invalid resource type");
-			if (!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
+			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXTexture>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXShader>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
 				throw std::runtime_error("Invalid resource type");
 
 			if (deletionQueue[typeName].size() > 0 &&
@@ -99,6 +91,10 @@ namespace UEngine
 				typeName != TYPE_RENDERMESH &&
 				typeName != TYPE_CONSTANT_BUFFER)
 				throw std::runtime_error("A resource with the given type doesn't exists");
+
+			if (resources[typeName].size() == 0 &&
+				resources[typeName].find(name) == resources[typeName].end())
+				throw std::runtime_error("A resource with the given name doesn't exists");
 
 			return static_cast<T*>(resources[typeName][name]);
 		}

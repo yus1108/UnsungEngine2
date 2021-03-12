@@ -3,116 +3,34 @@
 
 namespace UEngine
 {
-	struct RenderObject
-	{
-		std::wstring name;
-		UEngine::DXRenderer::DXShader* shader{ nullptr };
-		UEngine::DXRenderer::DXRenderMesh* renderMesh{ nullptr };
-		std::map<std::string, UEngine::DXRenderer::DXConstantBuffer*> constantBuffers;
-		std::map<std::string, UEngine::DXRenderer::DXTexture*> textures;
-	};
-
-	class GameView
-	{
-	public:
-		bool isRenderable{ true };
-		UEngine::DXRenderer::DXView* view{ nullptr };
-		std::vector<RenderObject*> renderObjects;
-	};
-
-	class GameScene
-	{
-		friend class RenderComponent;
-	private:
-		std::list<class GameObject*> gameObjects;
-		std::map<std::wstring, RenderObject*> renderObjects;
-		std::vector<GameView> gpu_view;
-
-		void AddRenderObject(RenderObject* obj)
-		{
-			if (GetRenderObject(obj->name) != nullptr)
-				throw std::runtime_error("This object already exsits");
-			renderObjects[obj->name] = obj;
-		}
-		void RemoveRenderObject(RenderObject* obj)
-		{
-			if (GetRenderObject(obj->name) == nullptr)
-				throw std::runtime_error("This object doesn't exsits");
-			renderObjects.erase(obj->name);
-			delete obj;
-		}
-
-	public:
-		std::wstring name;
-		std::vector<GameView> cpu_view;
-		UEngine::DXRenderer::DXResourceManager ResourceManager;
-		DebugRenderer DebugRenderer;
-		// TODO: Add collisions
-
-	public:
-		template <typename T>
-		T* LoadResource(std::wstring resource_name);
-
-		virtual void Load() {}
-		void Load(std::wstring scene_name) {}
-
-		void Update() {}
-		void Render() {}
-		void Sync() {}
-
-		RenderObject* const GetRenderObject(std::wstring name)
-		{
-			auto obj = renderObjects.find(name);
-			if (obj == renderObjects.end()) return nullptr;
-			return obj->second;
-		}
-
-		void AddGameObject(GameObject* obj) { gameObjects.emplace_back(obj); }
-		GameObject* const GetGameObject(std::wstring name)
-		{
-			for (auto obj : gameObjects)
-				if (obj->name == name) return obj;
-			return nullptr;
-		}
-
-		void RemoveGameObject(GameObject* obj)
-		{
-			for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++)
-			{
-				if (*iter == obj)
-				{
-					gameObjects.erase(iter);
-					return;
-				}
-			}
-		}
-		void RemoveGameObject(std::wstring name)
-		{
-			for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++)
-			{
-				if ((*iter)->name == name)
-				{
-					gameObjects.erase(iter);
-					return;
-				}
-			}
-		}
-	};
-
-	// TODO: Make singleton
 	class GameState
 	{
 	private:
 		bool isTerminate{ false };
+		bool drawOnBackBuffer{ true };
+
+		float deltaTime = 0.0f;
+		float fixedUpdateTimer = 0.0f;
+
 		std::map<std::wstring, GameScene*> scenes;
 		GameScene* currentScene = nullptr;
 
 #pragma region Singleton
 	public:
+		float FixedTimestep = 0.02f;
+		float MaxFixedTimestep = 0.1f;
+
 		static GameState* Get() { return &instance; }
 		static GameScene* GetCurrentScene() { return instance.currentScene; }
-		static bool GetTerminate() { return instance.isTerminate; }
+
+		static bool IsTerminate() { return instance.isTerminate; }
+		static bool IsFixedUpdate();
+
+		static float GetCurrentFixedTimestep() { return UEngine::Math::Clamp(instance.deltaTime, instance.FixedTimestep, instance.MaxFixedTimestep); }
+		static float GetDeltaTime() { return instance.deltaTime; }
+
 		static void Init(GameScene* scene);
+		static void Update(std::function<void()> OnUpdate, std::function<void()> OnRender);
 		static void Release();
 
 	private:
@@ -121,16 +39,4 @@ namespace UEngine
 		static GameState instance;
 #pragma endregion
 	};
-
-	template<typename T>
-	inline T* GameScene::LoadResource(std::wstring resource_name)
-	{
-		auto resource = ResourceManager->GetResource<T>(resource_name);
-		if (resource == nullptr)
-		{
-			// TODO: open file and load resource using reousrce_name as file name
-		}
-		return resource;
-	}
-
 }
