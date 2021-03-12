@@ -26,7 +26,6 @@ namespace UEngine
 
 		void Awake();
 		void OnEnable();
-		void Start();
 		void Initialize();
 		void FixedUpdate();
 		void PhysicsUpdate();

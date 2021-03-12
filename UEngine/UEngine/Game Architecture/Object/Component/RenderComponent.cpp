@@ -20,7 +20,6 @@ void UEngine::RenderComponent::Load(std::wstring renderMesh_name, std::wstring s
 	this->shader_name = shader_name;
 
 	renderObject = new RenderObject;
-	renderObject->name = renderMesh_name + shader_name;
 	renderObject->shader = scene->ResourceManager.GetResource<DXRenderer::DXShader>(shader_name);
 	if (renderObject->shader == nullptr)
 	{

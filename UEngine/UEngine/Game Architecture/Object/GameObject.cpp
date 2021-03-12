@@ -30,19 +30,8 @@ void UEngine::GameObject::OnEnable()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->OnEnable();
+			component->SetEnable(true);
 	}
-}
-
-void UEngine::GameObject::Start()
-{
-	if (isStart) return;
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			component->Start();
-	}
-	isStart = true;
 }
 
 void UEngine::GameObject::Initialize()
@@ -59,7 +48,7 @@ void UEngine::GameObject::FixedUpdate()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->FixedUpdate();
+			if (component->GetEnable()) component->FixedUpdate();
 	}
 }
 
@@ -68,7 +57,7 @@ void UEngine::GameObject::PhysicsUpdate()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->PhysicsUpdate();
+			if (component->GetEnable()) component->PhysicsUpdate();
 	}
 }
 
@@ -77,7 +66,7 @@ void UEngine::GameObject::Update()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->Update();
+			if (component->GetEnable()) component->Update();
 	}
 }
 
@@ -86,7 +75,7 @@ void UEngine::GameObject::LateUpdate()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->LateUpdate();
+			if (component->GetEnable()) component->LateUpdate();
 	}
 }
 
@@ -95,7 +84,7 @@ void UEngine::GameObject::AnimationUpdate()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->AnimationUpdate();
+			if (component->GetEnable()) component->AnimationUpdate();
 	}
 }
 
@@ -104,7 +93,7 @@ void UEngine::GameObject::OnPreRender()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->OnPreRender();
+			if (component->GetEnable()) component->OnPreRender();
 	}
 }
 
@@ -113,7 +102,7 @@ void UEngine::GameObject::OnRender()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->OnRender();
+			if (component->GetEnable()) component->OnRender();
 	}
 }
 
@@ -122,7 +111,7 @@ void UEngine::GameObject::OnPostRender()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->OnPostRender();
+			if (component->GetEnable()) component->OnPostRender();
 	}
 }
 
@@ -131,7 +120,7 @@ void UEngine::GameObject::OnDisable()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			component->OnDisable();
+			component->SetEnable(false);
 	}
 }
 
@@ -149,7 +138,6 @@ void UEngine::GameObject::SetActive(bool isActive)
 	if (isActive && !this->isActive)
 	{
 		OnEnable();
-		Start();
 	}
 	else if (!isActive && this->isActive)
 	{
