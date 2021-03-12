@@ -99,7 +99,7 @@ void UEngine::UEditor::EditorState::Load()
             ball->AddComponent<Material>()->Load(L"./football-157930_640.png");
         }
 
-        GameState::Init(currentScene);
+        GameState::Init(currentScene, false);
     }
 }
 
@@ -153,6 +153,12 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                     show_another_window = false;
                 ImGui::End();
             }
+
+            ImGui::Begin("Game Scene");
+            ImVec2 size = ImGui::GetWindowSize();
+            size.y -= 35;
+            ImGui::Image(GameState::GetCurrentScene()->MainView->view->GetViewResource(), size);
+            ImGui::End();
 
             // Rendering
             ImGui::Render();

@@ -10,9 +10,10 @@ bool UEngine::GameState::IsFixedUpdate()
 	return instance.fixedUpdateTimer < timestep;
 }
 
-void UEngine::GameState::Init(GameScene* scene)
+void UEngine::GameState::Init(GameScene* scene, bool drawOnBackBuffer)
 {
 	instance.isTerminate = false;
+	instance.drawOnBackBuffer = drawOnBackBuffer;
 	instance.currentScene = scene;
 	instance.scenes[scene->name] = scene;
 }

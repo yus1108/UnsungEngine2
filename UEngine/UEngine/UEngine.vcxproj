@@ -180,6 +180,7 @@
     <ClInclude Include="Game Architecture\Object\GameObject.h" />
     <ClInclude Include="Game Architecture\Physics2D\Component\CircleCollider.h" />
     <ClInclude Include="Game Architecture\Physics2D\Component\Collider.h" />
+    <ClInclude Include="Game Architecture\Physics2D\Component\CollisionType.h" />
     <ClInclude Include="Game Architecture\Physics2D\Component\RectCollider.h" />
     <ClInclude Include="Game Architecture\Physics2D\SpatialPartition2D.h" />
     <ClInclude Include="Game Architecture\Scene\GameScene.h" />

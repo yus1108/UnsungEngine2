@@ -29,7 +29,7 @@ namespace UEngine
 		static float GetCurrentFixedTimestep() { return UEngine::Math::Clamp(instance.deltaTime, instance.FixedTimestep, instance.MaxFixedTimestep); }
 		static float GetDeltaTime() { return instance.deltaTime; }
 
-		static void Init(GameScene* scene);
+		static void Init(GameScene* scene, bool drawOnBackBuffer = true);
 		static void Update(std::function<void()> OnUpdate, std::function<void()> OnRender);
 		static void Release();
 

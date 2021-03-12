@@ -48,6 +48,9 @@
     <ClInclude Include="Game Architecture\Physics2D\Component\RectCollider.h">
       <Filter>Game Architecture\Physics2D\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Component\CollisionType.h">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -78,7 +81,6 @@
     <ClCompile Include="Math\Math.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Game Architecture\Scene\GameView.cpp" />
     <ClCompile Include="Game Architecture\Physics2D\SpatialPartition2D.cpp">
       <Filter>Game Architecture\Physics2D</Filter>
     </ClCompile>
@@ -90,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="Game Architecture\Physics2D\Component\RectCollider.cpp">
       <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Scene\GameView.cpp">
+      <Filter>Game Architecture\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
