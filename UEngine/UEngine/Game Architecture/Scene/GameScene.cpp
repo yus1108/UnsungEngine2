@@ -1,20 +1,6 @@
 #include "UEngine.h"
 #include "GameScene.h"
 
-void UEngine::GameScene::AddRenderObject(RenderObject* obj)
-{
-	for (auto iter = renderObjects.begin(); iter != renderObjects.end(); iter++)
-		if (*iter == obj) throw std::runtime_error("This object already exsits");
-	renderObjects.emplace_back(obj);
-}
-
-void UEngine::GameScene::RemoveRenderObject(RenderObject* obj)
-{
-	for (auto iter = renderObjects.begin(); iter != renderObjects.end(); iter++)
-		if (*iter == obj) renderObjects.erase(iter);
-	throw std::runtime_error("This object doesn't exsits");
-}
-
 void UEngine::GameScene::Load(std::wstring scene_name)
 {
 	// TODO: Load scene
@@ -39,8 +25,6 @@ void UEngine::GameScene::Release()
 		GameObject::Release(&obj);
 	for (auto obj : creationList)
 		GameObject::Release(&obj);
-	for (auto obj : renderObjects)
-		delete obj;
 	if (isDebugMode)
 	{
 		delete debugRenderer;

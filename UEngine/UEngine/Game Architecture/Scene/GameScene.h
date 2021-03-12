@@ -14,11 +14,7 @@ namespace UEngine
 		std::condition_variable renderCondition;
 
 		std::list<class GameObject*> gameObjects, deleteList, creationList;
-		std::list<RenderObject*> renderObjects;
 		std::vector<GameView> gpu_view;
-
-		void AddRenderObject(RenderObject* obj);
-		void RemoveRenderObject(RenderObject* obj);
 
 	public:
 		~GameScene() { Release(); }

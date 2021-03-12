@@ -3,7 +3,7 @@
 
 void UEngine::RenderComponent::LateUpdate()
 {
-	if (renderObject == nullptr) return;
+	if (!renderObject.isRenderable) return;
 	auto scene = GetGameObject()->GetScene();
 	// TODO: Calculate whether to draw or not
 	for (size_t i = 0; i < scene->cpu_view.size(); i++)
@@ -19,17 +19,16 @@ void UEngine::RenderComponent::Load(std::wstring renderMesh_name, std::wstring s
 	this->renderMesh_name = renderMesh_name;
 	this->shader_name = shader_name;
 
-	renderObject = new RenderObject;
-	renderObject->shader = scene->ResourceManager.GetResource<DXRenderer::DXShader>(shader_name);
-	if (renderObject->shader == nullptr)
+	if (GetEnable()) renderObject.isRenderable = true;
+	renderObject.shader = scene->ResourceManager.GetResource<DXRenderer::DXShader>(shader_name);
+	if (renderObject.shader == nullptr)
 	{
 	}
-	renderObject->renderMesh = scene->ResourceManager.GetResource<DXRenderer::DXRenderMesh>(renderMesh_name);
-	if (renderObject->renderMesh == nullptr)
+	renderObject.renderMesh = scene->ResourceManager.GetResource<DXRenderer::DXRenderMesh>(renderMesh_name);
+	if (renderObject.renderMesh == nullptr)
 	{
 		// load mesh file
 	}
-	scene->AddRenderObject(renderObject);
 }
 
 void UEngine::RenderComponent::LoadTriangle()
@@ -86,10 +85,10 @@ void UEngine::RenderComponent::LoadCircle(UINT slice)
 
 void UEngine::RenderComponent::AddConstantBuffer(std::string type_raw_name, DXRenderer::DXConstantBuffer* buffer)
 {
-	renderObject->constantBuffers[type_raw_name] = buffer;
+	renderObject.constantBuffers[type_raw_name] = buffer;
 }
 
 void UEngine::RenderComponent::AddImageTexture(DXRenderer::DXTexture* imageTexture)
 {
-	renderObject->textures["image"] = imageTexture;
+	renderObject.textures["image"] = imageTexture;
 }

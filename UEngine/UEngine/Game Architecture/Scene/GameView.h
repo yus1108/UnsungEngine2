@@ -8,7 +8,7 @@ namespace UEngine
 		bool isRenderable{ true };
 		UEngine::DXRenderer::DXView* view{ nullptr };
 		UEngine::DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };
-		std::vector<RenderObject*> renderObjects;
+		std::vector<RenderObject> renderObjects;
 
 		void Render();
 		void PostRender();

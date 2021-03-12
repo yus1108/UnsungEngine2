@@ -112,7 +112,10 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
     auto returnedValue = app->UpdateLoop([&]()
     {
         if (targetHz > 0) UEngine::Utility::UTime::Get()->Throttle(targetHz);
-        GameState::Update(nullptr, [&]()
+        GameState::Update([&]() 
+        {
+            
+        }, [&]()
         {
             // Start the Dear ImGui frame
             ImGui_ImplDX11_NewFrame();

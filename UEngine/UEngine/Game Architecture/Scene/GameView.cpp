@@ -8,13 +8,13 @@ void UEngine::GameView::Render()
 	cameraBuffer->Set(view->GetDeviceContext());
 	for (auto renderObject : renderObjects)
 	{
-		for (auto cbufferMap : renderObject->constantBuffers)
+		for (auto cbufferMap : renderObject.constantBuffers)
 			cbufferMap.second->Set(view->GetDeviceContext());
-		for (auto textureMap : renderObject->textures)
+		for (auto textureMap : renderObject.textures)
 			textureMap.second->Set(view->GetDeviceContext());
-		renderObject->shader->Set(view->GetDeviceContext());
-		renderObject->renderMesh->Set(view->GetDeviceContext());
-		renderObject->renderMesh->Draw(view->GetDeviceContext());
+		renderObject.shader->Set(view->GetDeviceContext());
+		renderObject.renderMesh->Set(view->GetDeviceContext());
+		renderObject.renderMesh->Draw(view->GetDeviceContext());
 	}
 	view->End();
 }
