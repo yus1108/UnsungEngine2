@@ -46,8 +46,8 @@ namespace UEngine
 		void PostRender();
 		void Sync();
 
+		bool IsDebugMode() { return isDebugMode; }
 		GameObject* const GetGameObject(std::wstring name);
-
 		const std::vector<GameView>& GetGpuViews() { return gpu_view; }
 
 		void AddGameObject(GameObject* obj) { gameObjects.emplace_back(obj); }

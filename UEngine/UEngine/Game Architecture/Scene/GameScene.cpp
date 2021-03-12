@@ -22,6 +22,7 @@ void UEngine::GameScene::Load(std::wstring scene_name)
 
 void UEngine::GameScene::Init(bool isDebugMode)
 {
+	this->isDebugMode = isDebugMode;
 	if (isDebugMode)
 	{
 		debugRenderer = new UEngine::DebugRenderer();
@@ -40,16 +41,17 @@ void UEngine::GameScene::Release()
 		GameObject::Release(&obj);
 	for (auto obj : renderObjects)
 		delete obj;
-	delete debugRenderer;
-	debugRenderer = nullptr;
+	if (isDebugMode)
+	{
+		delete debugRenderer;
+		debugRenderer = nullptr;
+	}
 }
 
 void UEngine::GameScene::Update()
 {
 	while (true)
 	{
-		// TODO:
-		//spatialPartition2d.Release();
 		for (auto obj : gameObjects)
 			obj->FixedUpdate();
 		for (auto obj : gameObjects)
@@ -75,7 +77,7 @@ void UEngine::GameScene::Render(ID3D11DeviceContext* deviceContext)
 			renderSyncCount++;
 			lock.unlock();
 
-			debugRenderer->Flush(MainView->cameraBuffer);
+			if (isDebugMode) debugRenderer->Flush(MainView->cameraBuffer);
 
 			lock.lock();
 			int count = --renderSyncCount;

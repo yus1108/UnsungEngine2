@@ -3,7 +3,7 @@
 
 void Tile::FixedUpdate()
 {
-	fixedPosition.x -= 7;
+	//fixedPosition.x -= 7;
 	if (GetTransform()->localPosition.x < -650)
 	{
 		fixedPosition.x += 1300;
@@ -29,5 +29,5 @@ void Tile::FixedUpdate()
 void Tile::Update()
 {
 	GetTransform()->localPosition.x = fixedPosition.x;
-	GetTransform()->localPosition.y = -250;
+	//GetTransform()->localPosition.y = -250;
 }

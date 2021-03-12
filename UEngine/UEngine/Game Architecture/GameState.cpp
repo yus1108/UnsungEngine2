@@ -31,7 +31,7 @@ void UEngine::GameState::Update(std::function<void()> OnUpdate, std::function<vo
 		if (instance.drawOnBackBuffer)
 		{
 			DXRenderer::Get()->Draw(instance.currentScene->MainView->view->GetAddressOfViewResource());
-			if (instance.currentScene->debugRenderer)
+			if (instance.currentScene->IsDebugMode() && instance.currentScene->debugRenderer)
 				DXRenderer::Get()->Draw(instance.currentScene->debugRenderer->GetAddressOfViewResource());
 		}
 		if (OnRender) OnRender();

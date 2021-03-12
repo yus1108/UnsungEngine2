@@ -93,12 +93,12 @@ namespace UEngine
 			if (currNode == nullptr) return;
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				// TODO:
-			/*	GameState::Get()->GetDebugRenderer()->Add_Rectangle(currNode->aabb, nodeColor);
+				// TODO: spatial partitioning need to know debugrenderer in the same scene
+				GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(currNode->aabb, nodeColor);
 				for (auto colliderPair : currNode->colliders)
-					GameState::Get()->GetDebugRenderer()->Add_Rectangle(colliderPair.second->GetWorldAABB(), colliderColor);
+					GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(colliderPair.second->GetWorldAABB(), colliderColor);
 				for (auto child : currNode->children)
-					DebugRender(child, collider, nodeColor, colliderColor);*/
+					DebugRender(child, collider, nodeColor, colliderColor);
 			}
 		}
 
@@ -112,10 +112,9 @@ namespace UEngine
 			if (currNode == nullptr) return;
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				// TODO:
-				/*for (auto colliderPair : currNode->colliders)
+				for (auto colliderPair : currNode->colliders)
 				{
-					GameState::Get()->GetDebugRenderer()->Add_line
+					GameState::GetCurrentScene()->debugRenderer->Add_line
 					(
 						{
 							colliderPair.second->GetTransform()->localPosition,
@@ -125,7 +124,7 @@ namespace UEngine
 					);
 				}
 				for (auto child : currNode->children)
-					DebugRender(child, collider, color);*/
+					DebugRender(child, collider, color);
 			}
 		}
 
