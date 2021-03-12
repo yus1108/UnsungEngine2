@@ -190,6 +190,7 @@ UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::wstring 
 UEngine::GameObject* UEngine::GameObject::Instantiate(std::wstring name)
 {
 	UEngine::GameObject* obj = new UEngine::GameObject();
+	obj->name = name;
 	obj->scene = GameState::GetCurrentScene();
 	obj->scene->AddGameObject(obj);
 	obj->AddComponent<Transform>();
@@ -199,6 +200,7 @@ UEngine::GameObject* UEngine::GameObject::Instantiate(std::wstring name)
 UEngine::GameObject* UEngine::GameObject::Instantiate(GameScene* scene, std::wstring name)
 {
 	UEngine::GameObject* obj = new UEngine::GameObject();
+	obj->name = name;
 	obj->scene = scene;
 	obj->scene->AddGameObject(obj);
 	obj->AddComponent<Transform>();

@@ -13,8 +13,12 @@
 #include "../DXRenderer/dxrframework.h"
 
 #include "UEngineDefinitions.h"
-#include "Math\Math.h"
 #include "DebugRenderer\DebugRenderer.h"
+
+#include "Game Architecture\Physics2D\Component\Collider.h"
+#include "Game Architecture\Physics2D\Component\CircleCollider.h"
+#include "Game Architecture\Physics2D\Component\RectCollider.h"
+#include "Math\Math.h"
 
 #include "Game Architecture\Scene\GameView.h"
 #include "Game Architecture\Scene\GameScene.h"
@@ -25,4 +29,5 @@
 #include "Game Architecture\Object\Component\RenderComponent.h"
 #include "Game Architecture\Object\Component\Material.h"
 #include "Game Architecture\Object\Component\Camera.h"
+
 

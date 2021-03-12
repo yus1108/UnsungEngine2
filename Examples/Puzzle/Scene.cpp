@@ -19,37 +19,32 @@ Scene::Scene()
         rendererDesc.MultisampleDesc = { 4, 0 };
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
-
-    auto gameState = UEngine::GameState::Get();
-    gameState->Init(app, renderer);
 }
 
 void Scene::Load()
 {
-    auto gameState = UEngine::GameState::Get();
     // TODO: Place code here.
     {
         // basic load
         using namespace UEngine;
-        gameState->LoadObject([this](GameObject* cameraObject)
+        GameScene* currentScene = new GameScene();
+        currentScene->Init(true);
+
         {
+            auto cameraObject = GameObject::Instantiate(currentScene, L"camera");
             auto camera = cameraObject->AddComponent<Camera>();
             camera->viewWidth = static_cast<float>(screenSize.x);
             camera->viewHeight = static_cast<float>(screenSize.y);
-        });
-        
-        gameState->LoadObject([this](GameObject* puzzleObj)
-        {
-            puzzleObj->name = "puzzle";
+
+            auto puzzleObj = GameObject::Instantiate(currentScene, L"puzzle");
             auto puzzle = puzzleObj->AddComponent<Puzzle>();
 
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    puzzle->pieces[i][j] = GameObject::Instantiate();
-                    puzzle->pieces[i][j]->name = "pieces";
-                    puzzle->pieces[i][j]->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+                    puzzle->pieces[i][j] = GameObject::Instantiate(currentScene, L"pieces");
+                    puzzle->pieces[i][j]->AddComponent<RenderComponent>()->Load(L"rectangle", L"sprite");
                     puzzle->pieces[i][j]->AddComponent<Material>()->Load(L"./Assets/island-5783440_1920.jpg");
                     puzzle->pieces[i][j]->GetComponent<Material>()->uv = UV
                     {
@@ -72,9 +67,20 @@ void Scene::Load()
                         );
                 }
             }
-        });
+        }
 
-        gameState->StartGame();
+        GameState::Init(currentScene);
     }
+}
+
+int Scene::Run()
+{
+    auto returnedValue = WinApplication::Get()->UpdateLoop([&]()
+    {
+        UEngine::Utility::UTime::Get()->Throttle(200);
+        GameState::Update(nullptr, nullptr);
+    });
+
+    return returnedValue;
 }
  

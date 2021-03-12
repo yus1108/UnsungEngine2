@@ -19,7 +19,7 @@ void UEngine::Material::Update()
 		if (renderObject == nullptr) return;
 		renderComponent->AddConstantBuffer(typeid(Color).raw_name(), colorBuffer);
 		renderComponent->AddConstantBuffer(typeid(UV).raw_name(), spriteBuffer);
-		renderComponent->AddImageTexture(imageTexture);
+		if (imageTexture) renderComponent->AddImageTexture(imageTexture);
 	}
 }
 
@@ -54,8 +54,7 @@ void UEngine::Material::Load(std::wstring fileName)
 	imageTexture = DXRenderer::DXTexture::Load(fileName, samplerDesc);
 	color = Color{ 1, 1, 1, 1 };
 	uv = UV{ 0, 0, 1, 1 };
-	if (renderObject != nullptr)
-		GetComponent<RenderComponent>()->AddImageTexture(imageTexture);
+	if (renderObject != nullptr) GetComponent<RenderComponent>()->AddImageTexture(imageTexture);
 }
 
 void UEngine::Material::Load(std::wstring fileName, D3D11_TEXTURE_ADDRESS_MODE addressMode, D3D11_FILTER filter)
@@ -76,6 +75,5 @@ void UEngine::Material::Load(std::wstring fileName, D3D11_TEXTURE_ADDRESS_MODE a
 	imageTexture = DXRenderer::DXTexture::Load(fileName, samplerDesc);
 	color = Color{ 1, 1, 1, 1 };
 	uv = UV{ 0, 0, 1, 1 };
-	if (renderObject != nullptr)
-		GetComponent<RenderComponent>()->AddImageTexture(imageTexture);
+	if (renderObject != nullptr) GetComponent<RenderComponent>()->AddImageTexture(imageTexture);
 }

@@ -36,6 +36,18 @@
     <ClInclude Include="Game Architecture\Scene\GameView.h">
       <Filter>Game Architecture\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\SpatialPartition2D.h">
+      <Filter>Game Architecture\Physics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Component\CircleCollider.h">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Component\Collider.h">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Architecture\Physics2D\Component\RectCollider.h">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -67,6 +79,18 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Game Architecture\Scene\GameView.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\SpatialPartition2D.cpp">
+      <Filter>Game Architecture\Physics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Physics2D\Component\CircleCollider.cpp">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Physics2D\Component\Collider.cpp">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Physics2D\Component\RectCollider.cpp">
+      <Filter>Game Architecture\Physics2D\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DebugRenderer">
@@ -86,6 +110,12 @@
     </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{2d3ed35c-35ba-49e2-91fa-631c780801b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Physics2D">
+      <UniqueIdentifier>{ceff0b68-3259-46b7-b90f-d28fcac80581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Architecture\Physics2D\Component">
+      <UniqueIdentifier>{7067f2d2-bc0a-4471-9020-e0010434fdb8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

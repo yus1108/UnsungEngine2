@@ -1,4 +1,5 @@
 #pragma once
+#include "Game Architecture\Physics2D\SpatialPartition2D.h"
 
 namespace UEngine
 {
@@ -13,7 +14,7 @@ namespace UEngine
 		std::condition_variable renderCondition;
 
 		std::list<class GameObject*> gameObjects, deleteList, creationList;
-		std::map<std::wstring, RenderObject*> renderObjects;
+		std::list<RenderObject*> renderObjects;
 		std::vector<GameView> gpu_view;
 
 		void AddRenderObject(RenderObject* obj);
@@ -30,7 +31,7 @@ namespace UEngine
 
 		UEngine::DXRenderer::DXResourceManager ResourceManager;
 		DebugRenderer *debugRenderer = nullptr;
-		// TODO: Add collisions
+		Physics2D::SpatialPartition2D partition2D;
 
 		template <typename T>
 		T* LoadResource(std::wstring resource_name);
@@ -45,7 +46,6 @@ namespace UEngine
 		void PostRender();
 		void Sync();
 
-		RenderObject* const GetRenderObject(std::wstring name);
 		GameObject* const GetGameObject(std::wstring name);
 
 		const std::vector<GameView>& GetGpuViews() { return gpu_view; }

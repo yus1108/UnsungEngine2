@@ -48,15 +48,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     Scene scene;
-
-    auto gameState = UEngine::GameState::Get();
     scene.Load();
-    auto returnedValue = app->UpdateLoop([&]()
-    {
-        UEngine::Utility::UTime::Get()->Throttle(200);
-        gameState->Update();
-       
-    });
-
-    return returnedValue;
+    return scene.Run();
 }

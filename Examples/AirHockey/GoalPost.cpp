@@ -9,7 +9,7 @@ void GoalPost::Update()
 	auto transform = GetTransform();
 	auto postCol = MakeAABB(transform->GetWorld());
 
-	auto ball = FindObjectWithName("ball");
+	auto ball = FindObjectWithName(L"ball");
 	auto ballCol = MakeCircle(ball->GetTransform()->localPosition, ball->GetTransform()->scale.x * 0.5f);
 
 	if (IsColliding(postCol, ballCol))
@@ -17,10 +17,10 @@ void GoalPost::Update()
 		ball->GetComponent<Ball>()->Init();
 	}
 
-	auto p1 = FindObjectWithName("p1");
+	auto p1 = FindObjectWithName(L"p1");
 	auto p1Col = MakeCircle(p1->GetTransform()->localPosition, p1->GetTransform()->scale.x * 0.5f);
 
-	auto p2 = FindObjectWithName("p2");
+	auto p2 = FindObjectWithName(L"p2");
 	auto p2Col = MakeCircle(p2->GetTransform()->localPosition, p2->GetTransform()->scale.x * 0.5f);
 
 	if (IsColliding(postCol, p1Col))

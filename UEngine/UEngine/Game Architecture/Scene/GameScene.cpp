@@ -3,17 +3,16 @@
 
 void UEngine::GameScene::AddRenderObject(RenderObject* obj)
 {
-	if (GetRenderObject(obj->name) != nullptr)
-		throw std::runtime_error("This object already exsits");
-	renderObjects[obj->name] = obj;
+	for (auto iter = renderObjects.begin(); iter != renderObjects.end(); iter++)
+		if (*iter == obj) throw std::runtime_error("This object already exsits");
+	renderObjects.emplace_back(obj);
 }
 
 void UEngine::GameScene::RemoveRenderObject(RenderObject* obj)
 {
-	if (GetRenderObject(obj->name) == nullptr)
-		throw std::runtime_error("This object doesn't exsits");
-	renderObjects.erase(obj->name);
-	delete obj;
+	for (auto iter = renderObjects.begin(); iter != renderObjects.end(); iter++)
+		if (*iter == obj) renderObjects.erase(iter);
+	throw std::runtime_error("This object doesn't exsits");
 }
 
 void UEngine::GameScene::Load(std::wstring scene_name)
@@ -40,7 +39,7 @@ void UEngine::GameScene::Release()
 	for (auto obj : creationList)
 		GameObject::Release(&obj);
 	for (auto obj : renderObjects)
-		delete obj.second;
+		delete obj;
 	delete debugRenderer;
 	debugRenderer = nullptr;
 }
@@ -141,13 +140,6 @@ UEngine::GameObject* const UEngine::GameScene::GetGameObject(std::wstring name)
 	for (auto obj : gameObjects)
 		if (obj->name == name) return obj;
 	return nullptr;
-}
-
-UEngine::RenderObject* const UEngine::GameScene::GetRenderObject(std::wstring name)
-{
-	auto obj = renderObjects.find(name);
-	if (obj == renderObjects.end()) return nullptr;
-	return obj->second;
 }
 
 void UEngine::GameScene::RemoveGameObject(GameObject* obj)

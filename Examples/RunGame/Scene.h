@@ -6,5 +6,6 @@ private:
 public:
 	Scene();
 	void Load();
+	int Run();
 };
 

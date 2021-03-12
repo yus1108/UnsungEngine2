@@ -10,13 +10,12 @@ namespace UEngine
             worldAABB = MakeAABB(localAABB, GetTransform()->GetRTP());
             others.clear();
             collisions.clear();
-            GameState::Get()->GetSpatialPartition2D()->EnlargeHead(worldAABB);
+            GetGameObject()->GetScene()->partition2D.EnlargeHead(worldAABB);
         }
 
         void Collider::PhysicsUpdate()
         {
-            GameState::Get()->GetSpatialPartition2D()->ConstructNode(this);
-
+            GetGameObject()->GetScene()->partition2D.ConstructNode(this);
         }
     }
 }

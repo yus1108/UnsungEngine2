@@ -112,8 +112,7 @@ void Player::Update()
 
 void Player::OnPreRender()
 {
-	GameState* gameState = GameState::Get();
-	auto sp = gameState->GetSpatialPartition2D();
-	sp->DebugRender(sp->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-	sp->DebugRender(sp->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 1, 0, 1 });
+	auto sp = GetGameObject()->GetScene()->partition2D;
+	sp.DebugRender(sp.head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+	sp.DebugRender(sp.head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 1, 0, 1 });
 }

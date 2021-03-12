@@ -178,6 +178,10 @@
     <ClInclude Include="Game Architecture\Object\Component\RenderComponent.h" />
     <ClInclude Include="Game Architecture\Object\Component\Transform.h" />
     <ClInclude Include="Game Architecture\Object\GameObject.h" />
+    <ClInclude Include="Game Architecture\Physics2D\Component\CircleCollider.h" />
+    <ClInclude Include="Game Architecture\Physics2D\Component\Collider.h" />
+    <ClInclude Include="Game Architecture\Physics2D\Component\RectCollider.h" />
+    <ClInclude Include="Game Architecture\Physics2D\SpatialPartition2D.h" />
     <ClInclude Include="Game Architecture\Scene\GameScene.h" />
     <ClInclude Include="Game Architecture\Scene\GameView.h" />
     <ClInclude Include="Math\Math.h" />
@@ -192,6 +196,10 @@
     <ClCompile Include="Game Architecture\Object\Component\RenderComponent.cpp" />
     <ClCompile Include="Game Architecture\Object\Component\Transform.cpp" />
     <ClCompile Include="Game Architecture\Object\GameObject.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\Component\CircleCollider.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\Component\Collider.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\Component\RectCollider.cpp" />
+    <ClCompile Include="Game Architecture\Physics2D\SpatialPartition2D.cpp" />
     <ClCompile Include="Game Architecture\Scene\GameScene.cpp" />
     <ClCompile Include="Game Architecture\Scene\GameView.cpp" />
     <ClCompile Include="Math\Math.cpp" />

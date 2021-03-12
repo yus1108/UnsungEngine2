@@ -16,11 +16,8 @@ void UEngine::RenderComponent::LateUpdate()
 void UEngine::RenderComponent::Load(std::wstring renderMesh_name, std::wstring shader_name)
 {
 	auto scene = GetGameObject()->GetScene();
-	renderObject = scene->GetRenderObject(renderMesh_name + shader_name);
 	this->renderMesh_name = renderMesh_name;
 	this->shader_name = shader_name;
-
-	if (renderObject != nullptr) return;
 
 	renderObject = new RenderObject;
 	renderObject->name = renderMesh_name + shader_name;

@@ -12,7 +12,7 @@ public:
         right,
         bottom
     };
-    GameObject* pieces[3][3];
+    GameObject* pieces[3][3]{ nullptr };
     POINT currPos{ 0,0 };
     std::stack<Direction> stack;
     bool start = false;

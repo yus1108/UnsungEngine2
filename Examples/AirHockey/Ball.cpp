@@ -9,10 +9,10 @@ void Ball::Update()
 	auto transform = GetTransform();
 	auto ballCol = MakeCircle(transform->localPosition, transform->scale.x * 0.5f);
 
-	auto p1 = FindObjectWithName("p1");
+	auto p1 = FindObjectWithName(L"p1");
 	auto p1Col = MakeCircle(p1->GetTransform()->localPosition, p1->GetTransform()->scale.x * 0.5f);
 
-	auto p2 = FindObjectWithName("p2");
+	auto p2 = FindObjectWithName(L"p2");
 	auto p2Col = MakeCircle(p2->GetTransform()->localPosition, p2->GetTransform()->scale.x * 0.5f);
 
 	if (IsColliding(ballCol, p1Col))
