@@ -39,6 +39,8 @@ void UEngine::GameScene::Release()
 		GameObject::Release(&obj);
 	for (auto obj : creationList)
 		GameObject::Release(&obj);
+	for (auto obj : renderObjects)
+		delete obj.second;
 	delete debugRenderer;
 	debugRenderer = nullptr;
 }
