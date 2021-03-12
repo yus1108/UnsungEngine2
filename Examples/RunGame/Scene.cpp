@@ -53,7 +53,7 @@ void Scene::Load()
             };
             background->GetComponent<Background>()->speed = 0.5f;
 
-            for (size_t i = 0; i < 13; i++)
+            for (size_t i = 0; i < 1; i++)
             {
                 int index = i;
                 auto tile = GameObject::Instantiate(currentScene, L"tile");

@@ -28,6 +28,6 @@ void Tile::FixedUpdate()
 
 void Tile::Update()
 {
-	GetTransform()->localPosition.x = fixedPosition.x;
+	//GetTransform()->localPosition.x = fixedPosition.x;
 	//GetTransform()->localPosition.y = -250;
 }

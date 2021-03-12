@@ -17,6 +17,7 @@ namespace UEngine
 
 		public:
 			std::map<Collider*, Vector3> lastImpacts;
+			AABB GetLocalCollider() { return localCollider; }
 			AABB GetCollider() { return worldCollider; }
 			void SetCollider(float x, float y);
 

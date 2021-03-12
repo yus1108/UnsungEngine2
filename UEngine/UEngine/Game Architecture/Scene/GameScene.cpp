@@ -36,6 +36,7 @@ void UEngine::GameScene::Update()
 {
 	while (true)
 	{
+		partition2D.Release();
 		for (auto obj : gameObjects)
 			obj->FixedUpdate();
 		for (auto obj : gameObjects)
