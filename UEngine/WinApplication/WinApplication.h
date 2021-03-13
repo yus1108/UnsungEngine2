@@ -27,7 +27,10 @@ namespace UEngine
 	private:
 		WinApplication();
 		~WinApplication() { instance.Close(); }
+#pragma data_seg(".ioshare")
 		static WinApplication instance;
+#pragma data_seg()
+
 #pragma endregion
 
 	public:

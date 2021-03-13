@@ -13,7 +13,10 @@ namespace UEngine
 	private:
 		WinInput() = default;
 		~WinInput() = default;
+#pragma data_seg(".ioshare")
 		static WinInput instance;
+#pragma data_seg()
+
 #pragma endregion
 
 	private:

@@ -16,8 +16,10 @@ namespace UEngine
 		private:
 			DXRenderer();
 			~DXRenderer() { Release(); }
+#pragma data_seg(".ioshare")
 			static DXRenderer instance;
-	#pragma endregion
+#pragma data_seg()
+#pragma endregion
 
 		private:
 			HWND hwnd{ NULL };

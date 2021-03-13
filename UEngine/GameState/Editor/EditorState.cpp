@@ -79,8 +79,40 @@ UEngine::UEditor::EditorState::~EditorState()
     ImGui::DestroyContext();
 }
 
+#include <filesystem>
+#include <iostream>
+
+namespace fs = std::filesystem;
+
+HINSTANCE hDLL;               // Handle to DLL  
+typedef UEngine::Component*(*AddScript) (UEngine::GameObject* gameObject);
+AddScript scriptCreation = NULL;
 void UEngine::UEditor::EditorState::Load()
 {
+    fs::path sourceFile = "../Debug/DllTest.dll";
+    fs::path target = "../Debug/DllTestTemp.dll";
+
+    try // If you want to avoid exception handling, then use the error code overload of the following functions.
+    {
+        fs::copy_file(sourceFile, target, fs::copy_options::overwrite_existing);
+    }
+    catch (std::exception& e) // Not using fs::filesystem_error since std::bad_alloc can throw too.  
+    {
+        std::cout << e.what();
+    }
+
+    hDLL = LoadLibrary(L"../Debug/DllTestTemp.dll");
+    if (hDLL == NULL)
+        throw std::runtime_error("dll not found");
+
+    scriptCreation = (AddScript)GetProcAddress(hDLL, "ScriptCreation");
+
+    if (!scriptCreation)
+    {
+        // handle the error  
+        FreeLibrary(hDLL);
+        throw std::runtime_error("dll function not found");
+    }
     // TODO: Place code here.
     {
         // basic load
@@ -95,6 +127,8 @@ void UEngine::UEditor::EditorState::Load()
             camera->viewHeight = 30;
 
             auto ball = GameObject::Instantiate(currentScene, L"ball");
+            auto component = scriptCreation(ball);
+            
             ball->AddComponent<RenderComponent>()->Load(L"rectangle", L"image");
             ball->AddComponent<Material>()->Load(L"./football-157930_640.png");
         }
@@ -114,7 +148,23 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
         if (targetHz > 0) UEngine::Utility::UTime::Get()->Throttle(targetHz);
         GameState::Update([&]() 
         {
-            
+            if (WinInput::Get()->GetKeyDown('1'))
+            {
+                FreeLibrary(hDLL);
+                fs::path sourceFile = "../Debug/DllTest.dll";
+                fs::path target = "../Debug/DllTestTemp.dll";
+
+                try // If you want to avoid exception handling, then use the error code overload of the following functions.
+                {
+                    fs::copy_file(sourceFile, target, fs::copy_options::overwrite_existing);
+                }
+                catch (std::exception& e) // Not using fs::filesystem_error since std::bad_alloc can throw too.  
+                {
+                    std::cout << e.what();
+                }
+
+                hDLL = LoadLibrary(L"../Debug/DllTestTemp.dll");
+            }
         }, [&]()
         {
             // Start the Dear ImGui frame

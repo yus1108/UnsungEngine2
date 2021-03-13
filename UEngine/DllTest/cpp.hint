@@ -1,0 +1,5 @@
+// Hint files help the Visual Studio IDE interpret Visual C++ identifiers
+// such as names of functions and macros.
+// For more information see https://go.microsoft.com/fwlink/?linkid=865984
+#define UENGINE_CLASS(C, T) extern "C" __declspec(dllexport) UEngine::Component* C(UEngine::GameObject* gameObject) { return gameObject->AddComponent<Script>(); } extern "C" __declspec(dllimport) class T : public UEngine::Component
+#define UENGINE_CLASS(T) extern "C" __declspec(dllimport) UEngine::Component* T##Creation(UEngine::GameObject* gameObject) { return gameObject->AddComponent<Script>(); }extern "C" __declspec(dllimport) class T : public UEngine::Component

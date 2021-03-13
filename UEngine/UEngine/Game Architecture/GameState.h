@@ -36,7 +36,9 @@ namespace UEngine
 	private:
 		GameState() = default;
 		~GameState() { Release(); }
+#pragma data_seg(".ioshare")
 		static GameState instance;
+#pragma data_seg()
 #pragma endregion
 	};
 }

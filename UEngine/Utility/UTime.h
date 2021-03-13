@@ -14,7 +14,10 @@ namespace UEngine
 			~UTime() = default;
 
 		private:
-			static UTime instance;
+#pragma data_seg(".ioshare")
+		static UTime instance;
+#pragma data_seg()
+
 
 		private:
 			std::chrono::high_resolution_clock::time_point startTime;

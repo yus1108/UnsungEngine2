@@ -88,8 +88,8 @@ namespace UEngine
 
     void WinApplication::Close()
     {
-        UnregisterClass(isDefaultDesc ? _T("WIN_APPLICATION") : appDesc.Wcex->lpszClassName, appDesc.HInstance);
-        PostQuitMessage(0);
+        //UnregisterClass(isDefaultDesc ? _T("WIN_APPLICATION") : appDesc.Wcex->lpszClassName, appDesc.HInstance);
+        //PostQuitMessage(0);
     }
 
     BOOL WinApplication::InitInstance(HINSTANCE hInstance, int nCmdShow, LPCTSTR titleName, LPCTSTR windowClassName, POINT windowSize)
