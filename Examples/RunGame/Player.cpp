@@ -4,26 +4,11 @@
 void Player::Start()
 {
 	material = GetComponent<Material>();
-	lastpos = GetTransform()->localPosition;
 	collider = GetComponent<Physics2D::RectCollider>();
 }
 
 void Player::FixedUpdate()
 {
-	if (collider->collisions.size() > 0)
-	{
-		ableToJump = true;
-		if (weight < 0)
-		{
-			weight = 0;
-		}
-	}
-	else
-	{
-		//GetTransform()->localPosition.y += weight;
-		weight += gravity;
-		lastpos = GetTransform()->localPosition;
-	}
 	if (hitCounter <= 0)
 	{
 		material->color = Color{ 1, 1, 1, 1 };
@@ -55,11 +40,23 @@ void Player::Update()
 	}
 	hitCounter -= Utility::UTime::Get()->DeltaTimeF();
 	
-
+	if (collider->collisions.size() > 0)
+	{
+		ableToJump = true;
+		if (weight < 0)
+		{
+			weight = 0;
+		}
+	}
+	else
+	{
+		GetTransform()->localPosition.y += weight * Utility::UTime::Get()->DeltaTimeF();
+		weight += gravity;
+	}
 	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump && GetTransform()->localPosition.y < -155.0f)
 	{
 		ableToJump = false;
-		weight = 20;
+		weight = 500;
 	}
 
 	auto transform = GetTransform();

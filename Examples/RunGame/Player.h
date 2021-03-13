@@ -8,8 +8,7 @@ private:
 	POINT currMapIndex{ 0, 0 };
 	Material* material{ nullptr };
 	Physics2D::RectCollider* collider;
-	Vector2 lastpos;
-	float gravity = -1.5f;
+	float gravity = -10.0f;
 	float weight = 0;
 	bool ableToJump = false;
 	float hitCounter = 0;

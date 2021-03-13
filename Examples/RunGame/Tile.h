@@ -8,6 +8,7 @@ public:
 	Vector2 fixedPosition;
 
 private:
+	void Start() override;
 	void FixedUpdate() override;
 	void Update() override;
 };

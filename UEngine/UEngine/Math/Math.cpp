@@ -393,16 +393,14 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 )
 {
 	CollisionResult result;
-	if (rect1->GetCollider().right < rect2->GetCollider().left || rect1->GetCollider().left > rect2->GetCollider().right)
+	if (rect1->GetCollider().right <= rect2->GetCollider().left || rect1->GetCollider().left >= rect2->GetCollider().right)
 	{
 		result.isColliding = false;
-		rect1->lastImpacts.erase(rect2);
 		return result;
 	}
-	if (rect1->GetCollider().top < rect2->GetCollider().bottom || rect1->GetCollider().bottom > rect2->GetCollider().top)
+	if (rect1->GetCollider().top <= rect2->GetCollider().bottom || rect1->GetCollider().bottom >= rect2->GetCollider().top)
 	{
 		result.isColliding = false;
-		rect1->lastImpacts.erase(rect2);
 		return result;
 	}
 
@@ -417,80 +415,21 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 		(rect2->GetCollider().top + rect2->GetCollider().bottom) / 2.0f
 	);
 
-	Vector2 dir1 = center1 - rect1->GetLastPos();
-	Vector2 dir2 = center2 - rect2->GetLastPos();
-
 	Vector2 closestPoint1;
 	closestPoint1.x = Clamp(center1.x, rect2->GetCollider().left, rect2->GetCollider().right);
 	closestPoint1.y = Clamp(center1.y, rect2->GetCollider().bottom, rect2->GetCollider().top);
 
-	Vector2 lb, lt, rt, rb;
-	lb = Vector2(rect2->GetCollider().left, rect2->GetCollider().bottom);
-	lt = Vector2(rect2->GetCollider().left, rect2->GetCollider().top);
-	rt = Vector2(rect2->GetCollider().right, rect2->GetCollider().top);
-	rb = Vector2(rect2->GetCollider().right, rect2->GetCollider().bottom);
+	Vector2 closestPoint2;
+	closestPoint2.x = Clamp(center2.x, rect1->GetCollider().left, rect1->GetCollider().right);
+	closestPoint2.y = Clamp(center2.y, rect1->GetCollider().bottom, rect1->GetCollider().top);
 
-	float prevBottom = rect1->GetPrevCollider().bottom;
-	float prevTop = rect1->GetPrevCollider().top;
-	float prevRight = rect1->GetPrevCollider().right;
-	float prevLeft = rect1->GetPrevCollider().left;
+	Vector2 dist = closestPoint2 - closestPoint1;
+	Vector2 realDist;
+	realDist.x = abs(dist.x) > abs(dist.y) ? 0 : dist.x;
+	realDist.y = abs(dist.x) < abs(dist.y) ? 0 : dist.y;
+	result.distance1 = realDist * -0.5f;
+	result.distance2 = realDist * 0.5f;
 
-	if ((closestPoint1.x == lt.x && closestPoint1.y == lt.y) ||
-		(closestPoint1.x == rt.x && closestPoint1.y == rt.y) ||
-		(closestPoint1.x == lb.x && closestPoint1.y == lb.y) ||
-		(closestPoint1.x == rb.x && closestPoint1.y == rb.y))
-	{
-		Vector2 prevCenter1 = rect1->GetLastPos();
-		Vector2 prevCenter2 = rect2->GetLastPos();
-
-		Vector2 lastClosestPoint1, lastClosestPoint2;
-		lastClosestPoint1.x = Clamp(prevCenter1.x, rect2->GetPrevCollider().left, rect2->GetPrevCollider().right);
-		lastClosestPoint1.y = Clamp(prevCenter1.y, rect2->GetPrevCollider().bottom, rect2->GetPrevCollider().top);
-		lastClosestPoint2.x = Clamp(prevCenter2.x, rect1->GetPrevCollider().left, rect1->GetPrevCollider().right);
-		lastClosestPoint2.y = Clamp(prevCenter2.y, rect1->GetPrevCollider().bottom, rect1->GetPrevCollider().top);
-	}
-	
-
-	Vector2 dist1 = closestPoint1 - center1;
-	Vector2 realDist, absRealDist, expectedDist, distToMove;
-
-	realDist = center2 - center1;
-	absRealDist.x = abs(realDist.x);
-	absRealDist.y = abs(realDist.y);
-	expectedDist.x = abs(rect1->GetLocalCollider().right) + abs(rect2->GetLocalCollider().right);
-	expectedDist.y = abs(rect1->GetLocalCollider().top) + abs(rect2->GetLocalCollider().top);
-	distToMove = expectedDist - absRealDist;
-	distToMove.x = realDist.x > 0 ? distToMove.x : -distToMove.x;
-	distToMove.y = realDist.y > 0 ? distToMove.y : -distToMove.y;
-
-	float speed1 = dir1.Magnitude();
-	float speed2 = dir2.Magnitude();
-	float totalSeped = speed1 + speed2;
-
-	Vector2 velocity = dir1.Normalize();
-
-	if (dist1.x != 0)
-		dist1.x = distToMove.x * abs(velocity.x);
-	if (dist1.y != 0)
-		dist1.y = distToMove.y * abs(velocity.y);
-
-	/*if (speed1 > speed2 || rect2->GetGameObject()->IsStatic)
-{
-	result.distance1 = dist1.Normalize() * -1.0f;
-
-}
-else if (speed1 < speed2 || rect1->GetGameObject()->IsStatic)
-{
-	result.distance2 = dist1.Normalize() * 1.0f;
-}
-else
-{
-	result.distance1 = dist1.Normalize() * -1.0f;
-	result.distance2 = dist1.Normalize() * 1.0f;
-}*/
-
-	result.distance1 = dist1 * -0.5f;
-	result.distance2 = dist1 * 0.5f;
 	return result;
 }
 

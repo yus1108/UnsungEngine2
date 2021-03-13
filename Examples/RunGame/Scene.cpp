@@ -53,7 +53,7 @@ void Scene::Load()
             };
             background->GetComponent<Background>()->speed = 0.5f;
 
-            for (size_t i = 0; i < 1; i++)
+            for (size_t i = 0; i < 13; i++)
             {
                 int index = i;
                 auto tile = GameObject::Instantiate(currentScene, L"tile");
@@ -84,8 +84,8 @@ void Scene::Load()
             player->GetTransform()->localPosition.x = -450;
             player->GetTransform()->localPosition.y = -50;
             player->GetTransform()->scale = Vector2{
-                80,
-                 80
+                50,
+                 50
             };
             player->GetComponent<Material>()->uv = UV
             {

@@ -8,29 +8,17 @@ void UEngine::Physics2D::RectCollider::SetCollider(float x, float y)
 	float halfY = y / 2.0f;
 	localCollider = AABB{ -halfX, halfY, halfX, -halfY };
 	localAABB = AABB{ -halfX, halfY, halfX, -halfY };
-	prevCollider = AABB{ -halfX, halfY, halfX, -halfY };
-	prevCollider = MakeAABB(prevCollider, GetTransform()->GetRTP());
-	lastPos = GetTransform()->GetWorld().r[3];
 }
 
 void UEngine::Physics2D::RectCollider::Awake()
 {
 	typeName = Type_Rectangle;
-	lastPos = GetTransform()->GetWorld().r[3];
-	prevCollider = MakeAABB(localAABB, GetTransform()->GetRTP());
 }
 
 void UEngine::Physics2D::RectCollider::FixedUpdate()
 {
 	worldCollider = MakeAABB(localAABB, GetTransform()->GetRTP());
 	Collider::FixedUpdate();
-}
-
-void UEngine::Physics2D::RectCollider::PhysicsUpdate()
-{
-	Collider::PhysicsUpdate();
-	lastPos = GetTransform()->GetWorld().r[3];
-	prevCollider = MakeAABB(localAABB, GetTransform()->GetRTP());
 }
 
 void UEngine::Physics2D::RectCollider::CalculateImpact(Collider* other)
