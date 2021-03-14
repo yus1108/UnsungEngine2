@@ -51,10 +51,9 @@ void XMLSceneParser::LoadGameObject(TiXmlElement* sceneNode, UEngine::GameScene*
 		goNode->ToElement()->QueryBoolAttribute("isActive", &isActive);
 		auto gameObject = UEngine::GameObject::Instantiate(gameScene, name);
 		gameObject->SetActive(isActive);
-
+		goNode->ToElement()->QueryBoolAttribute("isStatic", &gameObject->IsStatic);
 		LoadComponent(goNode->ToElement(), gameObject);
 
-		goNode->ToElement()->QueryBoolAttribute("isStatic", &gameObject->IsStatic);
 
 
 		goNode = goNode->NextSibling();
@@ -93,12 +92,28 @@ void XMLSceneParser::LoadComponent(TiXmlElement* goNode, UEngine::GameObject* ga
 		{
 			component = gameObject->AddComponent<UEngine::Physics2D::RectCollider>();
 		}
+		else if (componentType == "GameObject")
+		{
+			std::string name;
+			bool isActive, isStatic;
+			name = componentNode->ToElement()->Attribute("name");
+			componentNode->ToElement()->QueryBoolAttribute("isActive", &isActive);
+			auto child = UEngine::GameObject::Instantiate(gameObject->GetScene(), name);
+			child->SetActive(isActive);
+			child->SetParent(gameObject);
+			componentNode->ToElement()->QueryBoolAttribute("isStatic", &gameObject->IsStatic);
+
+			LoadComponent(componentNode->ToElement(), child);
+
+			componentNode = componentNode->NextSibling();
+			continue;
+		}
 		else
 		{
 			typedef UEngine::Component* (*AddScript) (UEngine::GameObject* gameObject);
 			AddScript scriptCreation = NULL;
-			//scriptCreation = (AddScript)GetProcAddress(UEngine::WinApplication, "ScriptCreation");
-
+			scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction(componentType + "Creation");
+			component = scriptCreation(gameObject);
 		}
 
 		bool enabled;

@@ -100,7 +100,7 @@ void UEngine::UEditor::EditorState::Load()
     {
         // basic load
         using namespace UEngine;
-        GameScene* currentScene = new GameScene();
+    /*    GameScene* currentScene = new GameScene();
         currentScene->name = "tempScene";
         currentScene->Init(true);
         {
@@ -120,11 +120,12 @@ void UEngine::UEditor::EditorState::Load()
             
             ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
             ball->AddComponent<Material>()->Load(L"./ÇÑ±Û.png");
-        }
+        }*/
+        GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene");
+
 
         GameState::Init(currentScene, false);
         currentScene->SaveScene();
-        //currentScene->LoadScene("./.uscene");
     }
 }
 
