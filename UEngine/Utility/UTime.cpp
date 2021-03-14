@@ -7,11 +7,12 @@ namespace UEngine
 	{
 		using namespace std::chrono;
 
-		UTime UTime::instance;
+		UTime* UTime::instance = nullptr;
 
 		UTime* UTime::Get()
 		{
-			return &instance;
+			if (instance == nullptr) instance = new UTime;
+			return instance;
 		}
 
 		UTime::UTime()

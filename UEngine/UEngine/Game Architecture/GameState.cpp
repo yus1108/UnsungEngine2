@@ -10,13 +10,51 @@ bool UEngine::GameState::IsFixedUpdate()
 	return instance->fixedUpdateTimer < timestep;
 }
 
+void UEngine::GameState::SetCurrentScene(std::string name)
+{
+	auto scene = GetScene(name);
+	if (!scene) throw std::runtime_error("Cannot set nullptr as the current scene of the game state");
+	instance->currentScene = scene;
+}
+
+void UEngine::GameState::LoadScene(std::string fileName)
+{
+
+}
+
+void UEngine::GameState::SaveScene(std::string fileName)
+{
+
+}
+
+UEngine::GameScene* UEngine::GameState::GetScene(std::string name)
+{
+	auto iter = instance->scenes.find(name);
+	if (iter == instance->scenes.end())
+		return nullptr;
+	return iter->second;
+}
+
+void UEngine::GameState::Init(bool drawOnBackBuffer)
+{
+	if (instance == nullptr) instance = new GameState;
+	instance->isTerminate = false;
+	instance->drawOnBackBuffer = drawOnBackBuffer;
+}
+
 void UEngine::GameState::Init(GameScene* scene, bool drawOnBackBuffer)
 {
-	instance = new GameState;
+	if (instance == nullptr) instance = new GameState;
 	instance->isTerminate = false;
 	instance->drawOnBackBuffer = drawOnBackBuffer;
 	instance->currentScene = scene;
 	instance->scenes[scene->name] = scene;
+}
+
+void UEngine::GameState::AddScene(GameScene* scene, bool setCurrentScene)
+{
+	instance->scenes[scene->name] = scene;
+	if (setCurrentScene) instance->currentScene = scene;
 }
 
 void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<void()> OnRender)

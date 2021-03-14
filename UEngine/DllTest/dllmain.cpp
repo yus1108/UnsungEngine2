@@ -1,5 +1,6 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
+#include "dllmain.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -17,3 +18,12 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     return TRUE;
 }
 
+void ATTACH_SINGLETONS(UEngine::SingletonManager::Singletons singletons)
+{
+    UEngine::SingletonManager::Import(singletons);
+}
+
+void INIT_GAMESTATE()
+{
+    UEngine::GameState::Init(false);
+}

@@ -11,14 +11,15 @@ namespace UEngine
 		{
 	#pragma region Singleton
 		public:
-			static DXRenderer* Get() { return &instance; }
+			static DXRenderer* Get() { if (instance == nullptr) instance = new DXRenderer; return instance; }
+			static void Attach(DXRenderer* renderer) { instance = renderer; }
+			static void Detach() { instance = nullptr; }
+			static void Release();
 
 		private:
 			DXRenderer();
-			~DXRenderer() { Release(); }
-#pragma data_seg(".ioshare")
-			static DXRenderer instance;
-#pragma data_seg()
+			~DXRenderer() = default;
+			static DXRenderer* instance;
 #pragma endregion
 
 		private:
@@ -40,7 +41,6 @@ namespace UEngine
 			class DXResourceManager* const ResourceManager;
 
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
-			void Release();
 			void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
 			void Draw(ID3D11ShaderResourceView** sceneTexture);
 			void End();

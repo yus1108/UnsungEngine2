@@ -2,7 +2,7 @@
 #include "WinInput.h"
 #include <iostream>
 
-UEngine::WinInput UEngine::WinInput::instance;
+UEngine::WinInput* UEngine::WinInput::instance = nullptr;
 
 const bool UEngine::WinInput::GetKeyDown(const unsigned& _key)
 {

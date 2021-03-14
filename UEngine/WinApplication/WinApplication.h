@@ -22,14 +22,15 @@ namespace UEngine
 	{
 #pragma region Singleton
 	public:
-		static WinApplication* Get() { return &instance; }
+		static WinApplication* Get() { if (instance == nullptr) instance = new WinApplication; return instance; }
+		static void Attach(WinApplication* app) { instance = app; }
+		static void Detach() { instance = nullptr; }
+		static void Release() { delete instance; Detach(); }
 
 	private:
 		WinApplication();
-		~WinApplication() { instance.Close(); }
-#pragma data_seg(".ioshare")
-		static WinApplication instance;
-#pragma data_seg()
+		~WinApplication() { Close(); }
+		static WinApplication* instance;
 
 #pragma endregion
 

@@ -26,5 +26,6 @@
 #include "../UEngine/UEngine.h"
 #include "../WinApplication/WinConsole.h"
 #include "..//WinApplication/WinMemoryLeak.h"
+#include "../SingletonManager/SingletonManager.h"
 
 #include "Editor\EditorState.h"

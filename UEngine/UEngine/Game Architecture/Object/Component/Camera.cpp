@@ -3,6 +3,9 @@
 
 void UEngine::Camera::SetMainCamera()
 { 
+    if (GetGameObject()->GetScene()->MainCamera)
+        GetGameObject()->GetScene()->MainCamera->isThisMainCamera = false;
+    this->isThisMainCamera = true;
     GetGameObject()->GetScene()->MainCamera = this;
     GetGameObject()->GetScene()->MainView = &gameView;
 }

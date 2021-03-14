@@ -12,14 +12,14 @@ namespace UEngine
 		float deltaTime = 0.0f;
 		float fixedUpdateTimer = 0.0f;
 
-		std::map<std::wstring, GameScene*> scenes;
+		std::map<std::string, GameScene*> scenes;
 		GameScene* currentScene = nullptr;
 
 #pragma region Singleton
 	private:
 		GameState() = default;
 		~GameState() = default;
-		static GameState *instance;
+		static GameState* instance;
 #pragma endregion
 
 	public:
@@ -28,6 +28,12 @@ namespace UEngine
 
 		static GameState* Get() { return instance; }
 		static GameScene* GetCurrentScene() { return instance->currentScene; }
+		static void SetCurrentScene(std::string name);
+
+		static void AddScene(GameScene* scene, bool setCurrentScene = false);
+		static void LoadScene(std::string fileName);
+		static void SaveScene(std::string fileName);
+		static GameScene* GetScene(std::string name);
 
 		static bool IsTerminate() { return instance->isTerminate; }
 		static bool IsFixedUpdate();
@@ -35,6 +41,7 @@ namespace UEngine
 		static float GetCurrentFixedTimestep() { return UEngine::Math::Clamp(instance->deltaTime, instance->FixedTimestep, instance->MaxFixedTimestep); }
 		static float GetDeltaTime() { return instance->deltaTime; }
 
+		static void Init(bool drawOnBackBuffer = true);
 		static void Init(GameScene* scene, bool drawOnBackBuffer = true);
 		static void Update(std::function<bool()> OnUpdate, std::function<void()> OnRender);
 		static void Release();

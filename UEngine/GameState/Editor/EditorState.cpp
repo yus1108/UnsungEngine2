@@ -6,7 +6,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int height)
 {
     // Window Application
-    // Window Application
     app = WinApplication::Get();
     {
         WNDCLASSEXW Wcex;
@@ -86,8 +85,10 @@ UEngine::UEditor::EditorState::~EditorState()
 namespace fs = std::filesystem;
 
 HINSTANCE hDLL;               // Handle to DLL  
-typedef UEngine::Component*(*AddScript) (UEngine::GameObject* gameObject);
+typedef UEngine::Component* (*AddScript) (UEngine::GameObject* gameObject);
+typedef void(*ExportSingletons) (UEngine::SingletonManager::Singletons exportedSingletons);
 AddScript scriptCreation = NULL;
+ExportSingletons exportSingletons = NULL;
 void UEngine::UEditor::EditorState::Load()
 {
     fs::path sourceFile = "../Debug/DllTest.dll";
@@ -107,8 +108,16 @@ void UEngine::UEditor::EditorState::Load()
     if (hDLL == NULL)
         throw std::runtime_error("dll not found");
 
+    exportSingletons = (ExportSingletons)GetProcAddress(hDLL, "ATTACH_SINGLETONS");
     scriptCreation = (AddScript)GetProcAddress(hDLL, "ScriptCreation");
 
+    if (!exportSingletons)
+    {
+        // handle the error  
+        FreeLibrary(hDLL);
+        throw std::runtime_error("dll function not found");
+    }
+    exportSingletons(SingletonManager::Export());
     if (!scriptCreation)
     {
         // handle the error  
@@ -127,6 +136,11 @@ void UEngine::UEditor::EditorState::Load()
             auto camera = cameraObject->AddComponent<Camera>();
             camera->viewWidth = 15;
             camera->viewHeight = 30;
+
+            auto cameraObject2 = GameObject::Instantiate(currentScene, L"camera");
+            auto camera2 = cameraObject2->AddComponent<Camera>();
+            camera2->viewWidth = 15;
+            camera2->viewHeight = 30;
 
             auto ball = GameObject::Instantiate(currentScene, L"ball");
             auto component = scriptCreation(ball);

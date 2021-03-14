@@ -19,7 +19,7 @@ namespace UEngine
 	public:
 		~GameScene() { Release(); }
 
-		std::wstring name;
+		std::string name;
 
 		class Camera* MainCamera;
 		GameView* MainView;

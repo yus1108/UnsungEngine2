@@ -7,7 +7,7 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		DXRenderer DXRenderer::instance;
+		DXRenderer* DXRenderer::instance = nullptr;
 
 		DXRenderer::DXRenderer() : ResourceManager(new DXResourceManager())
 		{
@@ -51,8 +51,10 @@ namespace UEngine
 
 		void DXRenderer::Release()
 		{
-			DXConstantBuffer::Release(&default_colorBuffer);
-			delete ResourceManager;
+			DXConstantBuffer::Release(&instance->default_colorBuffer);
+			delete instance->ResourceManager;
+			delete instance;
+			Detach();
 		}
 
 		void DXRenderer::Begin(const float clearRGBA[4])

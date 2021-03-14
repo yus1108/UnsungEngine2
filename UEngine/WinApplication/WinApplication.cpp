@@ -4,7 +4,7 @@
 
 namespace UEngine
 {
-    WinApplication WinApplication::instance;
+    WinApplication* WinApplication::instance = nullptr;
 
     WinApplication::WinApplication()
         : hWnd(NULL)

@@ -5,6 +5,7 @@ namespace UEngine
 	class Camera : public Component
 	{
 	private:
+		bool isThisMainCamera{ false };
 		GameView gameView;
 		DXRenderer::DXView* view{ nullptr };
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };

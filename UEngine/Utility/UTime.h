@@ -10,13 +10,14 @@ namespace UEngine
 		{
 		public:
 			static UTime* Get();
+			static void Attach(UTime* time) { instance = time; }
+			static void Detach() { instance = nullptr; }
+			static void Release() { delete instance; Detach(); }
 			UTime();
 			~UTime() = default;
 
 		private:
-#pragma data_seg(".ioshare")
-		static UTime instance;
-#pragma data_seg()
+		static UTime* instance;
 
 
 		private:

@@ -170,6 +170,9 @@
     <ClInclude Include="UEditor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SingletonManager\SingletonManager.vcxproj">
+      <Project>{d117c2db-8e63-429e-9216-58392b31321a}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\UEngine\UEngine.vcxproj">
       <Project>{4b4d66c9-796c-4bc1-84aa-543fb3786f12}</Project>
     </ProjectReference>

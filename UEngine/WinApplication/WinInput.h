@@ -8,14 +8,15 @@ namespace UEngine
 	public:
 #pragma region Singleton
 	public:
-		static WinInput* Get() { return &instance; }
+		static WinInput* Get() { if (instance == nullptr) instance = new WinInput; return instance; }
+		static void Attach(WinInput* input) { instance = input; }
+		static void Detach() { instance = nullptr; }
+		static void Release() { delete instance; Detach(); }
 
 	private:
 		WinInput() = default;
 		~WinInput() = default;
-#pragma data_seg(".ioshare")
-		static WinInput instance;
-#pragma data_seg()
+		static WinInput* instance;
 
 #pragma endregion
 
