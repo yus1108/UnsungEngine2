@@ -77,6 +77,7 @@ UEngine::UEditor::EditorState::~EditorState()
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+    GameState::Release();
 }
 
 #include <filesystem>
@@ -92,6 +93,7 @@ void UEngine::UEditor::EditorState::Load()
     fs::path sourceFile = "../Debug/DllTest.dll";
     fs::path target = "../Debug/DllTestTemp.dll";
 
+    FreeLibrary(hDLL);
     try // If you want to avoid exception handling, then use the error code overload of the following functions.
     {
         fs::copy_file(sourceFile, target, fs::copy_options::overwrite_existing);
@@ -146,25 +148,24 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
     auto returnedValue = app->UpdateLoop([&]()
     {
         if (targetHz > 0) UEngine::Utility::UTime::Get()->Throttle(targetHz);
+        auto state = GameState::Get();
+        if (state == nullptr)
+        {
+            Load();
+            return;
+        }
+        if (GameState::IsTerminate())
+        {
+            GameState::Release();
+            return;
+        }
         GameState::Update([&]() 
         {
             if (WinInput::Get()->GetKeyDown('1'))
             {
-                FreeLibrary(hDLL);
-                fs::path sourceFile = "../Debug/DllTest.dll";
-                fs::path target = "../Debug/DllTestTemp.dll";
-
-                try // If you want to avoid exception handling, then use the error code overload of the following functions.
-                {
-                    fs::copy_file(sourceFile, target, fs::copy_options::overwrite_existing);
-                }
-                catch (std::exception& e) // Not using fs::filesystem_error since std::bad_alloc can throw too.  
-                {
-                    std::cout << e.what();
-                }
-
-                hDLL = LoadLibrary(L"../Debug/DllTestTemp.dll");
+                return true;
             }
+            return false;
         }, [&]()
         {
             // Start the Dear ImGui frame

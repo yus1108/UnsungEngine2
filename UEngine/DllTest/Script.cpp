@@ -4,9 +4,9 @@
 
 void Script::Update()
 {
-    std::cout << UEngine::Utility::UTime::Get()->DeltaTimeF() << std::endl;
+    //std::cout << UEngine::Utility::UTime::Get()->DeltaTimeF() << std::endl;
     if (UEngine::WinInput::Get()->GetKeyDown('W'))
     {
-        GetTransform()->localPosition.y += 1;
+        GetTransform()->localPosition.x += 1;
     }
 }
