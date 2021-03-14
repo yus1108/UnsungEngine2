@@ -1,6 +1,9 @@
 #pragma once
 #include "../UtilityDefinitions.h"
 
+#define SERIALIZED_VECTOR3(name) UEngine::VECTOR3 name{this, #name}
+#define SERIALIZED_VECTOR3_INIT(name, value) UEngine::VECTOR3 name{this, #name, value}
+
 namespace UEngine
 {
 	struct Vector3
@@ -96,5 +99,16 @@ namespace UEngine
 			DirectX::XMVECTOR thisVector = DirectX::XMVectorSet(this->x * rhs, this->y * rhs, this->z * rhs, 0);
 			return thisVector;
 		}
+	};
+
+	class VECTOR3 : public SerializedType
+	{
+		// Inherited via SerializedType
+		virtual void Serialize(TiXmlElement* node) override;
+
+	public:
+		VECTOR3(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
+		VECTOR3(Serializer* serializer, std::string name, Vector3 value) : SerializedType(serializer, name) { this->value = value; }
+		Vector3 value;
 	};
 }

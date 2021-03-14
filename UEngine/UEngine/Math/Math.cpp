@@ -76,7 +76,7 @@ std::vector<UEngine::Math::Physics2D::PointCoord> UEngine::Math::Physics2D::Make
 UEngine::Math::Physics2D::TriangleCoords UEngine::Math::Physics2D::MakeTriangle(Matrix worldMatrix)
 {
 	Math::Physics2D::TriangleCoords triangle;
-	auto triVertices = DXRenderer::Get()->ResourceManager->GetResource<DXRenderer::DXRenderMesh>(L"triangle")->GetVertices();
+	auto triVertices = DXRenderer::Get()->ResourceManager->GetResource<DXRenderer::DXRenderMesh>("triangle")->GetVertices();
 	for (size_t i = 0; i < triangle.size(); i++)
 		triangle[i] = Vector2(triVertices[i].pos) * worldMatrix;
 	return triangle;
@@ -152,7 +152,7 @@ UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(std::vector<Po
 
 UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(Matrix worldMatrix)
 {
-	auto rectVertices = DXRenderer::Get()->ResourceManager->GetResource<DXRenderer::DXRenderMesh>(L"rectangle")->GetVertices();
+	auto rectVertices = DXRenderer::Get()->ResourceManager->GetResource<DXRenderer::DXRenderMesh>("rectangle")->GetVertices();
 	return MakeAABB(rectVertices, worldMatrix);
 }
 
@@ -466,7 +466,7 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 	CollisionResult result;
 	
 	auto transform = circle1->GetTransform();
-	result.distance1 = transform->localPosition - circle2->GetTransform()->localPosition;
+	result.distance1 = transform->localPosition.value - circle2->GetTransform()->localPosition.value;
 	float magnitude = result.distance1.Magnitude();
 	float maxDistance = circle1->GetCollider().radius + circle2->GetCollider().radius;
 	result.isColliding = magnitude <= maxDistance;

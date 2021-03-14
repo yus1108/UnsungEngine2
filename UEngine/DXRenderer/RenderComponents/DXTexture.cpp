@@ -7,6 +7,7 @@ void UEngine::DXRenderer::DXTexture::Set(ID3D11DeviceContext* const deviceContex
 	deviceContext->PSSetShaderResources(0, 1, GetTextureAddressOf());
 }
 
+
 UEngine::DXRenderer::DXTexture* UEngine::DXRenderer::DXTexture::Load(std::wstring fileName, D3D11_SAMPLER_DESC samplerDesc)
 {
 	DXTexture* dxTexture = new DXTexture;
@@ -14,12 +15,12 @@ UEngine::DXRenderer::DXTexture* UEngine::DXRenderer::DXTexture::Load(std::wstrin
 	auto hr = CreateWICTextureFromFile(
 		DXRenderer::Get()->GetDevice(), 
 		DXRenderer::Get()->GetTextureLoadDeviceContext(),
-		fileName.c_str(), 
+		dxTexture->fileName.c_str(),
 		(ID3D11Resource**)dxTexture->texture.GetAddressOf(), 
 		dxTexture->shader_resource_view.GetAddressOf()
 	);
 	if (dxTexture->shader_resource_view.Get() == nullptr) {
-		CreateDDSTextureFromFile(DXRenderer::Get()->GetDevice(), fileName.c_str(),
+		CreateDDSTextureFromFile(DXRenderer::Get()->GetDevice(), dxTexture->fileName.c_str(),
 			(ID3D11Resource**)dxTexture->texture.GetAddressOf(), dxTexture->shader_resource_view.GetAddressOf());
 		if (dxTexture->shader_resource_view.Get() == nullptr) throw std::runtime_error("Fail to load texture");
 	}

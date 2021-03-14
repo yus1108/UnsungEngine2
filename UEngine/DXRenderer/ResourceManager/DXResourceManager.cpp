@@ -77,7 +77,7 @@ namespace UEngine
 			rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
 			rsDesc.EnableMultisampling = rendering_desc.EnableMultisampling;
 
-			resources[TYPE_SHADER][L"default"] = DXShader::Instantiate
+			resources[TYPE_SHADER]["default"] = DXShader::Instantiate
 			(
 				renderer,
 				DefaultVS, ARRAYSIZE(DefaultVS),
@@ -88,7 +88,7 @@ namespace UEngine
 				&rsDesc
 			);
 
-			resources[TYPE_SHADER][L"image"] = DXShader::Instantiate
+			resources[TYPE_SHADER]["image"] = DXShader::Instantiate
 			(
 				renderer,
 				WorldVS, ARRAYSIZE(WorldVS),
@@ -99,7 +99,7 @@ namespace UEngine
 				&rsDesc
 			);
 
-			resources[TYPE_SHADER][L"sprite"] = DXShader::Instantiate
+			resources[TYPE_SHADER]["sprite"] = DXShader::Instantiate
 			(
 				renderer,
 				SpriteVS, ARRAYSIZE(SpriteVS),
@@ -110,7 +110,7 @@ namespace UEngine
 				&rsDesc
 			);
 
-			resources[TYPE_SHADER][L"color"] = DXShader::Instantiate
+			resources[TYPE_SHADER]["color"] = DXShader::Instantiate
 			(
 				renderer,
 				WorldVS, ARRAYSIZE(WorldVS),
@@ -128,7 +128,7 @@ namespace UEngine
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
-			resources[TYPE_SHADER][L"debug"] = DXShader::Instantiate
+			resources[TYPE_SHADER]["debug"] = DXShader::Instantiate
 			(
 				renderer,
 				DebugRenderVS, ARRAYSIZE(DebugRenderVS),
@@ -138,7 +138,7 @@ namespace UEngine
 				false,
 				&rsDesc
 			);
-			static_cast<DXShader*>(resources[TYPE_SHADER][L"debug"])->InitInputLayout
+			static_cast<DXShader*>(resources[TYPE_SHADER]["debug"])->InitInputLayout
 			(
 				renderer->GetDevice(),
 				vLayout, ARRAYSIZE(vLayout),
@@ -159,7 +159,7 @@ namespace UEngine
 				};
 				vertices.shrink_to_fit();
 				std::vector<unsigned> indices = { 0, 1, 2, 2, 1, 3 };
-				resources[TYPE_RENDERMESH][L"default"] =
+				resources[TYPE_RENDERMESH]["default"] =
 					DXRenderMesh::Instantiate
 					(
 						device,
@@ -174,7 +174,7 @@ namespace UEngine
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 0, 0}},
 				};
 				vertices.shrink_to_fit();
-				resources[TYPE_RENDERMESH][L"point"] =
+				resources[TYPE_RENDERMESH]["point"] =
 					DXRenderMesh::Instantiate
 					(
 						device,
@@ -190,7 +190,7 @@ namespace UEngine
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0, 1.0f, 0}},
 				};
 				vertices.shrink_to_fit();
-				resources[TYPE_RENDERMESH][L"line"] = DXRenderMesh::Instantiate
+				resources[TYPE_RENDERMESH]["line"] = DXRenderMesh::Instantiate
 					(
 						device,
 						vertices
@@ -207,7 +207,7 @@ namespace UEngine
 					SIMPLE_VERTEX{DirectX::XMFLOAT3{0.5f * cos(startRadian + radian * 2.0f), 0.5f * sin(startRadian + radian * 2.0f), 0}, DirectX::XMFLOAT2{ 1, 1 }},
 				};
 				vertices.shrink_to_fit();
-				resources[TYPE_RENDERMESH][L"triangle"] = DXRenderMesh::Instantiate
+				resources[TYPE_RENDERMESH]["triangle"] = DXRenderMesh::Instantiate
 					(
 						device,
 						vertices,
@@ -225,7 +225,7 @@ namespace UEngine
 				};
 				vertices.shrink_to_fit();
 				std::vector<unsigned> indices = { 0, 1, 2, 2, 1, 3 };
-				resources[TYPE_RENDERMESH][L"rectangle"] = DXRenderMesh::Instantiate
+				resources[TYPE_RENDERMESH]["rectangle"] = DXRenderMesh::Instantiate
 					(
 						device,
 						vertices,
@@ -253,7 +253,7 @@ namespace UEngine
 				indices.emplace_back(0);
 				indices.emplace_back(slice);
 				indices.emplace_back(1);
-				resources[TYPE_RENDERMESH][L"circle"] = DXRenderMesh::Instantiate
+				resources[TYPE_RENDERMESH]["circle"] = DXRenderMesh::Instantiate
 					(
 						device,
 						vertices,

@@ -7,6 +7,7 @@ namespace UEngine
 	{
 	private:
 		const RenderObject* renderObject{ nullptr };
+		SERIALIZED_STRING(fileName);
 		DXRenderer::DXTexture* imageTexture{ nullptr };
 		DXRenderer::DXConstantBuffer* colorBuffer;
 		DXRenderer::DXConstantBuffer* spriteBuffer;
@@ -19,8 +20,8 @@ namespace UEngine
 
 		virtual void SetEnable(bool enable) override {}
 	public:
-		Color color{ 0.5f, 0.5f, 0.5f, 1 };
-		UV uv{ 0, 0, 1, 1 };
+		SERIALIZED_COLOR_INIT(color, Color({0.5f, 0.5f, 0.5f, 1.0f}));
+		SERIALIZED_UV_INIT(uv, UV({ 0, 0, 1, 1 }));
 		void Load(std::wstring fileName);
 		void Load(std::wstring fileName, D3D11_TEXTURE_ADDRESS_MODE addressMode, D3D11_FILTER filter);
 

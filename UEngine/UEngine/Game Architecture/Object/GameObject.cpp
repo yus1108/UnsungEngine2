@@ -170,12 +170,12 @@ void UEngine::GameObject::RemoveChild(GameObject* child)
 	}
 }
 
-UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::wstring name)
+UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::string name)
 {
 	return scene->GetGameObject(name);
 }
 
-UEngine::GameObject* UEngine::GameObject::Instantiate(std::wstring name)
+UEngine::GameObject* UEngine::GameObject::Instantiate(std::string name)
 {
 	UEngine::GameObject* obj = new UEngine::GameObject();
 	obj->name = name;
@@ -185,7 +185,7 @@ UEngine::GameObject* UEngine::GameObject::Instantiate(std::wstring name)
 	return obj;
 }
 
-UEngine::GameObject* UEngine::GameObject::Instantiate(GameScene* scene, std::wstring name)
+UEngine::GameObject* UEngine::GameObject::Instantiate(GameScene* scene, std::string name)
 {
 	UEngine::GameObject* obj = new UEngine::GameObject();
 	obj->name = name;

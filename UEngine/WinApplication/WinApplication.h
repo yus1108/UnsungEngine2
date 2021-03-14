@@ -43,6 +43,11 @@ namespace UEngine
 		int UpdateLoop(std::function<void()> f = nullptr);
 		void Close();
 
+		void ReLoadDLL();
+		void LoadDLL(std::wstring name);
+		FARPROC FindFunction(std::string func_name);
+		void FreeDLL();
+
 		const HINSTANCE GetInstance() { return appDesc.HInstance; }
 		const WINDOWS_APPLICATION_DESC GetDesc() { return appDesc; }
 		const HWND GetHandler() { return hWnd; }
@@ -56,6 +61,9 @@ namespace UEngine
 		HWND hWnd;
 		WINDOWS_APPLICATION_DESC appDesc;
 		bool isDefaultDesc;
+
+		std::wstring dllSourceFile;
+		HINSTANCE hDLL;               // DLL library
 
 		BOOL InitInstance(HINSTANCE hInstance, int nCmdShow, LPCTSTR titleName, LPCTSTR windowClassName, POINT windowSize);
 		static LRESULT CALLBACK	WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

@@ -117,8 +117,8 @@ namespace UEngine
 					GameState::GetCurrentScene()->debugRenderer->Add_line
 					(
 						{
-							colliderPair.second->GetTransform()->localPosition,
-							collider->GetTransform()->localPosition
+							colliderPair.second->GetTransform()->localPosition.value,
+							collider->GetTransform()->localPosition.value
 						},
 						color
 					);

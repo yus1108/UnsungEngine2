@@ -3,8 +3,8 @@
 
 void UEngine::Material::Awake()
 {
-	colorBuffer->AttachData(&color, sizeof(Color));
-	spriteBuffer->AttachData(&uv, sizeof(UV));
+	colorBuffer->AttachData(&color.value, sizeof(Color));
+	spriteBuffer->AttachData(&uv.value, sizeof(UV));
 	GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(colorBuffer->UID, colorBuffer);
 	GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(spriteBuffer->UID, spriteBuffer);
 }
@@ -51,6 +51,7 @@ void UEngine::Material::Load(std::wstring fileName)
 	samplerDesc.MinLOD = -FLT_MAX;
 	samplerDesc.MipLODBias = 0;
 
+	this->fileName = fileName;
 	imageTexture = DXRenderer::DXTexture::Load(fileName, samplerDesc);
 	color = Color{ 1, 1, 1, 1 };
 	uv = UV{ 0, 0, 1, 1 };
@@ -72,6 +73,7 @@ void UEngine::Material::Load(std::wstring fileName, D3D11_TEXTURE_ADDRESS_MODE a
 	samplerDesc.MinLOD = -FLT_MAX;
 	samplerDesc.MipLODBias = 0;
 
+	this->fileName = fileName;
 	imageTexture = DXRenderer::DXTexture::Load(fileName, samplerDesc);
 	color = Color{ 1, 1, 1, 1 };
 	uv = UV{ 0, 0, 1, 1 };

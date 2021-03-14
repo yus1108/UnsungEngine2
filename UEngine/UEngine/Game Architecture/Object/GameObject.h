@@ -39,7 +39,7 @@ namespace UEngine
 		void OnDestroy();
 
 	public:
-		std::wstring name{ L"GameObject" };
+		std::string name{ "GameObject" };
 		bool IsStatic{ false };
 
 		void SetActive(bool isActive);
@@ -58,16 +58,18 @@ namespace UEngine
 		template <typename T>
 		T* const GetComponent();
 
+		const std::map<std::string, std::list<class Component*>*> GetComponents() { return components; }
+
 		template <typename T>
 		T* AddComponent();
 
 		template <typename T>
 		void RemoveComponent();
 
-		GameObject* const FindObjectWithName(std::wstring name);
+		GameObject* const FindObjectWithName(std::string name);
 
-		static GameObject* Instantiate(std::wstring name = L"GameObject");
-		static GameObject* Instantiate(GameScene* scene, std::wstring name = L"GameObject");
+		static GameObject* Instantiate(std::string name = "GameObject");
+		static GameObject* Instantiate(GameScene* scene, std::string name = "GameObject");
 		static void Release(GameObject** const gameObject);
 	};
 

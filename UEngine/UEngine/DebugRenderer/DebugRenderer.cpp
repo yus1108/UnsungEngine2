@@ -44,7 +44,7 @@ namespace UEngine
 			DXRenderer::Get()->GetDescription().MultisampleDesc
 		);
 
-		shader = DXRenderer::Get()->ResourceManager->GetResource<DXRenderer::DXShader>(L"debug");
+		shader = DXRenderer::Get()->ResourceManager->GetResource<DXRenderer::DXShader>("debug");
 	}
 
 	void DebugRenderer::Add_line(UEngine::DebugRenderPoint a, UEngine::DebugRenderPoint b)

@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include "../XMLSerializer/stdafx.h"
 
 namespace UEngine
 {
@@ -14,22 +15,6 @@ namespace UEngine
 
 	typedef DirectX::XMMATRIX Matrix;
 	inline Matrix MatrixIdentity() { return DirectX::XMMatrixIdentity(); }
-
-	struct Color
-	{
-		float r;
-		float g;
-		float b;
-		float a;
-	};
-
-	struct UV
-	{
-		float minX;
-		float minY;
-		float maxX;
-		float maxY;
-	};
 }
 
 #include "Math\Vector2.h"

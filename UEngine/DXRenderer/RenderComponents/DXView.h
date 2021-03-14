@@ -7,14 +7,14 @@ namespace UEngine
 		class DXView final
 		{
 		private:
-			DXView() { UID = std::to_wstring(nextId++); }
+			DXView() { UID = std::to_string(nextId++); }
 			~DXView() = default;
 		private:
 			static long long nextId;
 			ViewContext context;
 
 		public:
-			std::wstring UID;
+			std::string UID;
 			static DXView* const Instantiate
 			(
 				DXRenderer* renderer,

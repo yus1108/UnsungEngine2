@@ -3,7 +3,7 @@
 
 namespace UEngine
 {
-	class Component
+	class Component : public Serializer
 	{
 	private:
 		friend class UEngine::GameObject;
@@ -83,7 +83,7 @@ namespace UEngine
 		template <typename T>
 		void RemoveComponent();
 
-		GameObject* const FindObjectWithName(std::wstring name) { return gameObject->FindObjectWithName(name); }
+		GameObject* const FindObjectWithName(std::string name) { return gameObject->FindObjectWithName(name); }
 
 		//Component() = default;
 		virtual ~Component() { SetEnable(false); OnDestroy(); };

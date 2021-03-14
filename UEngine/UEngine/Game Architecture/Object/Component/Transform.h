@@ -19,9 +19,9 @@ namespace UEngine
 		virtual void OnDestroy() override { GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(worldBuffer->UID); }
 
 	public:
-		Vector3 localPosition{ 0, 0, 0 };
-		Vector3 localRotation{ 0, 0, 0 };
-		Vector3 scale{ 1, 1, 1 };
+		SERIALIZED_VECTOR3(localPosition);
+		SERIALIZED_VECTOR3(localRotation);
+		SERIALIZED_VECTOR3_INIT(scale, Vector3(1, 1, 1));
 
 		const Matrix& GetRTP() { return RTP; }
 		const Matrix GetWorld() { return XMMatrixTranspose(world.matrix); }

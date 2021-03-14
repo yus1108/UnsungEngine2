@@ -8,7 +8,7 @@ namespace UEngine
 		class DXConstantBuffer final
 		{
 		private:
-			DXConstantBuffer() { UID = std::to_wstring(nextId++); }
+			DXConstantBuffer() { UID = std::to_string(nextId++); }
 			~DXConstantBuffer() { if (!attached) delete data; };
 		private:
 			static long long nextId;
@@ -18,7 +18,7 @@ namespace UEngine
 			bool attached{ false };
 
 		public:
-			std::wstring UID;
+			std::string UID;
 			/*
 				Start slot of each pipeline in order of UENGINE_DXRENDERER_SHADERTYPE
 				i.e) if Flag = UENGINE_DXRENDERER_SHADERTYPE_VERTEX_SHADER | UENGINE_DXRENDERER_SHADERTYPE_GEOMETRY_SHADER,

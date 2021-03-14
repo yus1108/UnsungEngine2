@@ -13,7 +13,7 @@ void UEngine::RenderComponent::LateUpdate()
 	}
 }
 
-void UEngine::RenderComponent::Load(std::wstring renderMesh_name, std::wstring shader_name)
+void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string shader_name)
 {
 	auto scene = GetGameObject()->GetScene();
 	this->renderMesh_name = renderMesh_name;
@@ -33,17 +33,17 @@ void UEngine::RenderComponent::Load(std::wstring renderMesh_name, std::wstring s
 
 void UEngine::RenderComponent::LoadTriangle()
 {
-	Load(L"triangle", L"color");
+	Load("triangle", "color");
 }
 
 void UEngine::RenderComponent::LoadRectangle()
 {
-	Load(L"rectangle", L"color");
+	Load("rectangle", "color");
 }
 
 void UEngine::RenderComponent::LoadCircle(UINT slice)
 {
-	Load(L"circle", L"color");
+	Load("circle", "color");
 	/*if (slice == 360)
 	{
 		Load(L"circle", L"color");

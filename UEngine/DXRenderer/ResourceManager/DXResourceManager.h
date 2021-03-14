@@ -7,7 +7,7 @@ namespace UEngine
 		class DXResourceManager
 		{
 		private:
-			std::map<std::string, std::unordered_map<std::wstring, void*>> creationQueue, deletionQueue, resources;
+			std::map<std::string, std::unordered_map<std::string, void*>> creationQueue, deletionQueue, resources;
 			std::map<std::string, CONSTANT_BUFFER_DESC> cBufferPreset;
 
 			void InitShaders();
@@ -25,11 +25,11 @@ namespace UEngine
 			~DXResourceManager() { Release(); }
 
 			template <typename T>
-			void AddResource(std::wstring name, T* resource);
+			void AddResource(std::string name, T* resource);
 			template <typename T>
-			void RemoveResource(std::wstring name);
+			void RemoveResource(std::string name);
 			template <typename T>
-			T* GetResource(std::wstring name);
+			T* GetResource(std::string name);
 
 			const CONSTANT_BUFFER_DESC& GetCBufferPreset(std::string typeName) { return cBufferPreset[typeName]; }
 
@@ -39,7 +39,7 @@ namespace UEngine
 		};
 
 		template<typename T>
-		inline void DXResourceManager::AddResource(std::wstring name, T* resource)
+		inline void DXResourceManager::AddResource(std::string name, T* resource)
 		{
 			std::string typeName = typeid(T).raw_name();
 
@@ -58,7 +58,7 @@ namespace UEngine
 		}
 
 		template<typename T>
-		inline void DXResourceManager::RemoveResource(std::wstring name)
+		inline void DXResourceManager::RemoveResource(std::string name)
 		{
 			std::string typeName = typeid(T).raw_name();
 
@@ -81,7 +81,7 @@ namespace UEngine
 		}
 
 		template<typename T>
-		T* DXResourceManager::GetResource(std::wstring name)
+		T* DXResourceManager::GetResource(std::string name)
 		{
 			std::string typeName = typeid(T).raw_name();
 

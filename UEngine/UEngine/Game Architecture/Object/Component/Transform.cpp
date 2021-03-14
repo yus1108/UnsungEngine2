@@ -12,14 +12,14 @@ void UEngine::Transform::Start()
 	using namespace DirectX;
 	RTP = XMMatrixMultiply
 	(
-		XMMatrixRotationRollPitchYaw(localRotation.z, localRotation.x, localRotation.y),
-		XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z)
+		XMMatrixRotationRollPitchYaw(localRotation.value.z, localRotation.value.x, localRotation.value.y),
+		XMMatrixTranslation(localPosition.value.x, localPosition.value.y, localPosition.value.z)
 	);
 
 	if (GetParent() != nullptr)
 		RTP = XMMatrixMultiply(RTP, GetParent()->GetWorld());
 
-	world.matrix = XMMatrixMultiply(XMMatrixScaling(scale.x, scale.y, scale.z), RTP);
+	world.matrix = XMMatrixMultiply(XMMatrixScaling(scale.value.x, scale.value.y, scale.value.z), RTP);
 	world.matrix = XMMatrixTranspose(world.matrix);
 }
 
@@ -42,14 +42,14 @@ void UEngine::Transform::LateUpdate()
 	using namespace DirectX;
 	RTP = XMMatrixMultiply
 	(
-		XMMatrixRotationRollPitchYaw(localRotation.z, localRotation.x, localRotation.y),
-		XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z)
+		XMMatrixRotationRollPitchYaw(localRotation.value.z, localRotation.value.x, localRotation.value.y),
+		XMMatrixTranslation(localPosition.value.x, localPosition.value.y, localPosition.value.z)
 	);
 
 	if (GetParent() != nullptr)
 		RTP = XMMatrixMultiply(RTP, GetParent()->GetWorld());
 
-	world.matrix = XMMatrixMultiply(XMMatrixScaling(scale.x, scale.y, scale.z), RTP);
+	world.matrix = XMMatrixMultiply(XMMatrixScaling(scale.value.x, scale.value.y, scale.value.z), RTP);
 	world.matrix = XMMatrixTranspose(world.matrix);
 }
 

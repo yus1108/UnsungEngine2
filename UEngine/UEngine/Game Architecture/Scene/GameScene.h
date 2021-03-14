@@ -35,20 +35,21 @@ namespace UEngine
 		void Init(bool isDebugMode);
 		void Release();
 
-		void Load(std::wstring scene_name);
-
 		void Update();
 		void Render(ID3D11DeviceContext* deviceContext);
 		void PostRender();
 		void Sync();
 
 		bool IsDebugMode() { return isDebugMode; }
-		GameObject* const GetGameObject(std::wstring name);
+		GameObject* const GetGameObject(std::string name);
 		const std::vector<GameView>& GetGpuViews() { return gpu_view; }
 
 		void AddGameObject(GameObject* obj) { gameObjects.emplace_back(obj); }
 		void RemoveGameObject(GameObject* obj);
-		void RemoveGameObject(std::wstring name);
+		void RemoveGameObject(std::string name);
+
+		void SaveScene();
+		static UEngine::GameScene* LoadScene(std::string name);
 	};
 
 	template<typename T>

@@ -1,10 +1,6 @@
 #include "UEngine.h"
+#include "../../XMLParser/XMLSceneParser.h"
 #include "GameScene.h"
-
-void UEngine::GameScene::Load(std::wstring scene_name)
-{
-	// TODO: Load scene
-}
 
 void UEngine::GameScene::Init(bool isDebugMode)
 {
@@ -122,7 +118,7 @@ void UEngine::GameScene::Sync()
 		obj->Initialize();
 }
 
-UEngine::GameObject* const UEngine::GameScene::GetGameObject(std::wstring name)
+UEngine::GameObject* const UEngine::GameScene::GetGameObject(std::string name)
 {
 	for (auto obj : gameObjects)
 		if (obj->name == name) return obj;
@@ -141,7 +137,7 @@ void UEngine::GameScene::RemoveGameObject(GameObject* obj)
 	}
 }
 
-void UEngine::GameScene::RemoveGameObject(std::wstring name)
+void UEngine::GameScene::RemoveGameObject(std::string name)
 {
 	for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++)
 	{
@@ -151,4 +147,16 @@ void UEngine::GameScene::RemoveGameObject(std::wstring name)
 			return;
 		}
 	}
+}
+
+void UEngine::GameScene::SaveScene()
+{
+	XMLSceneParser parser;
+	parser.SaveScene(name, isDebugMode, gameObjects);
+}
+
+UEngine::GameScene* UEngine::GameScene::LoadScene(std::string name)
+{
+	XMLSceneParser parser;
+	return parser.LoadScene(name);
 }

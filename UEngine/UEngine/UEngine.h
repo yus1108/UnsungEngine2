@@ -12,6 +12,8 @@
 #include "../WinApplication/uengine_winapp.h"
 #include "../DXRenderer/dxrframework.h"
 
+#include "../XMLSerializer/stdafx.h"
+
 #include "UEngineDefinitions.h"
 #include "DebugRenderer\DebugRenderer.h"
 
@@ -29,5 +31,4 @@
 #include "Game Architecture\Object\Component\RenderComponent.h"
 #include "Game Architecture\Object\Component\Material.h"
 #include "Game Architecture\Object\Component\Camera.h"
-
 

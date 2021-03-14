@@ -4,8 +4,8 @@
 void UEngine::Camera::SetMainCamera()
 { 
     if (GetGameObject()->GetScene()->MainCamera)
-        GetGameObject()->GetScene()->MainCamera->isThisMainCamera = false;
-    this->isThisMainCamera = true;
+        GetGameObject()->GetScene()->MainCamera->isThisMainCamera.value = false;
+    this->isThisMainCamera.value = true;
     GetGameObject()->GetScene()->MainCamera = this;
     GetGameObject()->GetScene()->MainView = &gameView;
 }
@@ -46,10 +46,10 @@ void UEngine::Camera::Awake()
     GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(cameraBuffer->UID, cameraBuffer);
     GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXView>(view->UID, view);
 
-    viewWidth = 40.0f;
-    viewHeight = 40.0f;
-    nearZ = -1.0f;
-    farZ = 10.0f;
+    viewWidth.value = 40.0f;
+    viewHeight.value = 40.0f;
+    nearZ.value = -1.0f;
+    farZ.value = 10.0f;
 }
 
 void UEngine::Camera::Update()
@@ -59,13 +59,13 @@ void UEngine::Camera::Update()
 
 void UEngine::Camera::LateUpdate()
 {
-    DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(cameraRotation.z, cameraRotation.x, cameraRotation.y);
-    DirectX::XMMATRIX position = DirectX::XMMatrixTranslation(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(cameraRotation.value.z, cameraRotation.value.x, cameraRotation.value.y);
+    DirectX::XMMATRIX position = DirectX::XMMatrixTranslation(cameraPosition.value.x, cameraPosition.value.y, cameraPosition.value.z);
     cpu_camera.view = DirectX::XMMatrixMultiply(rotation, position);
     cpu_camera.view = DirectX::XMMatrixMultiply(cpu_camera.view, GetTransform()->GetRTP());
     view_determinant = DirectX::XMMatrixDeterminant(cpu_camera.view);
 
-    cpu_camera.projection = DirectX::XMMatrixOrthographicLH(viewWidth, viewHeight, nearZ, farZ);
+    cpu_camera.projection = DirectX::XMMatrixOrthographicLH(viewWidth.value, viewHeight.value, nearZ.value, farZ.value);
 
     cpu_camera = CPU_CAMERA
     {

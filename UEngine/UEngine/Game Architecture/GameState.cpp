@@ -85,12 +85,13 @@ void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<vo
 	WinApplication::Get()->threadPool.Join();
 	if (run)
 	{
-		instance->isTerminate = true;
+		//instance->isTerminate = true;
 	}
 }
 
 void UEngine::GameState::Release()
 {
+	if (instance == nullptr) return;
 	instance->isTerminate = true;
 	for (auto scene : instance->scenes)
 		delete scene.second;

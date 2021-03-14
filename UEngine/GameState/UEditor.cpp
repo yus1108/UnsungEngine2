@@ -10,12 +10,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     UEngine::WinMemoryLeak::Detect();
 
-    UEngine::SingletonManager::Init();
-
     UEngine::UEditor::EditorState editorState(hInstance);
     editorState.Load();
     int result = editorState.Run(200);
 
-    UEngine::SingletonManager::Release();
     return result;
 }

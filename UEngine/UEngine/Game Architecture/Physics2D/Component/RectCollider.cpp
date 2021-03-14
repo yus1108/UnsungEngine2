@@ -38,7 +38,7 @@ void UEngine::Physics2D::RectCollider::RigidBodyUpdate()
 {
 	if (GetGameObject()->IsStatic) return;
 	auto transform = GetTransform();
-	transform->localPosition = transform->localPosition + impact;
+	transform->localPosition.value = transform->localPosition.value + impact;
 	impact = Vector2();
 }
 

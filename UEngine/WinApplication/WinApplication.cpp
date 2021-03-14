@@ -10,6 +10,7 @@ namespace UEngine
         : hWnd(NULL)
         , appDesc({ 0 })
         , isDefaultDesc(false)
+        , hDLL(NULL)
     {
     }
 
@@ -88,8 +89,59 @@ namespace UEngine
 
     void WinApplication::Close()
     {
+        FreeDLL();
         //UnregisterClass(isDefaultDesc ? _T("WIN_APPLICATION") : appDesc.Wcex->lpszClassName, appDesc.HInstance);
         //PostQuitMessage(0);
+    }
+
+    void WinApplication::ReLoadDLL()
+    {
+        FreeDLL();
+        LoadDLL(dllSourceFile);
+    }
+
+    void WinApplication::LoadDLL(std::wstring name)
+    {
+        dllSourceFile = name;
+        std::wstring target = name + L".temp.dll";
+
+        try // If you want to avoid exception handling, then use the error code overload of the following functions.
+        {
+            std::filesystem::copy_file(dllSourceFile, target, std::filesystem::copy_options::overwrite_existing);
+        }
+        catch (std::exception& e) // Not using fs::filesystem_error since std::bad_alloc can throw too.  
+        {
+            throw std::runtime_error(e.what());
+        }
+
+        hDLL = LoadLibrary(dllSourceFile.c_str());
+        if (hDLL == NULL) throw std::runtime_error("dll not found");
+    }
+
+    FARPROC WinApplication::FindFunction(std::string func_name)
+    {
+        auto function = GetProcAddress(hDLL, func_name.c_str());
+        if (!function)
+        {
+            // handle the error  
+            FreeLibrary(hDLL);
+            throw std::runtime_error("dll function not found");
+        }
+        return function;
+    }
+
+    void WinApplication::FreeDLL()
+    {
+        FreeLibrary(hDLL);
+        std::filesystem::path target = dllSourceFile + L".temp.dll";
+        try // If you want to avoid exception handling, then use the error code overload of the following functions.
+        {
+            std::filesystem::remove(target);
+        }
+        catch (std::exception& e) // Not using fs::filesystem_error since std::bad_alloc can throw too.  
+        {
+            throw std::runtime_error(e.what());
+        }
     }
 
     BOOL WinApplication::InitInstance(HINSTANCE hInstance, int nCmdShow, LPCTSTR titleName, LPCTSTR windowClassName, POINT windowSize)

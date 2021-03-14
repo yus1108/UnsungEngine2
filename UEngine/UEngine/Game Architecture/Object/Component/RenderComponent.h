@@ -6,12 +6,12 @@ namespace UEngine
 	{
 	private:
 		RenderObject renderObject;
-		std::wstring renderMesh_name;
-		std::wstring shader_name;
+		SERIALIZED_STRING(renderMesh_name);
+		SERIALIZED_STRING(shader_name);
 
 		void LateUpdate() override;
 	public:
-		void Load(std::wstring renderMesh_name, std::wstring shader_name);
+		void Load(std::string renderMesh_name, std::string shader_name);
 		void LoadTriangle();
 		void LoadRectangle();
 		void LoadCircle(UINT slice = 360);

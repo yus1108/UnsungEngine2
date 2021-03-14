@@ -37,7 +37,7 @@ void UEngine::Physics2D::CircleCollider::RigidBodyUpdate()
 {
 	if (GetGameObject()->IsStatic) return;
 	auto transform = GetTransform();
-	transform->localPosition = transform->localPosition + impact;
+	transform->localPosition.value = transform->localPosition.value + impact;
 }
 
 void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1, CircleCollider* circle2)

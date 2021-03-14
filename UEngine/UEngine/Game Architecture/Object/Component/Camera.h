@@ -5,7 +5,7 @@ namespace UEngine
 	class Camera : public Component
 	{
 	private:
-		bool isThisMainCamera{ false };
+		SERIALIZED_BOOL(isThisMainCamera);
 		GameView gameView;
 		DXRenderer::DXView* view{ nullptr };
 		DXRenderer::DXConstantBuffer* cameraBuffer{ nullptr };
@@ -22,13 +22,13 @@ namespace UEngine
 		void OnDestroy() override;
 
 	public:
-		Vector3 cameraPosition{ 0, 0, 0 };
-		Vector3 cameraRotation{ 0, 0, 0 };
+		SERIALIZED_VECTOR3(cameraPosition, Vector3(0, 0, 0));
+		SERIALIZED_VECTOR3(cameraRotation, Vector3(0, 0, 0));
 
-		float viewWidth{ 0 };
-		float viewHeight{ 0 };
-		float nearZ{ 0 };
-		float farZ{ 0 };
+		SERIALIZED_FLOAT_INIT(viewWidth, 0);
+		SERIALIZED_FLOAT_INIT(viewHeight, 0);
+		SERIALIZED_FLOAT_INIT(nearZ, 0);
+		SERIALIZED_FLOAT_INIT(farZ, 0);
 
 		Camera() 
 			: cameraBuffer

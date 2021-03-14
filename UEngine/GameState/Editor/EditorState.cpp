@@ -68,6 +68,8 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(app->GetHandler());
     ImGui_ImplDX11_Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
+
+    UEngine::SingletonManager::Init();
 }
 
 UEngine::UEditor::EditorState::~EditorState()
@@ -77,79 +79,52 @@ UEngine::UEditor::EditorState::~EditorState()
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
     GameState::Release();
+    UEngine::SingletonManager::Release();
 }
 
-#include <filesystem>
-#include <iostream>
-
-namespace fs = std::filesystem;
-
-HINSTANCE hDLL;               // Handle to DLL  
 typedef UEngine::Component* (*AddScript) (UEngine::GameObject* gameObject);
-typedef void(*ExportSingletons) (UEngine::SingletonManager::Singletons exportedSingletons);
-AddScript scriptCreation = NULL;
-ExportSingletons exportSingletons = NULL;
+typedef void(*ATTACH_SINGLETONS) (UEngine::SingletonManager::Singletons exportedSingletons);
+
+ATTACH_SINGLETONS attach_singletons;
+AddScript addscript;
 void UEngine::UEditor::EditorState::Load()
 {
-    fs::path sourceFile = "../Debug/DllTest.dll";
-    fs::path target = "../Debug/DllTestTemp.dll";
+    WinApplication::Get()->LoadDLL(L"../Debug/DllTestTemp.dll");
 
-    FreeLibrary(hDLL);
-    try // If you want to avoid exception handling, then use the error code overload of the following functions.
-    {
-        fs::copy_file(sourceFile, target, fs::copy_options::overwrite_existing);
-    }
-    catch (std::exception& e) // Not using fs::filesystem_error since std::bad_alloc can throw too.  
-    {
-        std::cout << e.what();
-    }
+    attach_singletons = (ATTACH_SINGLETONS)WinApplication::Get()->FindFunction("ATTACH_SINGLETONS");
+    addscript = (AddScript)WinApplication::Get()->FindFunction("ScriptCreation");
 
-    hDLL = LoadLibrary(L"../Debug/DllTestTemp.dll");
-    if (hDLL == NULL)
-        throw std::runtime_error("dll not found");
+    attach_singletons(SingletonManager::Export());
 
-    exportSingletons = (ExportSingletons)GetProcAddress(hDLL, "ATTACH_SINGLETONS");
-    scriptCreation = (AddScript)GetProcAddress(hDLL, "ScriptCreation");
-
-    if (!exportSingletons)
-    {
-        // handle the error  
-        FreeLibrary(hDLL);
-        throw std::runtime_error("dll function not found");
-    }
-    exportSingletons(SingletonManager::Export());
-    if (!scriptCreation)
-    {
-        // handle the error  
-        FreeLibrary(hDLL);
-        throw std::runtime_error("dll function not found");
-    }
     // TODO: Place code here.
     {
         // basic load
         using namespace UEngine;
         GameScene* currentScene = new GameScene();
+        currentScene->name = "tempScene";
         currentScene->Init(true);
-
         {
-            auto cameraObject = GameObject::Instantiate(currentScene, L"camera");
+            auto cameraObject = GameObject::Instantiate(currentScene, "camera");
             auto camera = cameraObject->AddComponent<Camera>();
-            camera->viewWidth = 15;
-            camera->viewHeight = 30;
+            camera->viewWidth.value = 15;
+            camera->viewHeight.value = 30;
 
-            auto cameraObject2 = GameObject::Instantiate(currentScene, L"camera");
+            auto cameraObject2 = GameObject::Instantiate(currentScene, "camera");
             auto camera2 = cameraObject2->AddComponent<Camera>();
-            camera2->viewWidth = 15;
-            camera2->viewHeight = 30;
+            cameraObject2->SetParent(cameraObject);
+            camera2->viewWidth.value = 15;
+            camera2->viewHeight.value = 30;
 
-            auto ball = GameObject::Instantiate(currentScene, L"ball");
-            auto component = scriptCreation(ball);
+            auto ball = GameObject::Instantiate(currentScene, "ball");
+            auto component = addscript(ball);
             
-            ball->AddComponent<RenderComponent>()->Load(L"rectangle", L"image");
-            ball->AddComponent<Material>()->Load(L"./football-157930_640.png");
+            ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
+            ball->AddComponent<Material>()->Load(L"./ÇÑ±Û.png");
         }
 
         GameState::Init(currentScene, false);
+        currentScene->SaveScene();
+        //currentScene->LoadScene("./.uscene");
     }
 }
 
@@ -177,6 +152,7 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
         {
             if (WinInput::Get()->GetKeyDown('1'))
             {
+                GameState::GetCurrentScene()->SaveScene();
                 return true;
             }
             return false;

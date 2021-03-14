@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Serializer.h" />
+    <ClInclude Include="SerializedType\SerializedType.h">
+      <Filter>SerializedType</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializedType\BOOL.h">
+      <Filter>SerializedType</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializedType\INT.h">
+      <Filter>SerializedType</Filter>
+    </ClInclude>
+    <ClInclude Include="tinystr.h" />
+    <ClInclude Include="tinyxml.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SerializedType\STRING.h">
+      <Filter>SerializedType</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializedType\COLOR.h">
+      <Filter>SerializedType</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializedType\UV.h">
+      <Filter>SerializedType</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializedType\FLOAT.h">
+      <Filter>SerializedType</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Serializer.cpp" />
+    <ClCompile Include="SerializedType\SerializedType.cpp">
+      <Filter>SerializedType</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializedType\BOOL.cpp">
+      <Filter>SerializedType</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializedType\INT.cpp">
+      <Filter>SerializedType</Filter>
+    </ClCompile>
+    <ClCompile Include="tinystr.cpp" />
+    <ClCompile Include="tinyxml.cpp" />
+    <ClCompile Include="tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxmlparser.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="SerializedType\STRING.cpp">
+      <Filter>SerializedType</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializedType\UV.cpp">
+      <Filter>SerializedType</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializedType\FLOAT.cpp">
+      <Filter>SerializedType</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializedType\COLOR.cpp">
+      <Filter>SerializedType</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="SerializedType">
+      <UniqueIdentifier>{b3030ca3-5200-4018-8d6e-c0743fb43ea2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
