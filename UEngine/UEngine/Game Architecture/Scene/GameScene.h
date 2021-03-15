@@ -21,8 +21,8 @@ namespace UEngine
 
 		std::string name;
 
-		class Camera* MainCamera;
-		GameView* MainView;
+		class Camera* MainCamera{ nullptr };
+		GameView* MainView{ nullptr };
 		std::vector<GameView> cpu_view;
 
 		UEngine::DXRenderer::DXResourceManager ResourceManager;

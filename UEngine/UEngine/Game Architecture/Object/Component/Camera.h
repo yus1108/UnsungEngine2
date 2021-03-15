@@ -23,8 +23,8 @@ namespace UEngine
 		void DeSerialize(TiXmlNode* node) override;
 
 	public:
-		SERIALIZED_VECTOR3(cameraPosition, Vector3(0, 0, 0));
-		SERIALIZED_VECTOR3(cameraRotation, Vector3(0, 0, 0));
+		SERIALIZED_VECTOR3_INIT(cameraPosition, Vector3(0, 0, 0));
+		SERIALIZED_VECTOR3_INIT(cameraRotation, Vector3(0, 0, 0));
 
 		SERIALIZED_FLOAT_INIT(viewWidth, 0);
 		SERIALIZED_FLOAT_INIT(viewHeight, 0);
