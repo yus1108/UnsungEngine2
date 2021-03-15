@@ -2,18 +2,18 @@
 <GameScene name="tempScene" isDebugMode="1">
     <GameObject name="camera" isActive="1" isStatic="0">
         <Camera>
-            <Component enabled="204">
-                <BOOL name="isThisMainCamera" value="0" />
+            <Component enabled="1">
+                <BOOL isThisMainCamera="0" />
                 <Vector3 name="cameraPosition" x="0" y="0" z="0" />
                 <Vector3 name="cameraRotation" x="0" y="0" z="0" />
-                <FLOAT name="viewWidth" value="40" />
-                <FLOAT name="viewHeight" value="40" />
-                <FLOAT name="nearZ" value="-1" />
-                <FLOAT name="farZ" value="10" />
+                <FLOAT viewWidth="15" />
+                <FLOAT viewHeight="30" />
+                <FLOAT nearZ="-1" />
+                <FLOAT farZ="10" />
             </Component>
         </Camera>
         <Transform>
-            <Component enabled="204">
+            <Component enabled="1">
                 <Vector3 name="localPosition" x="0" y="0" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
@@ -21,18 +21,18 @@
         </Transform>
         <GameObject name="camera" isActive="1" isStatic="0">
             <Camera>
-                <Component enabled="204">
-                    <BOOL name="isThisMainCamera" value="0" />
+                <Component enabled="1">
+                    <BOOL isThisMainCamera="1" />
                     <Vector3 name="cameraPosition" x="0" y="0" z="0" />
                     <Vector3 name="cameraRotation" x="0" y="0" z="0" />
-                    <FLOAT name="viewWidth" value="40" />
-                    <FLOAT name="viewHeight" value="40" />
-                    <FLOAT name="nearZ" value="-1" />
-                    <FLOAT name="farZ" value="10" />
+                    <FLOAT viewWidth="15" />
+                    <FLOAT viewHeight="30" />
+                    <FLOAT nearZ="-1" />
+                    <FLOAT farZ="10" />
                 </Component>
             </Camera>
             <Transform>
-                <Component enabled="204">
+                <Component enabled="1">
                     <Vector3 name="localPosition" x="0" y="0" z="0" />
                     <Vector3 name="localRotation" x="0" y="0" z="0" />
                     <Vector3 name="scale" x="1" y="1" z="1" />
@@ -43,23 +43,23 @@
     <GameObject name="ball" isActive="1" isStatic="0">
         <Material>
             <Component enabled="1">
-                <BOOL name="fileName" value="" />
-                <COLOR name="color" r="0" g="0" b="0" a="1" />
-                <BOOL name="uv" maxX="1" maxY="1" minX="0" minY="0" />
+                <STRING fileName="./picture.png" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="1" maxY="1" minX="0" minY="0" />
             </Component>
         </Material>
         <RenderComponent>
-            <Component enabled="204">
-                <BOOL name="renderMesh_name" value="" />
-                <BOOL name="shader_name" value="" />
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="image" />
             </Component>
         </RenderComponent>
         <Script>
-            <Component enabled="204" />
+            <Component enabled="1" />
         </Script>
         <Transform>
-            <Component enabled="204">
-                <Vector3 name="localPosition" x="0" y="0" z="0" />
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="1.5" y="0" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>

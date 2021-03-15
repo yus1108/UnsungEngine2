@@ -15,3 +15,14 @@ void UEngine::VECTOR3::Serialize(TiXmlElement* node)
 	variable->SetDoubleAttribute("z", value.z);
 	node->LinkEndChild(variable);
 }
+
+void UEngine::VECTOR3::DeSerialize(TiXmlNode* node)
+{
+	double x, y, z;
+	node->ToElement()->QueryDoubleAttribute("x", &x);
+	node->ToElement()->QueryDoubleAttribute("y", &y);
+	node->ToElement()->QueryDoubleAttribute("z", &z);
+	value.x = static_cast<float>(x);
+	value.y = static_cast<float>(y);
+	value.z = static_cast<float>(z);
+}

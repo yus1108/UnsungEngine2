@@ -27,3 +27,13 @@ void INIT_GAMESTATE()
 {
     UEngine::GameState::Init(false);
 }
+
+void DeSerializeComponent(UEngine::Component* component, TiXmlNode* memberVarNode)
+{
+    component->DeSerialize(memberVarNode);
+}
+
+void SetEnable(UEngine::Component* component, bool enabled)
+{
+    component->SetEnable(enabled);
+}

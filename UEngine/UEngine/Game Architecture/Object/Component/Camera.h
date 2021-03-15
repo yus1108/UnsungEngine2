@@ -20,6 +20,7 @@ namespace UEngine
 		void LateUpdate() override;
 		void OnPreRender() override;
 		void OnDestroy() override;
+		void DeSerialize(TiXmlNode* node) override;
 
 	public:
 		SERIALIZED_VECTOR3(cameraPosition, Vector3(0, 0, 0));

@@ -13,5 +13,6 @@
 #include "../SingletonManager/SingletonManager.h"
 
 #include "Script.h"
+#include "dllmain.h"
 
 #endif //PCH_H

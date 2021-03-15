@@ -35,14 +35,14 @@ UEngine::GameScene* XMLSceneParser::LoadScene(std::string name)
 	currentScene->Init(isDebugMode);
 	currentScene->name = node->ToElement()->Attribute("name");
 
-	LoadGameObject(node->ToElement(), currentScene);
+	LoadGameObject(node, currentScene);
 
 	return currentScene;
 }
 
-void XMLSceneParser::LoadGameObject(TiXmlElement* sceneNode, UEngine::GameScene* gameScene)
+void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, UEngine::GameScene* gameScene)
 {
-	auto goNode = sceneNode->FirstChild();
+	auto goNode = parentNode->FirstChild();
 	while (goNode)
 	{
 		std::string name;
@@ -52,78 +52,118 @@ void XMLSceneParser::LoadGameObject(TiXmlElement* sceneNode, UEngine::GameScene*
 		auto gameObject = UEngine::GameObject::Instantiate(gameScene, name);
 		gameObject->SetActive(isActive);
 		goNode->ToElement()->QueryBoolAttribute("isStatic", &gameObject->IsStatic);
-		LoadComponent(goNode->ToElement(), gameObject);
 
+		{
+			auto subNode = goNode->FirstChild();
+			while (subNode)
+			{
+				std::string subName = subNode->ToElement()->Value();
+				if (subName == "GameObject")
+					LoadGameObject(goNode, subNode, gameObject);
+				else
+					LoadComponent(subNode, gameObject);
+
+				subNode = subNode->NextSibling();
+			}
+		}
 
 
 		goNode = goNode->NextSibling();
 	}
 }
 
-void XMLSceneParser::LoadComponent(TiXmlElement* goNode, UEngine::GameObject* gameObject)
+void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, TiXmlNode* goNode, UEngine::GameObject* parent)
 {
-	auto componentNode = goNode->FirstChild();
+	std::string name;
+	bool isActive, isStatic;
+	name = goNode->ToElement()->Attribute("name");
+	goNode->ToElement()->QueryBoolAttribute("isActive", &isActive);
+	auto child = UEngine::GameObject::Instantiate(parent->GetScene(), name);
+	child->SetActive(isActive);
+	goNode->ToElement()->QueryBoolAttribute("isStatic", &child->IsStatic);
+	child->SetParent(parent);
+}
+
+void XMLSceneParser::LoadComponent(TiXmlNode* componentListNode, UEngine::GameObject* gameObject)
+{
+	std::string componentType = componentListNode->ToElement()->Value();
+	
+	auto componentNode = componentListNode->FirstChild();
 	while (componentNode)
 	{
-		std::string componentType = componentNode->ToElement()->Value();
-		
-		UEngine::Component* component = nullptr;
-		if (componentType == "Transform")
+		bool enabled;
+		componentNode->ToElement()->QueryBoolAttribute("enabled", &enabled);
+		UEngine::Component* component = CreateComponent(componentType, gameObject);
+
+		auto memberVarNode = componentNode->FirstChild();
+		if (componentType == "Transform" ||
+			componentType == "RenderComponent" ||
+			componentType == "Material" ||
+			componentType == "Camera" ||
+			componentType == "CircleCollider" ||
+			componentType == "RectCollider")
 		{
-			component = gameObject->GetComponent<UEngine::Transform>();
-		}
-		else if (componentType == "RenderComponent")
-		{
-			component = gameObject->AddComponent<UEngine::RenderComponent>();
-		}
-		else if (componentType == "Material")
-		{
-			component = gameObject->AddComponent<UEngine::Material>();
-		}
-		else if (componentType == "Camera")
-		{
-			component = gameObject->AddComponent<UEngine::Camera>();
-		}
-		else if (componentType == "CircleCollider")
-		{
-			component = gameObject->AddComponent<UEngine::Physics2D::CircleCollider>();
-		}
-		else if (componentType == "RectCollider")
-		{
-			component = gameObject->AddComponent<UEngine::Physics2D::RectCollider>();
+			if (memberVarNode) component->DeSerialize(memberVarNode);
+			component->SetEnable(enabled);
 		}
 		else if (componentType == "GameObject")
 		{
-			std::string name;
-			bool isActive, isStatic;
-			name = componentNode->ToElement()->Attribute("name");
-			componentNode->ToElement()->QueryBoolAttribute("isActive", &isActive);
-			auto child = UEngine::GameObject::Instantiate(gameObject->GetScene(), name);
-			child->SetActive(isActive);
-			child->SetParent(gameObject);
-			componentNode->ToElement()->QueryBoolAttribute("isStatic", &gameObject->IsStatic);
-
-			LoadComponent(componentNode->ToElement(), child);
-
-			componentNode = componentNode->NextSibling();
-			continue;
+			throw std::runtime_error("it's impossible to be here");
 		}
 		else
 		{
-			typedef UEngine::Component* (*AddScript) (UEngine::GameObject* gameObject);
-			AddScript scriptCreation = NULL;
-			scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction(componentType + "Creation");
-			component = scriptCreation(gameObject);
+			typedef void (*DeSerializeComponent) (UEngine::Component*, TiXmlNode*);
+			typedef void (*SetEnable) (UEngine::Component*, bool);
+			DeSerializeComponent deserializeComponent = NULL;
+			SetEnable setEnable = NULL;
+			deserializeComponent = (DeSerializeComponent)UEngine::WinApplication::Get()->FindFunction("DeSerializeComponent");
+			setEnable = (SetEnable)UEngine::WinApplication::Get()->FindFunction("SetEnable");
+			if (memberVarNode) deserializeComponent(component, memberVarNode);
+			setEnable(component, enabled);
 		}
-
-		bool enabled;
-		goNode->ToElement()->QueryBoolAttribute("enabled", &enabled);
-		component->SetEnable(enabled);
-
-		// deserialize
-
 		componentNode = componentNode->NextSibling();
 	}
+}
+
+UEngine::Component* XMLSceneParser::CreateComponent(std::string componentType, UEngine::GameObject* gameObject)
+{
+	UEngine::Component* component = nullptr;
+	if (componentType == "Transform")
+	{
+		component = gameObject->GetComponent<UEngine::Transform>();
+	}
+	else if (componentType == "RenderComponent")
+	{
+		component = gameObject->AddComponent<UEngine::RenderComponent>();
+	}
+	else if (componentType == "Material")
+	{
+		component = gameObject->AddComponent<UEngine::Material>();
+	}
+	else if (componentType == "Camera")
+	{
+		component = gameObject->AddComponent<UEngine::Camera>();
+	}
+	else if (componentType == "CircleCollider")
+	{
+		component = gameObject->AddComponent<UEngine::Physics2D::CircleCollider>();
+	}
+	else if (componentType == "RectCollider")
+	{
+		component = gameObject->AddComponent<UEngine::Physics2D::RectCollider>();
+	}
+	else if (componentType == "GameObject")
+	{
+		throw std::runtime_error("it's impossible to be here");
+	}
+	else
+	{
+		typedef UEngine::Component* (*AddScript) (UEngine::GameObject* gameObject);
+		AddScript scriptCreation = NULL;
+		scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction(componentType + "Creation");
+		component = scriptCreation(gameObject);
+	}
+	return component;
 }
 
 void XMLSceneParser::SaveGameObject
@@ -156,15 +196,4 @@ void XMLSceneParser::SaveGameObject
 	for (auto child : children)
 		SaveGameObject(gameObject, child->name, child->GetActive(), child->IsStatic, child->GetChildren(), child->GetComponents());
 	node->LinkEndChild(gameObject);
-}
-
-void XMLSceneParser::SaveComponent
-(
-	TiXmlElement* node,
-	bool enabled
-)
-{
-	auto component = new TiXmlElement("Component");
-	component->SetAttribute("enabled", enabled);
-	node->LinkEndChild(component);
 }

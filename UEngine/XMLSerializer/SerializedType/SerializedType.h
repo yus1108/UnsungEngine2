@@ -11,4 +11,5 @@ public:
 	SerializedType(const SerializedType&) = delete;
 	SerializedType(Serializer* serializer, std::string name);
 	virtual void Serialize(TiXmlElement* node) = 0;
+	virtual void DeSerialize(TiXmlNode* node) = 0;
 };

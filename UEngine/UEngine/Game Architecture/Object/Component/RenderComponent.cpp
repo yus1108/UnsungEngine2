@@ -13,6 +13,12 @@ void UEngine::RenderComponent::LateUpdate()
 	}
 }
 
+void UEngine::RenderComponent::DeSerialize(TiXmlNode* node)
+{
+	Serializer::DeSerialize(node);
+	Load(renderMesh_name.value, shader_name.value);
+}
+
 void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string shader_name)
 {
 	auto scene = GetGameObject()->GetScene();

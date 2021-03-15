@@ -114,7 +114,7 @@ namespace UEngine
             throw std::runtime_error(e.what());
         }
 
-        hDLL = LoadLibrary(dllSourceFile.c_str());
+        hDLL = LoadLibrary(target.c_str());
         if (hDLL == NULL) throw std::runtime_error("dll not found");
     }
 

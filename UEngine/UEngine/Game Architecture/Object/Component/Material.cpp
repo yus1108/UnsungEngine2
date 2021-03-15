@@ -36,6 +36,14 @@ void UEngine::Material::OnDestroy()
 	DXRenderer::DXTexture::Release(&imageTexture);
 }
 
+void UEngine::Material::DeSerialize(TiXmlNode* node)
+{
+	Serializer::DeSerialize(node);
+	std::wstring fileName;
+	convert_utf8_to_unicode_string(fileName, this->fileName.value.c_str(), this->fileName.value.size());
+	Load(fileName);
+}
+
 void UEngine::Material::Load(std::wstring fileName)
 {
 	// Sampler State

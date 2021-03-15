@@ -20,6 +20,7 @@ namespace UEngine
 		private:
 			// Inherited via SerializedType
 			virtual void Serialize(TiXmlElement* node) override;
+			virtual void DeSerialize(TiXmlNode* node) override;
 		public:
 			COLOR(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			COLOR(Serializer* serializer, std::string name, Color value) : SerializedType(serializer, name) { this->value = value; }
@@ -31,6 +32,7 @@ namespace UEngine
 				this->value = other;
 				return *this;
 			}
+
 		};
 	}
 }

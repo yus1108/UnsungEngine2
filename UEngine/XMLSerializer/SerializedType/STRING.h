@@ -23,6 +23,7 @@ namespace UEngine
 		private:
 			// Inherited via SerializedType
 			virtual void Serialize(TiXmlElement* node) override;
+			virtual void DeSerialize(TiXmlNode* node) override;
 		public:
 			STRING(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			STRING(Serializer* serializer, std::string name, std::string value) : SerializedType(serializer, name) { this->value = value; }
@@ -50,6 +51,7 @@ namespace UEngine
 				this->value = c_other;
 				return *this;
 			}
+
 		};
 	}
 }

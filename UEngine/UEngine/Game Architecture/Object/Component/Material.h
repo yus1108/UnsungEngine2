@@ -16,6 +16,7 @@ namespace UEngine
 		void Update() override;
 		void OnPreRender() override;
 		virtual void OnDestroy() override;
+		void DeSerialize(TiXmlNode* node) override;
 
 
 		virtual void SetEnable(bool enable) override {}

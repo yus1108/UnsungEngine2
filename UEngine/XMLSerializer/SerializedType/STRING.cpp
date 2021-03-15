@@ -3,10 +3,14 @@
 
 void UEngine::TYPE::STRING::Serialize(TiXmlElement* node)
 {
-	auto variable = new TiXmlElement("BOOL");
-	variable->SetAttribute("name", name.c_str());
-	variable->SetAttribute("value", value.c_str());
+	auto variable = new TiXmlElement("STRING");
+	variable->SetAttribute(name.c_str(), value.c_str());
 	node->LinkEndChild(variable);
+}
+
+void UEngine::TYPE::STRING::DeSerialize(TiXmlNode* node)
+{
+	value = node->ToElement()->Attribute(name.c_str());
 }
 
 //

@@ -85,4 +85,10 @@ void UEngine::Camera::OnDestroy()
     GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(cameraBuffer->UID);
 }
 
+void UEngine::Camera::DeSerialize(TiXmlNode* node)
+{
+    Serializer::DeSerialize(node);
+    if (this->isThisMainCamera.value == true) SetMainCamera();
+}
+
 

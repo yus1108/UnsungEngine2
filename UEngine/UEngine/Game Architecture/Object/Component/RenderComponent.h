@@ -10,6 +10,7 @@ namespace UEngine
 		SERIALIZED_STRING(shader_name);
 
 		void LateUpdate() override;
+		void DeSerialize(TiXmlNode* node) override;
 	public:
 		void Load(std::string renderMesh_name, std::string shader_name);
 		void LoadTriangle();

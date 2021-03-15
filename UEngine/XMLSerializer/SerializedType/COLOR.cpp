@@ -12,3 +12,16 @@ void UEngine::TYPE::COLOR::Serialize(TiXmlElement* node)
 	node->LinkEndChild(variable);
 }
 
+void UEngine::TYPE::COLOR::DeSerialize(TiXmlNode* node)
+{
+	double r, g, b, a;
+	node->ToElement()->QueryDoubleAttribute("r", &r);
+	node->ToElement()->QueryDoubleAttribute("g", &g);
+	node->ToElement()->QueryDoubleAttribute("b", &b);
+	node->ToElement()->QueryDoubleAttribute("a", &a);
+	value.r = static_cast<float>(r);
+	value.g = static_cast<float>(g);
+	value.b = static_cast<float>(b);
+	value.a = static_cast<float>(a);
+}
+

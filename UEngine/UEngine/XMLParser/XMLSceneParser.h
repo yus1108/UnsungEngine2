@@ -11,8 +11,10 @@ private:
 	TiXmlDocument doc;
 	TiXmlElement* scene = nullptr;
 
-	void LoadGameObject(TiXmlElement* sceneNode, UEngine::GameScene* gameScene);
-	void LoadComponent(TiXmlElement* goNode, UEngine::GameObject* gameObject);
+	void LoadGameObject(TiXmlNode* goNode, UEngine::GameScene* gameScene);
+	void LoadGameObject(TiXmlNode* parentNode, TiXmlNode* goNode, UEngine::GameObject* parent);
+	void LoadComponent(TiXmlNode* componentListNode, UEngine::GameObject* gameObject);
+	UEngine::Component* CreateComponent(std::string componentType, UEngine::GameObject* gameObject);
 	void SaveGameObject
 	(
 		TiXmlElement* node,
@@ -21,10 +23,5 @@ private:
 		bool isStatic,
 		std::vector<UEngine::GameObject*> children,
 		std::map<std::string, std::list<UEngine::Component*>*> components
-	);
-	void SaveComponent
-	(
-		TiXmlElement* node,
-		bool enabled
 	);
 };
