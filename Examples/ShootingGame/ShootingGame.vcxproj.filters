@@ -5,14 +5,12 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Background.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Tile.h" />
     <ClInclude Include="Background.h" />
   </ItemGroup>
 </Project>
