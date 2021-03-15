@@ -177,6 +177,7 @@
     <ClInclude Include="Game Architecture\GameState.h" />
     <ClInclude Include="Game Architecture\Object\Component\Camera.h" />
     <ClInclude Include="Game Architecture\Object\Component\Component.h" />
+    <ClInclude Include="Game Architecture\Object\Component\EditorScript.h" />
     <ClInclude Include="Game Architecture\Object\Component\Material.h" />
     <ClInclude Include="Game Architecture\Object\Component\RenderComponent.h" />
     <ClInclude Include="Game Architecture\Object\Component\Transform.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="DebugRenderer\DebugRenderer.cpp" />
     <ClCompile Include="Game Architecture\GameState.cpp" />
     <ClCompile Include="Game Architecture\Object\Component\Camera.cpp" />
+    <ClCompile Include="Game Architecture\Object\Component\EditorScript.cpp" />
     <ClCompile Include="Game Architecture\Object\Component\Material.cpp" />
     <ClCompile Include="Game Architecture\Object\Component\RenderComponent.cpp" />
     <ClCompile Include="Game Architecture\Object\Component\Transform.cpp" />

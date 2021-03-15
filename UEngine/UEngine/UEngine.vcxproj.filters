@@ -54,6 +54,9 @@
     <ClInclude Include="XMLParser\XMLSceneParser.h">
       <Filter>XMLParser</Filter>
     </ClInclude>
+    <ClInclude Include="Game Architecture\Object\Component\EditorScript.h">
+      <Filter>Game Architecture\Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="XMLParser\XMLSceneParser.cpp">
       <Filter>XMLParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Architecture\Object\Component\EditorScript.cpp">
+      <Filter>Game Architecture\Object\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

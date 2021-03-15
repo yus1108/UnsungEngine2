@@ -27,7 +27,7 @@ namespace UEngine
 
 		UEngine::DXRenderer::DXResourceManager ResourceManager;
 		DebugRenderer *debugRenderer = nullptr;
-		Physics2D::SpatialPartition2D partition2D;
+		Physics2D::SpatialPartition2D *partition2D = nullptr;
 
 		template <typename T>
 		T* LoadResource(std::wstring resource_name);

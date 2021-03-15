@@ -36,7 +36,7 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
         desc.WindowSize = { width, height };
         desc.Wcex = &Wcex;
 
-        app->Create(desc);
+        app->Create(desc, 8);
     }
 
     screenSize = app->GetClientPixelSize();

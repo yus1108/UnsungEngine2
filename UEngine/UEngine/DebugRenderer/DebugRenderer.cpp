@@ -363,9 +363,9 @@ void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 	{
 		if (vert_count == 0) return;
 		ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-		m_pImmediateContext->Map(gpu_side_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
+		viewContext->DeviceContext->Map(gpu_side_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
 		memcpy(mappedResource.pData, &cpu_side_buffer, sizeof(UEngine::DebugRenderPoint) * vert_count);
-		m_pImmediateContext->Unmap(gpu_side_buffer, 0);
+		viewContext->DeviceContext->Unmap(gpu_side_buffer, 0);
 
 		// set texture info
 		viewContext->DeviceContext->ClearRenderTargetView(viewContext->RenderTargetView.Get(), DirectX::Colors::Transparent);

@@ -31,4 +31,5 @@
 #include "Game Architecture\Object\Component\RenderComponent.h"
 #include "Game Architecture\Object\Component\Material.h"
 #include "Game Architecture\Object\Component\Camera.h"
+#include "Game Architecture\Object\Component\EditorScript.h"
 

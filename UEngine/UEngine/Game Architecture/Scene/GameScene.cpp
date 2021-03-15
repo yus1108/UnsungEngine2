@@ -11,16 +11,21 @@ void UEngine::GameScene::Init(bool isDebugMode)
 		debugRenderer->Init(DXRenderer::Get()->GetDevice(), DXRenderer::Get()->GetImmediateDeviceContext());
 	}
 	ResourceManager.Init();
+	partition2D = new Physics2D::SpatialPartition2D();
 }
 
 void UEngine::GameScene::Release()
 {
+	std::unique_lock<std::mutex> lock(renderMutex);
+	renderCondition.wait(lock, [this]() { return renderSyncCount == 0; });
+
 	for (auto obj : gameObjects)
 		GameObject::Release(&obj);
 	for (auto obj : deleteList)
 		GameObject::Release(&obj);
 	for (auto obj : creationList)
 		GameObject::Release(&obj);
+	delete partition2D;
 	if (isDebugMode)
 	{
 		delete debugRenderer;
@@ -32,7 +37,7 @@ void UEngine::GameScene::Update()
 {
 	while (true)
 	{
-		partition2D.Release();
+		partition2D->Release();
 		for (auto obj : gameObjects)
 			obj->FixedUpdate();
 		for (auto obj : gameObjects)
@@ -70,36 +75,31 @@ void UEngine::GameScene::Render(ID3D11DeviceContext* deviceContext)
 
 	for (auto view : gpu_view)
 	{
-		WinApplication::Get()->threadPool.AddTask([&]()
+		WinApplication::Get()->threadPool.AddTask([&, view]()
 		{
 			std::unique_lock<std::mutex> lock(renderMutex);
 			renderSyncCount++;
 			lock.unlock();
 
-			view.Render();
+			auto copeidView = view;
+			copeidView.Render();
 
 			lock.lock();
 			int count = --renderSyncCount;
-			lock.unlock();
-
 			if (count == 0) renderCondition.notify_one();
+			lock.unlock();
 		});
 	}
-	for (auto obj : gameObjects)
-		obj->OnRender();
-	
 
 	std::unique_lock<std::mutex> lock(renderMutex);
 	renderCondition.wait(lock, [this]() { return renderSyncCount == 0; });
 
 	for (auto view : gpu_view)
-		view.Execute(deviceContext);
+		view.PostRender();
 }
 
 void UEngine::GameScene::PostRender()
 {
-	for (auto view : gpu_view)
-		view.PostRender();
 	for (auto obj : gameObjects)
 		obj->OnPostRender();
 }

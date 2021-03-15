@@ -33,7 +33,6 @@ namespace UEngine
 		void LateUpdate();
 		void AnimationUpdate();
 		void OnPreRender();
-		void OnRender();
 		void OnPostRender();
 		void OnDisable();
 		void OnDestroy();

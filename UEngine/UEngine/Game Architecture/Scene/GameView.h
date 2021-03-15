@@ -12,6 +12,5 @@ namespace UEngine
 
 		void Render();
 		void PostRender();
-		void Execute(ID3D11DeviceContext* deviceContext) { view->Execute(deviceContext); }
 	};
 }

@@ -46,7 +46,7 @@ void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, UEngine::GameScene* g
 	while (goNode)
 	{
 		std::string name;
-		bool isActive, isStatic;
+		bool isActive;
 		name = goNode->ToElement()->Attribute("name");
 		goNode->ToElement()->QueryBoolAttribute("isActive", &isActive);
 		auto gameObject = UEngine::GameObject::Instantiate(gameScene, name);
@@ -75,7 +75,7 @@ void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, UEngine::GameScene* g
 void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, TiXmlNode* goNode, UEngine::GameObject* parent)
 {
 	std::string name;
-	bool isActive, isStatic;
+	bool isActive;
 	name = goNode->ToElement()->Attribute("name");
 	goNode->ToElement()->QueryBoolAttribute("isActive", &isActive);
 	auto child = UEngine::GameObject::Instantiate(parent->GetScene(), name);

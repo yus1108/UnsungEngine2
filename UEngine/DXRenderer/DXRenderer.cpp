@@ -162,9 +162,12 @@ namespace UEngine
 
 		void DXRenderer::InitMainRenderTargetView(ID3D11RenderTargetView** const rtv)
 		{
-			Microsoft::WRL::ComPtr<ID3D11Debug> pDebugger;
-			device->QueryInterface(__uuidof(ID3D11Debug), (void**)&pDebugger);
-			//pDebugger->ReportLiveDeviceObjects(D3D11_RLDO_FLAGS::D3D11_RLDO_IGNORE_INTERNAL);
+			if (rendering_desc.IsDebuggable)
+			{
+				Microsoft::WRL::ComPtr<ID3D11Debug> pDebugger;
+				device->QueryInterface(__uuidof(ID3D11Debug), (void**)&pDebugger);
+				pDebugger->ReportLiveDeviceObjects(D3D11_RLDO_FLAGS::D3D11_RLDO_DETAIL);
+			}
 			Microsoft::WRL::ComPtr<ID3D11Texture2D> pSwapChainBuffer;
 			swapchain->GetBuffer(0, __uuidof(pSwapChainBuffer), (void**)&pSwapChainBuffer);
 			device->CreateRenderTargetView(pSwapChainBuffer.Get(), nullptr, rtv);

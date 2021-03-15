@@ -73,6 +73,7 @@ void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<vo
 	
 	instance->currentScene->Update();
 	WinApplication::Get()->threadPool.Join();
+	instance->currentScene->PostRender();
 	if (run)
 	{
 		instance->isTerminate = true;

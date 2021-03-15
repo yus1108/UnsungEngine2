@@ -51,13 +51,14 @@ namespace UEngine
 
         void DXView::End()
         {
+            context.CommandList.ReleaseAndGetAddressOf();
             context.DeviceContext->FinishCommandList(true, context.CommandList.GetAddressOf());
         }
 
         void DXView::Execute(ID3D11DeviceContext* deviceContext)
         {
+            if (context.CommandList == nullptr) return;
             deviceContext->ExecuteCommandList(context.CommandList.Get(), true);
-            context.CommandList.ReleaseAndGetAddressOf();
 
             deviceContext->ResolveSubresource
             (
@@ -68,7 +69,5 @@ namespace UEngine
                 DXGI_FORMAT_R32G32B32A32_FLOAT
             );
         }
-
-
     }
 }
