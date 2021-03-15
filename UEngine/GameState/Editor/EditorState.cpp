@@ -89,6 +89,7 @@ ATTACH_SINGLETONS attach_singletons;
 AddScript addscript;
 void UEngine::UEditor::EditorState::Load()
 {
+    WinApplication::Get()->FreeDLL();
     WinApplication::Get()->LoadDLL(L"../Debug/DllTest.dll");
 
     attach_singletons = (ATTACH_SINGLETONS)WinApplication::Get()->FindFunction("ATTACH_SINGLETONS");
@@ -153,6 +154,10 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             if (WinInput::Get()->GetKeyDown('1'))
             {
                 GameState::GetCurrentScene()->SaveScene();
+            }
+            if (WinInput::Get()->GetKeyDown('2'))
+            {
+                return true;
             }
             return false;
         }, [&]()

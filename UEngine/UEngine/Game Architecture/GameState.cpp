@@ -17,16 +17,6 @@ void UEngine::GameState::SetCurrentScene(std::string name)
 	instance->currentScene = scene;
 }
 
-void UEngine::GameState::LoadScene(std::string fileName)
-{
-
-}
-
-void UEngine::GameState::SaveScene(std::string fileName)
-{
-
-}
-
 UEngine::GameScene* UEngine::GameState::GetScene(std::string name)
 {
 	auto iter = instance->scenes.find(name);

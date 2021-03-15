@@ -48,7 +48,7 @@
         </Script>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="6" y="0" z="0" />
+                <Vector3 name="localPosition" x="2" y="0.5" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>

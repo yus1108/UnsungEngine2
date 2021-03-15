@@ -4,9 +4,22 @@
 
 void Script::Update()
 {
-    //std::cout << UEngine::Utility::UTime::Get()->DeltaTimeF() << std::endl;
-    if (UEngine::WinInput::Get()->GetKeyDown('W'))
+    float deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
+    std::cout << UEngine::Utility::UTime::Get()->DeltaTimeF() << std::endl;
+    if (UEngine::WinInput::Get()->GetKey('W'))
     {
-        GetTransform()->localPosition.value.x += 0.5f;
+        GetTransform()->localPosition.value.y += 2 * deltatime;
+    }
+    if (UEngine::WinInput::Get()->GetKey('A'))
+    {
+        GetTransform()->localPosition.value.x -= 2 * deltatime;
+    }
+    if (UEngine::WinInput::Get()->GetKey('S'))
+    {
+        GetTransform()->localPosition.value.y -= 2 * deltatime;
+    }
+    if (UEngine::WinInput::Get()->GetKey('D'))
+    {
+        GetTransform()->localPosition.value.x += 2 * deltatime;
     }
 }

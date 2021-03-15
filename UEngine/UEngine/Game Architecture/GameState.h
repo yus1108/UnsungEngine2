@@ -31,8 +31,6 @@ namespace UEngine
 		static void SetCurrentScene(std::string name);
 
 		static void AddScene(GameScene* scene, bool setCurrentScene = false);
-		static void LoadScene(std::string fileName);
-		static void SaveScene(std::string fileName);
 		static GameScene* GetScene(std::string name);
 
 		static bool IsTerminate() { return instance->isTerminate; }
