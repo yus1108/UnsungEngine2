@@ -99,9 +99,9 @@ bool Puzzle::Swap(Direction dir)
 		return false;
 	}
 
-	auto tempPos = pieces[currPos.x][currPos.y]->GetTransform()->localPosition;
-	pieces[currPos.x][currPos.y]->GetTransform()->localPosition = pieces[newPos.x][newPos.y]->GetTransform()->localPosition;
-	pieces[newPos.x][newPos.y]->GetTransform()->localPosition = tempPos;
+	auto tempPos = pieces[currPos.x][currPos.y]->GetTransform()->localPosition.value;
+	pieces[currPos.x][currPos.y]->GetTransform()->localPosition.value = pieces[newPos.x][newPos.y]->GetTransform()->localPosition.value;
+	pieces[newPos.x][newPos.y]->GetTransform()->localPosition.value = tempPos;
 
 	auto tempObj = pieces[currPos.x][currPos.y];
 	pieces[currPos.x][currPos.y] = pieces[newPos.x][newPos.y];

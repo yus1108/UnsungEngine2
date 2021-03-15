@@ -31,20 +31,20 @@ void Scene::Load()
         currentScene->Init(true);
 
         {
-            auto cameraObject = GameObject::Instantiate(currentScene, L"camera");
+            auto cameraObject = GameObject::Instantiate(currentScene, "camera");
             auto camera = cameraObject->AddComponent<Camera>();
             camera->viewWidth = static_cast<float>(screenSize.x);
             camera->viewHeight = static_cast<float>(screenSize.y);
 
-            auto puzzleObj = GameObject::Instantiate(currentScene, L"puzzle");
+            auto puzzleObj = GameObject::Instantiate(currentScene, "puzzle");
             auto puzzle = puzzleObj->AddComponent<Puzzle>();
 
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    puzzle->pieces[i][j] = GameObject::Instantiate(currentScene, L"pieces");
-                    puzzle->pieces[i][j]->AddComponent<RenderComponent>()->Load(L"rectangle", L"sprite");
+                    puzzle->pieces[i][j] = GameObject::Instantiate(currentScene, "pieces");
+                    puzzle->pieces[i][j]->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                     puzzle->pieces[i][j]->AddComponent<Material>()->Load(L"./Assets/island-5783440_1920.jpg");
                     puzzle->pieces[i][j]->GetComponent<Material>()->uv = UV
                     {
@@ -53,13 +53,13 @@ void Scene::Load()
                         1.0f / 3.0f * (i + 1),
                         1 - 1.0f / 3.0f * j,
                     };
-                    puzzle->pieces[i][j]->GetTransform()->localPosition =
+                    puzzle->pieces[i][j]->GetTransform()->localPosition.value =
                         Vector2
                         (
                             static_cast<float>(screenSize.x) / 3.0f * (i - 1),
                             static_cast<float>(screenSize.y) / 3.0f * (j - 1)
                         );
-                    puzzle->pieces[i][j]->GetTransform()->scale =
+                    puzzle->pieces[i][j]->GetTransform()->scale.value =
                         Vector2
                         (
                             static_cast<float>(screenSize.x) / 3.0f - 10,

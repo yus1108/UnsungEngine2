@@ -49,5 +49,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     Scene scene;
     scene.Load();
-    return scene.Run();
+    int result = scene.Run();
+
+    GameState::Release();
+    DXRenderer::DXRenderer::Release();
+    WinInput::Release();
+    WinApplication::Release();
+    Utility::UTime::Release();
+    return result;
 }

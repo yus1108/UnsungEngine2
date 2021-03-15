@@ -3,12 +3,12 @@
 
 void Tile::Start()
 {
-	GetTransform()->localPosition.x = fixedPosition.x;
+	GetTransform()->localPosition.value.x = fixedPosition.x;
 }
 void Tile::FixedUpdate()
 {
 	fixedPosition.x -= 3;
-	if (GetTransform()->localPosition.x < -650)
+	if (GetTransform()->localPosition.value.x < -650)
 	{
 		fixedPosition.x += 1300;
 		if (Math::RndInt(0, 3) % 4 == 0)
@@ -32,8 +32,8 @@ void Tile::FixedUpdate()
 
 void Tile::Update()
 {
-	GetTransform()->localPosition.x = fixedPosition.x;
-	GetTransform()->localPosition.y = -250;
+	GetTransform()->localPosition.value.x = fixedPosition.x;
+	GetTransform()->localPosition.value.y = -250;
 	//auto transform = GetTransform();
 	//if (WinInput::Get()->GetKey('S'))
 	//{

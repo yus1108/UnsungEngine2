@@ -24,10 +24,12 @@
 #include "../../UEngine/WinApplication/WinMemoryLeak.h"
 
 #ifdef _DEBUG
+#pragma comment(lib, "../../UEngine/Debug/SingletonManager.lib")
 #pragma comment(lib, "../../UEngine/Debug/Utility.lib")
 #pragma comment(lib, "../../UEngine/Debug/WinApplication.lib")
 #pragma comment(lib, "../../UEngine/Debug/DXRenderer.lib")
 #pragma comment(lib, "../../UEngine/Debug/UEngine.lib")
+#pragma comment(lib, "../../UEngine/Debug/XMLSerializer.lib")
 #endif
 
 using namespace UEngine;

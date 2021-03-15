@@ -9,19 +9,19 @@ void GoalPost::Update()
 	auto transform = GetTransform();
 	auto postCol = MakeAABB(transform->GetWorld());
 
-	auto ball = FindObjectWithName(L"ball");
-	auto ballCol = MakeCircle(ball->GetTransform()->localPosition, ball->GetTransform()->scale.x * 0.5f);
+	auto ball = FindObjectWithName("ball");
+	auto ballCol = MakeCircle(ball->GetTransform()->localPosition.value, ball->GetTransform()->scale.value.x * 0.5f);
 
 	if (IsColliding(postCol, ballCol))
 	{
 		ball->GetComponent<Ball>()->Init();
 	}
 
-	auto p1 = FindObjectWithName(L"p1");
-	auto p1Col = MakeCircle(p1->GetTransform()->localPosition, p1->GetTransform()->scale.x * 0.5f);
+	auto p1 = FindObjectWithName("p1");
+	auto p1Col = MakeCircle(p1->GetTransform()->localPosition.value, p1->GetTransform()->scale.value.x * 0.5f);
 
-	auto p2 = FindObjectWithName(L"p2");
-	auto p2Col = MakeCircle(p2->GetTransform()->localPosition, p2->GetTransform()->scale.x * 0.5f);
+	auto p2 = FindObjectWithName("p2");
+	auto p2Col = MakeCircle(p2->GetTransform()->localPosition.value, p2->GetTransform()->scale.value.x * 0.5f);
 
 	if (IsColliding(postCol, p1Col))
 	{
@@ -31,7 +31,7 @@ void GoalPost::Update()
 		dir = p1Col.center - closestPoint;
 		float distance = dir.Magnitude();
 		distance = p1Col.radius - distance;
-		p1->GetTransform()->localPosition = p1->GetTransform()->localPosition + dir * distance;
+		p1->GetTransform()->localPosition.value = p1->GetTransform()->localPosition.value + dir * distance;
 	}
 
 	if (IsColliding(postCol, p2Col))
@@ -42,6 +42,6 @@ void GoalPost::Update()
 		dir = p2Col.center - closestPoint;
 		float distance = dir.Magnitude();
 		distance = p1Col.radius - distance;
-		p2->GetTransform()->localPosition = p2->GetTransform()->localPosition + dir * distance;
+		p2->GetTransform()->localPosition.value = p2->GetTransform()->localPosition.value + dir * distance;
 	}
 }

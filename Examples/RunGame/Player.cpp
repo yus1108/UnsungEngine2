@@ -50,10 +50,10 @@ void Player::Update()
 	}
 	else
 	{
-		GetTransform()->localPosition.y += weight * Utility::UTime::Get()->DeltaTimeF();
+		GetTransform()->localPosition.value.y += weight * Utility::UTime::Get()->DeltaTimeF();
 		weight += gravity;
 	}
-	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump && GetTransform()->localPosition.y < -155.0f)
+	if (WinInput::Get()->GetKeyDown(VK_SPACE) && ableToJump && GetTransform()->localPosition.value.y < -155.0f)
 	{
 		ableToJump = false;
 		weight = 500;
@@ -62,29 +62,29 @@ void Player::Update()
 	auto transform = GetTransform();
 	if (WinInput::Get()->GetKey('1'))
 	{
-		GetTransform()->localPosition.x = -450;
-		GetTransform()->localPosition.y = -100;
+		GetTransform()->localPosition.value.x = -450;
+		GetTransform()->localPosition.value.y = -100;
 		weight = 0;
 	}
 	if (WinInput::Get()->GetKey(VK_DOWN))
 	{
 		auto value = Vector2(0, -1) * 200 * Utility::UTime::Get()->DeltaTimeF();
-		transform->localPosition = transform->localPosition + value;
+		transform->localPosition.value = transform->localPosition.value + value;
 	}
 	if (WinInput::Get()->GetKey(VK_UP))
 	{
 		auto value = Vector2(0, 1) * 200 * Utility::UTime::Get()->DeltaTimeF();
-		transform->localPosition = transform->localPosition + value;
+		transform->localPosition.value = transform->localPosition.value + value;
 	}
 	if (WinInput::Get()->GetKey(VK_RIGHT))
 	{
 		auto value = Vector2(1, 0) * 200 * Utility::UTime::Get()->DeltaTimeF();
-		transform->localPosition = transform->localPosition + value;
+		transform->localPosition.value = transform->localPosition.value + value;
 	}
 	if (WinInput::Get()->GetKey(VK_LEFT))
 	{
 		auto value = Vector2(-1, 0) * 200 * Utility::UTime::Get()->DeltaTimeF();
-		transform->localPosition = transform->localPosition + value;
+		transform->localPosition.value = transform->localPosition.value + value;
 	}
 	
 

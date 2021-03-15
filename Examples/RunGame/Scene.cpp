@@ -31,16 +31,16 @@ void Scene::Load()
         currentScene->Init(true);
 
         {
-            auto cameraObject = GameObject::Instantiate(currentScene, L"camera");
+            auto cameraObject = GameObject::Instantiate(currentScene, "camera");
             auto camera = cameraObject->AddComponent<Camera>();
             camera->viewWidth = static_cast<float>(screenSize.x);
             camera->viewHeight = static_cast<float>(screenSize.y);
 
-            auto background = GameObject::Instantiate(currentScene, L"background");
-            background->AddComponent<RenderComponent>()->Load(L"rectangle", L"sprite");
+            auto background = GameObject::Instantiate(currentScene, "background");
+            background->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
             background->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/background.png", D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_MIN_MAG_MIP_LINEAR);
             background->AddComponent<Background>();
-            background->GetTransform()->scale = Vector2{
+            background->GetTransform()->scale.value = Vector2{
                 static_cast<float>(screenSize.x),
                 static_cast<float>(screenSize.y)
             };
@@ -56,14 +56,14 @@ void Scene::Load()
             for (size_t i = 0; i < 13; i++)
             {
                 int index = i;
-                auto tile = GameObject::Instantiate(currentScene, L"tile");
-                tile->AddComponent<RenderComponent>()->Load(L"rectangle", L"sprite");
+                auto tile = GameObject::Instantiate(currentScene, "tile");
+                tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                 tile->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/tileset.png");
                 auto tileScript = tile->AddComponent<Tile>();
                 tile->AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
                 tileScript->fixedPosition.x = -550 + index * 100;
                 tileScript->fixedPosition.y = -250;
-                tile->GetTransform()->scale = Vector2{
+                tile->GetTransform()->scale.value = Vector2{
                     100,
                     100
                 };
@@ -76,14 +76,14 @@ void Scene::Load()
                 };
             }
 
-            auto player = GameObject::Instantiate(currentScene, L"player");
-            player->AddComponent<RenderComponent>()->Load(L"rectangle", L"sprite");
+            auto player = GameObject::Instantiate(currentScene, "player");
+            player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
             player->AddComponent<Material>()->Load(L"./Assets/herochar sprites(new)/herochar_run_anim_strip_6.png");
             player->AddComponent<Player>();
             player->AddComponent<Physics2D::RectCollider>()->SetCollider(50, 50);
-            player->GetTransform()->localPosition.x = -450;
-            player->GetTransform()->localPosition.y = -50;
-            player->GetTransform()->scale = Vector2{
+            player->GetTransform()->localPosition.value.x = -450;
+            player->GetTransform()->localPosition.value.y = -50;
+            player->GetTransform()->scale.value = Vector2{
                 50,
                  50
             };
