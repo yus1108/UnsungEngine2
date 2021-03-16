@@ -21,4 +21,26 @@ void Script::Update()
     {
         GetTransform()->localPosition.value.x += 2 * deltatime;
     }
+
+    auto mousePos = UEngine::Math::GetMousePosToWorld();
+    if (UEngine::SingletonManager::Input->GetKey(VK_LBUTTON))
+    {
+        if (UEngine::Physics2D::IsColliding(mousePos, aabb))
+            isSelected = true;
+        else
+            isSelected = false;
+    }
+    
+    Console::Clear();
+    Console::WriteLine(std::to_string(isSelected.value));
+}
+
+void Script::LateUpdate()
+{
+    aabb = UEngine::Physics2D::MakeAABB(GetTransform()->GetWorld());
+}
+
+void Script::OnPreRender()
+{
+    GetGameObject()->GetScene()->debugRenderer->Add_Axis(GetTransform()->GetWorld());
 }

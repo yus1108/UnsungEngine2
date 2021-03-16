@@ -30,6 +30,7 @@ void UEngine::GameState::Init(bool drawOnBackBuffer)
 	if (instance == nullptr) instance = new GameState;
 	instance->isTerminate = false;
 	instance->drawOnBackBuffer = drawOnBackBuffer;
+	instance->windowSize = WinApplication::Get()->GetClientPixelSize();
 }
 
 void UEngine::GameState::Init(GameScene* scene, bool drawOnBackBuffer)
@@ -39,6 +40,7 @@ void UEngine::GameState::Init(GameScene* scene, bool drawOnBackBuffer)
 	instance->drawOnBackBuffer = drawOnBackBuffer;
 	instance->currentScene = scene;
 	instance->scenes[scene->name] = scene;
+	instance->windowSize = WinApplication::Get()->GetClientPixelSize();
 }
 
 void UEngine::GameState::AddScene(GameScene* scene, bool setCurrentScene)
@@ -56,16 +58,19 @@ void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<vo
 
 	WinApplication::Get()->threadPool.AddSyncTask([&]()
 	{
-		DXRenderer::Get()->Begin();
+		DXRenderer::Get()->Begin(DXRenderer::Get()->GetContext());
+		if (instance->currentScene->IsDebugMode() && instance->currentScene->debugRenderer)
+			instance->currentScene->debugRenderer->Render();
 		instance->currentScene->Render(DXRenderer::Get()->GetImmediateDeviceContext());
-		if (instance->drawOnBackBuffer)
+		
+		/*if (instance->drawOnBackBuffer)
 		{
 			DXRenderer::Get()->Draw(instance->currentScene->MainView->view->GetAddressOfViewResource());
 			if (instance->currentScene->IsDebugMode() && instance->currentScene->debugRenderer)
 				DXRenderer::Get()->Draw(instance->currentScene->debugRenderer->GetAddressOfViewResource());
-		}
+		}*/
 		if (OnRender) OnRender();
-		DXRenderer::Get()->End();
+		DXRenderer::Get()->End(nullptr);
 	});
 
 	bool run = false;

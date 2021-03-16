@@ -57,33 +57,41 @@ namespace UEngine
 			Detach();
 		}
 
-		void DXRenderer::Begin(const float clearRGBA[4])
+		void DXRenderer::Begin(ViewContext* context, const float clearRGBA[4])
 		{
 			textureCommands.ReleaseAndGetAddressOf();
 			textureContext->FinishCommandList(false, textureCommands.GetAddressOf());
 			immediate.DeviceContext->ExecuteCommandList(textureCommands.Get(), false);
 
-			immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
+			context->DeviceContext->ClearRenderTargetView(context->RenderTargetView.Get(), clearRGBA);
 
-			immediate.DeviceContext->RSSetViewports(1, &immediate.Viewport);
+			context->DeviceContext->RSSetViewports(1, &context->Viewport);
 
-			default_shader->Set(immediate.DeviceContext.Get());
-			default_renderMesh->Set(immediate.DeviceContext.Get());
-			default_colorBuffer->Set(immediate.DeviceContext.Get());
+			default_shader->Set(context->DeviceContext.Get());
+			default_renderMesh->Set(context->DeviceContext.Get());
+			default_colorBuffer->Set(context->DeviceContext.Get());
 
-			immediate.DeviceContext->OMSetRenderTargets(1, immediate.RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
+			context->DeviceContext->OMSetRenderTargets(1, context->RenderTargetView.GetAddressOf(), immediate.DepthStencilView.Get());
 		}
 
-		void DXRenderer::Draw(ID3D11ShaderResourceView** sceneTexture)
+		void DXRenderer::Draw(ViewContext* context, ID3D11ShaderResourceView** sceneTexture)
 		{
 			if (sceneTexture == nullptr) return;
-			immediate.DeviceContext->PSSetShaderResources(0, 1, sceneTexture);
-			default_renderMesh->Draw(immediate.DeviceContext.Get());
+			context->DeviceContext->PSSetShaderResources(0, 1, sceneTexture);
+			default_renderMesh->Draw(context->DeviceContext.Get());
+
+			if (true)
+			{
+
+			}
 		}
 
-		void DXRenderer::End()
+		void DXRenderer::End(DXView* view)
 		{
-			swapchain->Present(0, 0);
+			if (view != nullptr)
+				view->Execute(immediate.DeviceContext.Get());
+			else
+				swapchain->Present(0, 0);
 		}
 
 		void DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)

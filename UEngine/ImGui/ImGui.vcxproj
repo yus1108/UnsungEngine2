@@ -21,9 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4b4d66c9-796c-4bc1-84aa-543fb3786f12}</ProjectGuid>
-    <RootNamespace>UEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{bd3a1ecc-e8c6-4eec-97f7-c5044df5c166}</ProjectGuid>
+    <RootNamespace>ImGui</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -88,10 +88,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -107,10 +103,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -126,10 +118,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -145,10 +133,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>UEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>./;</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -159,67 +143,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DXRenderer\DXRenderer.vcxproj">
-      <Project>{9d244782-39df-490e-8068-eeb44ee826a2}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
-      <Project>{bd3a1ecc-e8c6-4eec-97f7-c5044df5c166}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Utility\Utility.vcxproj">
-      <Project>{1e6e9e7f-5741-42e3-8ba6-8de45e1cf4df}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\WinApplication\WinApplication.vcxproj">
-      <Project>{3225e7b8-ec78-42e5-aa5a-5fe133b5d2d8}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\XMLSerializer\XMLSerializer.vcxproj">
-      <Project>{cf149c06-a815-4a2f-9bee-2d6ca81463ae}</Project>
-    </ProjectReference>
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="ImGui.h" />
+    <ClInclude Include="ImGui\imconfig.h" />
+    <ClInclude Include="ImGui\imgui.h" />
+    <ClInclude Include="ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="ImGui\imgui_internal.h" />
+    <ClInclude Include="ImGui\imstb_rectpack.h" />
+    <ClInclude Include="ImGui\imstb_textedit.h" />
+    <ClInclude Include="ImGui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DebugRenderer\DebugRenderer.h" />
-    <ClInclude Include="Game Architecture\GameState.h" />
-    <ClInclude Include="Game Architecture\Object\Component\Camera.h" />
-    <ClInclude Include="Game Architecture\Object\Component\Component.h" />
-    <ClInclude Include="Game Architecture\Object\Component\EditorScript.h" />
-    <ClInclude Include="Game Architecture\Object\Component\Material.h" />
-    <ClInclude Include="Game Architecture\Object\Component\RenderComponent.h" />
-    <ClInclude Include="Game Architecture\Object\Component\Transform.h" />
-    <ClInclude Include="Game Architecture\Object\GameObject.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Component\CircleCollider.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Component\Collider.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Component\CollisionType.h" />
-    <ClInclude Include="Game Architecture\Physics2D\Component\RectCollider.h" />
-    <ClInclude Include="Game Architecture\Physics2D\SpatialPartition2D.h" />
-    <ClInclude Include="Game Architecture\Scene\GameScene.h" />
-    <ClInclude Include="Game Architecture\Scene\GameView.h" />
-    <ClInclude Include="Math\Math.h" />
-    <ClInclude Include="UEngine.h" />
-    <ClInclude Include="UEngineDefinitions.h" />
-    <ClInclude Include="XMLParser\XMLSceneParser.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DebugRenderer\DebugRenderer.cpp" />
-    <ClCompile Include="Game Architecture\GameState.cpp" />
-    <ClCompile Include="Game Architecture\Object\Component\Camera.cpp" />
-    <ClCompile Include="Game Architecture\Object\Component\EditorScript.cpp" />
-    <ClCompile Include="Game Architecture\Object\Component\Material.cpp" />
-    <ClCompile Include="Game Architecture\Object\Component\RenderComponent.cpp" />
-    <ClCompile Include="Game Architecture\Object\Component\Transform.cpp" />
-    <ClCompile Include="Game Architecture\Object\GameObject.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\Component\CircleCollider.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\Component\Collider.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\Component\RectCollider.cpp" />
-    <ClCompile Include="Game Architecture\Physics2D\SpatialPartition2D.cpp" />
-    <ClCompile Include="Game Architecture\Scene\GameScene.cpp" />
-    <ClCompile Include="Game Architecture\Scene\GameView.cpp" />
-    <ClCompile Include="Math\Math.cpp" />
-    <ClCompile Include="UEngine.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="XMLParser\XMLSceneParser.cpp" />
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="ImGui\imgui.cpp" />
+    <ClCompile Include="ImGui\imgui_demo.cpp" />
+    <ClCompile Include="ImGui\imgui_draw.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ImGui\imgui_tables.cpp" />
+    <ClCompile Include="ImGui\imgui_widgets.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

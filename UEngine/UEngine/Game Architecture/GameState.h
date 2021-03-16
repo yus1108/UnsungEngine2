@@ -23,10 +23,16 @@ namespace UEngine
 #pragma endregion
 
 	public:
+		Vector2 startWindowPos{ 0, 0 };
+		Vector2 windowSize{ 0, 0 };
+
+		static void Attach(GameState* state) { instance = state; }
+		static void Detach() { instance = nullptr; }
+
 		float FixedTimestep = 0.02f;
 		float MaxFixedTimestep = 0.1f;
 
-		static GameState* Get() { return instance; }
+		static GameState* Get() { if (instance == nullptr) instance = new GameState; return instance; }
 		static GameScene* GetCurrentScene() { return instance->currentScene; }
 		static void SetCurrentScene(std::string name);
 

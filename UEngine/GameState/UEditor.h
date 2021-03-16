@@ -10,9 +10,7 @@
 #include <tchar.h>
 #include <iostream>
 
-#include "ImGui\imgui.h"
-#include "ImGui\imgui_impl_win32.h"
-#include "ImGui\imgui_impl_dx11.h"
+#include "../ImGui/ImGui.h"
 
 //유니코드 사용
 #ifdef _UNICODE
@@ -24,7 +22,6 @@
 #endif
 
 #include "../UEngine/UEngine.h"
-#include "../WinApplication/WinConsole.h"
 #include "..//WinApplication/WinMemoryLeak.h"
 #include "../SingletonManager/SingletonManager.h"
 

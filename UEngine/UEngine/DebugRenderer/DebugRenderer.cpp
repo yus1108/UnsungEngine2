@@ -37,9 +37,9 @@ namespace UEngine
 		auto clientSize = WinApplication::Get()->GetClientPixelSize();
 		DXRenderer::Get()->InitRenderViewContext
 		(
-			&viewContext, 
-			clientSize.x, 
-			clientSize.y, 
+			&viewContext,
+			clientSize.x,
+			clientSize.y,
 			DXRenderer::Get()->GetDescription().EnableDepthStencil,
 			DXRenderer::Get()->GetDescription().MultisampleDesc
 		);
@@ -327,39 +327,39 @@ namespace UEngine
 	//	}
 	//}
 
-void DebugRenderer::Add_Axis(Matrix worldMatrix)
-{
-	for (size_t i = 1; i <= 6; i++)
-		if (vert_count + i == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
+	void DebugRenderer::Add_Axis(Matrix worldMatrix)
+	{
+		for (size_t i = 1; i <= 6; i++)
+			if (vert_count + i == MAX_VERTS) throw std::out_of_range("Cannot add more vertices!");
 
-	DebugRenderPoint center, right, up, front;
-	DirectX::XMVECTOR vCenter, vRight, vUp, vFront;
-	vCenter = worldMatrix.r[3];
-	vRight = DirectX::XMVectorAdd(vCenter, worldMatrix.r[0]);
-	vUp = DirectX::XMVectorAdd(vCenter, worldMatrix.r[1]);
-	vFront = DirectX::XMVectorAdd(vCenter, worldMatrix.r[2]);
+		DebugRenderPoint center, right, up, front;
+		DirectX::XMVECTOR vCenter, vRight, vUp, vFront;
+		vCenter = worldMatrix.r[3];
+		vRight = DirectX::XMVectorAdd(vCenter, worldMatrix.r[0]);
+		vUp = DirectX::XMVectorAdd(vCenter, worldMatrix.r[1]);
+		vFront = DirectX::XMVectorAdd(vCenter, worldMatrix.r[2]);
 
-	center.position = Vector3(vCenter);;
-	right.position = Vector3(vRight);;
-	up.position = Vector3(vUp);;
-	front.position = Vector3(vFront);;
+		center.position = Vector3(vCenter);;
+		right.position = Vector3(vRight);;
+		up.position = Vector3(vUp);;
+		front.position = Vector3(vFront);;
 
-	center.color = Color{ 1, 0, 0, 1 };
-	right.color = Color{ 1, 0, 0, 1 };
-	up.color = Color{ 0, 1, 0, 1 };
-	front.color = Color{ 0, 0, 1, 1 };
-	cpu_side_buffer[vert_count++] = center;
-	cpu_side_buffer[vert_count++] = right;
-	center.color = Color{ 0, 1, 0, 1 };
-	cpu_side_buffer[vert_count++] = center;
-	cpu_side_buffer[vert_count++] = up;
-	center.color = Color{ 0, 0, 1, 1 };
-	cpu_side_buffer[vert_count++] = center;
-	cpu_side_buffer[vert_count++] = front;
+		center.color = Color{ 1, 0, 0, 1 };
+		right.color = Color{ 1, 0, 0, 1 };
+		up.color = Color{ 0, 1, 0, 1 };
+		front.color = Color{ 0, 0, 1, 1 };
+		cpu_side_buffer[vert_count++] = center;
+		cpu_side_buffer[vert_count++] = right;
+		center.color = Color{ 0, 1, 0, 1 };
+		cpu_side_buffer[vert_count++] = center;
+		cpu_side_buffer[vert_count++] = up;
+		center.color = Color{ 0, 0, 1, 1 };
+		cpu_side_buffer[vert_count++] = center;
+		cpu_side_buffer[vert_count++] = front;
 
-}
+	}
 
-void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
+	void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 	{
 		if (vert_count == 0) return;
 		ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
@@ -380,33 +380,14 @@ void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 		viewContext->DeviceContext->OMSetDepthStencilState(viewContext->DepthStencilState.Get(), 1);
 		viewContext->DeviceContext->OMSetRenderTargets(1, viewContext->RenderTargetView.GetAddressOf(), viewContext->DepthStencilView.Get());
 		viewContext->DeviceContext->Draw(vert_count, 0);
+		viewContext->CommandList.ReleaseAndGetAddressOf();
 		viewContext->DeviceContext->FinishCommandList(true, viewContext->CommandList.GetAddressOf());
 	}
 
-ID3D11ShaderResourceView** DebugRenderer::GetAddressOfViewResource()
-{
-	if (vert_count == 0) return nullptr;
-	m_pImmediateContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
-	viewContext->CommandList.ReleaseAndGetAddressOf();
-
-	m_pImmediateContext->ResolveSubresource
-	(
-		(ID3D11Resource*)viewContext->OutputTexture2D.Get(),
-		D3D11CalcSubresource(0, 0, 1),
-		(ID3D11Resource*)viewContext->RenderTargetViewTexture2D.Get(),
-		D3D11CalcSubresource(0, 0, 1),
-		DXGI_FORMAT_R32G32B32A32_FLOAT
-	);
-
-	vert_count = 0;
-	return viewContext->OutputShaderResourceView.GetAddressOf();
-}
-
-ID3D11ShaderResourceView* DebugRenderer::GetViewResource()
+	void DebugRenderer::Render()
 	{
-		if (vert_count == 0) return nullptr;
+		if (viewContext->CommandList == nullptr) return;
 		m_pImmediateContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
-		viewContext->CommandList.ReleaseAndGetAddressOf();
 
 		m_pImmediateContext->ResolveSubresource
 		(
@@ -418,8 +399,15 @@ ID3D11ShaderResourceView* DebugRenderer::GetViewResource()
 		);
 
 		vert_count = 0;
-		return viewContext->OutputShaderResourceView.Get();
 	}
 
+	ID3D11ShaderResourceView** DebugRenderer::GetAddressOfViewResource()
+	{
+		return viewContext->OutputShaderResourceView.GetAddressOf();
+	}
 
+	ID3D11ShaderResourceView* DebugRenderer::GetViewResource()
+	{
+		return viewContext->OutputShaderResourceView.Get();
+	}
 }

@@ -16,6 +16,11 @@ namespace UEngine
 			this->x = x;
 			this->y = y;
 		}
+		Vector2(const POINT& point)
+		{
+			x = static_cast<float>(point.x);
+			y = static_cast<float>(point.y);
+		}
 		Vector2(const Utility::Coordinate2D& coord2d)
 		{
 			x = coord2d.x;

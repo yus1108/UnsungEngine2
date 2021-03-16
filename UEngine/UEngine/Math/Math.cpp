@@ -492,16 +492,20 @@ const UEngine::Vector2 UEngine::Math::GetMousePosToWorld()
 {
 	using namespace DirectX;
 	// mouse ndc position to world position = mousePos * Projection^-1 * View^-1
-	auto mousePos = Utility::UMath::ConvertPixelToNDC(WinInput::Get()->GetMousePos(), WinApplication::Get()->GetHandler());
+	RECT windowSize;
+	windowSize.left = GameState::Get()->startWindowPos.x;
+	windowSize.right = GameState::Get()->windowSize.x;
+	windowSize.top = GameState::Get()->startWindowPos.y;
+	windowSize.bottom = GameState::Get()->windowSize.y;
+	auto mousePos = Utility::UMath::ConvertPixelToNDC(WinInput::Get()->GetMousePos(), windowSize);
 	
 	auto cpu_camera = Camera::GetMainCamera()->GetCameraMatrix();
-	Vector3 vMousePos = mousePos;
+	Vector2 vMousePos = mousePos;
 	auto pDet = XMMatrixDeterminant(cpu_camera.projection);
 	auto vDet = XMMatrixDeterminant(cpu_camera.view);
 	vMousePos = vMousePos * XMMatrixInverse(&pDet, cpu_camera.projection);
 	vMousePos = vMousePos * XMMatrixInverse(&vDet, cpu_camera.view);
-	vMousePos.z = 0;
-	return Vector3(vMousePos);
+	return vMousePos;
 }
 
 const float UEngine::Math::Clamp(float value, float min, float max)

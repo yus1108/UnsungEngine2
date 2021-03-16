@@ -44,11 +44,13 @@
             </Component>
         </RenderComponent>
         <Script>
-            <Component enabled="1" />
+            <Component enabled="1">
+                <BOOL isSelected="0" />
+            </Component>
         </Script>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="2" y="0.5" z="0" />
+                <Vector3 name="localPosition" x="-0.983134" y="-5.45168" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>

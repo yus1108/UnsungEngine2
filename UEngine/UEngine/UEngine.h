@@ -11,6 +11,7 @@
 #include "../Utility/UThreadPool.h"
 #include "../WinApplication/uengine_winapp.h"
 #include "../DXRenderer/dxrframework.h"
+#include "../ImGui/ImGui.h"
 
 #include "../XMLSerializer/stdafx.h"
 

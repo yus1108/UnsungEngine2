@@ -41,9 +41,9 @@ namespace UEngine
 			class DXResourceManager* const ResourceManager;
 
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
-			void Begin(const float clearRGBA[4] = DirectX::Colors::Transparent);
-			void Draw(ID3D11ShaderResourceView** sceneTexture);
-			void End();
+			void Begin(ViewContext* context, const float clearRGBA[4] = DirectX::Colors::Transparent);
+			void Draw(ViewContext* context, ID3D11ShaderResourceView** sceneTexture);
+			void End(class DXView* view);
 
 			void ResizeMainRenderTarget(UINT width, UINT height);
 
@@ -52,6 +52,7 @@ namespace UEngine
 			ID3D11Device* const GetDevice() { return device.Get(); }
 			ID3D11DeviceContext* const GetImmediateDeviceContext() { return immediate.DeviceContext.Get(); }
 			ID3D11DeviceContext* const GetTextureLoadDeviceContext() { return textureContext.Get(); }
+			ViewContext* const GetContext() { return &immediate; }
 
 			void InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer);
 

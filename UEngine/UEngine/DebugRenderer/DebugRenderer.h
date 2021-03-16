@@ -40,6 +40,7 @@ namespace UEngine
 		void Add_UI_AABB(AABB aabb, DirectX::XMFLOAT4 color);*/
 		void Add_Axis(Matrix worldMatrix);
 		void Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer);
+		void Render();
 
 		ID3D11ShaderResourceView** GetAddressOfViewResource();
 		ID3D11ShaderResourceView* GetViewResource();

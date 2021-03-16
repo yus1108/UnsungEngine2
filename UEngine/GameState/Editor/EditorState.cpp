@@ -1,6 +1,10 @@
 #include "UEditor.h"
 #include "EditorState.h"
 
+#define IMGUI_TITLEBAR_PADDING_Y 27
+#define IMGUI_RIGHT_PADDING_X 4
+#define IMGUI_BORDER_PADDING 8
+
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int height)
@@ -58,12 +62,9 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(app->GetHandler());
@@ -78,7 +79,6 @@ UEngine::UEditor::EditorState::~EditorState()
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
-    GameState::Release();
     UEngine::SingletonManager::Release();
 }
 
@@ -135,18 +135,21 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+
     auto returnedValue = app->UpdateLoop([&]()
     {
         if (targetHz > 0) UEngine::Utility::UTime::Get()->Throttle(targetHz);
-        auto state = GameState::Get();
-        if (state == nullptr)
+        
+        if (SingletonManager::State == nullptr)
         {
+            SingletonManager::State = GameState::Get();
             Load();
             return;
         }
         if (GameState::IsTerminate())
         {
             GameState::Release();
+            SingletonManager::State = nullptr;
             return;
         }
         GameState::Update([&]() 
@@ -154,9 +157,6 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             if (WinInput::Get()->GetKeyDown('1'))
             {
                 GameState::GetCurrentScene()->SaveScene();
-            }
-            if (WinInput::Get()->GetKeyDown('2'))
-            {
                 return true;
             }
             return false;
@@ -166,14 +166,13 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
-
             ImGui::ShowDemoWindow(&show_demo_window);
 
             // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
             {
                 static float f = 0.0f;
                 static int counter = 0;
-
+                
                 ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
                 ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
@@ -202,11 +201,18 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                 ImGui::End();
             }
 
-            ImGui::Begin("Game Scene");
+            ImGui::Begin((std::string("Scene: ") + GameState::GetCurrentScene()->name).c_str());
+            ImVec2 pos = ImGui::GetWindowPos();
+            SingletonManager::State->startWindowPos.x = pos.x + IMGUI_BORDER_PADDING;
+            SingletonManager::State->startWindowPos.y = pos.y + IMGUI_TITLEBAR_PADDING_Y;
             ImVec2 size = ImGui::GetWindowSize();
-            size.y -= 35;
+            SingletonManager::State->windowSize.x = size.x - IMGUI_BORDER_PADDING - IMGUI_RIGHT_PADDING_X;
+            SingletonManager::State->windowSize.y = size.y - IMGUI_TITLEBAR_PADDING_Y - IMGUI_BORDER_PADDING;
+            size.y -= IMGUI_TITLEBAR_PADDING_Y + IMGUI_BORDER_PADDING;
             ImGui::Image(GameState::GetCurrentScene()->MainView->view->GetViewResource(), size);
             ImGui::End();
+
+            Console::Render();
 
             // Rendering
             ImGui::Render();
@@ -231,6 +237,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SIZE:
     {
         if (UEngine::SingletonManager::App == nullptr) return 0;
+        UEngine::GameState::Get()->windowSize = UEngine::WinApplication::Get()->GetClientPixelSize();
         UEngine::DXRenderer::Get()->ResizeMainRenderTarget((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
     }
         return 0;
