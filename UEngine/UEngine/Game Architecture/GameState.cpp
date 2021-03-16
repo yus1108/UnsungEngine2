@@ -61,14 +61,15 @@ void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<vo
 	{
 		instance->currentScene->Render(DXRenderer::Get()->GetImmediateDeviceContext());
 		
-		/*if (instance->drawOnBackBuffer)
-		{
-			DXRenderer::Get()->Draw(instance->currentScene->MainView->view->GetAddressOfViewResource());
-			if (instance->currentScene->IsDebugMode() && instance->currentScene->debugRenderer)
-				DXRenderer::Get()->Draw(instance->currentScene->debugRenderer->GetAddressOfViewResource());
-		}*/
-
 		DXRenderer::Get()->Begin(DXRenderer::Get()->GetContext());
+
+		if (instance->drawOnBackBuffer)
+		{
+			DXRenderer::Get()->Draw(DXRenderer::Get()->GetContext(), instance->currentScene->MainView->view->GetAddressOfViewResource());
+			if (instance->currentScene->IsDebugMode() && instance->currentScene->debugRenderer)
+				DXRenderer::Get()->Draw(DXRenderer::Get()->GetContext(), instance->currentScene->debugRenderer->GetAddressOfViewResource());
+		}
+
 		if (OnRender) OnRender();
 		DXRenderer::Get()->End(nullptr);
 	});

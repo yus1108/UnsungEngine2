@@ -331,7 +331,7 @@ namespace UEngine
 
 				for (auto resource : list)
 				{
-					if (resources[resourceType].size() == 0 &&
+					if (resources[resourceType].size() == 0 ||
 						resources[resourceType].find(resource.first) == resources[resourceType].end())
 						throw std::runtime_error("A resource with the given name doesn't exists");
 

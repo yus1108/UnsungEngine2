@@ -76,7 +76,7 @@ namespace UEngine
 				deletionQueue[typeName].find(name) != deletionQueue[typeName].end())
 				throw std::runtime_error("A resource with the given name already queued");
 
-			if (resources[typeName].size() == 0 &&
+			if (resources[typeName].size() == 0 ||
 				resources[typeName].find(name) == resources[typeName].end())
 				throw std::runtime_error("A resource with the given name doesn't exists");
 
@@ -96,7 +96,7 @@ namespace UEngine
 				typeName != TYPE_CONSTANT_BUFFER)
 				throw std::runtime_error("A resource with the given type doesn't exists");
 
-			if (resources[typeName].size() == 0 &&
+			if (resources[typeName].size() == 0 ||
 				resources[typeName].find(name) == resources[typeName].end())
 				return nullptr;
 			return static_cast<T*>(resources[typeName][name]);

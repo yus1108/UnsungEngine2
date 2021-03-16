@@ -52,6 +52,7 @@ void Scene::Load()
                 1
             };
             background->GetComponent<Background>()->speed = 0.5f;
+            currentScene->ResourceManager.ApplyChange();
 
             for (size_t i = 0; i < 13; i++)
             {
@@ -74,7 +75,9 @@ void Scene::Load()
                     8.0f / 12.0f,
                     1.0f - 1.0f / 3.0f
                 };
+                currentScene->ResourceManager.ApplyChange();
             }
+
 
             auto player = GameObject::Instantiate(currentScene, "player");
             player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
@@ -94,6 +97,7 @@ void Scene::Load()
                 1.0f / 6.0f,
                 1
             };
+            currentScene->ResourceManager.ApplyChange();
         }
 
         GameState::Init(currentScene);
