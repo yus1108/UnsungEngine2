@@ -229,7 +229,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_SIZE:
+    {
+        if (UEngine::SingletonManager::App == nullptr) return 0;
         UEngine::DXRenderer::Get()->ResizeMainRenderTarget((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+    }
         return 0;
     case WM_SYSCOMMAND:
         if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu

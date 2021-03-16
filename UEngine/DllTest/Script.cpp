@@ -5,7 +5,6 @@
 void Script::Update()
 {
     float deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
-    std::cout << UEngine::Utility::UTime::Get()->DeltaTimeF() << std::endl;
     if (UEngine::WinInput::Get()->GetKey('W'))
     {
         GetTransform()->localPosition.value.y += 2 * deltatime;

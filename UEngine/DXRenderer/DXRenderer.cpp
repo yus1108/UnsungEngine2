@@ -59,9 +59,9 @@ namespace UEngine
 
 		void DXRenderer::Begin(const float clearRGBA[4])
 		{
+			textureCommands.ReleaseAndGetAddressOf();
 			textureContext->FinishCommandList(false, textureCommands.GetAddressOf());
 			immediate.DeviceContext->ExecuteCommandList(textureCommands.Get(), false);
-			textureCommands.ReleaseAndGetAddressOf();
 
 			immediate.DeviceContext->ClearRenderTargetView(immediate.RenderTargetView.Get(), clearRGBA);
 

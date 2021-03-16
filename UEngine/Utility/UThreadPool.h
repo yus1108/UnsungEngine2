@@ -50,7 +50,6 @@ namespace UEngine
 				unsigned count{ 0 };
 
 			public:
-
 				void AddSyncTask(std::function<void()> task);
 				void Join();
 			};
