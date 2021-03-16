@@ -36,8 +36,9 @@
         <Material>
             <Component enabled="1">
                 <STRING fileName="./Assets/Start.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                 <COLOR name="color" r="1" g="1" b="1" a="1" />
-                <UV name="uv" maxX="1" maxY="1" minX="0" minY="0" />
+                <UV name="uv" maxX="0" maxY="1" minX="0" minY="0" />
             </Component>
         </Material>
         <RenderComponent>
@@ -66,6 +67,7 @@
         <Material>
             <Component enabled="1">
                 <STRING fileName="./Assets/LeftRight.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                 <COLOR name="color" r="1" g="1" b="1" a="1" />
                 <UV name="uv" maxX="0" maxY="1" minX="0" minY="0" />
             </Component>

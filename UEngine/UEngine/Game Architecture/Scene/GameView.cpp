@@ -11,7 +11,9 @@ void UEngine::GameView::Render(bool isDebugMode, bool isMainView)
 		for (auto cbufferMap : renderObject.constantBuffers)
 			cbufferMap.second->Set(view->GetDeviceContext());
 		for (auto textureMap : renderObject.textures)
-			textureMap.second->Set(view->GetDeviceContext());
+			textureMap.second->Set(view->GetDeviceContext(), textureMap.first);
+		for (auto samplerMap : renderObject.samplerState)
+			samplerMap.second->Set(view->GetDeviceContext(), samplerMap.first);
 		renderObject.shader->Set(view->GetDeviceContext());
 		renderObject.renderMesh->Set(view->GetDeviceContext());
 		renderObject.renderMesh->Draw(view->GetDeviceContext());

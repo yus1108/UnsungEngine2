@@ -31,6 +31,7 @@ namespace UEngine
 		{
 			DXResourceManager::TYPE_VIEW = typeid(UEngine::DXRenderer::DXView).raw_name();
 			DXResourceManager::TYPE_TEXTURE = typeid(UEngine::DXRenderer::DXTexture).raw_name();
+			DXResourceManager::TYPE_SAMPLER_STATE = typeid(UEngine::DXRenderer::DXSamplerState).raw_name();
 			DXResourceManager::TYPE_SHADER = typeid(UEngine::DXRenderer::DXShader).raw_name();
 			DXResourceManager::TYPE_RENDERMESH = typeid(UEngine::DXRenderer::DXRenderMesh).raw_name();
 			DXResourceManager::TYPE_CONSTANT_BUFFER = typeid(UEngine::DXRenderer::DXConstantBuffer).raw_name();
@@ -53,6 +54,8 @@ namespace UEngine
 						DXView::Release(static_cast<DXView*>(resource.second));
 					if (resourceType == TYPE_TEXTURE)
 						DXTexture::Release(static_cast<DXTexture*>(resource.second));
+					if (resourceType == TYPE_SAMPLER_STATE)
+						DXSamplerState::Release(static_cast<DXSamplerState*>(resource.second));
 					if (resourceType == TYPE_SHADER)
 						DXShader::Release(static_cast<DXShader*>(resource.second));
 					if (resourceType == TYPE_RENDERMESH)
@@ -335,6 +338,8 @@ namespace UEngine
 						DXView::Release(static_cast<DXView*>(resource.second));
 					if (resourceType == TYPE_TEXTURE)
 						DXTexture::Release(static_cast<DXTexture*>(resource.second));
+					if (resourceType == TYPE_SAMPLER_STATE)
+						DXSamplerState::Release(static_cast<DXSamplerState*>(resource.second));
 					if (resourceType == TYPE_SHADER)
 						DXShader::Release(static_cast<DXShader*>(resource.second));
 					if (resourceType == TYPE_RENDERMESH)

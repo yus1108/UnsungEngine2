@@ -17,6 +17,7 @@ namespace UEngine
 		public:
 			std::string TYPE_VIEW = typeid(UEngine::DXRenderer::DXView).raw_name();
 			std::string TYPE_TEXTURE = typeid(UEngine::DXRenderer::DXTexture).raw_name();
+			std::string TYPE_SAMPLER_STATE = typeid(UEngine::DXRenderer::DXSamplerState).raw_name();
 			std::string TYPE_SHADER = typeid(UEngine::DXRenderer::DXShader).raw_name();
 			std::string TYPE_RENDERMESH = typeid(UEngine::DXRenderer::DXRenderMesh).raw_name();
 			std::string TYPE_CONSTANT_BUFFER = typeid(UEngine::DXRenderer::DXConstantBuffer).raw_name();
@@ -45,6 +46,7 @@ namespace UEngine
 
 			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXTexture>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXSamplerState>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXShader>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
@@ -64,6 +66,7 @@ namespace UEngine
 
 			if (!std::is_same<T, UEngine::DXRenderer::DXView>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXTexture>::value &&
+				!std::is_same<T, UEngine::DXRenderer::DXSamplerState>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXShader>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXRenderMesh>::value &&
 				!std::is_same<T, UEngine::DXRenderer::DXConstantBuffer>::value)
@@ -87,6 +90,7 @@ namespace UEngine
 
 			if (typeName != TYPE_VIEW &&
 				typeName != TYPE_TEXTURE &&
+				typeName != TYPE_SAMPLER_STATE &&
 				typeName != TYPE_SHADER &&
 				typeName != TYPE_RENDERMESH &&
 				typeName != TYPE_CONSTANT_BUFFER)
@@ -94,7 +98,7 @@ namespace UEngine
 
 			if (resources[typeName].size() == 0 &&
 				resources[typeName].find(name) == resources[typeName].end())
-				throw std::runtime_error("A resource with the given name doesn't exists");
+				return nullptr;
 
 			return static_cast<T*>(resources[typeName][name]);
 		}

@@ -170,6 +170,7 @@
     <ClInclude Include="DXRFramework.h" />
     <ClInclude Include="RenderComponents\DXConstantBuffer.h" />
     <ClInclude Include="RenderComponents\DXRenderMesh.h" />
+    <ClInclude Include="RenderComponents\DXSamplerState.h" />
     <ClInclude Include="RenderComponents\DXShader.h" />
     <ClInclude Include="RenderComponents\DXTexture.h" />
     <ClInclude Include="RenderComponents\DXView.h" />
@@ -187,6 +188,7 @@
     </ClCompile>
     <ClCompile Include="RenderComponents\DXConstantBuffer.cpp" />
     <ClCompile Include="RenderComponents\DXRenderMesh.cpp" />
+    <ClCompile Include="RenderComponents\DXSamplerState.cpp" />
     <ClCompile Include="RenderComponents\DXShader.cpp" />
     <ClCompile Include="RenderComponents\DXTexture.cpp" />
     <ClCompile Include="RenderComponents\DXView.cpp" />

@@ -96,5 +96,10 @@ void UEngine::RenderComponent::AddConstantBuffer(std::string type_raw_name, DXRe
 
 void UEngine::RenderComponent::AddImageTexture(DXRenderer::DXTexture* imageTexture)
 {
-	renderObject.textures["image"] = imageTexture;
+	renderObject.textures[0] = imageTexture;
+}
+
+void UEngine::RenderComponent::AddImageSampler(DXRenderer::DXSamplerState* imageSampler)
+{
+	renderObject.samplerState[0] = imageSampler;
 }

@@ -96,7 +96,7 @@ void UEngine::GameScene::Sync()
 
 	ResourceManager.ApplyChange();
 
-	if (isDebugMode && this == GameState::GetCurrentScene()) debugRenderer->Flush(MainView->cameraBuffer);
+	if (isDebugMode && this == GameState::GetCurrentScene() && MainView) debugRenderer->Flush(MainView->cameraBuffer);
 	for (auto obj : gameObjects)
 		obj->Initialize();
 }

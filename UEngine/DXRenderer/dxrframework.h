@@ -41,5 +41,6 @@
 #include "RenderComponents\DXConstantBuffer.h"
 #include "RenderComponents\DXView.h"
 #include "RenderComponents\DXTexture.h"
+#include "RenderComponents\DXSamplerState.h"
 
 #include "ResourceManager\DXResourceManager.h"

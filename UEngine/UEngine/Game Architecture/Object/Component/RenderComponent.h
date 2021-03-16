@@ -18,6 +18,7 @@ namespace UEngine
 		void LoadCircle(UINT slice = 360);
 		void AddConstantBuffer(std::string type_raw_name, DXRenderer::DXConstantBuffer* buffer);
 		void AddImageTexture(DXRenderer::DXTexture* imageTexture);
+		void AddImageSampler(DXRenderer::DXSamplerState* imageSampler);
 		const RenderObject* const GetRenderObject() { return &renderObject; }
 	};
 }

@@ -102,28 +102,28 @@ void UEngine::UEditor::EditorState::Load()
     // TODO: Place code here.
     {
         // basic load
-        //using namespace UEngine;
-        //GameScene* currentScene = new GameScene();
-        //currentScene->name = "tempScene";
-        //currentScene->Init(true);
-        //{
-        //    auto cameraObject = GameObject::Instantiate(currentScene, "camera");
-        //    auto camera = cameraObject->AddComponent<Camera>();
-        //    camera->viewWidth.value = 15;
-        //    camera->viewHeight.value = 30;
+        using namespace UEngine;
+      /*  GameScene* currentScene = new GameScene();
+        currentScene->name = "tempScene";
+        currentScene->Init(true);*/
+        {
+         /*   auto cameraObject = GameObject::Instantiate(currentScene, "camera");
+            auto camera = cameraObject->AddComponent<Camera>();
+            camera->viewWidth.value = 15;
+            camera->viewHeight.value = 30;
 
-        //    auto cameraObject2 = GameObject::Instantiate(currentScene, "camera");
-        //    auto camera2 = cameraObject2->AddComponent<Camera>();
-        //    cameraObject2->SetParent(cameraObject);
-        //    camera2->viewWidth.value = 15;
-        //    camera2->viewHeight.value = 30;
+            auto cameraObject2 = GameObject::Instantiate(currentScene, "camera");
+            auto camera2 = cameraObject2->AddComponent<Camera>();
+            cameraObject2->SetParent(cameraObject);
+            camera2->viewWidth.value = 15;
+            camera2->viewHeight.value = 30;
 
-        //    auto ball = GameObject::Instantiate(currentScene, "ball");
-        //    auto component = addscript(ball);
-        //    
-        //    ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
-        //    ball->AddComponent<Material>()->Load(L"./ÇÑ±Û.png");
-        //}
+            auto ball = GameObject::Instantiate(currentScene, "ball");
+            auto component = addscript(ball);
+            
+            ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
+            ball->AddComponent<Material>()->LoadImageMaterial(L"./picture.png");*/
+        }
         GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene");
 
 
