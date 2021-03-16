@@ -124,6 +124,9 @@ namespace UEngine
 				&rsDesc
 			);
 
+			rsDesc.EnableAntialisedLine = false;
+			rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
+			rsDesc.EnableMultisampling = false;
 			rsDesc.FillMode = D3D11_FILL_WIREFRAME;
 			// Create view layout
 			D3D11_INPUT_ELEMENT_DESC vLayout[] =

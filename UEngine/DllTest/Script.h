@@ -13,7 +13,7 @@ public:
 	};
 private:
 	UEngine::Physics2D::AABB aabb{ 0.5f, 0.5f, 0.5f, 0.5f };
-	SERIALIZED_BOOL(isSelected);
+	static Script* isSelected;
 public:
 	TRANSFORM_MODE transformMode = TRANSFORM_MODE::TRANSLATION;
 	void Update() override;

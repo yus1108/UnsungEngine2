@@ -219,13 +219,16 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                 ImGui::End();
             }
 
+            ImGui::SetNextWindowBgAlpha(1.0f);
             ImGui::Begin((std::string("Scene: ") + GameState::GetCurrentScene()->name).c_str());
             ImVec2 pos = ImGui::GetWindowPos();
             SingletonManager::State->startWindowPos.x = pos.x + IMGUI_BORDER_PADDING;
             SingletonManager::State->startWindowPos.y = pos.y + IMGUI_TITLEBAR_PADDING_Y;
+
             ImVec2 size = ImGui::GetWindowSize();
             SingletonManager::State->windowSize.x = size.x - IMGUI_BORDER_PADDING - IMGUI_RIGHT_PADDING_X;
             SingletonManager::State->windowSize.y = size.y - IMGUI_TITLEBAR_PADDING_Y - IMGUI_BORDER_PADDING;
+
             size.y -= IMGUI_TITLEBAR_PADDING_Y + IMGUI_BORDER_PADDING;
             ImGui::Image(GameState::GetCurrentScene()->MainView->view->GetViewResource(), size);
             ImGui::End();

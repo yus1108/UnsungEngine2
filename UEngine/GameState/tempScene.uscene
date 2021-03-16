@@ -48,9 +48,7 @@
             </Component>
         </RenderComponent>
         <Script>
-            <Component enabled="1">
-                <BOOL isSelected="0" />
-            </Component>
+            <Component enabled="1" />
         </Script>
         <Transform>
             <Component enabled="1">
@@ -79,9 +77,7 @@
             </Component>
         </RenderComponent>
         <Script>
-            <Component enabled="1">
-                <BOOL isSelected="0" />
-            </Component>
+            <Component enabled="1" />
         </Script>
         <Transform>
             <Component enabled="1">

@@ -2,6 +2,8 @@
 #include "Script.h"
 #include <iostream>
 
+Script* Script::isSelected = nullptr;
+
 void Script::Update()
 {
     float deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
@@ -26,13 +28,20 @@ void Script::Update()
     if (UEngine::SingletonManager::Input->GetKey(VK_LBUTTON))
     {
         if (UEngine::Physics2D::IsColliding(mousePos, aabb))
-            isSelected = true;
+            isSelected = this;
         else
-            isSelected = false;
+        {
+            if (isSelected != nullptr && isSelected != this)
+            {
+                if (!UEngine::Physics2D::IsColliding(mousePos, isSelected->aabb))
+                {
+                    isSelected = this;
+                }
+            }
+        }
     }
     
     Console::Clear();
-    Console::WriteLine(std::to_string(isSelected.value));
 }
 
 void Script::LateUpdate()
@@ -42,7 +51,7 @@ void Script::LateUpdate()
 
 void Script::OnPreRender()
 {
-    if (isSelected.value)
+    if (isSelected == this)
     {
         auto matrix = DirectX::XMMatrixMultiply(DirectX::XMMatrixScaling(100, 100, 1), GetTransform()->GetRTP());
         GetGameObject()->GetScene()->debugRenderer->Add_Axis(matrix);
