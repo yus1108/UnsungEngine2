@@ -7,6 +7,8 @@
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+bool resize = false;
+POINT size;
 UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int height)
 {
     // Window Application
@@ -135,8 +137,7 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-
-    auto returnedValue = app->UpdateLoop([&]()
+       auto returnedValue = app->UpdateLoop([&]()
     {
         if (targetHz > 0) UEngine::Utility::UTime::Get()->Throttle(targetHz);
         
@@ -151,6 +152,22 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             GameState::Release();
             SingletonManager::State = nullptr;
             return;
+        }
+        if (resize)
+        {
+            UEngine::GameState::Get()->windowSize = UEngine::WinApplication::Get()->GetClientPixelSize();
+            if (GameState::GetCurrentScene()->debugRenderer)
+            {
+                delete GameState::GetCurrentScene()->debugRenderer;
+            }
+            UEngine::DXRenderer::Get()->ResizeMainRenderTarget(size.x, size.y);
+            if (GameState::GetCurrentScene()->debugRenderer)
+            {
+                GameState::GetCurrentScene()->debugRenderer = new DebugRenderer();
+                GameState::GetCurrentScene()->debugRenderer->Init(DXRenderer::Get()->GetDevice(), DXRenderer::Get()->GetImmediateDeviceContext());
+            }
+           
+            resize = false;
         }
         if (SingletonManager::State->noUpdate) return;
         GameState::Update([&]() 
@@ -238,13 +255,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SIZE:
     {
         if (UEngine::SingletonManager::App == nullptr) return 0;
-        std::lock_guard<std::mutex> lock(UEngine::SingletonManager::State->noRenderMutex);
-        UEngine::SingletonManager::State->noUpdate = true;
-
-        UEngine::GameState::Get()->windowSize = UEngine::WinApplication::Get()->GetClientPixelSize();
-        UEngine::DXRenderer::Get()->ResizeMainRenderTarget((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
-
-        UEngine::SingletonManager::State->noUpdate = false;
+        resize = true;
+        size.x = (UINT)LOWORD(lParam);
+        size.y = (UINT)HIWORD(lParam);
     }
         return 0;
     case WM_SYSCOMMAND:
