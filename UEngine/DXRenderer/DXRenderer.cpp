@@ -57,13 +57,15 @@ namespace UEngine
 			Detach();
 		}
 
-		void DXRenderer::Begin(ViewContext* context, const float clearRGBA[4])
+		void DXRenderer::Begin(ViewContext* context, bool clear, const float clearRGBA[4])
 		{
-			textureCommands.ReleaseAndGetAddressOf();
-			textureContext->FinishCommandList(false, textureCommands.GetAddressOf());
-			immediate.DeviceContext->ExecuteCommandList(textureCommands.Get(), false);
-
-			context->DeviceContext->ClearRenderTargetView(context->RenderTargetView.Get(), clearRGBA);
+			if (context == &immediate)
+			{
+				textureCommands.ReleaseAndGetAddressOf();
+				textureContext->FinishCommandList(false, textureCommands.GetAddressOf());
+				immediate.DeviceContext->ExecuteCommandList(textureCommands.Get(), false);
+			}
+			if (clear) context->DeviceContext->ClearRenderTargetView(context->RenderTargetView.Get(), clearRGBA);
 
 			context->DeviceContext->RSSetViewports(1, &context->Viewport);
 
@@ -79,19 +81,11 @@ namespace UEngine
 			if (sceneTexture == nullptr) return;
 			context->DeviceContext->PSSetShaderResources(0, 1, sceneTexture);
 			default_renderMesh->Draw(context->DeviceContext.Get());
-
-			if (true)
-			{
-
-			}
 		}
 
 		void DXRenderer::End(DXView* view)
 		{
-			if (view != nullptr)
-				view->Execute(immediate.DeviceContext.Get());
-			else
-				swapchain->Present(0, 0);
+			if (view == nullptr) swapchain->Present(0, 0);
 		}
 
 		void DXRenderer::ResizeMainRenderTarget(UINT width, UINT height)

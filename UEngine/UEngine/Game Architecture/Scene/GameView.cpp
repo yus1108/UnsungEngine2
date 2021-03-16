@@ -1,7 +1,7 @@
 #include "UEngine.h"
 #include "GameView.h"
 
-void UEngine::GameView::Render()
+void UEngine::GameView::Render(bool isDebugMode, bool isMainView)
 {
 	if (!isRenderable) return;
 	view->Begin();
@@ -16,6 +16,16 @@ void UEngine::GameView::Render()
 		renderObject.renderMesh->Set(view->GetDeviceContext());
 		renderObject.renderMesh->Draw(view->GetDeviceContext());
 	}
+
+	if (isDebugMode && isMainView)
+	{
+		DXRenderer::Get()->Begin(view->GetContext(), false);
+		GameState::GetCurrentScene()->debugRenderer->Render(view->GetDeviceContext());
+		DXRenderer::Get()->Draw(view->GetContext(), GameState::GetCurrentScene()->debugRenderer->GetAddressOfViewResource());
+		DXRenderer::Get()->End(view);
+	}
+	
+
 	view->End();
 }
 

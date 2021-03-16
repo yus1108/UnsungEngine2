@@ -361,15 +361,19 @@ namespace UEngine
 
 	void DebugRenderer::Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer)
 	{
-		if (vert_count == 0) return;
+		// set texture info
+		viewContext->DeviceContext->ClearRenderTargetView(viewContext->RenderTargetView.Get(), DirectX::Colors::Transparent);
+		if (viewContext->DepthStencilView) viewContext->DeviceContext->ClearDepthStencilView(viewContext->DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+		if (vert_count == 0)
+		{
+			viewContext->CommandList.ReleaseAndGetAddressOf();
+			viewContext->DeviceContext->FinishCommandList(true, viewContext->CommandList.GetAddressOf());
+			return;
+		}
 		ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 		viewContext->DeviceContext->Map(gpu_side_buffer, 0, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
 		memcpy(mappedResource.pData, &cpu_side_buffer, sizeof(UEngine::DebugRenderPoint) * vert_count);
 		viewContext->DeviceContext->Unmap(gpu_side_buffer, 0);
-
-		// set texture info
-		viewContext->DeviceContext->ClearRenderTargetView(viewContext->RenderTargetView.Get(), DirectX::Colors::Transparent);
-		if (viewContext->DepthStencilView) viewContext->DeviceContext->ClearDepthStencilView(viewContext->DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 		shader->Set(viewContext->DeviceContext.Get());
 		mainCameraBuffer->Set(viewContext->DeviceContext.Get());
@@ -382,14 +386,16 @@ namespace UEngine
 		viewContext->DeviceContext->Draw(vert_count, 0);
 		viewContext->CommandList.ReleaseAndGetAddressOf();
 		viewContext->DeviceContext->FinishCommandList(true, viewContext->CommandList.GetAddressOf());
+
+		vert_count = 0;
 	}
 
-	void DebugRenderer::Render()
+	void DebugRenderer::Render(ID3D11DeviceContext* deviceContext)
 	{
 		if (viewContext->CommandList == nullptr) return;
-		m_pImmediateContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
+		deviceContext->ExecuteCommandList(viewContext->CommandList.Get(), true);
 
-		m_pImmediateContext->ResolveSubresource
+		deviceContext->ResolveSubresource
 		(
 			(ID3D11Resource*)viewContext->OutputTexture2D.Get(),
 			D3D11CalcSubresource(0, 0, 1),
@@ -397,8 +403,6 @@ namespace UEngine
 			D3D11CalcSubresource(0, 0, 1),
 			DXGI_FORMAT_R32G32B32A32_FLOAT
 		);
-
-		vert_count = 0;
 	}
 
 	ID3D11ShaderResourceView** DebugRenderer::GetAddressOfViewResource()

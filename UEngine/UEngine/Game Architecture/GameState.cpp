@@ -58,9 +58,6 @@ void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<vo
 
 	WinApplication::Get()->threadPool.AddSyncTask([&]()
 	{
-		DXRenderer::Get()->Begin(DXRenderer::Get()->GetContext());
-		if (instance->currentScene->IsDebugMode() && instance->currentScene->debugRenderer)
-			instance->currentScene->debugRenderer->Render();
 		instance->currentScene->Render(DXRenderer::Get()->GetImmediateDeviceContext());
 		
 		/*if (instance->drawOnBackBuffer)
@@ -69,6 +66,8 @@ void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<vo
 			if (instance->currentScene->IsDebugMode() && instance->currentScene->debugRenderer)
 				DXRenderer::Get()->Draw(instance->currentScene->debugRenderer->GetAddressOfViewResource());
 		}*/
+
+		DXRenderer::Get()->Begin(DXRenderer::Get()->GetContext());
 		if (OnRender) OnRender();
 		DXRenderer::Get()->End(nullptr);
 	});

@@ -42,5 +42,10 @@ void Script::LateUpdate()
 
 void Script::OnPreRender()
 {
-    GetGameObject()->GetScene()->debugRenderer->Add_Axis(GetTransform()->GetWorld());
+    if (isSelected.value)
+    {
+        auto matrix = DirectX::XMMatrixMultiply(DirectX::XMMatrixScaling(5, 10, 1), GetTransform()->GetRTP());
+        GetGameObject()->GetScene()->debugRenderer->Add_Axis(matrix);
+    }
+   
 }

@@ -26,6 +26,7 @@ namespace UEngine
 			static void Release(DXView* const view);
 			static void Release(DXView** const view);
 
+			ViewContext* const GetContext() { return &context; }
 			ID3D11DeviceContext* const GetDeviceContext() { return context.DeviceContext.Get(); }
 			ID3D11ShaderResourceView* const GetViewResource() { return context.OutputShaderResourceView.Get(); }
 			ID3D11ShaderResourceView** const GetAddressOfViewResource() { return context.OutputShaderResourceView.GetAddressOf(); }

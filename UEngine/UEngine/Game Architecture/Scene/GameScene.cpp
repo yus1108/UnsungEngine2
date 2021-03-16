@@ -55,24 +55,6 @@ void UEngine::GameScene::Update()
 
 void UEngine::GameScene::Render(ID3D11DeviceContext* deviceContext)
 {
-	if (isDebugMode)
-	{
-		WinApplication::Get()->threadPool.AddTask([&]()
-		{
-			std::unique_lock<std::mutex> lock(renderMutex);
-			renderSyncCount++;
-			lock.unlock();
-
-			if (isDebugMode) debugRenderer->Flush(MainView->cameraBuffer);
-
-			lock.lock();
-			int count = --renderSyncCount;
-			lock.unlock();
-
-			if (count == 0) renderCondition.notify_one();
-		});
-	}
-
 	for (auto view : gpu_view)
 	{
 		WinApplication::Get()->threadPool.AddTask([&, view]()
@@ -82,7 +64,7 @@ void UEngine::GameScene::Render(ID3D11DeviceContext* deviceContext)
 			lock.unlock();
 
 			auto copeidView = view;
-			copeidView.Render();
+			copeidView.Render(isDebugMode, view.IsMain);
 
 			lock.lock();
 			int count = --renderSyncCount;
@@ -114,6 +96,7 @@ void UEngine::GameScene::Sync()
 
 	ResourceManager.ApplyChange();
 
+	if (isDebugMode && this == GameState::GetCurrentScene()) debugRenderer->Flush(MainView->cameraBuffer);
 	for (auto obj : gameObjects)
 		obj->Initialize();
 }

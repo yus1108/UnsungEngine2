@@ -41,7 +41,7 @@ namespace UEngine
 			class DXResourceManager* const ResourceManager;
 
 			void Init(HWND outputWindow, const RENDERER_DESC* desc = nullptr);
-			void Begin(ViewContext* context, const float clearRGBA[4] = DirectX::Colors::Transparent);
+			void Begin(ViewContext* context, bool clear = true, const float clearRGBA[4] = DirectX::Colors::Transparent);
 			void Draw(ViewContext* context, ID3D11ShaderResourceView** sceneTexture);
 			void End(class DXView* view);
 
