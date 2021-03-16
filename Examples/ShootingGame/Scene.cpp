@@ -38,7 +38,7 @@ void Scene::Load()
 
             auto background = GameObject::Instantiate(currentScene, "background");
             background->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-            background->AddComponent<Material>()->Load(L"./Assets/desert-backgorund.png", D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_MIN_MAG_MIP_LINEAR);
+            background->AddComponent<Material>()->LoadImageMaterial(L"./Assets/desert-backgorund.png", D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_MIN_MAG_MIP_LINEAR);
             background->AddComponent<Background>();
             background->GetTransform()->scale.value = Vector2{
                 static_cast<float>(screenSize.x),
@@ -52,10 +52,11 @@ void Scene::Load()
                 1
             };
             background->GetComponent<Background>()->speed = 0.5f;
+            currentScene->ResourceManager.ApplyChange();
 
             auto player = GameObject::Instantiate(currentScene, "player");
             player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-            player->AddComponent<Material>()->Load(L"./Assets/ship.png");
+            player->AddComponent<Material>()->LoadImageMaterial(L"./Assets/ship.png");
             player->AddComponent<Player>();
             player->AddComponent<Physics2D::RectCollider>()->SetCollider(50, 50);
             player->GetTransform()->localPosition.value.y = -50;
@@ -70,6 +71,7 @@ void Scene::Load()
                 1,
                 1
             };
+            currentScene->ResourceManager.ApplyChange();
         }
 
         GameState::Init(currentScene);

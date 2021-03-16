@@ -45,7 +45,7 @@ void Scene::Load()
                 {
                     puzzle->pieces[i][j] = GameObject::Instantiate(currentScene, "pieces");
                     puzzle->pieces[i][j]->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-                    puzzle->pieces[i][j]->AddComponent<Material>()->Load(L"./Assets/island-5783440_1920.jpg");
+                    puzzle->pieces[i][j]->AddComponent<Material>()->LoadImageMaterial(L"./Assets/island-5783440_1920.jpg");
                     puzzle->pieces[i][j]->GetComponent<Material>()->uv = UV
                     {
                         1.0f / 3.0f * i,
@@ -65,6 +65,7 @@ void Scene::Load()
                             static_cast<float>(screenSize.x) / 3.0f - 10,
                             static_cast<float>(screenSize.y) / 3.0f - 10
                         );
+                    currentScene->ResourceManager.ApplyChange();
                 }
             }
         }

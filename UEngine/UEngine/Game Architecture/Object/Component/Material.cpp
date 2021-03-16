@@ -21,6 +21,7 @@ void UEngine::Material::Update()
 		renderComponent->AddConstantBuffer(typeid(Color).raw_name(), colorBuffer);
 		renderComponent->AddConstantBuffer(typeid(UV).raw_name(), spriteBuffer);
 		if (imageTexture) renderComponent->AddImageTexture(imageTexture);
+		if (imageSampler) renderComponent->AddImageSampler(imageSampler);
 	}
 }
 
@@ -88,14 +89,16 @@ void UEngine::Material::LoadImageMaterial(std::wstring fileName)
 	this->samplerName = DXRenderer::DXSamplerState::MakeName(samplerDesc);
 
 	auto scene = GetGameObject()->GetScene();
+
 	imageTexture = scene->ResourceManager.GetResource<DXRenderer::DXTexture>(this->fileName.value);
 	if (imageTexture == nullptr)
 	{
 		imageTexture = DXRenderer::DXTexture::Load(fileName);
 		GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXTexture>(this->fileName.value, imageTexture);
 	}
-	imageSampler = scene->ResourceManager.GetResource<DXRenderer::DXSamplerState>(this->fileName.value);
-	if (imageTexture == nullptr)
+
+	imageSampler = scene->ResourceManager.GetResource<DXRenderer::DXSamplerState>(this->samplerName.value);
+	if (imageSampler == nullptr)
 	{
 		imageSampler = DXRenderer::DXSamplerState::Load(samplerDesc);
 		GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXSamplerState>(samplerName.value, imageSampler);
@@ -124,13 +127,15 @@ void UEngine::Material::LoadImageMaterial(std::wstring fileName, D3D11_TEXTURE_A
 	this->samplerName = DXRenderer::DXSamplerState::MakeName(samplerDesc);
 
 	auto scene = GetGameObject()->GetScene();
+
 	if (imageTexture == nullptr)
 	{
 		imageTexture = DXRenderer::DXTexture::Load(fileName);
 		GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXTexture>(this->fileName.value, imageTexture);
 	}
-	imageSampler = scene->ResourceManager.GetResource<DXRenderer::DXSamplerState>(this->fileName.value);
-	if (imageTexture == nullptr)
+
+	imageSampler = scene->ResourceManager.GetResource<DXRenderer::DXSamplerState>(this->samplerName.value);
+	if (imageSampler == nullptr)
 	{
 		imageSampler = DXRenderer::DXSamplerState::Load(samplerDesc);
 		GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXSamplerState>(samplerName.value, imageSampler);
@@ -146,14 +151,16 @@ void UEngine::Material::LoadImageMaterial(std::wstring fileName, D3D11_SAMPLER_D
 	this->samplerName = DXRenderer::DXSamplerState::MakeName(desc);
 
 	auto scene = GetGameObject()->GetScene();
+
 	imageTexture = scene->ResourceManager.GetResource<DXRenderer::DXTexture>(this->fileName.value);
 	if (imageTexture == nullptr)
 	{
 		imageTexture = DXRenderer::DXTexture::Load(fileName);
 		GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXTexture>(this->fileName.value, imageTexture);
 	}
-	imageSampler = scene->ResourceManager.GetResource<DXRenderer::DXSamplerState>(this->fileName.value);
-	if (imageTexture == nullptr)
+
+	imageSampler = scene->ResourceManager.GetResource<DXRenderer::DXSamplerState>(this->samplerName.value);
+	if (imageSampler == nullptr)
 	{
 		imageSampler = DXRenderer::DXSamplerState::Load(desc);
 		GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXSamplerState>(samplerName.value, imageSampler);
