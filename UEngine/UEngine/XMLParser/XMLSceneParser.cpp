@@ -82,6 +82,20 @@ void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, TiXmlNode* goNode, UE
 	child->SetActive(isActive);
 	goNode->ToElement()->QueryBoolAttribute("isStatic", &child->IsStatic);
 	child->SetParent(parent);
+
+	{
+		auto subNode = goNode->FirstChild();
+		while (subNode)
+		{
+			std::string subName = subNode->ToElement()->Value();
+			if (subName == "GameObject")
+				LoadGameObject(goNode, subNode, child);
+			else
+				LoadComponent(subNode, child);
+
+			subNode = subNode->NextSibling();
+		}
+	}
 }
 
 void XMLSceneParser::LoadComponent(TiXmlNode* componentListNode, UEngine::GameObject* gameObject)

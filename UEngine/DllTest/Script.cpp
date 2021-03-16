@@ -5,22 +5,22 @@
 void Script::Update()
 {
     float deltatime = UEngine::Utility::UTime::Get()->DeltaTimeF();
-    if (UEngine::WinInput::Get()->GetKey('W'))
-    {
-        GetTransform()->localPosition.value.y += 2 * deltatime;
-    }
-    if (UEngine::WinInput::Get()->GetKey('A'))
-    {
-        GetTransform()->localPosition.value.x -= 2 * deltatime;
-    }
-    if (UEngine::WinInput::Get()->GetKey('S'))
-    {
-        GetTransform()->localPosition.value.y -= 2 * deltatime;
-    }
-    if (UEngine::WinInput::Get()->GetKey('D'))
-    {
-        GetTransform()->localPosition.value.x += 2 * deltatime;
-    }
+    //if (UEngine::WinInput::Get()->GetKey('W'))
+    //{
+    //    GetTransform()->localPosition.value.y += 2 * deltatime;
+    //}
+    //if (UEngine::WinInput::Get()->GetKey('A'))
+    //{
+    //    GetTransform()->localPosition.value.x -= 2 * deltatime;
+    //}
+    //if (UEngine::WinInput::Get()->GetKey('S'))
+    //{
+    //    GetTransform()->localPosition.value.y -= 2 * deltatime;
+    //}
+    //if (UEngine::WinInput::Get()->GetKey('D'))
+    //{
+    //    GetTransform()->localPosition.value.x += 2 * deltatime;
+    //}
 
     auto mousePos = UEngine::Math::GetMousePosToWorld();
     if (UEngine::SingletonManager::Input->GetKey(VK_LBUTTON))
@@ -44,7 +44,7 @@ void Script::OnPreRender()
 {
     if (isSelected.value)
     {
-        auto matrix = DirectX::XMMatrixMultiply(DirectX::XMMatrixScaling(5, 10, 1), GetTransform()->GetRTP());
+        auto matrix = DirectX::XMMatrixMultiply(DirectX::XMMatrixScaling(100, 100, 1), GetTransform()->GetRTP());
         GetGameObject()->GetScene()->debugRenderer->Add_Axis(matrix);
     }
    

@@ -51,6 +51,7 @@ void UEngine::GameState::AddScene(GameScene* scene, bool setCurrentScene)
 
 void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<void()> OnRender)
 {
+	std::lock_guard<std::mutex> lock(instance->noRenderMutex);
 	instance->deltaTime = Utility::UTime::Get()->DeltaTimeF();
 	instance->fixedUpdateTimer += instance->deltaTime;
 

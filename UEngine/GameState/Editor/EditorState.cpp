@@ -40,7 +40,7 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
         desc.WindowSize = { width, height };
         desc.Wcex = &Wcex;
 
-        app->Create(desc, 8);
+        app->Create(desc, 0);
     }
 
     screenSize = app->GetClientPixelSize();
@@ -152,6 +152,7 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             SingletonManager::State = nullptr;
             return;
         }
+        if (SingletonManager::State->noUpdate) return;
         GameState::Update([&]() 
         {
             if (WinInput::Get()->GetKeyDown('1'))
@@ -237,8 +238,13 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SIZE:
     {
         if (UEngine::SingletonManager::App == nullptr) return 0;
+        std::lock_guard<std::mutex> lock(UEngine::SingletonManager::State->noRenderMutex);
+        UEngine::SingletonManager::State->noUpdate = true;
+
         UEngine::GameState::Get()->windowSize = UEngine::WinApplication::Get()->GetClientPixelSize();
         UEngine::DXRenderer::Get()->ResizeMainRenderTarget((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+
+        UEngine::SingletonManager::State->noUpdate = false;
     }
         return 0;
     case WM_SYSCOMMAND:

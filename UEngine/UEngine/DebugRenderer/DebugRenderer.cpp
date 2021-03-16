@@ -367,7 +367,7 @@ namespace UEngine
 		if (vert_count == 0)
 		{
 			viewContext->CommandList.ReleaseAndGetAddressOf();
-			viewContext->DeviceContext->FinishCommandList(true, viewContext->CommandList.GetAddressOf());
+			//viewContext->DeviceContext->FinishCommandList(true, viewContext->CommandList.GetAddressOf());
 			return;
 		}
 		ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
