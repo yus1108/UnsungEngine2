@@ -109,6 +109,6 @@ void Player::Update()
 
 void Player::OnPreRender()
 {
-	GetGameObject()->GetScene()->partition2D.DebugRender(GetGameObject()->GetScene()->partition2D.head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-	GetGameObject()->GetScene()->partition2D.DebugRender(GetGameObject()->GetScene()->partition2D.head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 1, 0, 1 });
+	GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+	GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::RectCollider>(), Color{ 1, 1, 0, 1 });
 }

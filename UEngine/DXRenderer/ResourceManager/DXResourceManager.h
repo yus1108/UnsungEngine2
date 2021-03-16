@@ -99,7 +99,6 @@ namespace UEngine
 			if (resources[typeName].size() == 0 &&
 				resources[typeName].find(name) == resources[typeName].end())
 				return nullptr;
-
 			return static_cast<T*>(resources[typeName][name]);
 		}
 	}

@@ -38,7 +38,7 @@ void Scene::Load()
 
             auto background = GameObject::Instantiate(currentScene, "background");
             background->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-            background->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/background.png", D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_MIN_MAG_MIP_LINEAR);
+            background->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tiles and background_foreground/background.png", D3D11_TEXTURE_ADDRESS_WRAP, D3D11_FILTER_MIN_MAG_MIP_LINEAR);
             background->AddComponent<Background>();
             background->GetTransform()->scale.value = Vector2{
                 static_cast<float>(screenSize.x),
@@ -58,7 +58,7 @@ void Scene::Load()
                 int index = i;
                 auto tile = GameObject::Instantiate(currentScene, "tile");
                 tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-                tile->AddComponent<Material>()->Load(L"./Assets/tiles and background_foreground/tileset.png");
+                tile->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tiles and background_foreground/tileset.png");
                 auto tileScript = tile->AddComponent<Tile>();
                 tile->AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
                 tileScript->fixedPosition.x = -550 + index * 100;
@@ -78,7 +78,7 @@ void Scene::Load()
 
             auto player = GameObject::Instantiate(currentScene, "player");
             player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-            player->AddComponent<Material>()->Load(L"./Assets/herochar sprites(new)/herochar_run_anim_strip_6.png");
+            player->AddComponent<Material>()->LoadImageMaterial(L"./Assets/herochar sprites(new)/herochar_run_anim_strip_6.png");
             player->AddComponent<Player>();
             player->AddComponent<Physics2D::RectCollider>()->SetCollider(50, 50);
             player->GetTransform()->localPosition.value.x = -450;
