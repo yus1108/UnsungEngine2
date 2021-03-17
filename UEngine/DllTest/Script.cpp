@@ -42,12 +42,28 @@ void Script::Update()
                 }
             }
         }
+        if (isSelected == this)
+        {
+            isMoving = true;
+        }
+
     }
-    Console::Clear();
-    Console::WriteLine(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
+    else
+    {
+        isMoving = false;
+    }
+
     if (isSelected == this)
     {
+        Console::Clear();
+        Console::WriteLine(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
         Console::WriteLine("colliding");
+        Console::WriteLine(isMoving ? "true" : "false");
+    }
+    else if (isSelected == nullptr)
+    {
+        Console::Clear();
+        Console::WriteLine(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
     }
 }
 

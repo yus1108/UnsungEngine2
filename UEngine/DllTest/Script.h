@@ -12,6 +12,7 @@ public:
 		NONE
 	};
 private:
+	bool isMoving{ false };
 	UEngine::Physics2D::AABB aabb{ 0.5f, 0.5f, 0.5f, 0.5f };
 	static Script* isSelected;
 public:
