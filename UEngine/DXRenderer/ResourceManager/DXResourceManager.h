@@ -98,7 +98,19 @@ namespace UEngine
 
 			if (resources[typeName].size() == 0 ||
 				resources[typeName].find(name) == resources[typeName].end())
+			{
+				if (creationQueue[typeName].size() > 0 &&
+					creationQueue[typeName].find(name) != creationQueue[typeName].end())
+				{
+					return static_cast<T*>(creationQueue[typeName][name]);
+				}
 				return nullptr;
+			}
+			else if (deletionQueue[typeName].size() > 0 &&
+				deletionQueue[typeName].find(name) != deletionQueue[typeName].end())
+			{
+				return nullptr;
+			}
 			return static_cast<T*>(resources[typeName][name]);
 		}
 	}

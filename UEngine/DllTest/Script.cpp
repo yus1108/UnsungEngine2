@@ -24,24 +24,31 @@ void Script::Update()
     //    GetTransform()->localPosition.value.x += 2 * deltatime;
     //}
 
+    
     auto mousePos = UEngine::Math::GetMousePosToWorld();
     if (UEngine::SingletonManager::Input->GetKey(VK_LBUTTON))
     {
         if (UEngine::Physics2D::IsColliding(mousePos, aabb))
+        {
             isSelected = this;
+        }
         else
         {
-            if (isSelected != nullptr && isSelected != this)
+            if (isSelected != nullptr)
             {
                 if (!UEngine::Physics2D::IsColliding(mousePos, isSelected->aabb))
                 {
-                    isSelected = this;
+                    isSelected = nullptr;
                 }
             }
         }
     }
-    
     Console::Clear();
+    Console::WriteLine(std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
+    if (isSelected == this)
+    {
+        Console::WriteLine("colliding");
+    }
 }
 
 void Script::LateUpdate()

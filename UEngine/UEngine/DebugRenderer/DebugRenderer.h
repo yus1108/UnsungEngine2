@@ -35,9 +35,6 @@ namespace UEngine
 		void Add_Triangle(UEngine::Math::Physics2D::TriangleCoords triangle, UEngine::Color color);
 		void Add_Rectangle(UEngine::Math::Physics2D::AABB aabb, UEngine::Color color);
 		void Add_Circle(UEngine::Math::Physics2D::CircleCoord circle, UEngine::Color color);
-		/*void Add_OOBB(OOBB * oobb, DirectX::XMFLOAT4 color);
-		void Add_Frustum(Frustum frustum, DirectX::XMFLOAT4 color);
-		void Add_UI_AABB(AABB aabb, DirectX::XMFLOAT4 color);*/
 		void Add_Axis(Matrix worldMatrix);
 		void Flush(DXRenderer::DXConstantBuffer* mainCameraBuffer);
 		void Render(ID3D11DeviceContext* deviceContext);

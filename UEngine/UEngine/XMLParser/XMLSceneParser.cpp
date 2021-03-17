@@ -63,10 +63,11 @@ void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, UEngine::GameScene* g
 				else
 					LoadComponent(subNode, gameObject);
 
+				gameScene->ResourceManager.ApplyChange();
 				subNode = subNode->NextSibling();
 			}
 		}
-
+		gameScene->ResourceManager.ApplyChange();
 
 		goNode = goNode->NextSibling();
 	}
@@ -93,6 +94,7 @@ void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, TiXmlNode* goNode, UE
 			else
 				LoadComponent(subNode, child);
 
+			parent->GetScene()->ResourceManager.ApplyChange();
 			subNode = subNode->NextSibling();
 		}
 	}

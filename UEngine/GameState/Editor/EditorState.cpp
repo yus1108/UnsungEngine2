@@ -1,9 +1,9 @@
 #include "UEditor.h"
 #include "EditorState.h"
 
+#define IMGUI_BORDER_PADDING 8
 #define IMGUI_TITLEBAR_PADDING_Y 27
 #define IMGUI_RIGHT_PADDING_X 4
-#define IMGUI_BORDER_PADDING 8
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -220,17 +220,28 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             }
 
             ImGui::SetNextWindowBgAlpha(1.0f);
+
             ImGui::Begin((std::string("Scene: ") + GameState::GetCurrentScene()->name).c_str());
+            ImGui::BeginGroup(); // Lock X position
             ImVec2 pos = ImGui::GetWindowPos();
             SingletonManager::State->startWindowPos.x = pos.x + IMGUI_BORDER_PADDING;
             SingletonManager::State->startWindowPos.y = pos.y + IMGUI_TITLEBAR_PADDING_Y;
 
             ImVec2 size = ImGui::GetWindowSize();
-            SingletonManager::State->windowSize.x = size.x - IMGUI_BORDER_PADDING - IMGUI_RIGHT_PADDING_X;
-            SingletonManager::State->windowSize.y = size.y - IMGUI_TITLEBAR_PADDING_Y - IMGUI_BORDER_PADDING;
+            size.x = size.x - IMGUI_BORDER_PADDING - IMGUI_BORDER_PADDING;
+            size.y = size.y - IMGUI_TITLEBAR_PADDING_Y - IMGUI_BORDER_PADDING * 2.0f;
+            SingletonManager::State->windowSize.x = size.x;
+            SingletonManager::State->windowSize.y = size.y;
 
-            size.y -= IMGUI_TITLEBAR_PADDING_Y + IMGUI_BORDER_PADDING;
-            ImGui::Image(GameState::GetCurrentScene()->MainView->view->GetViewResource(), size);
+            ImGui::InvisibleButton("##empty", size);
+            const ImVec2 p0 = ImGui::GetItemRectMin();
+            const ImVec2 p1 = ImGui::GetItemRectMax();
+            SingletonManager::State->windowSize.x = p1.x - p0.x;
+            SingletonManager::State->windowSize.y = p1.y - p0.y;
+            ImDrawList* draw_list = ImGui::GetWindowDrawList();
+            draw_list->AddRectFilled(p0, p1, IM_COL32(0, 0, 0, 255));
+            draw_list->AddImage(GameState::GetCurrentScene()->MainView->view->GetViewResource(), p0, p1);
+            ImGui::EndGroup();
             ImGui::End();
 
             Console::Render();
