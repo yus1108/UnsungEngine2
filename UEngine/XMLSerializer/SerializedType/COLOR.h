@@ -26,6 +26,7 @@ namespace UEngine
 			COLOR(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			COLOR(Serializer* serializer, std::string name, Color value) : SerializedType(serializer, name) { this->value = value; }
 			Color value{ 0, 0, 0, 1 };
+			const char* items[3] = { "Input", "Drag", "Slider" };
 
 			// copy assignment
 			COLOR& operator=(const Color& other)

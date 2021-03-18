@@ -18,6 +18,7 @@ namespace UEngine
 			FLOAT(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			FLOAT(Serializer* serializer, std::string name, float value) : SerializedType(serializer, name) { this->value = value; }
 			float value = 0;
+			const char* items[2] = { "Input", "Drag" };
 
 			// copy assignment
 			FLOAT& operator=(const float& other)

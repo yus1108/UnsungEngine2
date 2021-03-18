@@ -10,12 +10,12 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 bool resize = false;
 POINT size;
 
-void UEngine::UEditor::EditorState::RenderHierarchy(UEngine::GameObject* gameObject, size_t& index)
+void UEngine::UEditor::EditorState::RenderHierarchy(UEngine::GameObject* gameObject)
 {
     for (auto child : gameObject->GetChildren())
     {
+        ImGui::PushID(&child->name);
         if (ImGui::TreeNode((
-            std::to_string(index++) + " : " +
             child->name + " : GameObject(" +
             std::to_string(child->GetChildren().size()) + ")").c_str()))
         {
@@ -23,9 +23,10 @@ void UEngine::UEditor::EditorState::RenderHierarchy(UEngine::GameObject* gameObj
             {
                 UEngine::EditorScript::isSelected = child->GetComponent<UEngine::EditorScript>();
             }
-            RenderHierarchy(child, index);
+            RenderHierarchy(child);
             ImGui::TreePop();
         }
+        ImGui::PopID();
     }
 }
 
@@ -267,32 +268,32 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             {
                 ImGui::Begin("GameState Hierarchy");
 
-                int sceneIndex = 0;
                 for (auto sceneMap : SingletonManager::State->GetScenes())
                 {
-                    if (ImGui::CollapsingHeader((std::to_string(sceneIndex++) + " : " + sceneMap.first + " : GameScene").c_str()))
+                    ImGui::PushID(&sceneMap.first);
+                    if (ImGui::CollapsingHeader((sceneMap.first + " : GameScene").c_str()))
                     {
                         auto size = ImGui::GetItemRectSize();
-                        size_t objectIndex = 0;
                         for (auto gameObject : sceneMap.second->GetGameObjects())
                         {
                             if (gameObject->GetParent() == nullptr)
                             {
-                                if (ImGui::TreeNode((
-                                    std::to_string(objectIndex++) + " : " +
-                                    gameObject->name + " : GameObject(" + 
+                                ImGui::PushID(&gameObject->name);
+                                if (ImGui::TreeNode((gameObject->name + " : GameObject(" + 
                                     std::to_string(gameObject->GetChildren().size()) + ")").c_str()))
                                 {
                                     if (ImGui::Button("Select"))
                                     {
                                         UEngine::EditorScript::isSelected = gameObject->GetComponent<UEngine::EditorScript>();
                                     }
-                                    RenderHierarchy(gameObject, objectIndex);
+                                    RenderHierarchy(gameObject);
                                     ImGui::TreePop();
                                 }
+                                ImGui::PopID();
                             }
                         }
                     }
+                    ImGui::PopID();
                 }
 
                 ImGui::End();

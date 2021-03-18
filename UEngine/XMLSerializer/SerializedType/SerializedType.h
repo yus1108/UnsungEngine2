@@ -3,10 +3,7 @@
 class SerializedType
 {
 protected:
-	static size_t s_modeIndex;
-
 	int item_current = 0;
-	size_t modeIndex = s_modeIndex++;
 	Serializer* serializer = nullptr;
 	std::string name;
 public:

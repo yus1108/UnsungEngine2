@@ -38,10 +38,10 @@ UEngine::Vector2 UEngine::Input::GetMousePos()
 {
 	RECT windowSize;
 	auto state = GameState::Get();
-	windowSize.left = state->startWindowPos.x;
-	windowSize.right = state->windowSize.x;
-	windowSize.top = state->startWindowPos.y;
-	windowSize.bottom = state->windowSize.y;
+	windowSize.left = static_cast<LONG>(state->startWindowPos.x);
+	windowSize.right = static_cast<LONG>(state->windowSize.x);
+	windowSize.top = static_cast<LONG>(state->startWindowPos.y);
+	windowSize.bottom = static_cast<LONG>(state->windowSize.y);
 	return Utility::UMath::ConvertPixelToNDC(WinInput::Get()->GetMousePos(), windowSize);
 }
 

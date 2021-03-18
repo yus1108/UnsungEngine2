@@ -15,7 +15,9 @@ void UEngine::TYPE::BOOL::DeSerialize(TiXmlNode* node)
 
 void UEngine::TYPE::BOOL::OnEditRender()
 {
+	ImGui::PushID(&this->name);
 	ImGui::Checkbox(this->name.c_str(), &value);
+	ImGui::PopID();
 	ImGui::Separator();
 }
 

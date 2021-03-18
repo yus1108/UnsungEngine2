@@ -12,7 +12,7 @@ void UEngine::Transform::Start()
 	using namespace DirectX;
 	RTP = XMMatrixMultiply
 	(
-		XMMatrixRotationRollPitchYaw(localRotation.value.z, localRotation.value.x, localRotation.value.y),
+		XMMatrixRotationRollPitchYaw(localRotation.value.x, localRotation.value.y, localRotation.value.z),
 		XMMatrixTranslation(localPosition.value.x, localPosition.value.y, localPosition.value.z)
 	);
 
@@ -42,7 +42,7 @@ void UEngine::Transform::LateUpdate()
 	using namespace DirectX;
 	RTP = XMMatrixMultiply
 	(
-		XMMatrixRotationRollPitchYaw(localRotation.value.z, localRotation.value.x, localRotation.value.y),
+		XMMatrixRotationRollPitchYaw(localRotation.value.x, localRotation.value.y, localRotation.value.z),
 		XMMatrixTranslation(localPosition.value.x, localPosition.value.y, localPosition.value.z)
 	);
 

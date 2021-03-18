@@ -1,6 +1,7 @@
 #pragma once
 
 using namespace UEngine;
+
 UENGINE_CLASS(Flight)
 {
 private:

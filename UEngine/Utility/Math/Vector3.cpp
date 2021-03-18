@@ -29,6 +29,7 @@ void UEngine::VECTOR3::DeSerialize(TiXmlNode* node)
 
 void UEngine::VECTOR3::OnEditRender()
 {
+	ImGui::PushID(&this->name);
 	switch (item_current)
 	{
 	case 0:
@@ -40,7 +41,9 @@ void UEngine::VECTOR3::OnEditRender()
 	default:
 		break;
 	}
-	const char* items[] = { "Input", "Drag" };
-	ImGui::Combo((std::string("Mode") + std::to_string(modeIndex)).c_str(), &item_current, items, IM_ARRAYSIZE(items));
+	ImGui::PopID();
+	ImGui::PushID(&this->items);
+	ImGui::Combo("Mode", &item_current, items, IM_ARRAYSIZE(items));
+	ImGui::PopID();
 	ImGui::Separator();
 }

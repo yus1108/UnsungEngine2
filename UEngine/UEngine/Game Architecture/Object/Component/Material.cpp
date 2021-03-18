@@ -61,9 +61,9 @@ void UEngine::Material::DeSerialize(TiXmlNode* node)
 	desc.BorderColor[1] = stof(tokens.front()); tokens.pop_front();
 	desc.BorderColor[2] = stof(tokens.front()); tokens.pop_front();
 	desc.BorderColor[3] = stof(tokens.front()); tokens.pop_front();
-	desc.ComparisonFunc = static_cast<D3D11_COMPARISON_FUNC>(stoll(tokens.front())); tokens.pop_front();
-	desc.Filter = static_cast<D3D11_FILTER>(stoll(tokens.front())); tokens.pop_front();
-	desc.MaxAnisotropy = stoll(tokens.front()); tokens.pop_front();
+	desc.ComparisonFunc = static_cast<D3D11_COMPARISON_FUNC>(stoi(tokens.front())); tokens.pop_front();
+	desc.Filter = static_cast<D3D11_FILTER>(stoi(tokens.front())); tokens.pop_front();
+	desc.MaxAnisotropy = stoi(tokens.front()); tokens.pop_front();
 	desc.MaxLOD = stof(tokens.front()); tokens.pop_front();
 	desc.MinLOD = stof(tokens.front()); tokens.pop_front();
 	desc.MipLODBias = stof(tokens.front()); tokens.pop_front();

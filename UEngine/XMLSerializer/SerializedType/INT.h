@@ -18,6 +18,7 @@ namespace UEngine
 			INT(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			INT(Serializer* serializer, std::string name, int value) : SerializedType(serializer, name) { this->value = value; }
 			int value = 0;
+			const char* items[2] = { "Input", "Drag" };
 
 			// copy assignment
 			INT& operator=(const int& other)
