@@ -25,7 +25,7 @@ The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly 
 5. Build the game you want to play
 
 Keys for all games are either wasd or arrow keys to move, and space for jump, '1' for resetting games
-For puzzle game, '2' and '3' are disable/enable image of the puzzle you are moving
+<br />For puzzle game, '2' and '3' are disable/enable image of the puzzle you are moving
 
 ## Credit
 - RunGame art credit by o_robster
