@@ -17,3 +17,9 @@ void Serializer::DeSerialize(TiXmlNode* node)
 		variable++;
 	}
 }
+
+void Serializer::OnEditRender()
+{
+	for (auto variable : variables)
+		variable->OnEditRender();
+}

@@ -5,6 +5,8 @@
 #include <Windows.h>
 
 #include "tinyxml.h"
+#include "../ImGui/ImGui.h"
+
 #include "Serializer.h"
 #include "SerializedType\SerializedType.h"
 

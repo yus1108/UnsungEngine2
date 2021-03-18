@@ -131,15 +131,16 @@ namespace UEngine
 
             ImGui::Separator();
 
+            size_t componentIndex = 0;
             for (auto componentMap : gameObject->GetComponents())
             {
                 if (componentMap.first == ".PAVEditorScript@UEngine@@") continue;
                 auto typeName = componentMap.first.substr(4, componentMap.first.find_first_of('@') - 4);
                 for (auto componentPair : *componentMap.second)
                 {
-                    if (ImGui::CollapsingHeader(typeName.c_str()))
+                    if (ImGui::CollapsingHeader((std::to_string(componentIndex++) + ". " + typeName).c_str()))
                     {
-
+                        componentPair->OnEditRender();
                     }
                 }
             }

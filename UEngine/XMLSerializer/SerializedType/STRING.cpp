@@ -13,6 +13,10 @@ void UEngine::TYPE::STRING::DeSerialize(TiXmlNode* node)
 	value = node->ToElement()->Attribute(name.c_str());
 }
 
+void UEngine::TYPE::STRING::OnEditRender()
+{
+}
+
 //
 // convert_unicode_to_utf8_string
 //

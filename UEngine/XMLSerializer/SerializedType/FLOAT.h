@@ -13,6 +13,7 @@ namespace UEngine
 			// Inherited via SerializedType
 			virtual void Serialize(TiXmlElement* node) override;
 			virtual void DeSerialize(TiXmlNode* node) override;
+			virtual void OnEditRender() override;
 		public:
 			FLOAT(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			FLOAT(Serializer* serializer, std::string name, float value) : SerializedType(serializer, name) { this->value = value; }

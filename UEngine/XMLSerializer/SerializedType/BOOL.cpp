@@ -13,3 +13,9 @@ void UEngine::TYPE::BOOL::DeSerialize(TiXmlNode* node)
 	node->ToElement()->QueryBoolAttribute(name.c_str(), &value);
 }
 
+void UEngine::TYPE::BOOL::OnEditRender()
+{
+	ImGui::Checkbox(this->name.c_str(), &value);
+	ImGui::Separator();
+}
+

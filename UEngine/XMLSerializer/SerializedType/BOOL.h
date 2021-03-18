@@ -13,6 +13,7 @@ namespace UEngine
 			// Inherited via SerializedType
 			virtual void Serialize(TiXmlElement* node) override;
 			virtual void DeSerialize(TiXmlNode* node) override;
+			virtual void OnEditRender() override;
 		public:
 			BOOL(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			BOOL(Serializer* serializer, std::string name, bool value) : SerializedType(serializer, name) { this->value = value; }
@@ -28,8 +29,6 @@ namespace UEngine
 				this->value = other;
 				return *this;
 			}
-
-			// Inherited via SerializedType
 		};
 	}
 }

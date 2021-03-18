@@ -25,3 +25,24 @@ void UEngine::TYPE::UV::DeSerialize(TiXmlNode* node)
 	value.minY = static_cast<float>(minY);
 }
 
+void UEngine::TYPE::UV::OnEditRender()
+{
+	switch (item_current)
+	{
+	case 0:
+		ImGui::InputFloat4(this->name.c_str(), reinterpret_cast<float*>(&value));
+		break;
+	case 1:
+		ImGui::DragFloat4(this->name.c_str(), reinterpret_cast<float*>(&value));
+		break;
+	case 2:
+		ImGui::SliderFloat4(this->name.c_str(), reinterpret_cast<float*>(&value), 0, 1);
+		break;
+	default:
+		break;
+	}
+	const char* items[] = { "Input", "Drag", "Slider" };
+	ImGui::Combo((std::string("Mode") + std::to_string(modeIndex)).c_str(), &item_current, items, IM_ARRAYSIZE(items));
+	ImGui::Separator();
+}
+

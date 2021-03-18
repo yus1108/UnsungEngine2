@@ -24,6 +24,7 @@ namespace UEngine
 			// Inherited via SerializedType
 			virtual void Serialize(TiXmlElement* node) override;
 			virtual void DeSerialize(TiXmlNode* node) override;
+			virtual void OnEditRender() override;
 		public:
 			STRING(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			STRING(Serializer* serializer, std::string name, std::string value) : SerializedType(serializer, name) { this->value = value; }

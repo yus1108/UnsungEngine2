@@ -26,3 +26,21 @@ void UEngine::VECTOR3::DeSerialize(TiXmlNode* node)
 	value.y = static_cast<float>(y);
 	value.z = static_cast<float>(z);
 }
+
+void UEngine::VECTOR3::OnEditRender()
+{
+	switch (item_current)
+	{
+	case 0:
+		ImGui::InputFloat3(this->name.c_str(), reinterpret_cast<float*>(&value));
+		break;
+	case 1:
+		ImGui::DragFloat3(this->name.c_str(), reinterpret_cast<float*>(&value));
+		break;
+	default:
+		break;
+	}
+	const char* items[] = { "Input", "Drag" };
+	ImGui::Combo((std::string("Mode") + std::to_string(modeIndex)).c_str(), &item_current, items, IM_ARRAYSIZE(items));
+	ImGui::Separator();
+}
