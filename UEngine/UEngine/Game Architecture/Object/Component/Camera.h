@@ -2,7 +2,7 @@
 
 namespace UEngine
 {
-	class Camera : public Component
+	class Camera final : public Component
 	{
 	private:
 		SERIALIZED_BOOL(isThisMainCamera);

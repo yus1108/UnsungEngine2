@@ -2,7 +2,7 @@
 
 namespace UEngine
 {
-	class RenderComponent : public Component
+	class RenderComponent final : public Component
 	{
 	private:
 		RenderObject renderObject;

@@ -93,7 +93,7 @@ void UEngine::GameObject::OnPreRender()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
-			if (component->GetEnable()) component->OnPreRender();
+			if (component->GetEnable() || componentListPair.first == ".PAVEditorScript@UEngine@@") component->OnPreRender();
 	}
 }
 
@@ -102,7 +102,9 @@ void UEngine::GameObject::OnPostRender()
 	for (auto componentListPair : components)
 	{
 		for (auto component : *componentListPair.second)
+		{
 			if (component->GetEnable()) component->OnPostRender();
+		}
 	}
 }
 

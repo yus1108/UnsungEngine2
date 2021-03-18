@@ -138,8 +138,8 @@ void UEngine::GameScene::SaveScene()
 	parser.SaveScene(name, isDebugMode, gameObjects);
 }
 
-UEngine::GameScene* UEngine::GameScene::LoadScene(std::string name)
+UEngine::GameScene* UEngine::GameScene::LoadScene(std::string name, bool editorMode)
 {
 	XMLSceneParser parser;
-	return parser.LoadScene(name);
+	return parser.LoadScene(name, editorMode);
 }

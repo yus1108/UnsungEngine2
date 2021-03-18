@@ -18,7 +18,6 @@
 #include "UEngineDefinitions.h"
 #include "DebugRenderer\DebugRenderer.h"
 
-#include "Game Architecture\Physics2D\Component\Collider.h"
 #include "Game Architecture\Physics2D\Component\CircleCollider.h"
 #include "Game Architecture\Physics2D\Component\RectCollider.h"
 #include "Math\Math.h"
@@ -32,7 +31,7 @@
 #include "Game Architecture\Object\Component\RenderComponent.h"
 #include "Game Architecture\Object\Component\Material.h"
 #include "Game Architecture\Object\Component\Camera.h"
-#include "Game Architecture\Object\Component\EditorScript.h"
+#include "Editor\EditorScript.h"
 
 #include "Input\Input.h"
 

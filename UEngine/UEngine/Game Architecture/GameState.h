@@ -41,6 +41,7 @@ namespace UEngine
 
 		static void AddScene(GameScene* scene, bool setCurrentScene = false);
 		static GameScene* GetScene(std::string name);
+		static const std::map<std::string, GameScene*> GetScenes() { return instance->scenes; }
 
 		static bool IsTerminate() { return instance->isTerminate; }
 		static bool IsFixedUpdate();
@@ -50,7 +51,7 @@ namespace UEngine
 
 		static void Init(bool drawOnBackBuffer = true);
 		static void Init(GameScene* scene, bool drawOnBackBuffer = true);
-		static void Update(std::function<bool()> OnUpdate, std::function<void()> OnRender);
+		static void Update(std::function<void()> OnSync, std::function<bool()> OnUpdate, std::function<void()> OnRender);
 		static void Release();
 	};
 }

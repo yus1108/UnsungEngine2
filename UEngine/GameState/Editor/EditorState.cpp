@@ -9,6 +9,19 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool resize = false;
 POINT size;
+
+void UEngine::UEditor::EditorState::RenderHierarchy(UEngine::GameObject* gameObject)
+{
+    for (auto child : gameObject->GetChildren())
+    {
+        if (ImGui::TreeNode((child->name + " : GameObject (" + std::to_string(child->GetChildren().size()) + ")").c_str()))
+        {
+            RenderHierarchy(child);
+            ImGui::TreePop();
+        }
+    }
+}
+
 UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int height)
 {
     // Window Application
@@ -84,19 +97,13 @@ UEngine::UEditor::EditorState::~EditorState()
     UEngine::SingletonManager::Release();
 }
 
-typedef UEngine::Component* (*AddScript) (UEngine::GameObject* gameObject);
-typedef void(*ATTACH_SINGLETONS) (UEngine::SingletonManager::Singletons exportedSingletons);
-
-ATTACH_SINGLETONS attach_singletons;
-AddScript addscript;
 void UEngine::UEditor::EditorState::Load()
 {
     WinApplication::Get()->FreeDLL();
     WinApplication::Get()->LoadDLL(L"../Debug/DllTest.dll");
 
-    attach_singletons = (ATTACH_SINGLETONS)WinApplication::Get()->FindFunction("ATTACH_SINGLETONS");
-    addscript = (AddScript)WinApplication::Get()->FindFunction("ScriptCreation");
-
+    typedef void(*ATTACH_SINGLETONS) (UEngine::SingletonManager::Singletons exportedSingletons);
+    ATTACH_SINGLETONS attach_singletons = (ATTACH_SINGLETONS)WinApplication::Get()->FindFunction("ATTACH_SINGLETONS");
     attach_singletons(SingletonManager::Export());
 
     // TODO: Place code here.
@@ -124,7 +131,7 @@ void UEngine::UEditor::EditorState::Load()
             ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
             ball->AddComponent<Material>()->LoadImageMaterial(L"./picture.png");*/
         }
-        GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene");
+        GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", true);
 
 
         GameState::Init(currentScene, false);
@@ -170,7 +177,13 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             resize = false;
         }
         if (SingletonManager::State->noUpdate) return;
-        GameState::Update([&]() 
+        GameState::Update([&]()
+        {
+            // Start the Dear ImGui frame
+            ImGui_ImplDX11_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
+        }, [&]()
         {
             if (WinInput::Get()->GetKeyDown('1'))
             {
@@ -180,10 +193,6 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             return false;
         }, [&]()
         {
-            // Start the Dear ImGui frame
-            ImGui_ImplDX11_NewFrame();
-            ImGui_ImplWin32_NewFrame();
-            ImGui::NewFrame();
             ImGui::ShowDemoWindow(&show_demo_window);
 
             // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
@@ -219,33 +228,60 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                 ImGui::End();
             }
 
-            ImGui::SetNextWindowBgAlpha(1.0f);
+            // Scene Editor
+            {
+                ImGui::SetNextWindowBgAlpha(1.0f);
+                ImGui::Begin((std::string("Scene: ") + GameState::GetCurrentScene()->name).c_str());
+                GameState::Get()->isFocused = ImGui::IsWindowFocused();
+                ImGui::BeginGroup(); // Lock X position
+                ImVec2 pos = ImGui::GetWindowPos();
+                SingletonManager::State->startWindowPos.x = pos.x + IMGUI_BORDER_PADDING;
+                SingletonManager::State->startWindowPos.y = pos.y + IMGUI_TITLEBAR_PADDING_Y;
 
-            ImGui::Begin((std::string("Scene: ") + GameState::GetCurrentScene()->name).c_str());
-            GameState::Get()->isFocused = ImGui::IsWindowFocused();
-            ImGui::BeginGroup(); // Lock X position
-            ImVec2 pos = ImGui::GetWindowPos();
-            SingletonManager::State->startWindowPos.x = pos.x + IMGUI_BORDER_PADDING;
-            SingletonManager::State->startWindowPos.y = pos.y + IMGUI_TITLEBAR_PADDING_Y;
+                ImVec2 size = ImGui::GetWindowSize();
+                size.x = size.x - IMGUI_BORDER_PADDING - IMGUI_BORDER_PADDING;
+                size.y = size.y - IMGUI_TITLEBAR_PADDING_Y - IMGUI_BORDER_PADDING * 2.0f;
+                SingletonManager::State->windowSize.x = size.x;
+                SingletonManager::State->windowSize.y = size.y;
 
-            ImVec2 size = ImGui::GetWindowSize();
-            size.x = size.x - IMGUI_BORDER_PADDING - IMGUI_BORDER_PADDING;
-            size.y = size.y - IMGUI_TITLEBAR_PADDING_Y - IMGUI_BORDER_PADDING * 2.0f;
-            SingletonManager::State->windowSize.x = size.x;
-            SingletonManager::State->windowSize.y = size.y;
+                ImGui::InvisibleButton("##empty", size);
+                const ImVec2 p0 = ImGui::GetItemRectMin();
+                const ImVec2 p1 = ImGui::GetItemRectMax();
+                SingletonManager::State->windowSize.x = p1.x - p0.x;
+                SingletonManager::State->windowSize.y = p1.y - p0.y;
+                ImDrawList* draw_list = ImGui::GetWindowDrawList();
+                draw_list->AddRectFilled(p0, p1, IM_COL32(0, 0, 0, 255));
+                draw_list->AddImage(GameState::GetCurrentScene()->MainView->view->GetViewResource(), p0, p1);
+                ImGui::EndGroup();
+                ImGui::End();
+            }
 
-            ImGui::InvisibleButton("##empty", size);
-            const ImVec2 p0 = ImGui::GetItemRectMin();
-            const ImVec2 p1 = ImGui::GetItemRectMax();
-            SingletonManager::State->windowSize.x = p1.x - p0.x;
-            SingletonManager::State->windowSize.y = p1.y - p0.y;
-            ImDrawList* draw_list = ImGui::GetWindowDrawList();
-            draw_list->AddRectFilled(p0, p1, IM_COL32(0, 0, 0, 255));
-            draw_list->AddImage(GameState::GetCurrentScene()->MainView->view->GetViewResource(), p0, p1);
+            // GameState Hierarchy
+            {
+                ImGui::Begin("GameState Hierarchy");
 
+                for (auto sceneMap : SingletonManager::State->GetScenes())
+                {
+                    if (ImGui::CollapsingHeader((sceneMap.first + " : GameScene").c_str()))
+                    {
+                        auto size = ImGui::GetItemRectSize();
+                        size_t index = 0;
+                        for (auto gameObject : sceneMap.second->GetGameObjects())
+                        {
+                            if (gameObject->GetParent() == nullptr)
+                            {
+                                if (ImGui::TreeNode((gameObject->name + " : GameObject (" + std::to_string(gameObject->GetChildren().size()) + ")").c_str()))
+                                {
+                                    RenderHierarchy(gameObject);
+                                    ImGui::TreePop();
+                                }
+                            }
+                        }
+                    }
+                }
 
-            ImGui::EndGroup();
-            ImGui::End();
+                ImGui::End();
+            }
 
             Console::Render();
 

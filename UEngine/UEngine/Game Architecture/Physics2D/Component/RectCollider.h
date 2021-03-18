@@ -1,4 +1,5 @@
 #pragma once
+#include "Collider.h"
 
 namespace UEngine
 {
@@ -6,7 +7,7 @@ namespace UEngine
 	{
 		using namespace Math;
 		using namespace Math::Physics2D;
-		class RectCollider : public Collider
+		class RectCollider final : public Collider
 		{
 			friend class CircleCollider;
 		private:

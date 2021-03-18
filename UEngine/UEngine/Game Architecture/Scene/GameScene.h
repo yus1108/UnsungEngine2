@@ -42,6 +42,7 @@ namespace UEngine
 
 		bool IsDebugMode() { return isDebugMode; }
 		GameObject* const GetGameObject(std::string name);
+		const std::list<class GameObject*> GetGameObjects() { return gameObjects; }
 		const std::vector<GameView>& GetGpuViews() { return gpu_view; }
 
 		void AddGameObject(GameObject* obj) { gameObjects.emplace_back(obj); }
@@ -49,7 +50,7 @@ namespace UEngine
 		void RemoveGameObject(std::string name);
 
 		void SaveScene();
-		static UEngine::GameScene* LoadScene(std::string name);
+		static UEngine::GameScene* LoadScene(std::string name, bool editorMode);
 	};
 
 	template<typename T>

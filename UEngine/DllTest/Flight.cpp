@@ -40,7 +40,7 @@ void Flight::Update()
 	{
 		reverse = false;
 	}
-	if (UEngine::Input::GetKey(VK_LEFT))
+	else if (UEngine::Input::GetKey(VK_LEFT))
 	{
 		reverse = true;
 	}
@@ -97,4 +97,7 @@ void Flight::Update()
 		movingCounter = 0;
 	}
 	movingCounter += Utility::UTime::Get()->DeltaTimeF();
+
+	Console::Clear();
+	Console::WriteLine(std::to_string(currMapIndex.x));
 }

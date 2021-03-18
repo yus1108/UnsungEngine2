@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<GameScene name="tempScene" isDebugMode="1">
+<GameScene name="tempScene">
     <GameObject name="camera" isActive="1" isStatic="0">
         <Camera>
             <Component enabled="1">
@@ -38,7 +38,7 @@
                 <STRING fileName="./Assets/Start.png" />
                 <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                 <COLOR name="color" r="1" g="1" b="1" a="1" />
-                <UV name="uv" maxX="0" maxY="1" minX="0" minY="0" />
+                <UV name="uv" maxX="1" maxY="1" minX="0" minY="0" />
             </Component>
         </Material>
         <RenderComponent>
@@ -47,12 +47,9 @@
                 <STRING shader_name="sprite" />
             </Component>
         </RenderComponent>
-        <Script>
-            <Component enabled="1" />
-        </Script>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-27.5644" y="-37.0664" z="0" />
+                <Vector3 name="localPosition" x="7.95477" y="-47.1985" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="32" y="80" z="1" />
             </Component>
@@ -76,12 +73,9 @@
                 <STRING shader_name="sprite" />
             </Component>
         </RenderComponent>
-        <Script>
-            <Component enabled="1" />
-        </Script>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-27.5644" y="12.9336" z="0" />
+                <Vector3 name="localPosition" x="7.95477" y="2.80149" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="32" y="40" z="1" />
             </Component>

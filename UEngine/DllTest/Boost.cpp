@@ -9,6 +9,7 @@ void Boost::Start()
 void Boost::Update()
 {
 	auto flight = FindObjectWithName("flight");
+	if (flight == nullptr) return;
 	GetTransform()->localPosition.value = flight->GetTransform()->localPosition.value;
 	GetTransform()->localPosition.value.y -= 50;
 	if (timer >= delay)

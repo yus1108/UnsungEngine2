@@ -12,7 +12,6 @@ void XMLSceneParser::SaveScene(std::string name, bool isDebugMode, std::list<UEn
 
 	this->name = name + ".uscene";
 	scene->SetAttribute("name", name.c_str());
-	scene->SetAttribute("isDebugMode", isDebugMode);
 	for (auto gameObject : gameObjects)
 	{
 		if (gameObject->GetParent() != nullptr) continue;
@@ -21,8 +20,9 @@ void XMLSceneParser::SaveScene(std::string name, bool isDebugMode, std::list<UEn
 	doc.SaveFile(this->name.c_str());
 }
 
-UEngine::GameScene* XMLSceneParser::LoadScene(std::string name)
+UEngine::GameScene* XMLSceneParser::LoadScene(std::string name, bool editorMode)
 {
+	this->editorMode = editorMode;
 	doc.LoadFile(name.c_str());
 	auto node = doc.FirstChild();
 	node = node->NextSibling();
@@ -30,9 +30,7 @@ UEngine::GameScene* XMLSceneParser::LoadScene(std::string name)
 
 	UEngine::GameScene* currentScene = new UEngine::GameScene();
 
-	bool isDebugMode;
-	node->ToElement()->QueryBoolAttribute("isDebugMode", &isDebugMode);
-	currentScene->Init(isDebugMode);
+	currentScene->Init(editorMode);
 	currentScene->name = node->ToElement()->Attribute("name");
 
 	LoadGameObject(node, currentScene);
@@ -66,6 +64,7 @@ void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, UEngine::GameScene* g
 				gameScene->ResourceManager.ApplyChange();
 				subNode = subNode->NextSibling();
 			}
+			if (editorMode) gameObject->AddComponent<UEngine::EditorScript>();
 		}
 		gameScene->ResourceManager.ApplyChange();
 
@@ -97,6 +96,7 @@ void XMLSceneParser::LoadGameObject(TiXmlNode* parentNode, TiXmlNode* goNode, UE
 			parent->GetScene()->ResourceManager.ApplyChange();
 			subNode = subNode->NextSibling();
 		}
+		if (editorMode) child->AddComponent<UEngine::EditorScript>();
 	}
 }
 
@@ -199,15 +199,18 @@ void XMLSceneParser::SaveGameObject
 	{
 		std::string raw_typeName = componentList.first;
 		TiXmlString typeName = TiXmlString(raw_typeName.substr(4, raw_typeName.find_first_of('@') - 4).c_str());
-		auto componentType = new TiXmlElement(typeName.c_str());
-		for (auto component : *componentList.second)
+		if (typeName != "EditorScript")
 		{
-			auto xmlComponent = new TiXmlElement("Component");
-			xmlComponent->SetAttribute("enabled", component->GetEnable());
-			component->Serialize(xmlComponent);
-			componentType->LinkEndChild(xmlComponent);
+			auto componentType = new TiXmlElement(typeName.c_str());
+			for (auto component : *componentList.second)
+			{
+				auto xmlComponent = new TiXmlElement("Component");
+				xmlComponent->SetAttribute("enabled", component->GetEnable());
+				component->Serialize(xmlComponent);
+				componentType->LinkEndChild(xmlComponent);
+			}
+			gameObject->LinkEndChild(componentType);
 		}
-		gameObject->LinkEndChild(componentType);
 	}
 	for (auto child : children)
 		SaveGameObject(gameObject, child->name, child->GetActive(), child->IsStatic, child->GetChildren(), child->GetComponents());

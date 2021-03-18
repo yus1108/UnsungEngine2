@@ -4,12 +4,13 @@ class XMLSceneParser
 {
 public:
 	void SaveScene(std::string name, bool isDebugMode, std::list<UEngine::GameObject*> gameObjects);
-	UEngine::GameScene* LoadScene(std::string name);
+	UEngine::GameScene* LoadScene(std::string name, bool editorMode);
 	
 private:
 	std::string name;
 	TiXmlDocument doc;
 	TiXmlElement* scene = nullptr;
+	bool editorMode = false;
 
 	void LoadGameObject(TiXmlNode* goNode, UEngine::GameScene* gameScene);
 	void LoadGameObject(TiXmlNode* parentNode, TiXmlNode* goNode, UEngine::GameObject* parent);

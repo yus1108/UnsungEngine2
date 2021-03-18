@@ -49,12 +49,13 @@ void UEngine::GameState::AddScene(GameScene* scene, bool setCurrentScene)
 	if (setCurrentScene) instance->currentScene = scene;
 }
 
-void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<void()> OnRender)
+void UEngine::GameState::Update(std::function<void()> OnSync, std::function<bool()> OnUpdate, std::function<void()> OnRender)
 {
 	std::lock_guard<std::mutex> lock(instance->noRenderMutex);
 	instance->deltaTime = Utility::UTime::Get()->DeltaTimeF();
 	instance->fixedUpdateTimer += instance->deltaTime;
 
+	if (OnSync) OnSync();
 	instance->currentScene->Sync();
 
 	WinApplication::Get()->threadPool.AddSyncTask([&]()
@@ -74,16 +75,13 @@ void UEngine::GameState::Update(std::function<bool()> OnUpdate, std::function<vo
 		DXRenderer::Get()->End(nullptr);
 	});
 
-	bool run = false;
-	if (OnUpdate) run = OnUpdate();
+	if (OnUpdate) instance->isTerminate = OnUpdate();
 	
 	instance->currentScene->Update();
 	WinApplication::Get()->threadPool.Join();
+
+
 	instance->currentScene->PostRender();
-	if (run)
-	{
-		instance->isTerminate = true;
-	}
 }
 
 void UEngine::GameState::Release()
