@@ -79,7 +79,7 @@ int Scene::Run()
     auto returnedValue = WinApplication::Get()->UpdateLoop([&]()
     {
         UEngine::Utility::UTime::Get()->Throttle(200);
-        GameState::Update(nullptr, nullptr);
+        GameState::Update(nullptr, nullptr, nullptr);
     });
 
     return returnedValue;

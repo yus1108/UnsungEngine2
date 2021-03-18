@@ -30,6 +30,7 @@
 #pragma comment(lib, "../../UEngine/Debug/DXRenderer.lib")
 #pragma comment(lib, "../../UEngine/Debug/UEngine.lib")
 #pragma comment(lib, "../../UEngine/Debug/XMLSerializer.lib")
+#pragma comment(lib, "../../UEngine/Debug/ImGui.lib")
 #endif
 
 using namespace UEngine;
