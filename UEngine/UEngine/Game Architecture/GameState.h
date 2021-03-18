@@ -23,6 +23,7 @@ namespace UEngine
 #pragma endregion
 
 	public:
+		bool isFocused{ true };
 		bool noUpdate{ false };
 		std::mutex noRenderMutex;
 		Vector2 startWindowPos{ 0, 0 };

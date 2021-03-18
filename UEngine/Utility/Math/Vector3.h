@@ -112,5 +112,17 @@ namespace UEngine
 		VECTOR3(Serializer* serializer, std::string name, Vector3 value) : SerializedType(serializer, name) { this->value = value; }
 		Vector3 value;
 
+		// copy assignment
+		VECTOR3& operator=(const Vector3& other)
+		{
+			this->value = other;
+			return *this;
+		}
+		// copy assignment
+		VECTOR3& operator=(const Vector2& other)
+		{
+			this->value = other;
+			return *this;
+		}
 	};
 }

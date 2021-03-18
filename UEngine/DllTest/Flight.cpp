@@ -11,24 +11,24 @@ void Flight::Update()
 {
 	auto transform = GetTransform();
 
-	if (WinInput::Get()->GetKey(VK_DOWN))
+	if (UEngine::Input::GetKey(VK_DOWN))
 	{
 		auto value = Vector2(0, -1) * 50 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition.value = transform->localPosition.value + value;
 	}
-	if (WinInput::Get()->GetKey(VK_UP))
+	if (UEngine::Input::GetKey(VK_UP))
 	{
 		auto value = Vector2(0, 1) * 50 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition.value = transform->localPosition.value + value;
 	}
-	if (WinInput::Get()->GetKey(VK_RIGHT))
+	if (UEngine::Input::GetKey(VK_RIGHT))
 	{
 		auto value = Vector2(1, 0) * 50 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition.value = transform->localPosition.value + value;
 		if (frame == maxSpriteFrame)
 			currMapIndex.x = currMapIndex.x == endIndex.x - 1 ? endIndex.x - 1 : currMapIndex.x + 1;
 	}
-	if (WinInput::Get()->GetKey(VK_LEFT))
+	if (UEngine::Input::GetKey(VK_LEFT))
 	{
 		auto value = Vector2(-1, 0) * 50 * Utility::UTime::Get()->DeltaTimeF();
 		transform->localPosition.value = transform->localPosition.value + value;
@@ -36,11 +36,11 @@ void Flight::Update()
 			currMapIndex.x = currMapIndex.x == 0 ? 0 : currMapIndex.x - 1;
 	}
 
-	if (WinInput::Get()->GetKey(VK_RIGHT))
+	if (UEngine::Input::GetKey(VK_RIGHT))
 	{
 		reverse = false;
 	}
-	else if (WinInput::Get()->GetKey(VK_LEFT))
+	if (UEngine::Input::GetKey(VK_LEFT))
 	{
 		reverse = true;
 	}

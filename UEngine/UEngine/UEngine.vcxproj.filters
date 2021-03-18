@@ -57,6 +57,9 @@
     <ClInclude Include="Game Architecture\Object\Component\EditorScript.h">
       <Filter>Game Architecture\Object\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Input\Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UEngine.cpp" />
@@ -108,6 +111,10 @@
     <ClCompile Include="Game Architecture\Object\Component\EditorScript.cpp">
       <Filter>Game Architecture\Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Input\Source.cpp" />
+    <ClCompile Include="Input\Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DebugRenderer">
@@ -136,6 +143,9 @@
     </Filter>
     <Filter Include="XMLParser">
       <UniqueIdentifier>{79e8e7fe-3a79-45b9-a389-1ac43906670c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{d4460a4f-d3de-44ad-a4d4-12219c0ac819}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

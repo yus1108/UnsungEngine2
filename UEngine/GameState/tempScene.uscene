@@ -52,7 +52,7 @@
         </Script>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="4.19624" y="-52.4968" z="0" />
+                <Vector3 name="localPosition" x="-27.5644" y="-37.0664" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="32" y="80" z="1" />
             </Component>
@@ -81,7 +81,7 @@
         </Script>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="3.94624" y="-2.74682" z="0" />
+                <Vector3 name="localPosition" x="-27.5644" y="12.9336" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="32" y="40" z="1" />
             </Component>

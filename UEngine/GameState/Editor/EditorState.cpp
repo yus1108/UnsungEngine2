@@ -222,6 +222,7 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             ImGui::SetNextWindowBgAlpha(1.0f);
 
             ImGui::Begin((std::string("Scene: ") + GameState::GetCurrentScene()->name).c_str());
+            GameState::Get()->isFocused = ImGui::IsWindowFocused();
             ImGui::BeginGroup(); // Lock X position
             ImVec2 pos = ImGui::GetWindowPos();
             SingletonManager::State->startWindowPos.x = pos.x + IMGUI_BORDER_PADDING;
@@ -241,6 +242,8 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             ImDrawList* draw_list = ImGui::GetWindowDrawList();
             draw_list->AddRectFilled(p0, p1, IM_COL32(0, 0, 0, 255));
             draw_list->AddImage(GameState::GetCurrentScene()->MainView->view->GetViewResource(), p0, p1);
+
+
             ImGui::EndGroup();
             ImGui::End();
 

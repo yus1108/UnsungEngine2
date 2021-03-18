@@ -192,6 +192,7 @@
     <ClInclude Include="Game Architecture\Physics2D\SpatialPartition2D.h" />
     <ClInclude Include="Game Architecture\Scene\GameScene.h" />
     <ClInclude Include="Game Architecture\Scene\GameView.h" />
+    <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="UEngine.h" />
     <ClInclude Include="UEngineDefinitions.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="Game Architecture\Physics2D\SpatialPartition2D.cpp" />
     <ClCompile Include="Game Architecture\Scene\GameScene.cpp" />
     <ClCompile Include="Game Architecture\Scene\GameView.cpp" />
+    <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Math\Math.cpp" />
     <ClCompile Include="UEngine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
