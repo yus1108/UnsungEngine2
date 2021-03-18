@@ -150,4 +150,14 @@ namespace UEngine
 
     }
 
+    void EditorScript::OnDestroy()
+    {
+        if (isSelected == this)
+        {
+            isSelected = nullptr;
+            isMoving = false;
+            isKeyDown = false;
+        }
+    }
+
 }

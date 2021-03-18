@@ -19,7 +19,7 @@
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
-        <GameObject name="camera" isActive="1" isStatic="0">
+        <GameObject name="camera2" isActive="1" isStatic="0">
             <Transform>
                 <Component enabled="1">
                     <Vector3 name="localPosition" x="0" y="0" z="0" />
@@ -38,7 +38,7 @@
                 <STRING fileName="./Assets/Start.png" />
                 <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                 <COLOR name="color" r="1" g="1" b="1" a="1" />
-                <UV name="uv" maxX="1" maxY="1" minX="0" minY="0" />
+                <UV name="uv" maxX="0" maxY="1" minX="0" minY="0" />
             </Component>
         </Material>
         <RenderComponent>

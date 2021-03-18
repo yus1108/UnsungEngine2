@@ -11,7 +11,7 @@ namespace UEngine
 			WinApplication* app = nullptr;
 			DXRenderer::DXRenderer* renderer = nullptr;
 
-			void RenderHierarchy(UEngine::GameObject* gameObject);
+			void RenderHierarchy(UEngine::GameObject* gameObject, size_t& index);
 
 		public:
 			EditorState() = delete;
