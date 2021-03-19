@@ -45,6 +45,8 @@ namespace UEngine
 		virtual void OnDestroy() {}
 
 	public:
+		std::string typeName;
+
 		GameObject* const GetGameObject() { return gameObject; }
 		Transform* const GetTransform() { return gameObject->GetTransform(); }
 

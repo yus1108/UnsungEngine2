@@ -22,7 +22,11 @@ namespace UEngine
 		class Transform* transform{ nullptr };
 		class RenderComponent* renderComponent{ nullptr };
 		class Material* material{ nullptr };
-		std::map<std::string, std::list<class Component*>*> components;
+		std::vector<class Component*> components;
+
+		std::string GetComponentTypeName(Component* component);
+		void SetComponentTypeName(Component* component, std::string typeName);
+		void RemoveComponent(Component* component);
 
 		void Awake();
 		void OnEnable();
@@ -57,7 +61,7 @@ namespace UEngine
 		template <typename T>
 		T* const GetComponent();
 
-		const std::map<std::string, std::list<class Component*>*> GetComponents() { return components; }
+		const std::vector<class Component*> GetComponents() { return components; }
 
 		template <typename T>
 		T* AddComponent();
@@ -78,12 +82,12 @@ namespace UEngine
 		static_assert(std::is_base_of<Component, T>::value, "Provider type does not implement IComponent");
 
 		std::string typeName = typeid(T*).raw_name();
-		if (components[typeName] == nullptr)
+		for (size_t i = 0; i < components.size(); i++)
 		{
-			components.erase(typeName);
-			return nullptr;
+			if (GetComponentTypeName(components[i]) == typeName)
+				return static_cast<T*>(components[i]);
 		}
-		return static_cast<T*>(components[typeName]->front());
+		return nullptr;
 	}
 
 	template <>
@@ -95,25 +99,15 @@ namespace UEngine
 	template <>
 	inline RenderComponent* const GameObject::GetComponent<RenderComponent>()
 	{
-		std::string typeName = typeid(renderComponent).raw_name();
-		if (components[typeName] == nullptr)
-		{
-			components.erase(typeName);
-			return nullptr;
-		}
-		return renderComponent;
+		if (renderComponent != nullptr) return renderComponent;
+		return nullptr;
 	}
 
 	template <>
 	inline Material* const GameObject::GetComponent<Material>()
 	{
-		std::string typeName = typeid(material).raw_name();
-		if (components[typeName] == nullptr)
-		{
-			components.erase(typeName);
-			return nullptr;
-		}
-		return material;
+		if (material != nullptr) return material;
+		return nullptr;
 	}
 
 	template<typename T>
@@ -141,9 +135,8 @@ namespace UEngine
 		}
 
 		static_cast<Component*>(component)->Awake();
-		std::string typeName = typeid(T*).raw_name();
-		if (components[typeName] == nullptr) components[typeName] = new std::list<Component*>();
-		components[typeName]->push_back(component);
+		SetComponentTypeName(component, typeid(T*).raw_name());
+		components.emplace_back(component);
 		return component;
 	}
 
@@ -156,19 +149,24 @@ namespace UEngine
 			throw std::runtime_error("Cannot remove Transform component!");
 
 		std::string typeName = typeid(T*).raw_name();
-		if (components[typeName] == nullptr || components[typeName]->size() == 0)
-			throw std::runtime_error("doesn't exist in the GameObject!");
+		for (size_t i = 0; i < components.size(); i++)
+		{
+			if (GetComponentTypeName(components[i]) == typeName)
+			{
+				auto component = components[i];
+				RemoveComponent(component);
+				delete component;
+				components.erase(components.begin() + i);
 
-		auto component = components[typeName]->back();
-		components[typeName]->pop_back();
-		component->SetEnable(false);
-		static_cast<Component*>(component)->OnDestroy();
-		delete component;
-		
-		if constexpr (std::is_same<T, class RenderComponent>::value)
-			renderComponent = nullptr;
-		if constexpr (std::is_same<T, class Material>::value)
-			material = nullptr;
+				if constexpr (std::is_same<T, class RenderComponent>::value)
+					renderComponent = nullptr;
+				if constexpr (std::is_same<T, class Material>::value)
+					material = nullptr;
+
+				return;
+			}
+		}
+		throw std::runtime_error("doesn't exist in the GameObject!");
 	}
 }
 

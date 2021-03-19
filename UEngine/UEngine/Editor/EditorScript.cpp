@@ -115,19 +115,16 @@ namespace UEngine
 
             ImGui::Separator();
 
-            for (auto componentMap : gameObject->GetComponents())
+            for (auto component : gameObject->GetComponents())
             {
-                if (componentMap.first == ".PAVEditorScript@UEngine@@") continue;
-                auto typeName = componentMap.first.substr(4, componentMap.first.find_first_of('@') - 4);
-                for (auto componentPair : *componentMap.second)
+                if (component->typeName == ".PAVEditorScript@UEngine@@") continue;
+                auto typeName = component->typeName.substr(4, component->typeName.find_first_of('@') - 4);
+                ImGui::PushID(this);
+                if (ImGui::CollapsingHeader(typeName.c_str()))
                 {
-                    ImGui::PushID(this);
-                    if (ImGui::CollapsingHeader(typeName.c_str()))
-                    {
-                        componentPair->OnEditRender();
-                    }
-                    ImGui::PopID();
+                    component->OnEditRender();
                 }
+                ImGui::PopID();
             }
 
             ImGui::End();

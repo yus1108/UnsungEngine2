@@ -6,124 +6,96 @@ UEngine::GameObject::~GameObject()
 {
 	OnDisable();
 	OnDestroy();
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			delete component;
-		delete componentListPair.second;
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		delete components[i];
+}
+
+std::string UEngine::GameObject::GetComponentTypeName(Component* component)
+{
+	return component->typeName;
+}
+
+void UEngine::GameObject::SetComponentTypeName(Component* component, std::string typeName)
+{
+	component->typeName = typeName;
+}
+
+void UEngine::GameObject::RemoveComponent(Component* component)
+{
+	component->SetEnable(false);
+	component->OnDestroy();
 }
 
 void UEngine::GameObject::Awake()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-		{
-			component->Awake();
-		}
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		components[i]->Awake();
 }
 
 void UEngine::GameObject::OnEnable()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			component->SetEnable(true);
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		components[i]->SetEnable(true);
 }
 
 void UEngine::GameObject::Initialize()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			component->Initialize();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		components[i]->Initialize();
 }
 
 void UEngine::GameObject::FixedUpdate()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			if (component->GetEnable()) component->FixedUpdate();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		if (components[i]->GetEnable()) components[i]->FixedUpdate();
 }
 
 void UEngine::GameObject::PhysicsUpdate()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			if (component->GetEnable()) component->PhysicsUpdate();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		if (components[i]->GetEnable()) components[i]->PhysicsUpdate();
 }
 
 void UEngine::GameObject::Update()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			if (component->GetEnable()) component->Update();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		if (components[i]->GetEnable()) components[i]->Update();
 }
 
 void UEngine::GameObject::LateUpdate()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			if (component->GetEnable()) component->LateUpdate();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		if (components[i]->GetEnable()) components[i]->LateUpdate();
 }
 
 void UEngine::GameObject::AnimationUpdate()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			if (component->GetEnable()) component->AnimationUpdate();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		if (components[i]->GetEnable()) components[i]->AnimationUpdate();
 }
 
 void UEngine::GameObject::OnPreRender()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			if (component->GetEnable() || componentListPair.first == ".PAVEditorScript@UEngine@@") component->OnPreRender();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		if (components[i]->GetEnable() || components[i]->typeName == ".PAVEditorScript@UEngine@@") components[i]->OnPreRender();
 }
 
 void UEngine::GameObject::OnPostRender()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-		{
-			if (component->GetEnable()) component->OnPostRender();
-		}
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		if (components[i]->GetEnable()) components[i]->OnPostRender();
 }
 
 void UEngine::GameObject::OnDisable()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			component->SetEnable(false);
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		components[i]->SetEnable(false);
 }
 
 void UEngine::GameObject::OnDestroy()
 {
-	for (auto componentListPair : components)
-	{
-		for (auto component : *componentListPair.second)
-			component->OnDestroy();
-	}
+	for (size_t i = 0; i < components.size(); i++)
+		components[i]->OnDestroy();
 }
 
 void UEngine::GameObject::SetActive(bool isActive)

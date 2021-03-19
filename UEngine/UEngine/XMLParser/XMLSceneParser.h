@@ -23,6 +23,6 @@ private:
 		bool isActive,
 		bool isStatic,
 		std::vector<UEngine::GameObject*> children,
-		std::map<std::string, std::list<UEngine::Component*>*> components
+		std::vector<UEngine::Component*> components
 	);
 };

@@ -189,26 +189,23 @@ void XMLSceneParser::SaveGameObject
 	bool isActive,
 	bool isStatic, 
 	std::vector<UEngine::GameObject*> children,
-	std::map<std::string, std::list<UEngine::Component*>*> components)
+	std::vector<UEngine::Component*> components)
 {
 	auto gameObject = new TiXmlElement("GameObject");
 	gameObject->SetAttribute("name", name.c_str());
 	gameObject->SetAttribute("isActive", isActive);
 	gameObject->SetAttribute("isStatic", isStatic);
-	for (auto componentList : components)
+	for (auto component : components)
 	{
-		std::string raw_typeName = componentList.first;
+		std::string raw_typeName = component->typeName;
 		TiXmlString typeName = TiXmlString(raw_typeName.substr(4, raw_typeName.find_first_of('@') - 4).c_str());
 		if (typeName != "EditorScript")
 		{
 			auto componentType = new TiXmlElement(typeName.c_str());
-			for (auto component : *componentList.second)
-			{
-				auto xmlComponent = new TiXmlElement("Component");
-				xmlComponent->SetAttribute("enabled", component->GetEnable());
-				component->Serialize(xmlComponent);
-				componentType->LinkEndChild(xmlComponent);
-			}
+			auto xmlComponent = new TiXmlElement("Component");
+			xmlComponent->SetAttribute("enabled", component->GetEnable());
+			component->Serialize(xmlComponent);
+			componentType->LinkEndChild(xmlComponent);
 			gameObject->LinkEndChild(componentType);
 		}
 	}

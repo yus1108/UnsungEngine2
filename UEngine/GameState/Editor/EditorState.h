@@ -10,9 +10,6 @@ namespace UEngine
 			POINT screenSize;
 			WinApplication* app = nullptr;
 			DXRenderer::DXRenderer* renderer = nullptr;
-
-			void RenderHierarchy(UEngine::GameObject* gameObject);
-
 		public:
 			EditorState() = delete;
 			EditorState(HINSTANCE hInstance, int width = 800, int height = 600);

@@ -15,6 +15,7 @@ namespace UEngine
 		std::map<std::string, GameScene*> scenes;
 		GameScene* currentScene = nullptr;
 
+		void RenderHierarchy(UEngine::GameObject* gameObject);
 #pragma region Singleton
 	private:
 		GameState() = default;
@@ -52,6 +53,7 @@ namespace UEngine
 		static void Init(bool drawOnBackBuffer = true);
 		static void Init(GameScene* scene, bool drawOnBackBuffer = true);
 		static void Update(std::function<void()> OnSync, std::function<bool()> OnUpdate, std::function<void()> OnRender);
+		static void ShowHierarchy();
 		static void Release();
 	};
 }
