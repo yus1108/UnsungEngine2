@@ -22,11 +22,11 @@ namespace UEngine
 		class Transform* transform{ nullptr };
 		class RenderComponent* renderComponent{ nullptr };
 		class Material* material{ nullptr };
-		std::vector<class Component*> components;
+		std::vector<class Component*> components, deletionComponents;
 
 		std::string GetComponentTypeName(Component* component);
 		void SetComponentTypeName(Component* component, std::string typeName);
-		void RemoveComponent(Component* component);
+		void DisableComponent(Component* component);
 
 		void Awake();
 		void OnEnable();
@@ -40,6 +40,7 @@ namespace UEngine
 		void OnPostRender();
 		void OnDisable();
 		void OnDestroy();
+		void Sync();
 
 		void RemoveChild(GameObject* child);
 	public:
@@ -68,6 +69,7 @@ namespace UEngine
 
 		template <typename T>
 		void RemoveComponent();
+		void RemoveComponent(Component* component);
 
 		GameObject* const FindObjectWithName(std::string name);
 
@@ -154,7 +156,7 @@ namespace UEngine
 			if (GetComponentTypeName(components[i]) == typeName)
 			{
 				auto component = components[i];
-				RemoveComponent(component);
+				DisableComponent(component);
 				delete component;
 				components.erase(components.begin() + i);
 

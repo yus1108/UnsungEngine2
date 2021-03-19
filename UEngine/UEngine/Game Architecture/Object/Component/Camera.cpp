@@ -63,7 +63,7 @@ void UEngine::Camera::Update()
 
 void UEngine::Camera::LateUpdate()
 {
-    DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(cameraRotation.value.z, cameraRotation.value.x, cameraRotation.value.y);
+    DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationRollPitchYaw(cameraRotation.value.x, cameraRotation.value.y, cameraRotation.value.z);
     DirectX::XMMATRIX position = DirectX::XMMatrixTranslation(cameraPosition.value.x, cameraPosition.value.y, cameraPosition.value.z);
     cpu_camera.view = DirectX::XMMatrixMultiply(rotation, position);
     cpu_camera.view = DirectX::XMMatrixMultiply(cpu_camera.view, GetTransform()->GetRTP());
@@ -85,6 +85,11 @@ void UEngine::Camera::OnPreRender()
 
 void UEngine::Camera::OnDestroy()
 {
+    for (size_t i = 0; i < GetGameObject()->GetScene()->cpu_view.size(); i++)
+    {
+        if (GetGameObject()->GetScene()->cpu_view[i].view->UID == gameView.view->UID)
+            GetGameObject()->GetScene()->cpu_view.erase(GetGameObject()->GetScene()->cpu_view.begin() + i);
+    }
     GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXView>(view->UID);
     GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(cameraBuffer->UID);
 }

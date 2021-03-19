@@ -26,7 +26,7 @@ void UEngine::GameObject::SetComponentTypeName(Component* component, std::string
 	component->typeName = typeName;
 }
 
-void UEngine::GameObject::RemoveComponent(Component* component)
+void UEngine::GameObject::DisableComponent(Component* component)
 {
 	component->SetEnable(false);
 	component->OnDestroy();
@@ -104,6 +104,30 @@ void UEngine::GameObject::OnDestroy()
 		components[i]->OnDestroy();
 }
 
+void UEngine::GameObject::Sync()
+{
+	for (size_t i = 0; i < deletionComponents.size(); i++)
+	{
+		for (size_t j = 0; j < components.size(); j++)
+		{
+			if (deletionComponents[i] == components[j])
+			{
+				if (deletionComponents[i]->typeName == typeid(RenderComponent*).raw_name())
+					renderComponent = nullptr;
+				else if (deletionComponents[i]->typeName == typeid(Material*).raw_name())
+					material = nullptr;
+
+				DisableComponent(deletionComponents[i]);
+				delete deletionComponents[i];
+				components.erase(components.begin() + j);
+
+				break;
+			}
+		}
+	}
+	deletionComponents.clear();
+}
+
 void UEngine::GameObject::SetActive(bool isActive)
 {
 	if (isActive && !this->isActive)
@@ -139,6 +163,28 @@ void UEngine::GameObject::RemoveChild(GameObject* child)
 			return;
 		}
 	}
+}
+
+void UEngine::GameObject::RemoveComponent(Component* component)
+{
+	if (component == nullptr)
+	{
+		Console::WriteError("Cannot remove nullptr Component!!!");
+		return;
+	}
+	if (component->typeName == typeid(Transform*).raw_name())
+	{
+		Console::WriteError("Cannot remove Transform Component!!!");
+		return;
+	}
+
+	for (size_t i = 0; i < deletionComponents.size(); i++)
+	{
+		if (deletionComponents[i] == component)
+			return;
+	}
+	deletionComponents.emplace_back(component);
+	
 }
 
 UEngine::GameObject* const UEngine::GameObject::FindObjectWithName(std::string name)

@@ -89,6 +89,9 @@ void UEngine::GameScene::PostRender()
 void UEngine::GameScene::Sync()
 {
 	for (auto obj : gameObjects)
+		obj->Sync();
+
+	for (auto obj : gameObjects)
 		obj->OnPreRender();
 
 	gpu_view = cpu_view;
@@ -99,6 +102,7 @@ void UEngine::GameScene::Sync()
 	if (isDebugMode && this == GameState::GetCurrentScene() && MainView) debugRenderer->Flush(MainView->cameraBuffer);
 	for (auto obj : gameObjects)
 		obj->Initialize();
+	
 }
 
 UEngine::GameObject* const UEngine::GameScene::GetGameObject(std::string name)

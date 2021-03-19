@@ -124,6 +124,27 @@ namespace UEngine
                 if (ImGui::CollapsingHeader(typeName.c_str()))
                 {
                     component->OnEditRender();
+                    if (ImGui::Button("Remove Component"))
+                    {
+                        if (component->typeName == typeid(Transform*).raw_name())
+                        {
+                            Console::WriteError("Cannot remove Transform Component!!!");
+                        }
+                        else if (component->typeName == typeid(RenderComponent*).raw_name())
+                        {
+                            RemoveComponent<Material>();
+                            RemoveComponent<RenderComponent>();
+                        }
+                        else if (component->typeName == typeid(Material*).raw_name())
+                        {
+                            RemoveComponent<Material>();
+                            RemoveComponent<RenderComponent>();
+                        }
+                        else if (component->typeName == typeid(Camera*).raw_name())
+                        {
+                            GetGameObject()->RemoveComponent(component);
+                        }
+                    }
                 }
                 ImGui::PopID();
             }
@@ -167,7 +188,27 @@ namespace UEngine
                     ImGui::EndListBox();
                 }
                 filter.Draw("");
-                ImGui::Button("Add Component");
+                ImGui::PushID("Component Manipulation");
+                if (ImGui::Button("Add Component"))
+                {
+                    switch (item_current_idx)
+                    {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        AddComponent<Camera>();
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                ImGui::PopID();
             }
 
             ImGui::End();
