@@ -157,27 +157,26 @@ namespace UEngine
             {
                 ImGui::Separator();
                 static ImGuiTextFilter filter;
-                const char* renderingItems[] = 
+                const std::string renderingItems[] = 
                 { 
                     "RenderComponent",
                     "Material", 
                     "Camera",
-                    "Physics2D"
                     "CircleCollider",
                     "RectCollider"
                 };
                 // TODO: Dynamically find all user defined scripts
-                static int item_current_idx = 0; // Here we store our selection data as an index.
+                static std::string item_current_idx; // Here we store our selection data as an index.
 
                 if (ImGui::BeginListBox("##listbox 2", ImVec2(-FLT_MIN, 5 * ImGui::GetTextLineHeightWithSpacing())))
                 {
                     for (int n = 0; n < IM_ARRAYSIZE(renderingItems); n++)
                     {
-                        if (filter.PassFilter(renderingItems[n]))
+                        if (filter.PassFilter(renderingItems[n].c_str()))
                         {
-                            const bool is_selected = (item_current_idx == n);
-                            if (ImGui::Selectable(renderingItems[n], is_selected))
-                                item_current_idx = n;
+                            const bool is_selected = (item_current_idx == renderingItems[n]);
+                            if (ImGui::Selectable(renderingItems[n].c_str(), is_selected))
+                                item_current_idx = renderingItems[n];
 
                             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                             if (is_selected)
@@ -191,22 +190,23 @@ namespace UEngine
                 ImGui::PushID("Component Manipulation");
                 if (ImGui::Button("Add Component"))
                 {
-                    switch (item_current_idx)
+                    if (item_current_idx == "RenderComponent")
                     {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        AddComponent<Camera>();
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    default:
-                        break;
+                        AddComponent<RenderComponent>();
+                        AddComponent<Material>();
                     }
+                    else if (item_current_idx == "Material")
+                    {
+                        AddComponent<RenderComponent>();
+                        AddComponent<Material>();
+                    }
+                    else if (item_current_idx == "Camera")
+                        AddComponent<Camera>();
+                    else if (item_current_idx == "CircleCollider")
+                        AddComponent<Physics2D::CircleCollider>();
+                    else if (item_current_idx == "RectCollider")
+                        AddComponent<Physics2D::RectCollider>();
+                    isAddingComponent = false;
                 }
                 ImGui::PopID();
             }

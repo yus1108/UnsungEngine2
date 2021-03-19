@@ -10,10 +10,10 @@ namespace UEngine
 		SERIALIZED_STRING(shader_name);
 
 		void OnPreRender() override;
-		void OnEnable() override { renderObject->isRenderable = true; }
+		void OnEnable() override;
 		void OnDisable() override { renderObject->isRenderable = false; }
-		void OnDestroy() override { renderObject->isRenderable = false; }
 		void DeSerialize(TiXmlNode* node) override;
+		void OnEditRender() override;
 	public:
 		RenderComponent() : renderObject(new RenderObject) {}
 		~RenderComponent() { delete renderObject; }

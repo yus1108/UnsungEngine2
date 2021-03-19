@@ -25,7 +25,7 @@ namespace UEngine
 		public:
 			UV(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			UV(Serializer* serializer, std::string name, UEngine::UV value) : SerializedType(serializer, name) { this->value = value; }
-			UEngine::UV value{ 0, 0, 1, 1 };
+			UEngine::UV value{ 0, 0, 0, 0 };
 			const char* items[3] = { "Input", "Drag", "Slider" };
 
 			// copy assignment

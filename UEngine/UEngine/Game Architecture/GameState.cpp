@@ -154,10 +154,8 @@ void UEngine::GameState::HierarchyPopup(GameScene* scene, GameObject** gameObjec
         if (newObject != nullptr)
         {
             newObject->AddComponent<EditorScript>();
-            if (*gameObject != nullptr)
-            {
+            if (gameObject != nullptr && *gameObject != nullptr)
                 newObject->SetParent(*gameObject);
-            }
         }
         ImGui::EndPopup();
     }
@@ -175,7 +173,7 @@ void UEngine::GameState::ShowHierarchy()
         ImGui::PushID(&sceneMap.first);
         if (ImGui::CollapsingHeader((sceneMap.first + " : GameScene").c_str()))
         {
-            instance->HierarchyPopup(sceneMap.second, nullptr);
+            instance->HierarchyPopup(sceneMap.second, { nullptr });
             for (auto gameObject : sceneMap.second->GetGameObjects())
             {
                 if (gameObject->GetParent() == nullptr)
@@ -186,7 +184,7 @@ void UEngine::GameState::ShowHierarchy()
         }
         else
         {
-            instance->HierarchyPopup(sceneMap.second, nullptr);
+            instance->HierarchyPopup(sceneMap.second, { nullptr });
         }
         ImGui::PopID();
     }

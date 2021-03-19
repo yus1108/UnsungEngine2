@@ -3,10 +3,7 @@
 
 void UEngine::RenderComponent::OnPreRender()
 {
-	if (!renderObject->isRenderable) 
-	{
-		return;
-	}
+	if (!renderObject->isRenderable) return;
 	auto scene = GetGameObject()->GetScene();
 	// TODO: Calculate whether to draw or not
 	for (size_t i = 0; i < scene->gpu_view.size(); i++)
@@ -22,13 +19,18 @@ void UEngine::RenderComponent::DeSerialize(TiXmlNode* node)
 	Load(renderMesh_name.value, shader_name.value);
 }
 
+void UEngine::RenderComponent::OnEnable()
+{
+	if (renderObject->shader && renderObject->renderMesh)
+		renderObject->isRenderable = true;
+}
+
 void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string shader_name)
 {
 	auto scene = GetGameObject()->GetScene();
 	this->renderMesh_name = renderMesh_name;
 	this->shader_name = shader_name;
 
-	if (GetEnable()) renderObject->isRenderable = true;
 	renderObject->shader = scene->ResourceManager.GetResource<DXRenderer::DXShader>(shader_name);
 	if (renderObject->shader == nullptr)
 	{
@@ -38,11 +40,17 @@ void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string sha
 	{
 		// load mesh file
 	}
+	if (GetEnable()) renderObject->isRenderable = true;
 }
 
 void UEngine::RenderComponent::LoadTriangle()
 {
 	Load("triangle", "color");
+}
+
+void UEngine::RenderComponent::OnEditRender()
+{
+	Component::OnEditRender();
 }
 
 void UEngine::RenderComponent::LoadRectangle()
