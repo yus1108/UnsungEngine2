@@ -8,15 +8,17 @@ void UEngine::GameView::Render(bool isDebugMode, bool isMainView)
 	cameraBuffer->Set(view->GetDeviceContext());
 	for (auto renderObject : renderObjects)
 	{
-		for (auto cbufferMap : renderObject.constantBuffers)
+		if (!renderObject->isRenderable)
+			continue;
+		for (auto cbufferMap : renderObject->constantBuffers)
 			cbufferMap.second->Set(view->GetDeviceContext());
-		for (auto textureMap : renderObject.textures)
+		for (auto textureMap : renderObject->textures)
 			textureMap.second->Set(view->GetDeviceContext(), textureMap.first);
-		for (auto samplerMap : renderObject.samplerState)
+		for (auto samplerMap : renderObject->samplerState)
 			samplerMap.second->Set(view->GetDeviceContext(), samplerMap.first);
-		renderObject.shader->Set(view->GetDeviceContext());
-		renderObject.renderMesh->Set(view->GetDeviceContext());
-		renderObject.renderMesh->Draw(view->GetDeviceContext());
+		renderObject->shader->Set(view->GetDeviceContext());
+		renderObject->renderMesh->Set(view->GetDeviceContext());
+		renderObject->renderMesh->Draw(view->GetDeviceContext());
 	}
 
 	if (isDebugMode && isMainView)
@@ -26,7 +28,6 @@ void UEngine::GameView::Render(bool isDebugMode, bool isMainView)
 		DXRenderer::Get()->Draw(view->GetContext(), GameState::GetCurrentScene()->debugRenderer->GetAddressOfViewResource());
 		DXRenderer::Get()->End(view);
 	}
-	
 
 	view->End();
 }

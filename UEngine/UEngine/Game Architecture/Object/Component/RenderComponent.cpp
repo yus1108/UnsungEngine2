@@ -1,15 +1,18 @@
 #include "UEngine.h"
 #include "RenderComponent.h"
 
-void UEngine::RenderComponent::LateUpdate()
+void UEngine::RenderComponent::OnPreRender()
 {
-	if (!renderObject.isRenderable) return;
+	if (!renderObject->isRenderable) 
+	{
+		return;
+	}
 	auto scene = GetGameObject()->GetScene();
 	// TODO: Calculate whether to draw or not
-	for (size_t i = 0; i < scene->cpu_view.size(); i++)
+	for (size_t i = 0; i < scene->gpu_view.size(); i++)
 	{
-		if (!scene->cpu_view[i].isRenderable) continue;
-		scene->cpu_view[i].renderObjects.emplace_back(renderObject);
+		if (!scene->gpu_view[i].isRenderable) continue;
+		scene->gpu_view[i].renderObjects.emplace_back(renderObject);
 	}
 }
 
@@ -25,13 +28,13 @@ void UEngine::RenderComponent::Load(std::string renderMesh_name, std::string sha
 	this->renderMesh_name = renderMesh_name;
 	this->shader_name = shader_name;
 
-	if (GetEnable()) renderObject.isRenderable = true;
-	renderObject.shader = scene->ResourceManager.GetResource<DXRenderer::DXShader>(shader_name);
-	if (renderObject.shader == nullptr)
+	if (GetEnable()) renderObject->isRenderable = true;
+	renderObject->shader = scene->ResourceManager.GetResource<DXRenderer::DXShader>(shader_name);
+	if (renderObject->shader == nullptr)
 	{
 	}
-	renderObject.renderMesh = scene->ResourceManager.GetResource<DXRenderer::DXRenderMesh>(renderMesh_name);
-	if (renderObject.renderMesh == nullptr)
+	renderObject->renderMesh = scene->ResourceManager.GetResource<DXRenderer::DXRenderMesh>(renderMesh_name);
+	if (renderObject->renderMesh == nullptr)
 	{
 		// load mesh file
 	}
@@ -91,15 +94,15 @@ void UEngine::RenderComponent::LoadCircle(UINT slice)
 
 void UEngine::RenderComponent::AddConstantBuffer(std::string type_raw_name, DXRenderer::DXConstantBuffer* buffer)
 {
-	renderObject.constantBuffers[type_raw_name] = buffer;
+	renderObject->constantBuffers[type_raw_name] = buffer;
 }
 
 void UEngine::RenderComponent::AddImageTexture(DXRenderer::DXTexture* imageTexture)
 {
-	renderObject.textures[0] = imageTexture;
+	renderObject->textures[0] = imageTexture;
 }
 
 void UEngine::RenderComponent::AddImageSampler(DXRenderer::DXSamplerState* imageSampler)
 {
-	renderObject.samplerState[0] = imageSampler;
+	renderObject->samplerState[0] = imageSampler;
 }

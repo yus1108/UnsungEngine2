@@ -157,8 +157,7 @@ namespace UEngine
 			{
 				auto component = components[i];
 				DisableComponent(component);
-				delete component;
-				components.erase(components.begin() + i);
+				deletionComponents.emplace_back(component);
 
 				if constexpr (std::is_same<T, class RenderComponent>::value)
 					renderComponent = nullptr;

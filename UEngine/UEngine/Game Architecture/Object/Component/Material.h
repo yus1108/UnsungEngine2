@@ -41,5 +41,10 @@ namespace UEngine
 				DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(UV).raw_name())
 			))
 		{}
+		~Material()
+		{
+			GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(colorBuffer->UID);
+			GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(spriteBuffer->UID);
+		}
 	};
 }

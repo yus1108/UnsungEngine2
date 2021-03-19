@@ -117,7 +117,6 @@ void UEngine::GameObject::Sync()
 				else if (deletionComponents[i]->typeName == typeid(Material*).raw_name())
 					material = nullptr;
 
-				DisableComponent(deletionComponents[i]);
 				delete deletionComponents[i];
 				components.erase(components.begin() + j);
 
@@ -183,6 +182,7 @@ void UEngine::GameObject::RemoveComponent(Component* component)
 		if (deletionComponents[i] == component)
 			return;
 	}
+	DisableComponent(component);
 	deletionComponents.emplace_back(component);
 	
 }

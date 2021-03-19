@@ -14,7 +14,6 @@ namespace UEngine
 		std::condition_variable renderCondition;
 
 		std::list<class GameObject*> gameObjects, deleteList, creationList;
-		std::vector<GameView> gpu_view;
 
 	public:
 		~GameScene() { Release(); }
@@ -23,7 +22,8 @@ namespace UEngine
 
 		class Camera* MainCamera{ nullptr };
 		GameView* MainView{ nullptr };
-		std::vector<GameView> cpu_view;
+
+		std::vector<GameView> gpu_view;
 
 		UEngine::DXRenderer::DXResourceManager ResourceManager;
 		DebugRenderer *debugRenderer = nullptr;

@@ -33,8 +33,17 @@ void UEngine::Material::OnPreRender()
 
 void UEngine::Material::OnDestroy()
 {
-	GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(colorBuffer->UID);
-	GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(spriteBuffer->UID);
+	auto renderComponent = GetComponent<RenderComponent>();
+	if (renderComponent == nullptr) return;
+	if (renderObject != renderComponent->GetRenderObject())
+	{
+		renderObject = renderComponent->GetRenderObject();
+		if (renderObject == nullptr) return;
+		renderComponent->AddConstantBuffer(typeid(Color).raw_name(), nullptr);
+		renderComponent->AddConstantBuffer(typeid(UV).raw_name(), nullptr);
+		if (imageTexture) renderComponent->AddImageTexture(nullptr);
+		if (imageSampler) renderComponent->AddImageSampler(nullptr);
+	}
 }
 
 void UEngine::Material::DeSerialize(TiXmlNode* node)
