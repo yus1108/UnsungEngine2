@@ -8,6 +8,12 @@ UEngine::GameObject::~GameObject()
 	OnDestroy();
 	for (size_t i = 0; i < components.size(); i++)
 		delete components[i];
+	components.clear();
+	for (size_t i = 0; i < children.size(); i++)
+		GetScene()->RemoveGameObject(&children[i]);
+	if (parent != nullptr)
+		parent->RemoveChild(this);
+	children.clear();
 }
 
 std::string UEngine::GameObject::GetComponentTypeName(Component* component)

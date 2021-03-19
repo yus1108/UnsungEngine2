@@ -15,7 +15,8 @@ namespace UEngine
 		std::map<std::string, GameScene*> scenes;
 		GameScene* currentScene = nullptr;
 
-		void RenderHierarchy(UEngine::GameObject* gameObject);
+		void RenderHierarchy(UEngine::GameObject** gameObject);
+		void HierarchyPopup(GameScene* scene, GameObject** gameObject);
 #pragma region Singleton
 	private:
 		GameState() = default;

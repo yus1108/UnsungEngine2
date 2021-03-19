@@ -41,6 +41,7 @@ namespace UEngine
 		void OnDisable();
 		void OnDestroy();
 
+		void RemoveChild(GameObject* child);
 	public:
 		std::string name{ "GameObject" };
 		bool IsStatic{ false };
@@ -56,7 +57,6 @@ namespace UEngine
 
 		void SetParent(GameObject* parent);
 		void AddChild(GameObject* child);
-		void RemoveChild(GameObject* child);
 
 		template <typename T>
 		T* const GetComponent();

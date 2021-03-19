@@ -84,96 +84,90 @@ void UEngine::GameState::Update(std::function<void()> OnSync, std::function<bool
 	instance->currentScene->PostRender();
 }
 
-void UEngine::GameState::RenderHierarchy(UEngine::GameObject* gameObject)
+void UEngine::GameState::RenderHierarchy(UEngine::GameObject** gameObject)
 {
     ImGuiIO& io = ImGui::GetIO();
 
-    for (auto child : gameObject->GetChildren())
+    ImGui::PushID(&(*gameObject)->name);
+    static bool closable_group = true;
+    if (ImGui::TreeNode(((*gameObject)->name + " : GameObject(" +
+        std::to_string((*gameObject)->GetChildren().size()) + ")").c_str()))
     {
-        ImGui::PushID(&child->name);
-        if (ImGui::TreeNode((
-            child->name + " : GameObject(" +
-            std::to_string(child->GetChildren().size()) + ")").c_str()))
+        instance->HierarchyPopup((*gameObject)->GetScene(), gameObject);
+        if (ImGui::Button("Select"))
         {
-            for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-            {
-                if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
-                    ImGui::OpenPopup("gameobject_selection_popup2");
-            }
-            if (ImGui::BeginPopup("gameobject_selection_popup2"))
-            {
-                ImGui::MenuItem("copy", "Ctrl+C", false);
-                ImGui::MenuItem("paste", "Ctrl+V", false, false);
-                ImGui::Separator();
-                ImGui::MenuItem("rename", "F2", false, false);
-                ImGui::MenuItem("duplicate", "Ctrl+G", false);
-                ImGui::MenuItem("delete", "del", false);
-                ImGui::Separator();
-                if (ImGui::MenuItem("Create Empty", "", false))
-                {
-                    auto newChild = GameObject::Instantiate(child->GetScene(), "GameObject");
-                    newChild->AddComponent<EditorScript>();
-                    newChild->SetParent(child);
-                }
-                ImGui::MenuItem("2D Object", "", false);
-                if (ImGui::MenuItem("Camera", "", false))
-                {
-                    auto newChild = GameObject::Instantiate(child->GetScene(), "GameObject");
-                    newChild->AddComponent<EditorScript>();
-                    newChild->AddComponent<Camera>();
-                    newChild->SetParent(child);
-                }
-                ImGui::EndPopup();
-            }
-            if (ImGui::Button("Select"))
-            {
-                UEngine::EditorScript::isSelected = child->GetComponent<UEngine::EditorScript>();
-            }
-            RenderHierarchy(child);
-            ImGui::TreePop();
+            UEngine::EditorScript::isSelected = (*gameObject)->GetComponent<EditorScript>();
         }
-        else
+        if (*gameObject != nullptr)
         {
-            for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+            auto children = (*gameObject)->GetChildren();
+            for (size_t i = 0; i < children.size(); i++)
             {
-                if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
-                    ImGui::OpenPopup("gameobject_selection_popup");
-            }
-            if (ImGui::BeginPopup("gameobject_selection_popup"))
-            {
-                ImGui::MenuItem("copy", "Ctrl+C", false);
-                ImGui::MenuItem("paste", "Ctrl+V", false, false);
-                ImGui::Separator();
-                ImGui::MenuItem("rename", "F2", false, false);
-                ImGui::MenuItem("duplicate", "Ctrl+G", false);
-                ImGui::MenuItem("delete", "del", false);
-                ImGui::Separator();
-                if (ImGui::MenuItem("Create Empty", "", false))
-                {
-                    auto newChild = GameObject::Instantiate(child->GetScene(), "GameObject");
-                    newChild->AddComponent<EditorScript>();
-                    newChild->SetParent(child);
-                }
-                ImGui::MenuItem("2D Object", "", false);
-                if (ImGui::MenuItem("Camera", "", false))
-                {
-                    auto newChild = GameObject::Instantiate(child->GetScene(), "GameObject");
-                    newChild->AddComponent<EditorScript>();
-                    newChild->AddComponent<Camera>();
-                    newChild->SetParent(child);
-                }
-                ImGui::EndPopup();
+                instance->RenderHierarchy(&children[i]);
             }
         }
-        ImGui::PopID();
+        ImGui::TreePop();
     }
+    else
+    {
+        instance->HierarchyPopup((*gameObject)->GetScene(), gameObject);
+    }
+    ImGui::PopID();
+}
+
+void UEngine::GameState::HierarchyPopup(GameScene* scene, GameObject** gameObject)
+{
+    static unsigned id = 0;
+    ImGuiIO& io = ImGui::GetIO();
+
+    GameObject* newObject = nullptr;
+    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+    {
+        if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
+        {
+            ImGui::OpenPopup("popup");
+        }
+    }
+    if (ImGui::BeginPopup("popup"))
+    {
+        ImGui::MenuItem("copy", "Ctrl+C", false);
+        ImGui::MenuItem("paste", "Ctrl+V", false, false);
+        ImGui::Separator();
+        ImGui::MenuItem("rename", "F2", false, false);
+        ImGui::MenuItem("duplicate", "Ctrl+G", false);
+        if (ImGui::MenuItem("delete", "del", false))
+        {
+            scene->RemoveGameObject(gameObject);
+            *gameObject = nullptr;
+        }
+        ImGui::Separator();
+        if (ImGui::MenuItem("Create Empty", "", false))
+        {
+            newObject = GameObject::Instantiate(scene, "GameObject");
+        }
+        ImGui::MenuItem("2D Object", "", false);
+        if (ImGui::MenuItem("Camera", "", false))
+        {
+            newObject = GameObject::Instantiate(scene, "GameObject");
+            newObject->AddComponent<Camera>();
+        }
+        if (newObject != nullptr)
+        {
+            newObject->AddComponent<EditorScript>();
+            if (*gameObject != nullptr)
+            {
+                newObject->SetParent(*gameObject);
+            }
+        }
+        ImGui::EndPopup();
+    }
+   
 }
 
 void UEngine::GameState::ShowHierarchy()
 {
     ImGui::Begin("GameState Hierarchy");
 
-    static GameScene* sceneSelected = nullptr;
     ImGuiIO& io = ImGui::GetIO();
 
     for (auto sceneMap : instance->GetScenes())
@@ -181,127 +175,18 @@ void UEngine::GameState::ShowHierarchy()
         ImGui::PushID(&sceneMap.first);
         if (ImGui::CollapsingHeader((sceneMap.first + " : GameScene").c_str()))
         {
-            sceneSelected = sceneMap.second;
-            for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-            {
-                if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
-                    ImGui::OpenPopup("scene_selection_popup");
-            }
-
+            instance->HierarchyPopup(sceneMap.second, nullptr);
             for (auto gameObject : sceneMap.second->GetGameObjects())
             {
                 if (gameObject->GetParent() == nullptr)
                 {
-                    ImGui::PushID(&gameObject->name);
-                    static bool closable_group = true;
-                    if (ImGui::TreeNode((gameObject->name + " : GameObject(" +
-                        std::to_string(gameObject->GetChildren().size()) + ")").c_str()))
-                    {
-                        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-                        {
-                            if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
-                                ImGui::OpenPopup("gameobject_selection_popup2");
-                        }
-                        if (ImGui::BeginPopup("gameobject_selection_popup2"))
-                        {
-                            ImGui::MenuItem("copy", "Ctrl+C", false);
-                            ImGui::MenuItem("paste", "Ctrl+V", false, false);
-                            ImGui::Separator();
-                            ImGui::MenuItem("rename", "F2", false, false);
-                            ImGui::MenuItem("duplicate", "Ctrl+G", false);
-                            ImGui::MenuItem("delete", "del", false);
-                            ImGui::Separator();
-                            if (ImGui::MenuItem("Create Empty", "", false))
-                            {
-                                auto child = GameObject::Instantiate(sceneSelected, "GameObject");
-                                child->AddComponent<EditorScript>();
-                                child->SetParent(gameObject);
-                            }
-                            ImGui::MenuItem("2D Object", "", false);
-                            if (ImGui::MenuItem("Camera", "", false))
-                            {
-                                auto child = GameObject::Instantiate(sceneSelected, "GameObject");
-                                child->AddComponent<EditorScript>();
-                                child->AddComponent<Camera>();
-                                child->SetParent(gameObject);
-                            }
-                            ImGui::EndPopup();
-                        }
-                        if (ImGui::Button("Select"))
-                        {
-                            UEngine::EditorScript::isSelected = gameObject->GetComponent<EditorScript>();
-                        }
-                        instance->RenderHierarchy(gameObject);
-                        ImGui::TreePop();
-                    }
-                    else
-                    {
-                        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-                        {
-                            if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
-                                ImGui::OpenPopup("gameobject_selection_popup");
-                        }
-                    }
-                    if (ImGui::BeginPopup("gameobject_selection_popup"))
-                    {
-                        ImGui::MenuItem("copy", "Ctrl+C", false);
-                        ImGui::MenuItem("paste", "Ctrl+V", false, false);
-                        ImGui::Separator();
-                        ImGui::MenuItem("rename", "F2", false, false);
-                        ImGui::MenuItem("duplicate", "Ctrl+G", false);
-                        ImGui::MenuItem("delete", "del", false);
-                        ImGui::Separator();
-                        if (ImGui::MenuItem("Create Empty", "", false))
-                        {
-                            auto child = GameObject::Instantiate(sceneSelected, "GameObject");
-                            child->AddComponent<EditorScript>();
-                            child->SetParent(gameObject);
-                        }
-                        ImGui::MenuItem("2D Object", "", false);
-                        if (ImGui::MenuItem("Camera", "", false))
-                        {
-                            auto child = GameObject::Instantiate(sceneSelected, "GameObject");
-                            child->AddComponent<EditorScript>();
-                            child->AddComponent<Camera>();
-                            child->SetParent(gameObject);
-                        }
-                        ImGui::EndPopup();
-                    }
-                    ImGui::PopID();
+                    instance->RenderHierarchy(&gameObject);
                 }
             }
         }
         else
         {
-            for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-            {
-                if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
-                    ImGui::OpenPopup("scene_selection_popup");
-            }
-        }
-
-        if (ImGui::BeginPopup("scene_selection_popup"))
-        {
-            ImGui::MenuItem("copy", "Ctrl+C", false);
-            ImGui::MenuItem("paste", "Ctrl+V", false, false);
-            ImGui::Separator();
-            ImGui::MenuItem("rename", "F2", false, false);
-            ImGui::MenuItem("duplicate", "Ctrl+G", false);
-            ImGui::MenuItem("delete", "del", false);
-            ImGui::Separator();
-            if (ImGui::MenuItem("Create Empty", "", false))
-            {
-                auto gameObject = GameObject::Instantiate(sceneSelected, "GameObject");
-                gameObject->AddComponent<EditorScript>();
-            }
-            ImGui::MenuItem("2D Object", "", false);
-            if (ImGui::MenuItem("Camera", "", false))
-            {
-                auto gameObject = GameObject::Instantiate(sceneSelected, "GameObject");
-                gameObject->AddComponent<EditorScript>();
-                gameObject->AddComponent<Camera>();
-            }
-            ImGui::EndPopup();
+            instance->HierarchyPopup(sceneMap.second, nullptr);
         }
         ImGui::PopID();
     }

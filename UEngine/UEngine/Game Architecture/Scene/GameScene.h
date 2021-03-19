@@ -46,7 +46,7 @@ namespace UEngine
 		const std::vector<GameView>& GetGpuViews() { return gpu_view; }
 
 		void AddGameObject(GameObject* obj) { gameObjects.emplace_back(obj); }
-		void RemoveGameObject(GameObject* obj);
+		void RemoveGameObject(GameObject** obj);
 		void RemoveGameObject(std::string name);
 
 		void SaveScene();

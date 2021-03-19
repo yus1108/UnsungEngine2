@@ -108,12 +108,13 @@ UEngine::GameObject* const UEngine::GameScene::GetGameObject(std::string name)
 	return nullptr;
 }
 
-void UEngine::GameScene::RemoveGameObject(GameObject* obj)
+void UEngine::GameScene::RemoveGameObject(GameObject** obj)
 {
 	for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++)
 	{
-		if (*iter == obj)
+		if (*iter == *obj)
 		{
+			GameObject::Release(obj);
 			gameObjects.erase(iter);
 			return;
 		}
@@ -127,6 +128,7 @@ void UEngine::GameScene::RemoveGameObject(std::string name)
 		if ((*iter)->name == name)
 		{
 			gameObjects.erase(iter);
+			delete* iter;
 			return;
 		}
 	}
