@@ -10,6 +10,7 @@ namespace UEngine
 		Vector3 worldPosition{ 0, 0, 0 };
 		CPU_WORLD world{ DirectX::XMMatrixIdentity() };
 		Matrix RTP{ DirectX::XMMatrixIdentity() };
+		Matrix CameraRTP{ DirectX::XMMatrixIdentity() };
 
 		void Awake() override;
 		void Start() override;

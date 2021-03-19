@@ -91,7 +91,8 @@ void UEngine::GameScene::Sync()
 	for (auto obj : gameObjects)
 		obj->Sync();
 
-	gpu_view.clear();
+	gpu_view = cpu_view;
+	cpu_view.clear();
 	ResourceManager.ApplyChange();
 
 	for (auto obj : gameObjects)
