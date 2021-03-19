@@ -5,10 +5,10 @@ void UEngine::TYPE::UV::Serialize(TiXmlElement* node)
 {
 	auto variable = new TiXmlElement("UV");
 	variable->SetAttribute("name", name.c_str());
-	variable->SetAttribute("maxX", value.maxX);
-	variable->SetAttribute("maxY", value.maxY);
-	variable->SetAttribute("minX", value.minX);
-	variable->SetAttribute("minY", value.minY);
+	variable->SetDoubleAttribute("maxX", value.maxX);
+	variable->SetDoubleAttribute("maxY", value.maxY);
+	variable->SetDoubleAttribute("minX", value.minX);
+	variable->SetDoubleAttribute("minY", value.minY);
 	node->LinkEndChild(variable);
 }
 

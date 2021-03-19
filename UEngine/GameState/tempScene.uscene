@@ -49,7 +49,7 @@
         </RenderComponent>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="7.95477" y="-47.1985" z="0" />
+                <Vector3 name="localPosition" x="0" y="-50" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="32" y="80" z="1" />
             </Component>
@@ -75,7 +75,7 @@
         </RenderComponent>
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="7.95477" y="2.80149" z="0" />
+                <Vector3 name="localPosition" x="0" y="0" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="32" y="40" z="1" />
             </Component>

@@ -21,6 +21,7 @@ namespace UEngine
 		void OnPreRender() override;
 		void OnDestroy() override;
 		void DeSerialize(TiXmlNode* node) override;
+		void OnEditRender() override;
 
 	public:
 		SERIALIZED_VECTOR3_INIT(cameraPosition, Vector3(0, 0, 0));

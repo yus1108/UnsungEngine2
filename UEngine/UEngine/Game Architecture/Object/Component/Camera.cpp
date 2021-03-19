@@ -95,4 +95,15 @@ void UEngine::Camera::DeSerialize(TiXmlNode* node)
     if (this->isThisMainCamera.value == true) SetMainCamera();
 }
 
+void UEngine::Camera::OnEditRender()
+{
+    Component::OnEditRender();
+    if (isThisMainCamera.value && GetMainCamera() != this) SetMainCamera();
+    else if (!isThisMainCamera.value && GetMainCamera() == this)
+    {
+        Console::WriteErrorLine("Cannot set false for the main camera");
+        isThisMainCamera = true;
+    }
+}
+
 

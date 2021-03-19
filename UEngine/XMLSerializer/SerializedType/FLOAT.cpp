@@ -4,7 +4,7 @@
 void UEngine::TYPE::FLOAT::Serialize(TiXmlElement* node)
 {
 	auto variable = new TiXmlElement("FLOAT");
-	variable->SetAttribute(name.c_str(), value);
+	variable->SetDoubleAttribute(name.c_str(), value);
 	node->LinkEndChild(variable);
 }
 

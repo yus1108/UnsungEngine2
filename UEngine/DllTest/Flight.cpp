@@ -97,7 +97,4 @@ void Flight::Update()
 		movingCounter = 0;
 	}
 	movingCounter += Utility::UTime::Get()->DeltaTimeF();
-
-	Console::Clear();
-	Console::WriteLine(std::to_string(currMapIndex.x));
 }

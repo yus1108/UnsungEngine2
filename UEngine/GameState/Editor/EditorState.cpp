@@ -268,18 +268,30 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             {
                 ImGui::Begin("GameState Hierarchy");
 
+                static GameScene* sceneSelected = nullptr;
+                ImGuiIO& io = ImGui::GetIO();
+
                 for (auto sceneMap : SingletonManager::State->GetScenes())
                 {
                     ImGui::PushID(&sceneMap.first);
                     if (ImGui::CollapsingHeader((sceneMap.first + " : GameScene").c_str()))
                     {
-                        auto size = ImGui::GetItemRectSize();
+                        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+                        {
+                            if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
+                            {
+                                sceneSelected = sceneMap.second;
+                                ImGui::OpenPopup("gameobject_creation_popup");
+                            }
+                        }
+
                         for (auto gameObject : sceneMap.second->GetGameObjects())
                         {
                             if (gameObject->GetParent() == nullptr)
                             {
                                 ImGui::PushID(&gameObject->name);
-                                if (ImGui::TreeNode((gameObject->name + " : GameObject(" + 
+                                static bool closable_group = true;
+                                if (ImGui::TreeNode((gameObject->name + " : GameObject(" +
                                     std::to_string(gameObject->GetChildren().size()) + ")").c_str()))
                                 {
                                     if (ImGui::Button("Select"))
@@ -292,6 +304,38 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                                 ImGui::PopID();
                             }
                         }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+                        {
+                            if (ImGui::IsMouseClicked(i) && i == 1 && ImGui::IsItemHovered())
+                                ImGui::OpenPopup("gameobject_creation_popup");
+                        }
+                    }
+                    
+                    if (ImGui::BeginPopup("gameobject_creation_popup"))
+                    {
+                        ImGui::MenuItem("copy", "Ctrl+C", false);
+                        ImGui::MenuItem("paste", "Ctrl+V", false, false);
+                        ImGui::Separator();
+                        ImGui::MenuItem("rename", "F2", false, false);
+                        ImGui::MenuItem("duplicate", "Ctrl+G", false);
+                        ImGui::MenuItem("delete", "del", false);
+                        ImGui::Separator();
+                        if (ImGui::MenuItem("Create Empty", "", false))
+                        {
+                            auto gameObject = GameObject::Instantiate(sceneSelected, "GameObject");
+                            gameObject->AddComponent<EditorScript>();
+                        }
+                        ImGui::MenuItem("2D Object", "", false);
+                        if (ImGui::MenuItem("Camera", "", false))
+                        {
+                            auto gameObject = GameObject::Instantiate(sceneSelected, "GameObject");
+                            gameObject->AddComponent<EditorScript>();
+                            gameObject->AddComponent<Camera>();
+                        }
+                        ImGui::EndPopup();
                     }
                     ImGui::PopID();
                 }
