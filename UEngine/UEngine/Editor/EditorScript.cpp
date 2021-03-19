@@ -91,6 +91,7 @@ namespace UEngine
             gameObject->GetScene()->debugRenderer->Add_Axis(matrix);
             gameObject->GetScene()->debugRenderer->Add_Rectangle(aabb, UEngine::Color{ 0.5f, 0.5f, 0.5f, 1 });
 
+            ImGui::PushID(this);
             ImGui::Begin("Inspector");
 
             ImGui::Text("GameObject");
@@ -119,7 +120,7 @@ namespace UEngine
             {
                 if (component->typeName == ".PAVEditorScript@UEngine@@") continue;
                 auto typeName = component->typeName.substr(4, component->typeName.find_first_of('@') - 4);
-                ImGui::PushID(this);
+                ImGui::PushID(component);
                 if (ImGui::CollapsingHeader(typeName.c_str()))
                 {
                     component->OnEditRender();
@@ -127,7 +128,50 @@ namespace UEngine
                 ImGui::PopID();
             }
 
+            if (!isAddingComponent)
+            {
+                isAddingComponent = ImGui::Button("Add Component");
+            }
+            if (isAddingComponent)
+            {
+                ImGui::Separator();
+                static ImGuiTextFilter filter;
+                const char* renderingItems[] = 
+                { 
+                    "RenderComponent",
+                    "Material", 
+                    "Camera",
+                    "Physics2D"
+                    "CircleCollider",
+                    "RectCollider"
+                };
+                // TODO: Dynamically find all user defined scripts
+                static int item_current_idx = 0; // Here we store our selection data as an index.
+
+                if (ImGui::BeginListBox("##listbox 2", ImVec2(-FLT_MIN, 5 * ImGui::GetTextLineHeightWithSpacing())))
+                {
+                    for (int n = 0; n < IM_ARRAYSIZE(renderingItems); n++)
+                    {
+                        if (filter.PassFilter(renderingItems[n]))
+                        {
+                            const bool is_selected = (item_current_idx == n);
+                            if (ImGui::Selectable(renderingItems[n], is_selected))
+                                item_current_idx = n;
+
+                            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                            if (is_selected)
+                                ImGui::SetItemDefaultFocus();
+                        }
+                        
+                    }
+                    ImGui::EndListBox();
+                }
+                filter.Draw("");
+                ImGui::Button("Add Component");
+            }
+
             ImGui::End();
+            ImGui::PopID();
         }
 
     }

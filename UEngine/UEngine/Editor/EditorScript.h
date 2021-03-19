@@ -14,6 +14,7 @@ namespace UEngine
 		};
 	private:
 		bool isMoving{ false };
+		bool isAddingComponent{ false };
 		UEngine::Vector2 posDiff;
 		UEngine::Physics2D::AABB aabb{ 0.5f, 0.5f, 0.5f, 0.5f };
 
