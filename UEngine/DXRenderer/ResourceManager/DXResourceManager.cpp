@@ -76,6 +76,7 @@ namespace UEngine
 			auto rendering_desc = renderer->GetDescription();
 
 			RASTERIZER_DESC rsDesc = RASTERIZER_DESC();
+			rsDesc.CullMode = rendering_desc.CullMode;
 			rsDesc.EnableAntialisedLine = rendering_desc.EnableAntialisedLine;
 			rsDesc.EnableDepthStencil = rendering_desc.EnableDepthStencil;
 			rsDesc.EnableMultisampling = rendering_desc.EnableMultisampling;

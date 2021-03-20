@@ -16,7 +16,6 @@ namespace UEngine
 
     void WinApplication::Create(HINSTANCE hInstance, size_t numThreads)
     {
-
         WNDCLASSEXW Wcex;
         Wcex.cbSize = sizeof(WNDCLASSEX);
         Wcex.style = CS_HREDRAW | CS_VREDRAW;

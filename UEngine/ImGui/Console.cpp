@@ -47,9 +47,10 @@ namespace UEngine
         instance->logs.clear();
     }
 
-    void Console::Render()
+    void Console::Render(bool* isFocused)
     {
         ImGui::Begin("Console");
+        if (isFocused) *isFocused = ImGui::IsWindowFocused();
         for (size_t i = 0; i < instance->logs.size(); i++)
         {
             switch (instance->logs[i].first)
@@ -66,6 +67,8 @@ namespace UEngine
             }
         }
         ImGui::End();
+
+        
     }
 }
 

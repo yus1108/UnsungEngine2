@@ -1,10 +1,11 @@
 #include "UEngine.h"
 #include "Input.h"
-
 bool UEngine::Input::GetKey(const unsigned VK_KEY)
 {
+	auto window = GetFocus();
 	bool isFocuesd = GameState::Get()->isFocused;
-	if (isFocuesd &&
+	if (reinterpret_cast<int>(window) != NULL &&
+		isFocuesd &&
 		UEngine::WinInput::Get()->GetKey(VK_KEY))
 	{
 		return true;
@@ -14,8 +15,10 @@ bool UEngine::Input::GetKey(const unsigned VK_KEY)
 
 bool UEngine::Input::GetKeyDown(const unsigned VK_KEY)
 {
+	auto window = GetFocus();
 	bool isFocuesd = GameState::Get()->isFocused;
-	if (isFocuesd &&
+	if (reinterpret_cast<int>(window) != NULL &&
+		isFocuesd &&
 		UEngine::WinInput::Get()->GetKeyDown(VK_KEY))
 	{
 		return true;
@@ -25,8 +28,10 @@ bool UEngine::Input::GetKeyDown(const unsigned VK_KEY)
 
 bool UEngine::Input::GetKeyUp(const unsigned VK_KEY)
 {
+	auto window = GetFocus();
 	bool isFocuesd = GameState::Get()->isFocused;
-	if (isFocuesd &&
+	if (reinterpret_cast<int>(window) != NULL &&
+		isFocuesd &&
 		UEngine::WinInput::Get()->GetKeyUp(VK_KEY))
 	{
 		return true;

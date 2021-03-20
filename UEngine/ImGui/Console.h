@@ -38,7 +38,7 @@ namespace UEngine
 		static void WriteError(std::string log);
 		static void WriteErrorLine(std::string log);
 		static void Clear();
-		static void Render();
+		static void Render(bool* isFocused = nullptr);
 	};
 }
 

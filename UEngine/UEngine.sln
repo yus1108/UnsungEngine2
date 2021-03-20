@@ -26,6 +26,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XMLSerializer", "XMLSeriali
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "ImGui\ImGui.vcxproj", "{BD3A1ECC-E8C6-4EEC-97F7-C5044DF5C166}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DungeonSouls", "..\Examples\DungeonSouls\DungeonSouls.vcxproj", "{DC16FD29-393D-48E8-8B8B-921CF94A661C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -114,6 +116,14 @@ Global
 		{BD3A1ECC-E8C6-4EEC-97F7-C5044DF5C166}.Release|x64.Build.0 = Release|x64
 		{BD3A1ECC-E8C6-4EEC-97F7-C5044DF5C166}.Release|x86.ActiveCfg = Release|Win32
 		{BD3A1ECC-E8C6-4EEC-97F7-C5044DF5C166}.Release|x86.Build.0 = Release|Win32
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Debug|x64.ActiveCfg = Debug|x64
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Debug|x64.Build.0 = Debug|x64
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Debug|x86.ActiveCfg = Debug|Win32
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Debug|x86.Build.0 = Debug|Win32
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Release|x64.ActiveCfg = Release|x64
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Release|x64.Build.0 = Release|x64
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Release|x86.ActiveCfg = Release|Win32
+		{DC16FD29-393D-48E8-8B8B-921CF94A661C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

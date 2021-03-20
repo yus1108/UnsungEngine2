@@ -173,11 +173,11 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             ImGui::NewFrame();
         }, [&]()
         {
-            if (WinInput::Get()->GetKeyDown('1'))
-            {
-                GameState::GetCurrentScene()->SaveScene();
-                return true;
-            }
+            //if (WinInput::Get()->GetKeyDown('1'))
+            //{
+            //    GameState::GetCurrentScene()->SaveScene();
+            //    return true;
+            //}
             return false;
         }, [&]()
         {
