@@ -1,4 +1,5 @@
 #pragma once
+#include "Animation.h"
 
 using namespace UEngine;
 
@@ -20,49 +21,34 @@ enum PLAYER_ANIMATION_STATE
 	PLAYER_ANIMATION_STATE_COUNT
 };
 
-struct Animation
-{
-	int numSprite;
-	float delay;
-};
-
-Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT] =
-{
-	{ 13, 0.2f },
-	{ 8, 0.1f },
-	{ 10, 0.1f },
-	{ 10, 0.2f },
-	{ 10, 0.2f },
-	{ 6, 0.2f },
-	{ 4, 0.2f },
-	{ 7, 0.2f },
-	{ 4, 0.2f },
-	{ 8, 0.2f },
-	{ 6, 0.2f },
-	{ 8, 0.2f },
-	{ 5, 0.2f }
-};
-
 UENGINE_CLASS(Player)
 {
 private:
-	bool isRolling = false;
-	bool isAttacking = false;
-	bool isJumping = false;
 	float frameSize = 32.0f;
-	float textureSize = 416.0f;
-	float index = 0;
 	float timer = 0;
-	unsigned animationState = PLAYER_ANIMATION_STATE_MOVE;
 	float speed = 4.0f;
+	float deltaTime = 0.0f;
 	Vector2 lastPos;
+	Vector2 velocity;
 
+	Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT];
+	Animation animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
+
+	bool Movable = false;
+	bool Rotatable = false;
+	bool EnableRoutine = false;
+	Transform* transform = nullptr;
 	Material* material{ nullptr };
 	GameObject* imageObj{ nullptr };
 
-public:
 private:
 	void Start() override;
 	void Update() override;
+	void LateUpdate() override;
+
+	void RotateOn(float x);
+	void ReceiveInput();
+	void UpdateAnimation();
+	void OnPreRender();
 };
 

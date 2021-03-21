@@ -425,8 +425,12 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 
 	Vector2 dist = closestPoint2 - closestPoint1;
 	Vector2 realDist;
+
 	realDist.x = abs(dist.x) > abs(dist.y) ? 0 : dist.x;
 	realDist.y = abs(dist.x) < abs(dist.y) ? 0 : dist.y;
+	if (dist.x == 0 || dist.y == 0)
+		realDist = dist;
+	result.isColliding = true;
 	result.distance1 = realDist * -0.5f;
 	result.distance2 = realDist * 0.5f;
 
@@ -451,8 +455,9 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 	if (!result.isColliding) return result;
 
 	float distToMove = (circle->GetCollider().radius - distance) / 2.0f;
-	result.distance1 = dir.Normalize() * distToMove;
-	result.distance2 = dir.Normalize() * -distToMove;
+	result.isColliding = true;
+	result.distance1 = dir.Normalize() * -distToMove;
+	result.distance2 = dir.Normalize() * distToMove;
 
 	return result;
 }
@@ -482,6 +487,7 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 		result.distance2 = Vector2(Math::RndFloat(0, 2) - 1.0f, Math::RndFloat(0, 2) - 1.0f);
 	}
 
+	result.isColliding = true;
 	result.distance1 = result.distance1.Normalize() * distance;
 	result.distance2 = result.distance2.Normalize() * distance;
 

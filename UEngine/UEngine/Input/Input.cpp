@@ -39,6 +39,21 @@ bool UEngine::Input::GetKeyUp(const unsigned VK_KEY)
 	return false;
 }
 
+bool UEngine::Input::GetMouseDown(const unsigned VK_KEY)
+{
+	auto window = GetFocus();
+	bool isFocuesd = GameState::Get()->isFocused;
+	auto mousePos = GetMousePos();
+	if (IsMouseInWindow(mousePos) &&
+		reinterpret_cast<int>(window) != NULL &&
+		isFocuesd &&
+		UEngine::WinInput::Get()->GetKeyDown(VK_KEY))
+	{
+		return true;
+	}
+	return false;
+}
+
 UEngine::Vector2 UEngine::Input::GetMousePos()
 {
 	RECT windowSize;
@@ -61,6 +76,5 @@ bool UEngine::Input::IsMouseInWindow(__out UEngine::Vector2& mousePos)
 	mousePos = GetMousePos();
 
 	Vector2 pixelPos = WinInput::Get()->GetMousePos();
-
 	return Math::Physics2D::IsColliding(pixelPos, windowSize);
 }

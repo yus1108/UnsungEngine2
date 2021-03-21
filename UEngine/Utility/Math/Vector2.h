@@ -109,5 +109,17 @@ namespace UEngine
 			DirectX::XMVECTOR thisVector = DirectX::XMVectorSet(this->x, this->y, 0, 0);
 			return DirectX::XMVector2TransformCoord(thisVector, rhs);
 		}
+
+		bool operator==(Vector2& rhs)
+		{
+			if (
+				this->x == rhs.x &&
+				this->y == rhs.y
+				)
+			{
+				return true;
+			}
+			return false;
+		}
 	};
 }

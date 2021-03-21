@@ -29,9 +29,11 @@ namespace UEngine
 		std::vector<std::pair<LOG_TYPE, std::string>> logs;
 		unsigned warningCounter = 0;
 		unsigned errorCounter = 0;
+		bool gotoEnd = false;
 
 	public:
 		static void Write(std::string log);
+		static void Write(std::pair<LOG_TYPE, std::string> log);
 		static void WriteLine(std::string log);
 		static void WriteWarning(std::string log);
 		static void WriteWarningLine(std::string log);

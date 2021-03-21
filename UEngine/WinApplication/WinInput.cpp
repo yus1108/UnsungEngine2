@@ -50,7 +50,6 @@ const bool UEngine::WinInput::GetKeyUp(const unsigned& _key)
 
 const UEngine::Utility::Coordinate2D UEngine::WinInput::GetMousePos() const
 {
-    UEngine::Utility::Coordinate2D value;
     RECT clientSize, windowSize, rc;
     POINT point;
 
@@ -62,16 +61,10 @@ const UEngine::Utility::Coordinate2D UEngine::WinInput::GetMousePos() const
     rc.top = 0;
     rc.right = clientSize.right;
     rc.bottom = clientSize.bottom;
-    //WinApplication::Get()->GetClientSize(&rc);
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, false);
 
     point.x = point.x - windowSize.left + rc.left;
-    point.x = point.x < clientSize.left ? clientSize.left : point.x;
-    value.x = static_cast<float>(point.x >= clientSize.right ? clientSize.right - 1 : point.x);
-
     point.y = point.y - windowSize.top + rc.top;
-    point.y = point.y < clientSize.top ? clientSize.top : point.y;
-    value.y = static_cast<float>(point.y >= clientSize.bottom ? clientSize.bottom - 1 : point.y);
 
-    return value;
+    return { static_cast<float>(point.x), static_cast<float>(point.y) };
 }

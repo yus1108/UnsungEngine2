@@ -107,14 +107,39 @@ void Game::Load()
                auto camera = cameraObject->AddComponent<Camera>();
                camera->viewWidth.value = static_cast<float>(size.x);
                camera->viewHeight.value = static_cast<float>(size.y);
+               currentScene->ResourceManager.ApplyChange();
 
                auto map = GameObject::Instantiate(currentScene, "map");
                map->AddComponent<RenderComponent>()->Load("rectangle", "image");
                map->AddComponent<Material>()->LoadImageMaterial(L"./Assets/background.png");
                map->GetTransform()->scale = Vector2(1280, 720);
+               currentScene->ResourceManager.ApplyChange();
+
+               for (size_t i = 0; i < 13; i++)
+               {
+                   int index = i;
+                   auto tile = GameObject::Instantiate(currentScene, "tile");
+                   tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+                   tile->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tileset.png");
+                   tile->AddComponent<Physics2D::RectCollider>()->SetCollider(32, 32);
+                   tile->GetTransform()->localPosition.value.x = (i + 1) * 32.0f;
+                   tile->GetTransform()->scale.value = Vector2{
+                       32,
+                       32
+                   };
+                   tile->GetComponent<Material>()->uv = UV
+                   {
+                       7.0f / 12.0f,
+                       0.5f,
+                       8.0f / 12.0f,
+                       1.0f - 1.0f / 3.0f
+                   };
+                   currentScene->ResourceManager.ApplyChange();
+               }
 
                auto player = GameObject::Instantiate(currentScene, "player");
                player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+               player->AddComponent<UEngine::Physics2D::CircleCollider>()->SetCollider({ 0, 0 }, 16);
 
                auto playerImage = GameObject::Instantiate(currentScene, "playerImage");
                playerImage->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
@@ -126,15 +151,18 @@ void Game::Load()
 
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("PlayerCreation");
                scriptCreation(player);
+               currentScene->ResourceManager.ApplyChange();
 
-               auto weapon = GameObject::Instantiate(currentScene, "weapon");
+               
+
+ /*              auto weapon = GameObject::Instantiate(currentScene, "weapon");
                weapon->AddComponent<RenderComponent>()->Load("rectangle", "image");
                weapon->AddComponent<Material>()->LoadImageMaterial(L"./Assets/throw_09.png");
                weapon->GetTransform()->scale = Vector2(32, 32);
                weapon->SetParent(player);
 
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
-               scriptCreation(weapon);
+               scriptCreation(weapon);*/
         }
         //GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", true);
 
@@ -189,9 +217,10 @@ int Game::Run(double targetHz)
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
+            //Console::Clear();
         }, [&]()
         {
-            if (WinInput::Get()->GetKeyDown(VK_F10))
+            if (Input::GetKeyDown(VK_F10))
             {
                 GameState::GetCurrentScene()->SaveScene();
                 return true;

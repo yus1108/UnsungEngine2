@@ -8,35 +8,41 @@ namespace UEngine
 
     void Console::Write(std::string log)
     {
-        instance->logs.push_back(std::pair<LOG_TYPE, std::string>(LOG_TYPE::LOG, log));
+        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::LOG, log));
+    }
+
+    void Console::Write(std::pair<LOG_TYPE, std::string> log)
+    {
+        instance->logs.push_back(log);
+        instance->gotoEnd = true;
     }
 
     void Console::WriteLine(std::string log)
     {
-        instance->logs.push_back(std::pair<LOG_TYPE, std::string>(LOG_TYPE::LOG, log + "\n"));
+        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::LOG, log + "\n"));
     }
 
     void Console::WriteWarning(std::string log)
     {
-        instance->logs.push_back(std::pair<LOG_TYPE, std::string>(LOG_TYPE::WARNING, log + "\n"));
+        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::WARNING, log));
         instance->warningCounter++;
     }
 
     void Console::WriteWarningLine(std::string log)
     {
-        instance->logs.push_back(std::pair<LOG_TYPE, std::string>(LOG_TYPE::WARNING, log + "\n"));
+        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::WARNING, log + "\n"));
         instance->warningCounter++;
     }
 
     void Console::WriteError(std::string log)
     {
-        instance->logs.push_back(std::pair<LOG_TYPE, std::string>(LOG_TYPE::ERROR_LOG, log + "\n"));
+        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::ERROR_LOG, log));
         instance->errorCounter++;
     }
 
     void Console::WriteErrorLine(std::string log)
     {
-        instance->logs.push_back(std::pair<LOG_TYPE, std::string>(LOG_TYPE::ERROR_LOG, log + "\n"));
+        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::ERROR_LOG, log + "\n"));
         instance->errorCounter++;
     }
 
@@ -44,6 +50,7 @@ namespace UEngine
     {
         instance->warningCounter = 0;
         instance->errorCounter = 0;
+        instance->gotoEnd = false;
         instance->logs.clear();
     }
 
@@ -64,6 +71,15 @@ namespace UEngine
             case UEngine::LOG_TYPE::ERROR_LOG:
                 ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), (std::string("[ERROR] ") + instance->logs[i].second).c_str());
                 break;
+            }
+        }
+        if (instance->gotoEnd)
+        {
+            float maxScrollY = ImGui::GetScrollMaxY();
+            if (ImGui::GetScrollY() != maxScrollY)
+            {
+                ImGui::SetScrollY(maxScrollY);
+                instance->gotoEnd = false;
             }
         }
         ImGui::End();
