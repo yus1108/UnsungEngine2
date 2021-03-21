@@ -115,10 +115,14 @@ void Game::Load()
 
                auto player = GameObject::Instantiate(currentScene, "player");
                player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-               auto material = player->AddComponent<Material>();
+
+               auto playerImage = GameObject::Instantiate(currentScene, "playerImage");
+               playerImage->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+               auto material = playerImage->AddComponent<Material>();
                material->LoadImageMaterial(L"./Assets/Adventurer Sprite Sheet v1.3.png");
                material->uv.value = UV{ 0, 0, 1.0f / 13.0f, 1.0f / 13.0f };
-               player->GetTransform()->scale = Vector2(32, 32);
+               playerImage->GetTransform()->scale = Vector2(32, 32);
+               playerImage->SetParent(player);
 
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("PlayerCreation");
                scriptCreation(player);
@@ -126,11 +130,11 @@ void Game::Load()
                auto weapon = GameObject::Instantiate(currentScene, "weapon");
                weapon->AddComponent<RenderComponent>()->Load("rectangle", "image");
                weapon->AddComponent<Material>()->LoadImageMaterial(L"./Assets/throw_09.png");
-               weapon->GetTransform()->scale = Vector2(1, 1);
+               weapon->GetTransform()->scale = Vector2(32, 32);
                weapon->SetParent(player);
 
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
-               scriptCreation(player);
+               scriptCreation(weapon);
         }
         //GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", true);
 

@@ -10,10 +10,13 @@ UEngine::GameObject::~GameObject()
 		delete components[i];
 	components.clear();
 	for (size_t i = 0; i < children.size(); i++)
+	{
+		if (children[i]) children[i]->parent = nullptr;
 		GetScene()->RemoveGameObject(&children[i]);
+	}
 	if (parent != nullptr)
 		parent->RemoveChild(this);
-	children.clear();
+	parent = nullptr;
 }
 
 std::string UEngine::GameObject::GetComponentTypeName(Component* component)
@@ -158,6 +161,7 @@ void UEngine::GameObject::RemoveChild(GameObject* child)
 	{
 		if (*iter == child)
 		{
+			child->parent = nullptr;
 			children.erase(iter);
 			return;
 		}

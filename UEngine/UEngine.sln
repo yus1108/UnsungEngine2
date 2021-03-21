@@ -27,6 +27,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "ImGui\ImGui.vcxproj", "{BD3A1ECC-E8C6-4EEC-97F7-C5044DF5C166}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DungeonSouls", "..\Examples\DungeonSouls\DungeonSouls.vcxproj", "{DC16FD29-393D-48E8-8B8B-921CF94A661C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4B4D66C9-796C-4BC1-84AA-543FB3786F12} = {4B4D66C9-796C-4BC1-84AA-543FB3786F12}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

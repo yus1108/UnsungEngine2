@@ -30,7 +30,7 @@ Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT] =
 {
 	{ 13, 0.2f },
 	{ 8, 0.1f },
-	{ 10, 0.2f },
+	{ 10, 0.1f },
 	{ 10, 0.2f },
 	{ 10, 0.2f },
 	{ 6, 0.2f },
@@ -47,6 +47,8 @@ UENGINE_CLASS(Player)
 {
 private:
 	bool isRolling = false;
+	bool isAttacking = false;
+	bool isJumping = false;
 	float frameSize = 32.0f;
 	float textureSize = 416.0f;
 	float index = 0;
@@ -56,6 +58,7 @@ private:
 	Vector2 lastPos;
 
 	Material* material{ nullptr };
+	GameObject* imageObj{ nullptr };
 
 public:
 private:

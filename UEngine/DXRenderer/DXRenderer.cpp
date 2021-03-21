@@ -94,6 +94,12 @@ namespace UEngine
 			immediate.RenderTargetView.ReleaseAndGetAddressOf();
 			swapchain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
 			InitMainRenderTargetView(immediate.RenderTargetView.GetAddressOf());
+			immediate.Viewport.Width = width;
+			immediate.Viewport.Height = height;
+			immediate.Viewport.MinDepth = 0;
+			immediate.Viewport.MaxDepth = 1;
+			immediate.Viewport.TopLeftX = 0;
+			immediate.Viewport.TopLeftY = 0;
 		}
 
 		void DXRenderer::InitConstantBuffer(UINT byteWidth, ID3D11Buffer** constBuffer)

@@ -3,7 +3,8 @@
 
 void Player::Start()
 {
-	material = GetComponent<Material>();
+	imageObj = FindObjectWithName("playerImage");
+	material = imageObj->GetComponent<Material>();
 }
 
 void Player::Update()
@@ -31,26 +32,53 @@ void Player::Update()
 		auto value = Vector2(-1, 0) * frameSize * speed * deltaTime;
 		transform->localPosition.value = transform->localPosition.value + value;
 	}
+	if (UEngine::Input::GetKeyDown(VK_SPACE))
+	{
+		isJumping = !isJumping;
+	}
 	if (UEngine::Input::GetKeyDown(VK_SPACE)) 
 	{
-		isRolling = true;
+		isRolling = !isRolling;
+	}
+	if (Input::GetKeyDown(VK_LBUTTON))
+	{
+		isAttacking = !isAttacking;
 	}
 
 	Vector2 velocity = transform->localPosition.value - lastPos;
-	if (velocity.x == 0 && velocity.y == 0)
+	if (isJumping)
 	{
-		animationState = PLAYER_ANIMATION_STATE_IDLE;
+		animationState = PLAYER_ANIMATION_STATE_JUMP;
 	}
-	else
+	else if (isAttacking)
 	{
-		animationState = PLAYER_ANIMATION_STATE_MOVE;
+		animationState = PLAYER_ANIMATION_STATE_ATTACK1;
 		if (velocity.x < 0)
 		{
-			transform->localRotation.value.y = -Utility::UMath::PI;
+			imageObj->GetTransform()->localRotation.value.y = -Utility::UMath::PI;
 		}
 		else if (velocity.x > 0)
 		{
-			transform->localRotation.value.y = 0;
+			imageObj->GetTransform()->localRotation.value.y = 0;
+		}
+	}
+	else
+	{
+		if (velocity.x == 0 && velocity.y == 0)
+		{
+			animationState = PLAYER_ANIMATION_STATE_IDLE;
+		}
+		else
+		{
+			animationState = PLAYER_ANIMATION_STATE_MOVE;
+			if (velocity.x < 0)
+			{
+				imageObj->GetTransform()->localRotation.value.y = -Utility::UMath::PI;
+			}
+			else if (velocity.x > 0)
+			{
+				imageObj->GetTransform()->localRotation.value.y = 0;
+			}
 		}
 	}
 	lastPos = transform->localPosition.value;
