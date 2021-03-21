@@ -6,6 +6,7 @@ namespace UEngine
 	{
 		friend class GameScene;
 		friend class Component;
+
 	private:
 		GameObject() { Awake(); SetActive(true); }
 		~GameObject();

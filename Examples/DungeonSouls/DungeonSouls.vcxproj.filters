@@ -3,11 +3,9 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
 </Project>

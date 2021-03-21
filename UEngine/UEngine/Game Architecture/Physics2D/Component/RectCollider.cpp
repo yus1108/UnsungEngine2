@@ -50,8 +50,8 @@ void UEngine::Physics2D::RectCollider::Calc_Vs_Circle(RectCollider* rect, Circle
 		{
 			if (Math::Physics2D::IsColliding(rect->GetCollider(), circle->GetCollider()))
 			{
-				circle->others[rect] = rect;
-				rect->others[circle] = circle;
+				circle->others.emplace(rect);
+				rect->others.emplace(circle);
 			}
 		}
 	}
@@ -75,8 +75,8 @@ void UEngine::Physics2D::RectCollider::Calc_Vs_Circle(RectCollider* rect, Circle
 				circle->RigidBodyUpdate();
 				rect->RigidBodyUpdate();
 
-				circle->collisions[rect] = rect;
-				rect->collisions[circle] = circle;
+				circle->OnCollision(rect);
+				rect->OnCollision(circle);
 			}
 		}
 	}
@@ -90,8 +90,8 @@ void UEngine::Physics2D::RectCollider::Calc_Vs_Rect(RectCollider* rect1, RectCol
 		{
 			if (Math::Physics2D::IsColliding(rect1->GetCollider(), rect2->GetCollider()))
 			{
-				rect1->others[rect2] = rect2;
-				rect2->others[rect1] = rect1;
+				rect1->others.emplace(rect2);
+				rect2->others.emplace(rect1);
 			}
 		}
 	}
@@ -115,8 +115,8 @@ void UEngine::Physics2D::RectCollider::Calc_Vs_Rect(RectCollider* rect1, RectCol
 				rect1->RigidBodyUpdate();
 				rect2->RigidBodyUpdate();
 
-				rect1->collisions[rect2] = rect2;
-				rect2->collisions[rect1] = rect1;
+				rect1->OnCollision(rect2);
+				rect2->OnCollision(rect1);
 			}
 		}
 	}

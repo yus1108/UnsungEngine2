@@ -3,6 +3,7 @@
 #include <list>
 #include <queue>
 #include <map>
+#include <set>
 #include <array>
 
 #include "../Utility/UtilityDefinitions.h"
@@ -18,6 +19,7 @@
 #include "UEngineDefinitions.h"
 #include "DebugRenderer\DebugRenderer.h"
 
+#include "Game Architecture\Physics2D\Component\Collider.h"
 #include "Game Architecture\Physics2D\Component\CircleCollider.h"
 #include "Game Architecture\Physics2D\Component\RectCollider.h"
 #include "Math\Math.h"

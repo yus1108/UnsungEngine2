@@ -115,14 +115,16 @@ void Game::Load()
                map->GetTransform()->scale = Vector2(1280, 720);
                currentScene->ResourceManager.ApplyChange();
 
-               for (size_t i = 0; i < 13; i++)
+               for (size_t i = 0; i < 12; i++)
                {
                    int index = i;
                    auto tile = GameObject::Instantiate(currentScene, "tile");
+                   tile->IsStatic = true;
                    tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                    tile->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tileset.png");
                    tile->AddComponent<Physics2D::RectCollider>()->SetCollider(32, 32);
-                   tile->GetTransform()->localPosition.value.x = (i + 1) * 32.0f;
+                   tile->GetTransform()->localPosition.value.x = (index - 6) * 32.0f;
+                   tile->GetTransform()->localPosition.value.y = -32.0f;
                    tile->GetTransform()->scale.value = Vector2{
                        32,
                        32

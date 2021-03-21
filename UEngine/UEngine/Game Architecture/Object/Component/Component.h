@@ -3,11 +3,17 @@
 
 namespace UEngine
 {
+	class EditorScript;
+	namespace Physics2D
+	{
+		class Collider;
+	}
 	class Component : public Serializer
 	{
 	private:
 		friend class UEngine::GameObject;
-
+		friend class UEngine::EditorScript;
+		friend class Physics2D::Collider;
 	private:
 		GameObject* gameObject{ nullptr };
 		bool initialized{ false };
@@ -43,6 +49,10 @@ namespace UEngine
 		virtual void OnPostRender() {}
 		virtual void OnDisable() {}
 		virtual void OnDestroy() {}
+
+		virtual void OnCollisionEnter(Physics2D::Collider* collision) {}
+		virtual void OnCollisionStay(Physics2D::Collider* collisions) {}
+		virtual void OnCollisionExit(Physics2D::Collider* collisions) {}
 
 	public:
 		std::string typeName;

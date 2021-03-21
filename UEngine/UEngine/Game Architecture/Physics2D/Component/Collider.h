@@ -17,19 +17,22 @@ namespace UEngine
 		protected:
 			std::string typeName;
 			AABB localAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
+			std::set<Collider*> prevCollisions;
 
 			Vector3 impact{ 0, 0, 0 };
 
 			void FixedUpdate() override;
 			void PhysicsUpdate() override;
+			void Update() override;
 
 			virtual void CalculateImpact(Collider* other) = 0;
 			virtual void RigidBodyUpdate() = 0;
+			void OnCollision(Collider* other);
 
 		public:
 			bool IsTrigger{ false };
-			std::map<Collider*, Collider*> others;
-			std::map<Collider*, Collider*> collisions;
+			std::set<Collider*> others;
+			std::set<Collider*> collisions;
 
 			std::string GetColliderType() { return typeName; }
 		};

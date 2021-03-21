@@ -28,8 +28,11 @@ private:
 	float timer = 0;
 	float speed = 4.0f;
 	float deltaTime = 0.0f;
+	float jumpPower;
+	Vector2 gravity = Vector2(0, -9.81f);
 	Vector2 lastPos;
 	Vector2 velocity;
+	Vector2 externalVelocity;
 
 	Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT];
 	Animation animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
@@ -45,6 +48,8 @@ private:
 	void Start() override;
 	void Update() override;
 	void LateUpdate() override;
+
+	void OnCollisionStay(Physics2D::Collider * collisions) override;
 
 	void RotateOn(float x);
 	void ReceiveInput();

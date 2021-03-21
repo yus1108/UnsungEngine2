@@ -13,7 +13,7 @@ void Player::Start()
 	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1] = Animation(false, 0.1f, { 0, 2 }, { 10, 2 }, { frameSize, frameSize }, { 416.0f, 416.0f });
 	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2] = Animation(false, 0.1f, { 0, 3 }, { 10, 3 }, { frameSize, frameSize }, { 416.0f, 416.0f });
 	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3] = Animation(false, 0.1f, { 0, 4 }, { 10, 4 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_JUMP] = Animation(false, 0.2f, { 2, 5 }, { 6, 5 }, { frameSize, frameSize }, { 416.0f, 416.0f });
+	player_animation_map[PLAYER_ANIMATION_STATE_JUMP] = Animation(false, 0.1f, { 2, 5 }, { 6, 5 }, { frameSize, frameSize }, { 416.0f, 416.0f });
 	player_animation_map[PLAYER_ANIMATION_STATE_DAMAGED] = Animation(false, 0.2f, { 0, 6 }, { 4, 6 }, { frameSize, frameSize }, { 416.0f, 416.0f });
 	player_animation_map[PLAYER_ANIMATION_STATE_DEAD] = Animation(false, 0.2f, { 0, 7 }, { 7, 7 }, { frameSize, frameSize }, { 416.0f, 416.0f });
 	player_animation_map[PLAYER_ANIMATION_STATE_CLIMB] = Animation(true, 0.2f, { 0, 8 }, { 4, 8 }, { frameSize, frameSize }, { 416.0f, 416.0f });
@@ -29,6 +29,7 @@ void Player::Start()
 void Player::Update()
 {
 	deltaTime = Utility::UTime::Get()->DeltaTimeF();
+	externalVelocity = externalVelocity + gravity * deltaTime;
 
 	ReceiveInput();
 
@@ -52,7 +53,7 @@ void Player::Update()
 
 void Player::LateUpdate()
 {
-	transform->localPosition.value = transform->localPosition.value + velocity;
+	transform->localPosition.value = transform->localPosition.value + velocity + externalVelocity;
 	velocity = Vector2(0, 0);
 	if (Rotatable)
 	{
@@ -112,7 +113,8 @@ void Player::ReceiveInput()
 	if (animation != player_animation_map[PLAYER_ANIMATION_STATE_JUMP] &&
 		Input::GetMouseDown(VK_RBUTTON))
 	{
-		Movable = false;
+		EnableRoutine = false;
+		jumpPower = 600.0f;
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_JUMP]);
 		return;
 	}
@@ -132,7 +134,11 @@ void Player::UpdateAnimation()
 {
 	if (animation == player_animation_map[PLAYER_ANIMATION_STATE_JUMP])
 	{
-		Movable = false;
+		EnableRoutine = false;
+		externalVelocity.y = jumpPower * deltaTime;
+		jumpPower -= 1200.0f * deltaTime;
+		if (jumpPower < 0)
+			jumpPower = 0;
 		if (animation.IsFinished() && velocity.y == 0) animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
 	}
 	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1] ||
@@ -154,4 +160,12 @@ void Player::OnPreRender()
 {
 	GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
 	GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 1, 0, 1 });
+}
+
+void Player::OnCollisionStay(Physics2D::Collider* collisions)
+{
+	if (collisions->GetGameObject()->name == "tile")
+	{
+		externalVelocity.y = 0;
+	}
 }
