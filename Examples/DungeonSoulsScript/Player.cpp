@@ -9,6 +9,7 @@ void Player::Start()
 	imageObj = FindObjectWithName("playerImage");
 	imageObj->GetTransform()->localPosition.value.x = 7.0f;
 	material = imageObj->GetComponent<Material>();
+	weapon = GetComponent<Weapon>();
 
 	player_animation_map[PLAYER_ANIMATION_STATE_IDLE] = Animation(true, 0.2f, { 0, 0 }, { 13, 0 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
 	player_animation_map[PLAYER_ANIMATION_STATE_MOVE] = Animation(true, 0.1f, {0, 1}, { 8, 1 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
@@ -30,6 +31,7 @@ void Player::Start()
 
 void Player::Update()
 {
+	weapon->Reset();
 	deltaTime = Utility::UTime::Get()->DeltaTimeF();
 	externalVelocity = externalVelocity + gravity * deltaTime;
 
@@ -114,7 +116,7 @@ void Player::ReceiveInput()
 
 	if (Jumpable && !jump &&
 		animation != player_animation_map[PLAYER_ANIMATION_STATE_JUMP] &&
-		Input::GetMouseDown(VK_SPACE))
+		Input::GetKeyDown(VK_SPACE))
 	{
 		EnableRoutine = false;
 		Jumpable = false;
@@ -154,6 +156,11 @@ void Player::UpdateAnimation()
 		animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
 	{
 		Movable = false;
+		weapon->Set();
+		if (animation.IsAt({ 3, PLAYER_ANIMATION_STATE_ATTACK1 })) SetAttack();
+		else if (animation.IsAt({ 3, PLAYER_ANIMATION_STATE_ATTACK2 })) SetAttack();
+		else if (animation.IsAt({ 3, PLAYER_ANIMATION_STATE_ATTACK3 })) SetAttack();
+		
 		if (animation.IsFinished()) animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
 	}
 	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ROLL])
@@ -225,50 +232,34 @@ void Player::Dash(float value)
 void Player::AttackInput()
 {
 	float attackValue = 0;
-	if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
-		attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
-		.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], 60.0f);
-	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
-		attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
-		.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], 60.0f);
-	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
-		attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
-		.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], 60.0f);
-	else if (Input::GetKeyDown(VK_LBUTTON))
+	if (Input::GetMouseDown(VK_LBUTTON))
 	{
-		attackValue = 60.0f;
-		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1]);
+		if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
+			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], 60.0f);
+		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
+			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], 60.0f);
+		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
+			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], 60.0f);
+		else
+		{
+			attackValue = 60.0f;
+			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1]);
+		}
 	}
+	
 
 	if (attackValue > 0)
 	{
+		weapon->Set();
 		Movable = false;
 		Dash(attackValue);
 	}
 }
 
-void Player::OnTriggerEnter(Physics2D::Collider* other)
+void Player::SetAttack()
 {
-	/*if (other->GetGameObject()->name == "enemy")
-	{
-		Console::Clear();
-		Console::WriteLine("Enter");
-	}*/
-}
-
-void Player::OnTriggerStay(Physics2D::Collider* other)
-{
-	//if (other->GetGameObject()->name == "enemy")
-	//{
-	//	Console::WriteLine("stay");
-	//}
-}
-
-void Player::OnTriggerExit(Physics2D::Collider* other)
-{
-	//if (other->GetGameObject()->name == "enemy")
-	//{
-	//	Console::Clear();
-	//	Console::WriteLine("exit");
-	//}
+	weapon->Attack();
 }

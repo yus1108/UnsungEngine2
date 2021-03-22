@@ -49,8 +49,9 @@ private:
 	bool EnableRoutine = false;
 	bool Jumpable = true;
 	Transform* transform = nullptr;
-	Material* material{ nullptr };
-	GameObject* imageObj{ nullptr };
+	Material* material = nullptr;
+	class Weapon* weapon = nullptr;
+	GameObject* imageObj = nullptr;
 
 	bool showCollision = false;
 
@@ -61,9 +62,6 @@ private:
 
 	void OnCollisionStay(Physics2D::Collider * collision) override;
 	void OnCollisionEnter(Physics2D::Collider * collision) override;
-	void OnTriggerEnter(Physics2D::Collider * other) override;
-	void OnTriggerStay(Physics2D::Collider * other) override;
-	void OnTriggerExit(Physics2D::Collider * other) override;
 
 	void RotateOn(float x);
 	void ReceiveInput();
@@ -72,5 +70,6 @@ private:
 	void DecreaseDash(float value);
 	void Dash(float value);
 	void AttackInput();
+	void SetAttack();
 };
 

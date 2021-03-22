@@ -30,6 +30,7 @@ public:
 	virtual void Stop() { stop = true; }
 	virtual void Play() { stop = false; }
 	virtual void Change(Animation& animation);
+	virtual bool IsAt(POINT spriteNum) { return index.x == spriteNum.x && index.y == spriteNum.y; }
 	virtual bool IsPassed(POINT spriteNum) { return index.x >= spriteNum.x && index.y >= spriteNum.y; }
 	virtual bool IsFinished() { return index.x >= endIndex.x - 1 && index.y >= endIndex.y - 1; }
 };

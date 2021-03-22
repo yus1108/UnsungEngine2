@@ -23,7 +23,7 @@
     <GameObject name="followCamera" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="138.92" y="-0.132541" z="0" />
+                <Vector3 name="localPosition" x="-542.07" y="-2080.63" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -846,7 +846,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="50.7516" y="-0.13451" z="0" />
+                <Vector3 name="localPosition" x="-379.977" y="-0.0981037" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="32" y="32" z="0" />
             </Component>
@@ -875,7 +875,7 @@
     <GameObject name="player" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="138.92" y="-0.198509" z="0" />
+                <Vector3 name="localPosition" x="-542.07" y="-2094.99" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -917,7 +917,7 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.473558" maxY="0.0769231" minX="0.396635" minY="0" />
+                    <UV name="uv" maxX="0.319712" maxY="0.0769231" minX="0.242788" minY="0" />
                 </Component>
             </Material>
         </GameObject>

@@ -27,5 +27,8 @@ using namespace UEngine;
 using namespace std;
 
 #include "Animation.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "Weapon.h"
 
 #endif //PCH_H
