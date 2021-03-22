@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <GameScene name="tempScene">
-    <GameObject name="camera" isActive="1" isStatic="0">
+    <GameObject name="worldCamera" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
                 <Vector3 name="localPosition" x="0" y="0" z="0" />
@@ -10,11 +10,31 @@
         </Transform>
         <Camera>
             <Component enabled="1">
-                <BOOL isThisMainCamera="1" />
+                <BOOL isThisMainCamera="0" />
                 <Vector3 name="cameraPosition" x="0" y="0" z="0" />
                 <Vector3 name="cameraRotation" x="0" y="0" z="0" />
                 <FLOAT viewWidth="1280" />
                 <FLOAT viewHeight="720" />
+                <FLOAT nearZ="-1" />
+                <FLOAT farZ="10" />
+            </Component>
+        </Camera>
+    </GameObject>
+    <GameObject name="followCamera" isActive="1" isStatic="0">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-29.43" y="-0.125042" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="1" y="1" z="1" />
+            </Component>
+        </Transform>
+        <Camera>
+            <Component enabled="1">
+                <BOOL isThisMainCamera="1" />
+                <Vector3 name="cameraPosition" x="0" y="0" z="0" />
+                <Vector3 name="cameraRotation" x="0" y="0" z="0" />
+                <FLOAT viewWidth="640" />
+                <FLOAT viewHeight="376" />
                 <FLOAT nearZ="-1" />
                 <FLOAT farZ="10" />
             </Component>
@@ -42,6 +62,240 @@
                 <UV name="uv" maxX="1" maxY="1" minX="0" minY="0" />
             </Component>
         </Material>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-480" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-448" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-416" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-384" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-352" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-320" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-288" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-256" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="-224" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
     </GameObject>
     <GameObject name="tile" isActive="1" isStatic="1">
         <Transform>
@@ -355,11 +609,245 @@
             <Component enabled="1" />
         </RectCollider>
     </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="192" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="224" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="256" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="288" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="320" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="352" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="384" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="416" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
+    <GameObject name="tile" isActive="1" isStatic="1">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="448" y="-32" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/tileset.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.666667" maxY="0.666667" minX="0.583333" minY="0.5" />
+            </Component>
+        </Material>
+        <RectCollider>
+            <Component enabled="1" />
+        </RectCollider>
+    </GameObject>
     <GameObject name="player" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-36.2301" y="-0.147149" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="localPosition" x="-29.43" y="-0.190808" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
@@ -372,13 +860,19 @@
         <CircleCollider>
             <Component enabled="1" />
         </CircleCollider>
+        <FollowCamera>
+            <Component enabled="1" />
+        </FollowCamera>
         <Player>
             <Component enabled="1" />
         </Player>
+        <Weapon>
+            <Component enabled="1" />
+        </Weapon>
         <GameObject name="playerImage" isActive="1" isStatic="0">
             <Transform>
                 <Component enabled="1">
-                    <Vector3 name="localPosition" x="0" y="0" z="0" />
+                    <Vector3 name="localPosition" x="7" y="0" z="0" />
                     <Vector3 name="localRotation" x="0" y="0" z="0" />
                     <Vector3 name="scale" x="32" y="32" z="0" />
                 </Component>
@@ -394,9 +888,50 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.307692" maxY="0.384615" minX="0.230769" minY="0.307692" />
+                    <UV name="uv" maxX="0.627404" maxY="0.0769231" minX="0.550481" minY="0" />
                 </Component>
             </Material>
         </GameObject>
+        <GameObject name="attackCollider" isActive="1" isStatic="0">
+            <Transform>
+                <Component enabled="1">
+                    <Vector3 name="localPosition" x="8" y="0" z="0" />
+                    <Vector3 name="localRotation" x="0" y="0" z="0" />
+                    <Vector3 name="scale" x="1" y="1" z="1" />
+                </Component>
+            </Transform>
+            <RectCollider>
+                <Component enabled="1" />
+            </RectCollider>
+        </GameObject>
+    </GameObject>
+    <GameObject name="enemy" isActive="1" isStatic="0">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="117.711" y="-0.128735" z="0" />
+                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="scale" x="32" y="32" z="0" />
+            </Component>
+        </Transform>
+        <RenderComponent>
+            <Component enabled="1">
+                <STRING renderMesh_name="rectangle" />
+                <STRING shader_name="sprite" />
+            </Component>
+        </RenderComponent>
+        <CircleCollider>
+            <Component enabled="1" />
+        </CircleCollider>
+        <Material>
+            <Component enabled="1">
+                <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
+                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                <COLOR name="color" r="1" g="1" b="1" a="1" />
+                <UV name="uv" maxX="0.0769231" maxY="0.0769231" minX="0" minY="0" />
+            </Component>
+        </Material>
+        <Enemy>
+            <Component enabled="1" />
+        </Enemy>
     </GameObject>
 </GameScene>

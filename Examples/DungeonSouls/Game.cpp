@@ -103,10 +103,17 @@ void Game::Load()
         currentScene->name = "tempScene";
         currentScene->Init(true);
         {
-               auto cameraObject = GameObject::Instantiate(currentScene, "camera");
+               auto cameraObject = GameObject::Instantiate(currentScene, "worldCamera");
                auto camera = cameraObject->AddComponent<Camera>();
                camera->viewWidth.value = static_cast<float>(size.x);
                camera->viewHeight.value = static_cast<float>(size.y);
+               currentScene->ResourceManager.ApplyChange();
+
+               auto playerCameraObj = GameObject::Instantiate(currentScene, "followCamera");
+               auto playerCamera = playerCameraObj->AddComponent<Camera>();
+               playerCamera->viewWidth.value = 640.0f;
+               playerCamera->viewHeight.value = 376.0f;
+               playerCamera->SetMainCamera();
                currentScene->ResourceManager.ApplyChange();
 
                auto map = GameObject::Instantiate(currentScene, "map");
@@ -115,15 +122,15 @@ void Game::Load()
                map->GetTransform()->scale = Vector2(1280, 720);
                currentScene->ResourceManager.ApplyChange();
 
-               for (size_t i = 0; i < 12; i++)
+               for (size_t i = 0; i < 30; i++)
                {
-                   int index = i;
+                   int index = i - 15;
                    auto tile = GameObject::Instantiate(currentScene, "tile");
                    tile->IsStatic = true;
                    tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                    tile->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tileset.png");
                    tile->AddComponent<Physics2D::RectCollider>()->SetCollider(32, 32);
-                   tile->GetTransform()->localPosition.value.x = (index - 6) * 32.0f;
+                   tile->GetTransform()->localPosition.value.x = index * 32.0f;
                    tile->GetTransform()->localPosition.value.y = -32.0f;
                    tile->GetTransform()->scale.value = Vector2{
                        32,
@@ -142,6 +149,13 @@ void Game::Load()
                auto player = GameObject::Instantiate(currentScene, "player");
                player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                player->AddComponent<UEngine::Physics2D::CircleCollider>()->SetCollider({ 0, 0 }, 16);
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("FollowCameraCreation");
+               scriptCreation(player);
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("PlayerCreation");
+               scriptCreation(player);
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
+               scriptCreation(player);
+               currentScene->ResourceManager.ApplyChange();
 
                auto playerImage = GameObject::Instantiate(currentScene, "playerImage");
                playerImage->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
@@ -150,21 +164,28 @@ void Game::Load()
                material->uv.value = UV{ 0, 0, 1.0f / 13.0f, 1.0f / 13.0f };
                playerImage->GetTransform()->scale = Vector2(32, 32);
                playerImage->SetParent(player);
-
-               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("PlayerCreation");
-               scriptCreation(player);
                currentScene->ResourceManager.ApplyChange();
 
-               
+               auto attackCollider = GameObject::Instantiate(currentScene, "attackCollider");
+               auto attack = attackCollider->AddComponent<UEngine::Physics2D::RectCollider>();
+               attack->SetCollider(16, 32);
+               attack->IsTrigger = true;
+               attackCollider->GetTransform()->localPosition.value.x = 8;
+               attackCollider->SetParent(player);
+               currentScene->ResourceManager.ApplyChange();
 
- /*              auto weapon = GameObject::Instantiate(currentScene, "weapon");
-               weapon->AddComponent<RenderComponent>()->Load("rectangle", "image");
-               weapon->AddComponent<Material>()->LoadImageMaterial(L"./Assets/throw_09.png");
-               weapon->GetTransform()->scale = Vector2(32, 32);
-               weapon->SetParent(player);
-
-               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
-               scriptCreation(weapon);*/
+               auto enemy = GameObject::Instantiate(currentScene, "enemy");
+               enemy->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+               auto enemyCollider = enemy->AddComponent<UEngine::Physics2D::CircleCollider>();
+               enemyCollider->SetCollider({ 0, 0 }, 16);
+               enemyCollider->IsTrigger = true;
+               material = enemy->AddComponent<Material>();
+               material->LoadImageMaterial(L"./Assets/Adventurer Sprite Sheet v1.3.png");
+               material->uv.value = UV{ 0, 0, 1.0f / 13.0f, 1.0f / 13.0f };
+               enemy->GetTransform()->scale = Vector2(32, 32);
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("EnemyCreation");
+               scriptCreation(enemy);
+               currentScene->ResourceManager.ApplyChange();
         }
         //GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", true);
 
@@ -225,6 +246,7 @@ int Game::Run(double targetHz)
             if (Input::GetKeyDown(VK_F10))
             {
                 GameState::GetCurrentScene()->SaveScene();
+                Console::Clear();
                 return true;
             }
             return false;

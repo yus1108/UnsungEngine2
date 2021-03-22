@@ -50,9 +50,12 @@ namespace UEngine
 		virtual void OnDisable() {}
 		virtual void OnDestroy() {}
 
+		virtual void OnTriggerEnter(Physics2D::Collider* other) {}
+		virtual void OnTriggerStay(Physics2D::Collider* other) {}
+		virtual void OnTriggerExit(Physics2D::Collider* other) {}
 		virtual void OnCollisionEnter(Physics2D::Collider* collision) {}
-		virtual void OnCollisionStay(Physics2D::Collider* collisions) {}
-		virtual void OnCollisionExit(Physics2D::Collider* collisions) {}
+		virtual void OnCollisionStay(Physics2D::Collider* collision) {}
+		virtual void OnCollisionExit(Physics2D::Collider* collision) {}
 
 	public:
 		std::string typeName;

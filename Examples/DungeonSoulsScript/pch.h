@@ -26,4 +26,6 @@
 using namespace UEngine;
 using namespace std;
 
+#include "Animation.h"
+
 #endif //PCH_H

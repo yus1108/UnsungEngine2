@@ -50,8 +50,8 @@ void UEngine::Physics2D::RectCollider::Calc_Vs_Circle(RectCollider* rect, Circle
 		{
 			if (Math::Physics2D::IsColliding(rect->GetCollider(), circle->GetCollider()))
 			{
-				circle->others.emplace(rect);
-				rect->others.emplace(circle);
+				circle->OnTrigger(rect);
+				rect->OnTrigger(circle);
 			}
 		}
 	}
@@ -90,8 +90,8 @@ void UEngine::Physics2D::RectCollider::Calc_Vs_Rect(RectCollider* rect1, RectCol
 		{
 			if (Math::Physics2D::IsColliding(rect1->GetCollider(), rect2->GetCollider()))
 			{
-				rect1->others.emplace(rect2);
-				rect2->others.emplace(rect1);
+				rect1->OnTrigger(rect2);
+				rect2->OnTrigger(rect1);
 			}
 		}
 	}

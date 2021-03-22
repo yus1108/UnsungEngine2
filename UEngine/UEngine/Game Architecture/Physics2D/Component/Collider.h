@@ -18,6 +18,7 @@ namespace UEngine
 			std::string typeName;
 			AABB localAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
 			std::set<Collider*> prevCollisions;
+			std::set<Collider*> prevOthers;
 
 			Vector3 impact{ 0, 0, 0 };
 
@@ -27,6 +28,7 @@ namespace UEngine
 
 			virtual void CalculateImpact(Collider* other) = 0;
 			virtual void RigidBodyUpdate() = 0;
+			void OnTrigger(Collider* other);
 			void OnCollision(Collider* other);
 
 		public:

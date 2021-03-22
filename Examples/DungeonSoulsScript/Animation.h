@@ -13,10 +13,11 @@ public:
 	POINT endIndex;
 	Vector2 frameSize;
 	Vector2 textureSize;
+	Vector2 offset;
 
 	Animation() = default;
-	Animation(bool repeat, float delay, POINT startIndex, POINT endIndex, Vector2 frameSize, Vector2 textureSize)
-		: repeat(repeat), delay(delay), startIndex(startIndex), endIndex(endIndex), frameSize(frameSize), textureSize(textureSize)
+	Animation(bool repeat, float delay, POINT startIndex, POINT endIndex, Vector2 frameSize, Vector2 textureSize, Vector2 offset)
+		: repeat(repeat), delay(delay), startIndex(startIndex), endIndex(endIndex), frameSize(frameSize), textureSize(textureSize), offset(offset)
 	{
 		index = startIndex;
 	}

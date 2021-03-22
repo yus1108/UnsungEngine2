@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Attack.h"
 #include "Player.h"
 
 
@@ -6,21 +7,22 @@ void Player::Start()
 {
 	transform = GetTransform();
 	imageObj = FindObjectWithName("playerImage");
+	imageObj->GetTransform()->localPosition.value.x = 7.0f;
 	material = imageObj->GetComponent<Material>();
 
-	player_animation_map[PLAYER_ANIMATION_STATE_IDLE] = Animation(true, 0.2f, {0, 0}, { 13, 0 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_MOVE] = Animation(true, 0.1f, {0, 1}, { 8, 1 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1] = Animation(false, 0.1f, { 0, 2 }, { 10, 2 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2] = Animation(false, 0.1f, { 0, 3 }, { 10, 3 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3] = Animation(false, 0.1f, { 0, 4 }, { 10, 4 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_JUMP] = Animation(false, 0.1f, { 2, 5 }, { 6, 5 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_DAMAGED] = Animation(false, 0.2f, { 0, 6 }, { 4, 6 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_DEAD] = Animation(false, 0.2f, { 0, 7 }, { 7, 7 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_CLIMB] = Animation(true, 0.2f, { 0, 8 }, { 4, 8 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_ARROW_ATTACK] = Animation(false, 0.2f, { 0, 9 }, { 8, 9 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_MAGIC] = Animation(false, 0.2f, { 0, 10 }, { 6, 10 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_UP_RUNNING] = Animation(true, 0.2f, { 0, 11 }, { 8, 11 }, { frameSize, frameSize }, { 416.0f, 416.0f });
-	player_animation_map[PLAYER_ANIMATION_STATE_ROLL] = Animation(false, 0.2f, { 0, 12 }, { 5, 12 }, { frameSize, frameSize }, { 416.0f, 416.0f });
+	player_animation_map[PLAYER_ANIMATION_STATE_IDLE] = Animation(true, 0.2f, { 0, 0 }, { 13, 0 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_MOVE] = Animation(true, 0.1f, {0, 1}, { 8, 1 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1] = Attack(4); 
+	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2] = Attack(3);
+	player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3] = Attack(2);
+	player_animation_map[PLAYER_ANIMATION_STATE_JUMP] = Animation(false, 0.1f, { 2, 5 }, { 5, 5 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_DAMAGED] = Animation(false, 0.2f, { 0, 6 }, { 4, 6 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_DEAD] = Animation(false, 0.2f, { 0, 7 }, { 7, 7 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_CLIMB] = Animation(true, 0.2f, { 0, 8 }, { 4, 8 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_ARROW_ATTACK] = Animation(false, 0.2f, { 0, 9 }, { 8, 9 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_MAGIC] = Animation(false, 0.2f, { 0, 10 }, { 6, 10 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_UP_RUNNING] = Animation(true, 0.2f, { 0, 11 }, { 8, 11 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
+	player_animation_map[PLAYER_ANIMATION_STATE_ROLL] = Animation(false, 0.1f, { 0, 12 }, { 5, 12 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
 
 	animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
 	animation.Play();
@@ -41,18 +43,16 @@ void Player::Update()
 	if (Movable && EnableRoutine)
 	{
 		if (velocity.x == 0 && velocity.y == 0)
-		{
 			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
-		}
 		else
-		{
 			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_MOVE]);
-		}
 	}
 }
 
 void Player::LateUpdate()
 {
+	externalVelocity.x += dashPower * deltaTime;
+	DecreaseDash(600.0f);
 	transform->localPosition.value = transform->localPosition.value + velocity + externalVelocity;
 	velocity = Vector2(0, 0);
 	if (Rotatable)
@@ -62,30 +62,42 @@ void Player::LateUpdate()
 		RotateOn(mouseDirection.x);
 	}
 	material->uv = animation.Update();
-	lastPos = transform->localPosition.value;
-	timer += deltaTime;
+
+	if (jump)
+	{
+		jumpCooldownTimer += deltaTime;
+		if (jumpCooldownTimer > jumpCooldown)
+		{
+			jump = false;
+			jumpCooldownTimer = 0;
+		}
+	}
+	if (dash)
+	{
+		dashCooldownTimer += deltaTime;
+		if (dashCooldownTimer > dashCooldown)
+		{
+			dash = false;
+			dashCooldownTimer = 0;
+		}
+	}
 }
 
 void Player::RotateOn(float x)
 {
-	if (x < 0) imageObj->GetTransform()->localRotation.value.y = -Utility::UMath::PI;
-	else if (x > 0) imageObj->GetTransform()->localRotation.value.y = 0;
+	if (x < 0) transform->localRotation.value.y = -Utility::UMath::PI;
+	else if (x > 0) transform->localRotation.value.y = 0;
 }
 
 void Player::ReceiveInput()
 {
+	if (UEngine::Input::GetKeyDown('C'))
+	{
+		showCollision = !showCollision;
+	}
+
 	if (Movable)
 	{
-		if (UEngine::Input::GetKey('S'))
-		{
-			auto value = Vector2(0, -1) * frameSize * speed * deltaTime;
-			velocity = velocity + value;
-		}
-		if (UEngine::Input::GetKey('W'))
-		{
-			auto value = Vector2(0, 1) * frameSize * speed * deltaTime;
-			velocity = velocity + value;
-		}
 		if (UEngine::Input::GetKey('D'))
 		{
 			auto value = Vector2(1, 0) * frameSize * speed * deltaTime;
@@ -98,34 +110,29 @@ void Player::ReceiveInput()
 		}
 	}
 
-	if (Input::GetMouseDown(VK_LBUTTON))
-	{
-		// TODO: IMPLEMENT JUMP COMBO ATTACK
-		Movable = false;
-		if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
-			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2]);
-		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
-			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1]);
-		else
-			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3]);
-	}
+	AttackInput();
 
-	if (animation != player_animation_map[PLAYER_ANIMATION_STATE_JUMP] &&
-		Input::GetMouseDown(VK_RBUTTON))
+	if (Jumpable && !jump &&
+		animation != player_animation_map[PLAYER_ANIMATION_STATE_JUMP] &&
+		Input::GetMouseDown(VK_SPACE))
 	{
 		EnableRoutine = false;
+		Jumpable = false;
+		jump = true;
 		jumpPower = 600.0f;
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_JUMP]);
 		return;
 	}
 
-	if (animation != player_animation_map[PLAYER_ANIMATION_STATE_ROLL] &&
-		Input::GetMouseDown(VK_SPACE))
+	if (!dash && animation != player_animation_map[PLAYER_ANIMATION_STATE_ROLL] &&
+		Input::GetMouseDown(VK_RBUTTON))
 	{
 		Rotatable = false;
-		Movable = false;
+		EnableRoutine = false;
+		dash = true;
+
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ROLL]);
-		RotateOn(velocity.x);
+		Dash(80.0f);
 		return;
 	}
 }
@@ -139,7 +146,8 @@ void Player::UpdateAnimation()
 		jumpPower -= 1200.0f * deltaTime;
 		if (jumpPower < 0)
 			jumpPower = 0;
-		if (animation.IsFinished() && velocity.y == 0) animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
+		if (animation.IsFinished() && velocity.y == 0) 
+			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
 	}
 	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1] ||
 		animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2] ||
@@ -151,15 +159,28 @@ void Player::UpdateAnimation()
 	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ROLL])
 	{
 		Rotatable = false;
-		Movable = false;
+		EnableRoutine = false;
+
 		if (animation.IsFinished()) animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
 	}
 }
 
 void Player::OnPreRender()
 {
-	GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-	GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 1, 0, 1 });
+	if (showCollision)
+	{
+		GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+		GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 1, 0, 1 });
+	}
+}
+
+void Player::OnCollisionEnter(Physics2D::Collider* collisions)
+{
+	if (collisions->GetGameObject()->name == "tile")
+	{
+		if (!Jumpable && collisions->GetTransform()->localPosition.value.y < transform->localPosition.value.y)
+			Jumpable = true;
+	}
 }
 
 void Player::OnCollisionStay(Physics2D::Collider* collisions)
@@ -168,4 +189,86 @@ void Player::OnCollisionStay(Physics2D::Collider* collisions)
 	{
 		externalVelocity.y = 0;
 	}
+}
+
+void Player::DecreaseDash(float value)
+{
+	if (transform->localRotation.value.y < 0)
+	{
+		dashPower += value * deltaTime;
+		if (dashPower > 0)
+		{
+			dashPower = 0;
+			externalVelocity.x = 0;
+		}
+	}
+	// right
+	else
+	{
+		dashPower -= value * deltaTime;
+		if (dashPower < 0)
+		{
+			dashPower = 0;
+			externalVelocity.x = 0;
+		}
+	}
+}
+
+void Player::Dash(float value)
+{
+	if (transform->localRotation.value.y < 0)
+		dashPower = -value;
+	else
+		dashPower = value;
+}
+
+void Player::AttackInput()
+{
+	float attackValue = 0;
+	if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
+		attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
+		.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], 60.0f);
+	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
+		attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
+		.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], 60.0f);
+	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
+		attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
+		.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], 60.0f);
+	else if (Input::GetKeyDown(VK_LBUTTON))
+	{
+		attackValue = 60.0f;
+		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1]);
+	}
+
+	if (attackValue > 0)
+	{
+		Movable = false;
+		Dash(attackValue);
+	}
+}
+
+void Player::OnTriggerEnter(Physics2D::Collider* other)
+{
+	/*if (other->GetGameObject()->name == "enemy")
+	{
+		Console::Clear();
+		Console::WriteLine("Enter");
+	}*/
+}
+
+void Player::OnTriggerStay(Physics2D::Collider* other)
+{
+	//if (other->GetGameObject()->name == "enemy")
+	//{
+	//	Console::WriteLine("stay");
+	//}
+}
+
+void Player::OnTriggerExit(Physics2D::Collider* other)
+{
+	//if (other->GetGameObject()->name == "enemy")
+	//{
+	//	Console::Clear();
+	//	Console::WriteLine("exit");
+	//}
 }

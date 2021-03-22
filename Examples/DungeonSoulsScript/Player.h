@@ -1,5 +1,4 @@
 #pragma once
-#include "Animation.h"
 
 using namespace UEngine;
 
@@ -25,12 +24,20 @@ UENGINE_CLASS(Player)
 {
 private:
 	float frameSize = 32.0f;
-	float timer = 0;
 	float speed = 4.0f;
 	float deltaTime = 0.0f;
+
+	bool jump;
 	float jumpPower;
+	float jumpCooldown = 0.5f;
+	float jumpCooldownTimer = 0;
+
+	bool dash;
+	float dashPower;
+	float dashCooldown = 0.5f;
+	float dashCooldownTimer = 0;
+
 	Vector2 gravity = Vector2(0, -9.81f);
-	Vector2 lastPos;
 	Vector2 velocity;
 	Vector2 externalVelocity;
 
@@ -40,20 +47,30 @@ private:
 	bool Movable = false;
 	bool Rotatable = false;
 	bool EnableRoutine = false;
+	bool Jumpable = true;
 	Transform* transform = nullptr;
 	Material* material{ nullptr };
 	GameObject* imageObj{ nullptr };
+
+	bool showCollision = false;
 
 private:
 	void Start() override;
 	void Update() override;
 	void LateUpdate() override;
 
-	void OnCollisionStay(Physics2D::Collider * collisions) override;
+	void OnCollisionStay(Physics2D::Collider * collision) override;
+	void OnCollisionEnter(Physics2D::Collider * collision) override;
+	void OnTriggerEnter(Physics2D::Collider * other) override;
+	void OnTriggerStay(Physics2D::Collider * other) override;
+	void OnTriggerExit(Physics2D::Collider * other) override;
 
 	void RotateOn(float x);
 	void ReceiveInput();
 	void UpdateAnimation();
 	void OnPreRender();
+	void DecreaseDash(float value);
+	void Dash(float value);
+	void AttackInput();
 };
 

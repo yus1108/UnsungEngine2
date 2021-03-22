@@ -5,7 +5,14 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="FollowCamera.cpp" />
+    <ClCompile Include="Animation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Attack.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -13,6 +20,18 @@
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Weapon.h" />
-    <ClInclude Include="Animation.h" />
+    <ClInclude Include="FollowCamera.h" />
+    <ClInclude Include="Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Attack.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{5cb0b3a5-c85c-464f-ac05-f06f2d52e8b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

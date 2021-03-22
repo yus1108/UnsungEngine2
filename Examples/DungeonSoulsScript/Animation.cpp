@@ -27,10 +27,10 @@ UV Animation::Update()
 {
 	UV currUV = UV
 	{
-		(frameSize.x * index.x) / textureSize.x,
-		(frameSize.y * index.y) / textureSize.y,
-		(frameSize.x * (index.x + 1)) / textureSize.x,
-		(frameSize.y * (index.y + 1)) / textureSize.y,
+		(frameSize.x * index.x) / textureSize.x + offset.x / textureSize.x,
+		(frameSize.y * index.y) / textureSize.y + offset.y / textureSize.y,
+		(frameSize.x * (index.x + 1)) / textureSize.x + offset.x / textureSize.x,
+		(frameSize.y * (index.y + 1)) / textureSize.y + offset.y / textureSize.y,
 	};
 
 	if (!stop)

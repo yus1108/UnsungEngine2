@@ -6,7 +6,7 @@
 void UEngine::Physics2D::CircleCollider::SetCollider(Vector2 center, float radius)
 {
 	localCollider = CircleCoord{ center, radius };
-	localAABB = AABB{ -radius, radius, radius, -radius };
+	localAABB = AABB{ center.x - radius, center.y + radius, center.x + radius, center.y + -radius };
 }
 
 void UEngine::Physics2D::CircleCollider::Awake()
@@ -48,8 +48,8 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1,
 		{
 			if (Math::Physics2D::IsColliding(circle1->GetCollider(), circle2->GetCollider()))
 			{
-				circle1->others.emplace(circle2);
-				circle2->others.emplace(circle1);
+				circle1->OnTrigger(circle2);
+				circle2->OnTrigger(circle1);
 			}
 		}
 	}
@@ -88,8 +88,8 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Rect(CircleCollider* circle, Re
 		{
 			if (Math::Physics2D::IsColliding(rect->GetCollider(), circle->GetCollider()))
 			{
-				circle->others.emplace(rect);
-				rect->others.emplace(circle);
+				circle->OnTrigger(rect);
+				rect->OnTrigger(circle);
 			}
 		}
 	}

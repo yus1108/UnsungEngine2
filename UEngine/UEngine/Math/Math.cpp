@@ -471,7 +471,7 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 	CollisionResult result;
 	
 	auto transform = circle1->GetTransform();
-	result.distance1 = transform->localPosition.value - circle2->GetTransform()->localPosition.value;
+	result.distance1 = circle1->GetCollider().center - circle2->GetCollider().center;
 	float magnitude = result.distance1.Magnitude();
 	float maxDistance = circle1->GetCollider().radius + circle2->GetCollider().radius;
 	result.isColliding = magnitude <= maxDistance;
