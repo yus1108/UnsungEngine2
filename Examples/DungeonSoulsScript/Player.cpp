@@ -8,6 +8,7 @@ void Player::Start()
 	transform = GetTransform();
 	bodyObj = GetGameObject()->GetChild(0);
 	material = bodyObj->GetComponent<Material>();
+	health = GetGameObject()->GetChild(1)->GetComponent<Health>();
 	weapon = GetGameObject()->GetChild(2)->GetComponent<Weapon>();
 
 	bodyObj->GetTransform()->localPosition.value.x = 7.0f;
@@ -30,11 +31,40 @@ void Player::Start()
 	animation.Play();
 }
 
+void Player::FixedUpdate()
+{
+	if (health->Dead) return;
+
+	if (hitTimer > 0)
+	{
+		IsHit = true;
+		if (hitRed)
+			material->color = Color{ 1,1,1,1 };
+		else
+			material->color = Color{ 1,0,0,1 };
+		hitRed = !hitRed;
+	}
+	else
+	{
+		material->color = Color{ 1,1,1,1 };
+		IsHit = false;
+	}
+}
+
+
 void Player::Update()
 {
 	weapon->Reset();
 	deltaTime = Utility::UTime::Get()->DeltaTimeF();
 	externalVelocity = externalVelocity + gravity * deltaTime;
+
+	Console::Clear();
+	Console::WriteLine(string("Player : ") + to_string(health->HP * 100.0f));
+	Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->HP * 100.0f));
+
+	if (health->Dead) return;
+
+	if (hitTimer > 0) hitTimer -= deltaTime;
 
 	ReceiveInput();
 
@@ -54,17 +84,29 @@ void Player::Update()
 
 void Player::LateUpdate()
 {
+	if (health->Dead)
+		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_DEAD]);
+
+	Vector2 hitVelocity = hitDirection * deltaTime;
+	hitVelocity.x *= hitPower.x;
+	hitVelocity.y *= hitPower.y;
+	hitPower = hitPower * 0.9f;
+
+
 	externalVelocity.x += dashPower * deltaTime;
 	DecreaseDash(600.0f);
-	transform->localPosition.value = transform->localPosition.value + velocity + externalVelocity;
+	transform->localPosition.value = transform->localPosition.value + velocity + externalVelocity + hitVelocity;
 	velocity = Vector2(0, 0);
+	material->uv = animation.Update();
+
+	if (health->Dead) return;
+
 	if (Rotatable)
 	{
 		auto mousePos = Math::GetMousePosToWorld();
 		auto mouseDirection = mousePos - transform->localPosition.value;
 		RotateOn(mouseDirection.x);
 	}
-	material->uv = animation.Update();
 
 	if (jump)
 	{
@@ -99,7 +141,7 @@ void Player::ReceiveInput()
 		showCollision = !showCollision;
 	}
 
-	if (Movable)
+	if (Movable && !IsHit)
 	{
 		if (UEngine::Input::GetKey('D'))
 		{
@@ -263,3 +305,16 @@ void Player::SetAttack()
 {
 	weapon->Attack();
 }
+
+void Player::GetHit(Vector2 from)
+{
+	hitDirection = (GetTransform()->localPosition.value - from).Normalize();
+	hitDirection.y = 0.5f;
+	hitDirection = hitDirection.Normalize();
+	hitPower.x = 500.0f;
+	hitPower.y = 300.0f;
+	hitTimer = hitMaxTimer;
+	material->color = Color{ 1,1,1,1 };
+	hitRed = true;
+}
+

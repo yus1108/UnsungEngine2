@@ -6,23 +6,37 @@
 
 #ifdef USER_DEFINED_SCRIPTS_EXPORTS  
 
-#define UENGINE_CLASS(T) \
-class T;\
-extern "C" __declspec(dllexport) UEngine::Component* T##Creation(UEngine::GameObject* gameObject) \
+#define UENGINE_CLASS(CLASS_NAME) \
+class CLASS_NAME;\
+extern "C" __declspec(dllexport) UEngine::Component* CLASS_NAME##Creation(UEngine::GameObject* gameObject) \
 {\
- return (UEngine::Component*)gameObject->AddComponent<T>(); \
+ return (UEngine::Component*)gameObject->AddComponent<CLASS_NAME>(); \
 }\
-class T : public UEngine::Component
+class CLASS_NAME : public UEngine::Component
+
+#define UENGINE_CLASS_INHERIT(CLASS_NAME, CLASS_CHILD_OF_COMPONENT) \
+class CLASS_NAME;\
+extern "C" __declspec(dllexport) UEngine::Component* CLASS_NAME##Creation(UEngine::GameObject* gameObject) \
+{\
+ return (UEngine::Component*)gameObject->AddComponent<CLASS_NAME>(); \
+}\
+class CLASS_NAME : public CLASS_CHILD_OF_COMPONENT
 
 #define UENGINE_API extern "C" __declspec(dllexport)
 
 #else  
 
-#define UENGINE_CLASS(T) \
-class T;\
-extern "C" __declspec(dllimport) UEngine::Component* T##Creation(UEngine::GameObject* gameObject); \
-class T : public UEngine::Component
+#define UENGINE_CLASS(CLASS_NAME) \
+class CLASS_NAME;\
+extern "C" __declspec(dllimport) UEngine::Component* CLASS_NAME##Creation(UEngine::GameObject* gameObject); \
+class CLASS_NAME : public UEngine::Component
+
+#define UENGINE_CLASS_INHERIT(CLASS_NAME, CLASS_CHILD_OF_COMPONENT) \
+class CLASS_NAME;\
+extern "C" __declspec(dllimport) UEngine::Component* CLASS_NAME##Creation(UEngine::GameObject* gameObject); \
+class CLASS_NAME : public CLASS_CHILD_OF_COMPONENT
 
 #define UENGINE_API extern "C" __declspec(dllimport)
 
 #endif  
+

@@ -1,18 +1,28 @@
 #include "pch.h"
 #include "Health.h"
 
-void Health::GetHit(Vector2 from)
+void Health::GetHit(Vector2 from, float damage)
 {
-	auto enemy = GetGameObject()->GetParent()->GetComponent<Enemy>();
-	if (enemy != nullptr)
+	auto enemy = GetGameObject()->GetParent()->GetComponent<Skeleton>();
+	HP -= damage * Utility::UTime::Get()->DeltaTimeF();
+	if (HP <= 0)
 	{
-		enemy->GetHit(GetTransform()->localPosition.value);
+		Dead = true;
+		HP = 0;
 	}
 	else
 	{
-		auto player = GetGameObject()->GetParent()->GetComponent<Player>();
-		if (player != nullptr)
+		if (enemy != nullptr)
 		{
+			enemy->GetHit(from);
+		}
+		else
+		{
+			auto player = GetGameObject()->GetParent()->GetComponent<Player>();
+			if (player != nullptr)
+			{
+				player->GetHit(from);
+			}
 		}
 	}
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-using namespace UEngine;
-
 enum PLAYER_ANIMATION_STATE
 {
 	PLAYER_ANIMATION_STATE_IDLE,
@@ -37,6 +35,12 @@ private:
 	float dashCooldown = 0.5f;
 	float dashCooldownTimer = 0;
 
+	bool hitRed = true;
+	float hitTimer = 0.0f;
+	float hitMaxTimer = 0.2f;
+	Vector2 hitPower;
+	Vector2 hitDirection;
+
 	Vector2 gravity = Vector2(0, -9.81f);
 	Vector2 velocity;
 	Vector2 externalVelocity;
@@ -44,6 +48,7 @@ private:
 	Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT];
 	Animation animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
 
+	bool IsHit = false;
 	bool Movable = false;
 	bool Rotatable = false;
 	bool EnableRoutine = false;
@@ -51,12 +56,15 @@ private:
 	Transform* transform = nullptr;
 	Material* material = nullptr;
 	class Weapon* weapon = nullptr;
+	class Health* health = nullptr;
 	GameObject* bodyObj = nullptr;
 
+public:
 	bool showCollision = false;
 
 private:
 	void Start() override;
+	void FixedUpdate() override;
 	void Update() override;
 	void LateUpdate() override;
 
@@ -71,5 +79,8 @@ private:
 	void Dash(float value);
 	void AttackInput();
 	void SetAttack();
+
+public:
+	void GetHit(Vector2 from);
 };
 

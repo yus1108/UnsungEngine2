@@ -10,6 +10,8 @@ private:
 	void OnTriggerStay(Physics2D::Collider * other) override;
 	
 public:
+	float damage = 10;
+
 	void Reset() { isAttack = false; };
 	void Set() { isAttack = true; }
 	void Attack();

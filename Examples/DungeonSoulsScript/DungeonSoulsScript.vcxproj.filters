@@ -22,6 +22,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
+    <ClCompile Include="Skeleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Player.h">
       <Filter>Characters</Filter>
     </ClInclude>
+    <ClInclude Include="Skeleton.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Animation">

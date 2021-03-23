@@ -152,7 +152,7 @@ void Game::Load()
                enemyCollider->IsTrigger = true;
                enemy->GetTransform()->localPosition.value.x = 50.0f;
                enemy->GetTransform()->localPosition.value.y = 200.0f;
-               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("EnemyCreation");
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("SkeletonCreation");
                scriptCreation(enemy);
                currentScene->ResourceManager.ApplyChange();
 
@@ -168,6 +168,16 @@ void Game::Load()
                enemyBody->SetParent(enemy);
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("HealthCreation");
                scriptCreation(enemyBody);
+               currentScene->ResourceManager.ApplyChange();
+
+               auto enemyAttack = GameObject::Instantiate(currentScene, "enemyAttack");
+               auto eAttack = enemyAttack->AddComponent<UEngine::Physics2D::RectCollider>();
+               eAttack->SetCollider(16, 32);
+               eAttack->IsTrigger = true;
+               enemyAttack->GetTransform()->localPosition.value.x = 8;
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
+               scriptCreation(enemyAttack);
+               enemyAttack->SetParent(enemy);
                currentScene->ResourceManager.ApplyChange();
 
 

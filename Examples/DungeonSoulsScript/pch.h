@@ -31,5 +31,6 @@ using namespace std;
 #include "Enemy.h"
 #include "Weapon.h"
 #include "Health.h"
+#include "Skeleton.h"
 
 #endif //PCH_H

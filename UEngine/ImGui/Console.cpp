@@ -22,6 +22,11 @@ namespace UEngine
         Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::LOG, log + "\n"));
     }
 
+    void Console::WriteLine(float log)
+    {
+        WriteLine(std::to_string(log));
+    }
+
     void Console::WriteWarning(std::string log)
     {
         Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::WARNING, log));
