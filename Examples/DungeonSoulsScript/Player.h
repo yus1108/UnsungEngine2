@@ -59,6 +59,8 @@ private:
 	class Health* health = nullptr;
 	GameObject* bodyObj = nullptr;
 
+	GameObject* creation = nullptr;
+
 public:
 	bool showCollision = false;
 	bool EditorMode = false;

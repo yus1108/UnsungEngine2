@@ -92,18 +92,22 @@ void Player::LateUpdate()
 	hitVelocity.y *= hitPower.y;
 	hitPower = hitPower * 0.9f;
 
-
 	externalVelocity.x += dashPower * deltaTime;
 	DecreaseDash(600.0f);
 	transform->localPosition.value = transform->localPosition.value + velocity + externalVelocity + hitVelocity;
 	velocity = Vector2(0, 0);
 	material->uv = animation.Update();
 
+	auto mousePos = Math::GetMousePosToWorld();
+	if (creation != nullptr)
+	{
+		creation->GetTransform()->localPosition.value = mousePos;
+	}
+
 	if (health->Dead) return;
 
 	if (Rotatable)
 	{
-		auto mousePos = Math::GetMousePosToWorld();
 		auto mouseDirection = mousePos - transform->localPosition.value;
 		RotateOn(mouseDirection.x);
 	}
@@ -163,6 +167,36 @@ void Player::ReceiveInput()
 	if (!EditorMode)
 	{
 		AttackInput();
+	}
+	else
+	{
+		if (Input::GetKeyDown('3'))
+		{
+			creation = GameObject::Instantiate("tile");
+			creation->IsStatic = true;
+			creation->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+			creation->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tileset.png");
+			auto collider = creation->AddComponent<Physics2D::RectCollider>();
+			collider->SetCollider(32, 32);
+			collider->IsTrigger = true;
+			creation->GetTransform()->localPosition.value.x = 0;
+			creation->GetTransform()->localPosition.value.y = 0;
+			creation->GetTransform()->scale.value = Vector2{
+				32,
+				32
+			};
+			creation->GetComponent<Material>()->uv = UV
+			{
+				7.0f / 12.0f,
+				0.5f,
+				8.0f / 12.0f,
+				1.0f - 1.0f / 3.0f
+			};
+		}
+		if (Input::GetKeyDown('4'))
+		{
+			GetGameObject()->GetScene()->RemoveGameObject(&creation);
+		}
 	}
 
 	if (Jumpable && !jump &&

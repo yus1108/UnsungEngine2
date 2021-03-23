@@ -23,7 +23,7 @@
     <GameObject name="followCamera" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-154.081" y="-0.14761" z="0" />
+                <Vector3 name="localPosition" x="81.1991" y="-0.0936786" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -846,7 +846,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="113.558" y="-0.155823" z="0" />
+                <Vector3 name="localPosition" x="218.147" y="-0.142442" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -879,7 +879,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.5" maxY="0.1" minX="0.4" minY="0" />
+                    <UV name="uv" maxX="1" maxY="0.5" minX="0.9" minY="0.4" />
                 </Component>
             </Material>
             <Health>
@@ -905,7 +905,7 @@
     <GameObject name="player" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-154.081" y="-0.228452" z="0" />
+                <Vector3 name="localPosition" x="81.1991" y="-0.165006" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -944,7 +944,7 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.242788" maxY="0.384615" minX="0.165865" minY="0.307692" />
+                    <UV name="uv" maxX="0.473558" maxY="0.384615" minX="0.396635" minY="0.307692" />
                 </Component>
             </Material>
         </GameObject>
