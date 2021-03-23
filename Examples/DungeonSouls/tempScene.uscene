@@ -23,7 +23,7 @@
     <GameObject name="followCamera" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-73.4981" y="-0.123335" z="0" />
+                <Vector3 name="localPosition" x="235.795" y="-0.135817" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -846,36 +846,51 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="50.8253" y="-0.124395" z="0" />
+                <Vector3 name="localPosition" x="327.847" y="-0.133341" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
-                <Vector3 name="scale" x="32" y="32" z="0" />
+                <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
-        <RenderComponent>
-            <Component enabled="1">
-                <STRING renderMesh_name="rectangle" />
-                <STRING shader_name="sprite" />
-            </Component>
-        </RenderComponent>
         <CircleCollider>
             <Component enabled="1" />
         </CircleCollider>
-        <Material>
-            <Component enabled="1">
-                <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
-                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
-                <COLOR name="color" r="1" g="1" b="1" a="1" />
-                <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
-            </Component>
-        </Material>
         <Enemy>
             <Component enabled="1" />
         </Enemy>
+        <GameObject name="enemyBody" isActive="1" isStatic="0">
+            <Transform>
+                <Component enabled="1">
+                    <Vector3 name="localPosition" x="0" y="0" z="0" />
+                    <Vector3 name="localRotation" x="0" y="0" z="0" />
+                    <Vector3 name="scale" x="32" y="32" z="0" />
+                </Component>
+            </Transform>
+            <RenderComponent>
+                <Component enabled="1">
+                    <STRING renderMesh_name="rectangle" />
+                    <STRING shader_name="sprite" />
+                </Component>
+            </RenderComponent>
+            <RectCollider>
+                <Component enabled="1" />
+            </RectCollider>
+            <Material>
+                <Component enabled="1">
+                    <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
+                    <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                    <COLOR name="color" r="1" g="1" b="1" a="1" />
+                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                </Component>
+            </Material>
+            <Health>
+                <Component enabled="1" />
+            </Health>
+        </GameObject>
     </GameObject>
     <GameObject name="player" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-73.4981" y="-0.185634" z="0" />
+                <Vector3 name="localPosition" x="235.795" y="-0.199987" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -895,10 +910,7 @@
         <Player>
             <Component enabled="1" />
         </Player>
-        <Weapon>
-            <Component enabled="1" />
-        </Weapon>
-        <GameObject name="playerImage" isActive="1" isStatic="0">
+        <GameObject name="playerBody" isActive="1" isStatic="0">
             <Transform>
                 <Component enabled="1">
                     <Vector3 name="localPosition" x="7" y="0" z="0" />
@@ -917,9 +929,24 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.242788" maxY="0.384615" minX="0.165865" minY="0.307692" />
+                    <UV name="uv" maxX="0.319712" maxY="0.0769231" minX="0.242788" minY="0" />
                 </Component>
             </Material>
+        </GameObject>
+        <GameObject name="playerHealth" isActive="1" isStatic="0">
+            <Transform>
+                <Component enabled="1">
+                    <Vector3 name="localPosition" x="0" y="0" z="0" />
+                    <Vector3 name="localRotation" x="0" y="0" z="0" />
+                    <Vector3 name="scale" x="1" y="1" z="1" />
+                </Component>
+            </Transform>
+            <RectCollider>
+                <Component enabled="1" />
+            </RectCollider>
+            <Health>
+                <Component enabled="1" />
+            </Health>
         </GameObject>
         <GameObject name="attackCollider" isActive="1" isStatic="0">
             <Transform>
@@ -932,6 +959,9 @@
             <RectCollider>
                 <Component enabled="1" />
             </RectCollider>
+            <Weapon>
+                <Component enabled="1" />
+            </Weapon>
         </GameObject>
     </GameObject>
 </GameScene>

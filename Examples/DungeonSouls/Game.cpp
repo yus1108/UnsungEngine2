@@ -158,11 +158,16 @@ void Game::Load()
 
                auto enemyBody = GameObject::Instantiate(currentScene, "enemyBody");
                enemyBody->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+               auto enemyBodyCollider = enemyBody->AddComponent<UEngine::Physics2D::RectCollider>();
+               enemyBodyCollider->SetCollider(16, 32);
+               enemyBodyCollider->IsTrigger = true;
                auto enemyMaterial = enemyBody->AddComponent<Material>();
                enemyMaterial->LoadImageMaterial(L"./Assets/SkeletalWarrior_Sprites.png");
                enemyMaterial->uv.value = UV{ 0, 0, 1.0f / 10.0f, 1.0f / 10.0f };
                enemyBody->GetTransform()->scale = Vector2(32, 32);
                enemyBody->SetParent(enemy);
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("HealthCreation");
+               scriptCreation(enemyBody);
                currentScene->ResourceManager.ApplyChange();
 
 
@@ -172,8 +177,6 @@ void Game::Load()
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("FollowCameraCreation");
                scriptCreation(player);
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("PlayerCreation");
-               scriptCreation(player);
-               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
                scriptCreation(player);
                currentScene->ResourceManager.ApplyChange();
 
@@ -186,12 +189,23 @@ void Game::Load()
                playerBody->SetParent(player);
                currentScene->ResourceManager.ApplyChange();
 
+               auto playerHealth = GameObject::Instantiate(currentScene, "playerHealth");
+               auto playerHealthCollider = playerHealth->AddComponent<UEngine::Physics2D::RectCollider>();
+               playerHealthCollider->SetCollider(16, 32);
+               playerHealthCollider->IsTrigger = true;
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("HealthCreation");
+               scriptCreation(playerHealth);
+               playerHealth->SetParent(player);
+               currentScene->ResourceManager.ApplyChange();
+
                auto attackCollider = GameObject::Instantiate(currentScene, "attackCollider");
                auto attack = attackCollider->AddComponent<UEngine::Physics2D::RectCollider>();
                attack->SetCollider(16, 32);
                attack->IsTrigger = true;
                attackCollider->GetTransform()->localPosition.value.x = 8;
                attackCollider->SetParent(player);
+               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
+               scriptCreation(attackCollider);
                currentScene->ResourceManager.ApplyChange();
         }
         //GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", true);

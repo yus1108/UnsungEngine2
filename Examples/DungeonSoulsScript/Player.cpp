@@ -6,10 +6,11 @@
 void Player::Start()
 {
 	transform = GetTransform();
-	bodyObj = FindObjectWithName("playerBody");
-	bodyObj->GetTransform()->localPosition.value.x = 7.0f;
+	bodyObj = GetGameObject()->GetChild(0);
 	material = bodyObj->GetComponent<Material>();
-	weapon = GetComponent<Weapon>();
+	weapon = GetGameObject()->GetChild(2)->GetComponent<Weapon>();
+
+	bodyObj->GetTransform()->localPosition.value.x = 7.0f;
 
 	player_animation_map[PLAYER_ANIMATION_STATE_IDLE] = Animation(true, 0.2f, { 0, 0 }, { 13, 0 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
 	player_animation_map[PLAYER_ANIMATION_STATE_MOVE] = Animation(true, 0.1f, {0, 1}, { 8, 1 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });

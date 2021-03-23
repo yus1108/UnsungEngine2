@@ -2,9 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="Animation.cpp">
       <Filter>Animation</Filter>
@@ -12,14 +10,23 @@
     <ClCompile Include="Attack.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="Health.cpp">
+      <Filter>Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Characters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Weapon.h" />
     <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="Animation.h">
       <Filter>Animation</Filter>
@@ -27,11 +34,28 @@
     <ClInclude Include="Attack.h">
       <Filter>Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Weapon.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="Health.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Animation">
       <UniqueIdentifier>{5cb0b3a5-c85c-464f-ac05-f06f2d52e8b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Combat">
+      <UniqueIdentifier>{037c9b83-2e24-4824-aa8a-abb556653cbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Characters">
+      <UniqueIdentifier>{38443957-abc6-4d25-986b-b1505d4882d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

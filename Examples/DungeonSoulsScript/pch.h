@@ -30,5 +30,6 @@ using namespace std;
 #include "Player.h"
 #include "Enemy.h"
 #include "Weapon.h"
+#include "Health.h"
 
 #endif //PCH_H

@@ -5,24 +5,14 @@ void Weapon::OnTriggerEnter(Physics2D::Collider* other)
 {
 	if (isAttack)
 	{
-		auto enemy = other->GetComponent<Enemy>();
-		if (enemy != nullptr)
+		auto health = other->GetComponent<Health>();
+		if (health != nullptr && 
+			health->GetGameObject()->GetParent() != GetGameObject()->GetParent())
 		{
 			if (colliders.find(other) == colliders.end())
 			{
-				enemy->GetHit(GetTransform()->localPosition.value);
+				health->GetHit(GetTransform()->localPosition.value);
 				colliders.insert(other);
-			}
-		}
-		else
-		{
-			auto player = other->GetComponent<Player>();
-			if (player != nullptr)
-			{
-				if (colliders.find(other) == colliders.end())
-				{
-					colliders.insert(other);
-				}
 			}
 		}
 	}
@@ -32,24 +22,14 @@ void Weapon::OnTriggerStay(Physics2D::Collider* other)
 {
 	if (isAttack)
 	{
-		auto enemy = other->GetComponent<Enemy>();
-		if (enemy != nullptr)
+		auto health = other->GetComponent<Health>();
+		if (health != nullptr &&
+			health->GetGameObject()->GetParent() != GetGameObject()->GetParent())
 		{
 			if (colliders.find(other) == colliders.end())
 			{
-				enemy->GetHit(GetTransform()->localPosition.value);
+				health->GetHit(GetTransform()->localPosition.value);
 				colliders.insert(other);
-			}
-		}
-		else
-		{
-			auto player = other->GetComponent<Player>();
-			if (player != nullptr)
-			{
-				if (colliders.find(other) == colliders.end())
-				{
-					colliders.insert(other);
-				}
 			}
 		}
 	}
