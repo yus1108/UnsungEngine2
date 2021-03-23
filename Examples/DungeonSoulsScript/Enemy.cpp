@@ -5,7 +5,7 @@ void Enemy::Start()
 {
 	transform = GetTransform();
 	collider = GetComponent<Physics2D::CircleCollider>();
-	material = GetComponent<Material>();
+	material = GetGameObject()->GetChild(0)->GetComponent<Material>();
 }
 
 void Enemy::FixedUpdate()

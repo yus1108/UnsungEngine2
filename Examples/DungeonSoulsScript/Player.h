@@ -51,7 +51,7 @@ private:
 	Transform* transform = nullptr;
 	Material* material = nullptr;
 	class Weapon* weapon = nullptr;
-	GameObject* imageObj = nullptr;
+	GameObject* bodyObj = nullptr;
 
 	bool showCollision = false;
 

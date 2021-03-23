@@ -6,9 +6,9 @@
 void Player::Start()
 {
 	transform = GetTransform();
-	imageObj = FindObjectWithName("playerImage");
-	imageObj->GetTransform()->localPosition.value.x = 7.0f;
-	material = imageObj->GetComponent<Material>();
+	bodyObj = FindObjectWithName("playerBody");
+	bodyObj->GetTransform()->localPosition.value.x = 7.0f;
+	material = bodyObj->GetComponent<Material>();
 	weapon = GetComponent<Weapon>();
 
 	player_animation_map[PLAYER_ANIMATION_STATE_IDLE] = Animation(true, 0.2f, { 0, 0 }, { 13, 0 }, { frameSize, frameSize }, { 416.0f, 416.0f }, { 5.0f, 0 });
@@ -177,7 +177,6 @@ void Player::OnPreRender()
 	if (showCollision)
 	{
 		GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-		GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 1, 0, 1 });
 	}
 }
 

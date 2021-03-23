@@ -147,19 +147,24 @@ void Game::Load()
                }
 
                auto enemy = GameObject::Instantiate(currentScene, "enemy");
-               enemy->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                auto enemyCollider = enemy->AddComponent<UEngine::Physics2D::CircleCollider>();
                enemyCollider->SetCollider({ 0, 0 }, 16);
                enemyCollider->IsTrigger = true;
-               auto enemyMaterial = enemy->AddComponent<Material>();
-               enemyMaterial->LoadImageMaterial(L"./Assets/SkeletalWarrior_Sprites.png");
-               enemyMaterial->uv.value = UV{ 0, 0, 1.0f / 10.0f, 1.0f / 10.0f };
                enemy->GetTransform()->localPosition.value.x = 50.0f;
                enemy->GetTransform()->localPosition.value.y = 200.0f;
-               enemy->GetTransform()->scale = Vector2(32, 32);
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("EnemyCreation");
                scriptCreation(enemy);
                currentScene->ResourceManager.ApplyChange();
+
+               auto enemyBody = GameObject::Instantiate(currentScene, "enemyBody");
+               enemyBody->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+               auto enemyMaterial = enemyBody->AddComponent<Material>();
+               enemyMaterial->LoadImageMaterial(L"./Assets/SkeletalWarrior_Sprites.png");
+               enemyMaterial->uv.value = UV{ 0, 0, 1.0f / 10.0f, 1.0f / 10.0f };
+               enemyBody->GetTransform()->scale = Vector2(32, 32);
+               enemyBody->SetParent(enemy);
+               currentScene->ResourceManager.ApplyChange();
+
 
                auto player = GameObject::Instantiate(currentScene, "player");
                player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
@@ -172,13 +177,13 @@ void Game::Load()
                scriptCreation(player);
                currentScene->ResourceManager.ApplyChange();
 
-               auto playerImage = GameObject::Instantiate(currentScene, "playerImage");
-               playerImage->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-               auto material = playerImage->AddComponent<Material>();
+               auto playerBody = GameObject::Instantiate(currentScene, "playerBody");
+               playerBody->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+               auto material = playerBody->AddComponent<Material>();
                material->LoadImageMaterial(L"./Assets/Adventurer Sprite Sheet v1.3.png");
                material->uv.value = UV{ 0, 0, 1.0f / 13.0f, 1.0f / 13.0f };
-               playerImage->GetTransform()->scale = Vector2(32, 32);
-               playerImage->SetParent(player);
+               playerBody->GetTransform()->scale = Vector2(32, 32);
+               playerBody->SetParent(player);
                currentScene->ResourceManager.ApplyChange();
 
                auto attackCollider = GameObject::Instantiate(currentScene, "attackCollider");

@@ -38,9 +38,8 @@ namespace UEngine
 		{
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				for (auto otherPair : currNode->colliders)
+				for (auto other : currNode->colliders)
 				{
-					auto other = otherPair.second;
 					if (other->GetGameObject() != collider->GetGameObject())
 					{
 						// TODO: need to change to proper collider component
@@ -56,7 +55,7 @@ namespace UEngine
 				}
 				else
 				{
-					currNode->colliders[collider] = collider;
+					currNode->colliders.emplace(collider);
 					for (auto child : currNode->children)
 						CheckCollision(child, collider);
 				}
@@ -68,9 +67,8 @@ namespace UEngine
 		{
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				for (auto otherPair : currNode->colliders)
+				for (auto other : currNode->colliders)
 				{
-					auto other = otherPair.second;
 					if (other->GetGameObject() != collider->GetGameObject())
 					{
 						// TODO: need to change to proper collider component
@@ -95,8 +93,13 @@ namespace UEngine
 			{
 				// TODO: spatial partitioning need to know debugrenderer in the same scene
 				GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(currNode->aabb, nodeColor);
-				for (auto colliderPair : currNode->colliders)
-					GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(colliderPair.second->GetWorldAABB(), colliderColor);
+				for (auto otherCollider : currNode->colliders)
+				{
+					if (otherCollider->typeName == ".PAVCircleCollider@Physics2D@UEngine@@")
+						GameState::GetCurrentScene()->debugRenderer->Add_Circle(static_cast<CircleCollider*>(otherCollider)->GetCollider(), colliderColor);
+					else
+						GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(otherCollider->GetWorldAABB(), colliderColor);
+				}
 				for (auto child : currNode->children)
 					DebugRender(child, collider, nodeColor, colliderColor);
 			}
@@ -112,12 +115,12 @@ namespace UEngine
 			if (currNode == nullptr) return;
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				for (auto colliderPair : currNode->colliders)
+				for (auto otherCollider : currNode->colliders)
 				{
 					GameState::GetCurrentScene()->debugRenderer->Add_line
 					(
 						{
-							colliderPair.second->GetTransform()->localPosition.value,
+							otherCollider->GetTransform()->localPosition.value,
 							collider->GetTransform()->localPosition.value
 						},
 						color
