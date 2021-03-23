@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="Animation.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
@@ -22,13 +21,15 @@
     <ClCompile Include="Player.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
-    <ClCompile Include="Skeleton.cpp" />
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="Animation.h">
       <Filter>Animation</Filter>
     </ClInclude>
@@ -47,7 +48,10 @@
     <ClInclude Include="Player.h">
       <Filter>Characters</Filter>
     </ClInclude>
-    <ClInclude Include="Skeleton.h" />
+    <ClInclude Include="Skeleton.h">
+      <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Animation">

@@ -4,7 +4,7 @@
 void Health::GetHit(Vector2 from, float damage)
 {
 	auto enemy = GetGameObject()->GetParent()->GetComponent<Skeleton>();
-	HP -= damage * Utility::UTime::Get()->DeltaTimeF();
+	HP -= damage * 0.01f;
 	if (HP <= 0)
 	{
 		Dead = true;

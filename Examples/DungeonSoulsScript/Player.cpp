@@ -136,6 +136,11 @@ void Player::RotateOn(float x)
 
 void Player::ReceiveInput()
 {
+	if (UEngine::Input::GetKeyDown(VK_TAB))
+	{
+		EditorMode = !EditorMode;
+	}
+
 	if (UEngine::Input::GetKeyDown('C'))
 	{
 		showCollision = !showCollision;
@@ -155,7 +160,10 @@ void Player::ReceiveInput()
 		}
 	}
 
-	AttackInput();
+	if (!EditorMode)
+	{
+		AttackInput();
+	}
 
 	if (Jumpable && !jump &&
 		animation != player_animation_map[PLAYER_ANIMATION_STATE_JUMP] &&
@@ -199,10 +207,8 @@ void Player::UpdateAnimation()
 		animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
 	{
 		Movable = false;
+		
 		weapon->Set();
-		if (animation.IsAt({ 2, PLAYER_ANIMATION_STATE_ATTACK1 })) SetAttack();
-		else if (animation.IsAt({ 2, PLAYER_ANIMATION_STATE_ATTACK2 })) SetAttack();
-		else if (animation.IsAt({ 2, PLAYER_ANIMATION_STATE_ATTACK3 })) SetAttack();
 		
 		if (animation.IsFinished()) animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
 	}
@@ -295,9 +301,9 @@ void Player::AttackInput()
 
 	if (attackValue > 0)
 	{
-		weapon->Set();
 		Movable = false;
 		Dash(attackValue);
+		SetAttack();
 	}
 }
 

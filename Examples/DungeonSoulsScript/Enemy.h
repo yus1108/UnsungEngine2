@@ -24,6 +24,7 @@ protected:
 	float attackTimer = 0;
 	float attackCooldown = 0;
 	float playerFoundTimer = 0;
+	Player* player = nullptr;
 	Physics2D::CircleCollider* playerCollider = nullptr;
 	Physics2D::AABB localSight = { -96, 32, 96, -32 };
 	Physics2D::AABB sight = { 0, 0, 0, 0 };

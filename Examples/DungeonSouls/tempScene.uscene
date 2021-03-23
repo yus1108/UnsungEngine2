@@ -13,7 +13,7 @@
                 <BOOL isThisMainCamera="0" />
                 <Vector3 name="cameraPosition" x="0" y="0" z="0" />
                 <Vector3 name="cameraRotation" x="0" y="0" z="0" />
-                <FLOAT viewWidth="1280" />
+                <FLOAT viewWidth="1259" />
                 <FLOAT viewHeight="720" />
                 <FLOAT nearZ="-1" />
                 <FLOAT farZ="10" />
@@ -23,7 +23,7 @@
     <GameObject name="followCamera" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="186.812" y="-0.13762" z="0" />
+                <Vector3 name="localPosition" x="-154.081" y="-0.14761" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -846,7 +846,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="234.497" y="-0.140772" z="0" />
+                <Vector3 name="localPosition" x="113.558" y="-0.155823" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -879,7 +879,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="1" maxY="0.5" minX="0.9" minY="0.4" />
+                    <UV name="uv" maxX="0.5" maxY="0.1" minX="0.4" minY="0" />
                 </Component>
             </Material>
             <Health>
@@ -905,8 +905,8 @@
     <GameObject name="player" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="186.812" y="-0.209525" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="localPosition" x="-154.081" y="-0.228452" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
@@ -944,7 +944,7 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.627404" maxY="0.0769231" minX="0.550481" minY="0" />
+                    <UV name="uv" maxX="0.242788" maxY="0.384615" minX="0.165865" minY="0.307692" />
                 </Component>
             </Material>
         </GameObject>

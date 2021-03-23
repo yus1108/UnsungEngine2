@@ -17,6 +17,8 @@ void Skeleton::Start()
 
 void Skeleton::Update()
 {
+	if (player->EditorMode) return;
+
 	Enemy::Update();
 
 	if (health->Dead)
@@ -43,6 +45,8 @@ void Skeleton::Update()
 
 void Skeleton::LateUpdate()
 {
+	if (player->EditorMode) return;
+
 	Enemy::LateUpdate();
 	material->uv = animation.Update();
 }

@@ -61,6 +61,7 @@ private:
 
 public:
 	bool showCollision = false;
+	bool EditorMode = false;
 
 private:
 	void Start() override;

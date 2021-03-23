@@ -9,7 +9,8 @@ void Enemy::Start()
 	health = GetGameObject()->GetChild(0)->GetComponent<Health>();
 	weapon = GetGameObject()->GetChild(1)->GetComponent<Weapon>();
 
-	playerCollider = FindObjectWithName("player")->GetComponent<Physics2D::CircleCollider>();
+	player = FindObjectWithName("player")->GetComponent<Player>();
+	playerCollider = player->GetComponent<Physics2D::CircleCollider>();
 
 	attackTimer = AttackTime;
 }
@@ -17,6 +18,7 @@ void Enemy::Start()
 void Enemy::FixedUpdate()
 {
 	if (health->Dead) return;
+	if (player->EditorMode) return;
 
 	sight = Physics2D::MakeAABB(localSight, transform->GetWorld());
 	range = Physics2D::MakeAABB(localRange, transform->GetWorld());
@@ -54,6 +56,7 @@ void Enemy::FixedUpdate()
 
 void Enemy::Update()
 {
+	if (player->EditorMode) return;
 
 	deltaTime = Utility::UTime::Get()->DeltaTimeF();
 	velocity = velocity + gravity * deltaTime;
@@ -94,6 +97,8 @@ void Enemy::Update()
 
 void Enemy::LateUpdate()
 {
+	if (player->EditorMode) return;
+
 	Vector2 hitVelocity = hitDirection * deltaTime;
 	hitVelocity.x *= hitPower.x;
 	hitVelocity.y *= hitPower.y;
