@@ -37,7 +37,7 @@ private:
 
 	bool hitRed = true;
 	float hitTimer = 0.0f;
-	float hitMaxTimer = 0.2f;
+	float hitMaxTimer = 0.4f;
 	Vector2 hitPower;
 	Vector2 hitDirection;
 

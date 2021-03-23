@@ -59,8 +59,8 @@ void Player::Update()
 	externalVelocity = externalVelocity + gravity * deltaTime;
 
 	Console::Clear();
-	Console::WriteLine(string("Player : ") + to_string(health->HP * 100.0f));
-	Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->HP * 100.0f));
+	Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
+	Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->GetHP()));
 
 	if (health->Dead) return;
 
@@ -200,9 +200,9 @@ void Player::UpdateAnimation()
 	{
 		Movable = false;
 		weapon->Set();
-		if (animation.IsAt({ 3, PLAYER_ANIMATION_STATE_ATTACK1 })) SetAttack();
-		else if (animation.IsAt({ 3, PLAYER_ANIMATION_STATE_ATTACK2 })) SetAttack();
-		else if (animation.IsAt({ 3, PLAYER_ANIMATION_STATE_ATTACK3 })) SetAttack();
+		if (animation.IsAt({ 2, PLAYER_ANIMATION_STATE_ATTACK1 })) SetAttack();
+		else if (animation.IsAt({ 2, PLAYER_ANIMATION_STATE_ATTACK2 })) SetAttack();
+		else if (animation.IsAt({ 2, PLAYER_ANIMATION_STATE_ATTACK3 })) SetAttack();
 		
 		if (animation.IsFinished()) animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
 	}
