@@ -138,8 +138,8 @@ void Enemy::GetHit(Vector2 from)
 	hitDirection = (GetTransform()->localPosition.value - from).Normalize();
 	hitDirection.y = 0.5f;
 	hitDirection = hitDirection.Normalize();
-	hitPower.x = 500.0f;
-	hitPower.y = 300.0f;
+	hitPower.x = 216.0f;
+	hitPower.y = 150.0f;
 	hitTimer = hitMaxTimer;
 	material->color = Color{ 1,1,1,1 };
 	hitRed = true;

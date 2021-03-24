@@ -53,7 +53,7 @@ Game::Game(HINSTANCE hInstance, int width, int height)
         rendererDesc.EnableBlendState = true;
         rendererDesc.EnableDepthStencil = false;
         rendererDesc.EnableMultisampling = true;
-        rendererDesc.MultisampleDesc = { 4, 0 };
+        rendererDesc.MultisampleDesc = { 1, 0 };
         rendererDesc.CullMode = D3D11_CULL_NONE;
         renderer->Init(app->GetHandler(), &rendererDesc);
     }
@@ -85,11 +85,10 @@ Game::~Game()
 void Game::Load()
 {
     WinApplication::Get()->FreeDLL();
-
 #ifdef _DEBUG
     WinApplication::Get()->LoadDLL(L"../Debug/DungeonSoulsScript.dll");
 #else
-    WinApplication::Get()->LoadDLL(L"../Release/DungeonSoulsScript.dll");
+    WinApplication::Get()->LoadDLL(L"DungeonSoulsScript.dll");
 #endif
 
     typedef void(*ATTACH_SINGLETONS) (UEngine::SingletonManager::Singletons exportedSingletons);
@@ -151,44 +150,47 @@ void Game::Load()
                    currentScene->ResourceManager.ApplyChange();
                }
 
-               auto enemy = GameObject::Instantiate(currentScene, "enemy");
-               auto enemyCollider = enemy->AddComponent<UEngine::Physics2D::CircleCollider>();
-               enemyCollider->SetCollider({ 0, 0 }, 16);
-               enemyCollider->IsTrigger = true;
-               enemy->GetTransform()->localPosition.value.x = 50.0f;
-               enemy->GetTransform()->localPosition.value.y = 200.0f;
-               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("SkeletonCreation");
-               scriptCreation(enemy);
-               currentScene->ResourceManager.ApplyChange();
+               for (size_t i = 0; i < 1; i++)
+               {
+                   auto enemy = GameObject::Instantiate(currentScene, "enemy");
+                   auto enemyCollider = enemy->AddComponent<UEngine::Physics2D::CircleCollider>();
+                   enemyCollider->SetCollider({ 0, 0 }, 16);
+                   enemyCollider->IsTrigger = true;
+                   enemy->GetTransform()->localPosition.value.x = 50.0f;
+                   enemy->GetTransform()->localPosition.value.y = 200.0f;
+                   scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("SkeletonCreation");
+                   scriptCreation(enemy);
+                   currentScene->ResourceManager.ApplyChange();
 
-               auto enemyBody = GameObject::Instantiate(currentScene, "enemyBody");
-               enemyBody->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-               auto enemyBodyCollider = enemyBody->AddComponent<UEngine::Physics2D::RectCollider>();
-               enemyBodyCollider->SetCollider(16, 32);
-               enemyBodyCollider->IsTrigger = true;
-               auto enemyMaterial = enemyBody->AddComponent<Material>();
-               enemyMaterial->LoadImageMaterial(L"./Assets/SkeletalWarrior_Sprites.png");
-               enemyMaterial->uv.value = UV{ 0, 0, 1.0f / 10.0f, 1.0f / 10.0f };
-               enemyBody->GetTransform()->scale = Vector2(32, 32);
-               enemyBody->SetParent(enemy);
-               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("HealthCreation");
-               scriptCreation(enemyBody);
-               currentScene->ResourceManager.ApplyChange();
+                   auto enemyBody = GameObject::Instantiate(currentScene, "enemyBody");
+                   enemyBody->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+                   auto enemyBodyCollider = enemyBody->AddComponent<UEngine::Physics2D::RectCollider>();
+                   enemyBodyCollider->SetCollider(16, 32);
+                   enemyBodyCollider->IsTrigger = true;
+                   auto enemyMaterial = enemyBody->AddComponent<Material>();
+                   enemyMaterial->LoadImageMaterial(L"./Assets/SkeletalWarrior_Sprites.png");
+                   enemyMaterial->uv.value = UV{ 0, 0, 1.0f / 10.0f, 1.0f / 10.0f };
+                   enemyBody->GetTransform()->scale = Vector2(32, 32);
+                   enemyBody->SetParent(enemy);
+                   scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("HealthCreation");
+                   scriptCreation(enemyBody);
+                   currentScene->ResourceManager.ApplyChange();
 
-               auto enemyAttack = GameObject::Instantiate(currentScene, "enemyAttack");
-               auto eAttack = enemyAttack->AddComponent<UEngine::Physics2D::RectCollider>();
-               eAttack->SetCollider(16, 32);
-               eAttack->IsTrigger = true;
-               enemyAttack->GetTransform()->localPosition.value.x = 8;
-               scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
-               scriptCreation(enemyAttack);
-               enemyAttack->SetParent(enemy);
-               currentScene->ResourceManager.ApplyChange();
-
+                   auto enemyAttack = GameObject::Instantiate(currentScene, "enemyAttack");
+                   auto eAttack = enemyAttack->AddComponent<UEngine::Physics2D::RectCollider>();
+                   eAttack->SetCollider(16, 32);
+                   eAttack->IsTrigger = true;
+                   enemyAttack->GetTransform()->localPosition.value.x = 8;
+                   scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("WeaponCreation");
+                   scriptCreation(enemyAttack);
+                   enemyAttack->SetParent(enemy);
+                   currentScene->ResourceManager.ApplyChange();
+               }
 
                auto player = GameObject::Instantiate(currentScene, "player");
                player->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                player->AddComponent<UEngine::Physics2D::CircleCollider>()->SetCollider({ 0, 0 }, 16);
+               player->GetTransform()->localPosition.value.y = 200.0f;
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("FollowCameraCreation");
                scriptCreation(player);
                scriptCreation = (AddScript)UEngine::WinApplication::Get()->FindFunction("PlayerCreation");

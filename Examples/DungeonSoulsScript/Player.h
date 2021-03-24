@@ -18,6 +18,47 @@ enum PLAYER_ANIMATION_STATE
 	PLAYER_ANIMATION_STATE_COUNT
 };
 
+class Dash
+{
+private:
+	float Timer = 0;
+	float CooldownTimer = 0;
+	float Value = 0;
+
+public:
+	float Power = 500;
+	float Duration = 0.2f;
+	float Cooldown = 0.5f;
+
+	Dash() = default;
+	Dash(float Power, float Duration, float Cooldown)
+		: Power(Power), Duration(Duration), Cooldown(Cooldown)
+	{}
+
+	void Update(float deltaTime, bool isDecrement)
+	{
+		if (CooldownTimer > 0) CooldownTimer -= deltaTime;
+		if (Timer > 0)
+		{
+			if (isDecrement)
+				Value = -Power * deltaTime;
+			else
+				Value = Power * deltaTime;
+			Timer -= deltaTime;
+		}
+		else
+			Value = 0;
+	}
+	void Activate()
+	{
+		Timer = Duration;
+		CooldownTimer = Cooldown;
+	}
+
+	float GetValue() { return Value; }
+	bool IsAvailable() { return CooldownTimer <= 0; }
+};
+
 UENGINE_CLASS(Player)
 {
 private:
@@ -25,25 +66,24 @@ private:
 	float speed = 4.0f;
 	float deltaTime = 0.0f;
 
-	bool jump;
-	float jumpPower;
-	float jumpCooldown = 0.5f;
-	float jumpCooldownTimer = 0;
-
-	bool dash;
-	float dashPower;
-	float dashCooldown = 0.5f;
-	float dashCooldownTimer = 0;
-
 	bool hitRed = true;
 	float hitTimer = 0.0f;
 	float hitMaxTimer = 0.4f;
 	Vector2 hitPower;
 	Vector2 hitDirection;
 
-	Vector2 gravity = Vector2(0, -9.81f);
 	Vector2 velocity;
-	Vector2 externalVelocity;
+
+	float gravity = -20;
+	float gVelocity = 0;
+	Vector2 weight;
+
+	Vector2 dashDisplacement;
+
+	Dash dash;
+	Dash attackDash{ 200.0f, 0.2f, 0.0f };
+	Dash jumpDash{ 500.0f, 0.2f, 0.0f };
+
 
 	Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT];
 	Animation animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
@@ -73,13 +113,13 @@ private:
 
 	void OnCollisionStay(Physics2D::Collider * collision) override;
 	void OnCollisionEnter(Physics2D::Collider * collision) override;
+	void OnCollisionExit(Physics2D::Collider * collision) override;
 
 	void RotateOn(float x);
 	void ReceiveInput();
 	void UpdateAnimation();
 	void OnPreRender();
-	void DecreaseDash(float value);
-	void Dash(float value);
+	void DashUpdate();
 	void AttackInput();
 	void SetAttack();
 
