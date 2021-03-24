@@ -3,6 +3,12 @@
 
 void UEngine::Transform::Awake()
 {
+	worldBuffer = DXRenderer::DXConstantBuffer::Instantiate
+	(
+		GetGameObject()->GetScene()->ResourceManager.GetNextCBufferID(),
+		DXRenderer::Get(),
+		DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(CPU_WORLD).raw_name())
+	);
 	worldBuffer->AttachData(&world, sizeof(CPU_WORLD));
 	GetGameObject()->GetScene()->ResourceManager.AddResource<DXRenderer::DXConstantBuffer>(worldBuffer->UID, worldBuffer);
 }

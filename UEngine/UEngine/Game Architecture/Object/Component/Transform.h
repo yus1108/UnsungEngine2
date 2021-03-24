@@ -33,11 +33,5 @@ namespace UEngine
 		void SetParent(Transform* transform) { GetGameObject()->SetParent(transform->GetGameObject()); }
 		void AddChild(Transform* transform) { GetGameObject()->AddChild(transform->GetGameObject()); }
 		std::vector<Transform*> GetChildren();
-	public:
-		Transform() : worldBuffer(DXRenderer::DXConstantBuffer::Instantiate
-		(
-			DXRenderer::Get(),
-			DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(CPU_WORLD).raw_name())
-		)) {}
 	};
 }

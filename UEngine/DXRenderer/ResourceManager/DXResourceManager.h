@@ -7,6 +7,7 @@ namespace UEngine
 		class DXResourceManager
 		{
 		private:
+			UINT constantBufferID = 0;
 			std::map<std::string, std::unordered_map<std::string, void*>> creationQueue, deletionQueue, resources;
 			std::map<std::string, CONSTANT_BUFFER_DESC> cBufferPreset;
 
@@ -33,6 +34,7 @@ namespace UEngine
 			T* GetResource(std::string name);
 
 			const CONSTANT_BUFFER_DESC& GetCBufferPreset(std::string typeName) { return cBufferPreset[typeName]; }
+			const std::string GetNextCBufferID() { return std::to_string(constantBufferID++); }
 
 			void ApplyChange();
 			void Init();

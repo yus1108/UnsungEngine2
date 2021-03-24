@@ -3,6 +3,19 @@
 
 void UEngine::Material::Awake()
 {
+	colorBuffer = DXRenderer::DXConstantBuffer::Instantiate
+	(
+		GetGameObject()->GetScene()->ResourceManager.GetNextCBufferID(),
+		DXRenderer::Get(),
+		DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(Color).raw_name())
+	);
+	spriteBuffer = DXRenderer::DXConstantBuffer::Instantiate
+	(
+		GetGameObject()->GetScene()->ResourceManager.GetNextCBufferID(),
+		DXRenderer::Get(),
+		DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(UV).raw_name())
+	);
+
 	uv = UV{ 0, 0, 1, 1 };
 	colorBuffer->AttachData(&color.value, sizeof(Color));
 	spriteBuffer->AttachData(&uv.value, sizeof(UV));
