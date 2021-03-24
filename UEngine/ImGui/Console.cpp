@@ -63,6 +63,10 @@ namespace UEngine
     {
         ImGui::Begin("Console");
         if (isFocused) *isFocused = ImGui::IsWindowFocused();
+
+        float fps = ImGui::GetIO().Framerate;
+        ImGui::Text((std::string("FPS : ") + std::to_string(fps)).c_str());
+        ImGui::Separator();
         for (size_t i = 0; i < instance->logs.size(); i++)
         {
             switch (instance->logs[i].first)

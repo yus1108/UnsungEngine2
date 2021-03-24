@@ -28,8 +28,8 @@ namespace UEngine
 		{
 			prevTime = currentTime;
 			currentTime = high_resolution_clock::now();
-			duration<double, std::milli> time_span = currentTime - startTime;
-			totalTime = time_span.count() / 1000.0;
+			duration<double, std::nano> time_span = currentTime - startTime;
+			totalTime = time_span.count() / 1000000000.0;
 
 			elapsedSignal++;
 			double sinceLast = totalTime - lastSecond;
@@ -43,8 +43,8 @@ namespace UEngine
 
 		const double UTime::DeltaTime()
 		{
-			duration<double, std::milli> time_span = currentTime - prevTime;
-			return time_span.count() / 1000.0 * TimeScale;
+			duration<double, std::nano> time_span = currentTime - prevTime;
+			return time_span.count() / 1000000000.0 * TimeScale;
 		}
 
 		const float UTime::DeltaTimeF()
@@ -60,8 +60,8 @@ namespace UEngine
 		const double UTime::TotalTimeExact()
 		{
 			currentTime = high_resolution_clock::now();
-			duration<double, std::milli> time_span = currentTime - startTime;
-			return  time_span.count() / 1000.0;
+			duration<double, std::nano> time_span = currentTime - startTime;
+			return  time_span.count() / 1000000000.0;
 		}
 
 		const double UTime::FramePerSecond()
