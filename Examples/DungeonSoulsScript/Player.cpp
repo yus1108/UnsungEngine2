@@ -51,10 +51,6 @@ void Player::FixedUpdate()
 	}
 
 	deltaTime = GameState::GetCurrentFixedTimestep();
-
-	
-	
-	
 }
 
 
@@ -63,43 +59,10 @@ void Player::Update()
 	weapon->Reset();
 	deltaTime = Utility::UTime::Get()->DeltaTimeF();
 
-	
-
 	velocity = Vector2(0, 0);
 	gVelocity += gravity * deltaTime;
 	weight.y += gVelocity * deltaTime;
-
-	if (attackDashTimer > 0)
-	{
-		if (transform->localRotation.value.y < 0)
-			attackDashValue = -attackDash * deltaTime;
-		else
-			attackDashValue = attackDash * deltaTime;
-		attackDashTimer -= deltaTime;
-	}
-	else
-		attackDashValue = 0;
-
-	if (dashCooldownTimer > 0) dashCooldownTimer -= deltaTime;
-	if (dashTimer > 0)
-	{
-		if (transform->localRotation.value.y < 0)
-			dashValue = -dashPower * deltaTime;
-		else
-			dashValue = dashPower * deltaTime;
-		dashTimer -= deltaTime;
-	}
-	else
-		dashValue = 0;
-	dashDisplacement.x = attackDashValue + dashValue;
-
-	if (jumpTimer > 0)
-	{
-		DashUp(jumpPower);
-		jumpTimer -= deltaTime;
-	}
-	else
-		dashDisplacement.y = 0;
+	DashUpdate();
 
 	if (health->Dead) return;
 
@@ -234,21 +197,19 @@ void Player::ReceiveInput()
 	{
 		EnableRoutine = false;
 		Jumpable = false;
-		jumpTimer = jumpDuration;
+		jumpDash.Activate();
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_JUMP]);
 		return;
 	}
 
 	if (animation != player_animation_map[PLAYER_ANIMATION_STATE_ROLL] &&
-		dashCooldownTimer <= 0 &&
+		dash.IsAvailable() &&
 		Input::GetMouseDown(VK_RBUTTON))
 	{
 		Rotatable = false;
 		EnableRoutine = false;
 
-		dashTimer = dashDuration;
-		dashCooldownTimer = dashCooldown;
-		dashAction = PLAYER_DASH_ACTION_ROLL;
+		dash.Activate();
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ROLL]);
 		return;
 	}
@@ -315,17 +276,22 @@ void Player::OnCollisionExit(Physics2D::Collider* collisions)
 
 }
 
-void Player::Dash(float value)
+void Player::DashUpdate()
 {
+	jumpDash.Update(deltaTime, false);
 	if (transform->localRotation.value.y < 0)
-		dashDisplacement.x = -value * deltaTime;
+	{
+		attackDash.Update(deltaTime, true);
+		dash.Update(deltaTime, true);
+	}
 	else
-		dashDisplacement.x = value * deltaTime;
-}
+	{
+		attackDash.Update(deltaTime, false);
+		dash.Update(deltaTime, false);
+	}
 
-void Player::DashUp(float value)
-{
-	dashDisplacement.y = value * deltaTime;
+	dashDisplacement.x = attackDash.GetValue() + dash.GetValue();
+	dashDisplacement.y = jumpDash.GetValue();
 }
 
 void Player::AttackInput()
@@ -335,16 +301,16 @@ void Player::AttackInput()
 	{
 		if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], attackDash);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], 1);
 		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], attackDash);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], 1);
 		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], attackDash);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], 1);
 		else
 		{
-			attackValue = attackDash;
+			attackValue = 1;
 			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1]);
 		}
 	}
@@ -353,8 +319,7 @@ void Player::AttackInput()
 	if (attackValue > 0)
 	{
 		Movable = false;
-		attackDashTimer = attackDashDuration;
-		dashAction = PLAYER_DASH_ACTION_ATTACK;
+		attackDash.Activate();
 		SetAttack();
 	}
 }

@@ -18,11 +18,45 @@ enum PLAYER_ANIMATION_STATE
 	PLAYER_ANIMATION_STATE_COUNT
 };
 
-enum PLAYER_DASH_ACTION
+class Dash
 {
-	PLAYER_DASH_ACTION_ATTACK,
-	PLAYER_DASH_ACTION_ROLL,
-	PLAYER_DASH_ACTION_NONE
+private:
+	float Timer = 0;
+	float CooldownTimer = 0;
+	float Value = 0;
+
+public:
+	float Power = 500;
+	float Duration = 0.2f;
+	float Cooldown = 0.5f;
+
+	Dash() = default;
+	Dash(float Power, float Duration, float Cooldown)
+		: Power(Power), Duration(Duration), Cooldown(Cooldown)
+	{}
+
+	void Update(float deltaTime, bool isDecrement)
+	{
+		if (CooldownTimer > 0) CooldownTimer -= deltaTime;
+		if (Timer > 0)
+		{
+			if (isDecrement)
+				Value = -Power * deltaTime;
+			else
+				Value = Power * deltaTime;
+			Timer -= deltaTime;
+		}
+		else
+			Value = 0;
+	}
+	void Activate()
+	{
+		Timer = Duration;
+		CooldownTimer = Cooldown;
+	}
+
+	float GetValue() { return Value; }
+	bool IsAvailable() { return CooldownTimer <= 0; }
 };
 
 UENGINE_CLASS(Player)
@@ -42,25 +76,13 @@ private:
 
 	float gravity = -20;
 	float gVelocity = 0;
-	float jumpPower = 500;
-	float jumpTimer = 0;
-	float jumpDuration = 0.2f;
 	Vector2 weight;
 
-	PLAYER_DASH_ACTION dashAction = PLAYER_DASH_ACTION_NONE;
 	Vector2 dashDisplacement;
 
-	float attackDash = 200;
-	float attackDashValue = 0;
-	float attackDashTimer = 0;
-	float attackDashDuration = 0.2f;
-
-	float dashPower = 500;
-	float dashValue = 0;
-	float dashTimer = 0;
-	float dashDuration = 0.2f;
-	float dashCooldownTimer = 0;
-	float dashCooldown = 0.5f;
+	Dash dash;
+	Dash attackDash{ 200.0f, 0.2f, 0.0f };
+	Dash jumpDash{ 500.0f, 0.2f, 0.0f };
 
 
 	Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT];
@@ -97,8 +119,7 @@ private:
 	void ReceiveInput();
 	void UpdateAnimation();
 	void OnPreRender();
-	void Dash(float value);
-	void DashUp(float value);
+	void DashUpdate();
 	void AttackInput();
 	void SetAttack();
 
