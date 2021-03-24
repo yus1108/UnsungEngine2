@@ -21,6 +21,16 @@
 #pragma comment(lib, "../../UEngine/Debug/UEngine.lib")
 #pragma comment(lib, "../../UEngine/Debug/XMLSerializer.lib")
 #pragma comment(lib, "../../UEngine/Debug/ImGui.lib")
+
+#else
+#pragma comment(lib, "../../UEngine/Release/SingletonManager.lib")
+#pragma comment(lib, "../../UEngine/Release/Utility.lib")
+#pragma comment(lib, "../../UEngine/Release/WinApplication.lib")
+#pragma comment(lib, "../../UEngine/Release/DXRenderer.lib")
+#pragma comment(lib, "../../UEngine/Release/UEngine.lib")
+#pragma comment(lib, "../../UEngine/Release/XMLSerializer.lib")
+#pragma comment(lib, "../../UEngine/Release/ImGui.lib")
+
 #endif
 
 using namespace UEngine;

@@ -49,6 +49,12 @@ void Player::FixedUpdate()
 		material->color = Color{ 1,1,1,1 };
 		IsHit = false;
 	}
+
+	deltaTime = GameState::GetCurrentFixedTimestep();
+
+	
+	
+	
 }
 
 
@@ -56,11 +62,44 @@ void Player::Update()
 {
 	weapon->Reset();
 	deltaTime = Utility::UTime::Get()->DeltaTimeF();
-	externalVelocity = externalVelocity + gravity * deltaTime;
 
-	Console::Clear();
-	Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
-	Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->GetHP()));
+	
+
+	velocity = Vector2(0, 0);
+	gVelocity += gravity * deltaTime;
+	weight.y += gVelocity * deltaTime;
+
+	if (attackDashTimer > 0)
+	{
+		if (transform->localRotation.value.y < 0)
+			attackDashValue = -attackDash * deltaTime;
+		else
+			attackDashValue = attackDash * deltaTime;
+		attackDashTimer -= deltaTime;
+	}
+	else
+		attackDashValue = 0;
+
+	if (dashCooldownTimer > 0) dashCooldownTimer -= deltaTime;
+	if (dashTimer > 0)
+	{
+		if (transform->localRotation.value.y < 0)
+			dashValue = -dashPower * deltaTime;
+		else
+			dashValue = dashPower * deltaTime;
+		dashTimer -= deltaTime;
+	}
+	else
+		dashValue = 0;
+	dashDisplacement.x = attackDashValue + dashValue;
+
+	if (jumpTimer > 0)
+	{
+		DashUp(jumpPower);
+		jumpTimer -= deltaTime;
+	}
+	else
+		dashDisplacement.y = 0;
 
 	if (health->Dead) return;
 
@@ -91,11 +130,19 @@ void Player::LateUpdate()
 	hitVelocity.x *= hitPower.x;
 	hitVelocity.y *= hitPower.y;
 	hitPower = hitPower * 0.9f;
+	transform->localPosition.value = transform->localPosition.value + velocity + weight + dashDisplacement + hitVelocity;
+	Console::Clear();
+	Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
+	Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
+	Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
+	Console::WriteLine(string("Player gVelocity : ") + to_string(gVelocity));
+	Console::WriteLine(string("Player weight.y : ") + to_string(weight.y));
+	Console::WriteLine(string("Player jumpable : ") + (Jumpable ? "true" : "false"));
+	Console::WriteLine(string("Player dashDisplacement.x : ") + to_string(dashDisplacement.x));
+	Console::WriteLine(string(" : ") + to_string(GameState::GetCurrentFixedTimestep()));
 
-	externalVelocity.x += dashPower * deltaTime;
-	DecreaseDash(600.0f);
-	transform->localPosition.value = transform->localPosition.value + velocity + externalVelocity + hitVelocity;
-	velocity = Vector2(0, 0);
+	//Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->GetHP()));
+
 	material->uv = animation.Update();
 
 	auto mousePos = Math::GetMousePosToWorld();
@@ -111,25 +158,6 @@ void Player::LateUpdate()
 		auto mouseDirection = mousePos - transform->localPosition.value;
 		RotateOn(mouseDirection.x);
 	}
-
-	if (jump)
-	{
-		jumpCooldownTimer += deltaTime;
-		if (jumpCooldownTimer > jumpCooldown)
-		{
-			jump = false;
-			jumpCooldownTimer = 0;
-		}
-	}
-	if (dash)
-	{
-		dashCooldownTimer += deltaTime;
-		if (dashCooldownTimer > dashCooldown)
-		{
-			dash = false;
-			dashCooldownTimer = 0;
-		}
-	}
 }
 
 void Player::RotateOn(float x)
@@ -140,10 +168,11 @@ void Player::RotateOn(float x)
 
 void Player::ReceiveInput()
 {
-	if (UEngine::Input::GetKeyDown(VK_TAB))
+	if (!UEngine::Input::GetKeyDown(VK_LMENU) && UEngine::Input::GetKeyDown(VK_TAB))
 	{
 		EditorMode = !EditorMode;
 	}
+	
 
 	if (UEngine::Input::GetKeyDown('C'))
 	{
@@ -154,13 +183,13 @@ void Player::ReceiveInput()
 	{
 		if (UEngine::Input::GetKey('D'))
 		{
-			auto value = Vector2(1, 0) * frameSize * speed * deltaTime;
-			velocity = velocity + value;
+			float xValue = frameSize * speed * deltaTime;
+			velocity.x = xValue;
 		}
 		if (UEngine::Input::GetKey('A'))
 		{
-			auto value = Vector2(-1, 0) * frameSize * speed * deltaTime;
-			velocity = velocity + value;
+			auto xValue = -1.0f * frameSize * speed * deltaTime;
+			velocity.x = xValue;
 		}
 	}
 
@@ -199,27 +228,28 @@ void Player::ReceiveInput()
 		}
 	}
 
-	if (Jumpable && !jump &&
+	if (Jumpable &&
 		animation != player_animation_map[PLAYER_ANIMATION_STATE_JUMP] &&
 		Input::GetKeyDown(VK_SPACE))
 	{
 		EnableRoutine = false;
 		Jumpable = false;
-		jump = true;
-		jumpPower = 600.0f;
+		jumpTimer = jumpDuration;
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_JUMP]);
 		return;
 	}
 
-	if (!dash && animation != player_animation_map[PLAYER_ANIMATION_STATE_ROLL] &&
+	if (animation != player_animation_map[PLAYER_ANIMATION_STATE_ROLL] &&
+		dashCooldownTimer <= 0 &&
 		Input::GetMouseDown(VK_RBUTTON))
 	{
 		Rotatable = false;
 		EnableRoutine = false;
-		dash = true;
 
+		dashTimer = dashDuration;
+		dashCooldownTimer = dashCooldown;
+		dashAction = PLAYER_DASH_ACTION_ROLL;
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ROLL]);
-		Dash(80.0f);
 		return;
 	}
 }
@@ -229,12 +259,7 @@ void Player::UpdateAnimation()
 	if (animation == player_animation_map[PLAYER_ANIMATION_STATE_JUMP])
 	{
 		EnableRoutine = false;
-		externalVelocity.y = jumpPower * deltaTime;
-		jumpPower -= 1200.0f * deltaTime;
-		if (jumpPower < 0)
-			jumpPower = 0;
-		if (animation.IsFinished() && velocity.y == 0) 
-			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
+		if (Jumpable) animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
 	}
 	else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1] ||
 		animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2] ||
@@ -258,16 +283,17 @@ void Player::UpdateAnimation()
 void Player::OnPreRender()
 {
 	if (showCollision)
-	{
 		GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
-	}
 }
 
 void Player::OnCollisionEnter(Physics2D::Collider* collisions)
 {
 	if (collisions->GetGameObject()->name == "tile")
 	{
-		if (!Jumpable && collisions->GetTransform()->localPosition.value.y < transform->localPosition.value.y)
+		weight = Vector2();
+		gVelocity = 0;
+		if (!Jumpable &&
+			collisions->GetTransform()->localPosition.value.y < transform->localPosition.value.y)
 			Jumpable = true;
 	}
 }
@@ -276,39 +302,30 @@ void Player::OnCollisionStay(Physics2D::Collider* collisions)
 {
 	if (collisions->GetGameObject()->name == "tile")
 	{
-		externalVelocity.y = 0;
+		if (Jumpable)
+		{
+			gVelocity = 0;
+			weight = Vector2();
+		}
 	}
 }
 
-void Player::DecreaseDash(float value)
+void Player::OnCollisionExit(Physics2D::Collider* collisions)
 {
-	if (transform->localRotation.value.y < 0)
-	{
-		dashPower += value * deltaTime;
-		if (dashPower > 0)
-		{
-			dashPower = 0;
-			externalVelocity.x = 0;
-		}
-	}
-	// right
-	else
-	{
-		dashPower -= value * deltaTime;
-		if (dashPower < 0)
-		{
-			dashPower = 0;
-			externalVelocity.x = 0;
-		}
-	}
+
 }
 
 void Player::Dash(float value)
 {
 	if (transform->localRotation.value.y < 0)
-		dashPower = -value;
+		dashDisplacement.x = -value * deltaTime;
 	else
-		dashPower = value;
+		dashDisplacement.x = value * deltaTime;
+}
+
+void Player::DashUp(float value)
+{
+	dashDisplacement.y = value * deltaTime;
 }
 
 void Player::AttackInput()
@@ -318,16 +335,16 @@ void Player::AttackInput()
 	{
 		if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], 60.0f);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], attackDash);
 		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], 60.0f);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], attackDash);
 		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], 60.0f);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], attackDash);
 		else
 		{
-			attackValue = 60.0f;
+			attackValue = attackDash;
 			animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1]);
 		}
 	}
@@ -336,7 +353,8 @@ void Player::AttackInput()
 	if (attackValue > 0)
 	{
 		Movable = false;
-		Dash(attackValue);
+		attackDashTimer = attackDashDuration;
+		dashAction = PLAYER_DASH_ACTION_ATTACK;
 		SetAttack();
 	}
 }

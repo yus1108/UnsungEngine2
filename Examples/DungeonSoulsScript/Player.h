@@ -18,6 +18,13 @@ enum PLAYER_ANIMATION_STATE
 	PLAYER_ANIMATION_STATE_COUNT
 };
 
+enum PLAYER_DASH_ACTION
+{
+	PLAYER_DASH_ACTION_ATTACK,
+	PLAYER_DASH_ACTION_ROLL,
+	PLAYER_DASH_ACTION_NONE
+};
+
 UENGINE_CLASS(Player)
 {
 private:
@@ -25,25 +32,36 @@ private:
 	float speed = 4.0f;
 	float deltaTime = 0.0f;
 
-	bool jump;
-	float jumpPower;
-	float jumpCooldown = 0.5f;
-	float jumpCooldownTimer = 0;
-
-	bool dash;
-	float dashPower;
-	float dashCooldown = 0.5f;
-	float dashCooldownTimer = 0;
-
 	bool hitRed = true;
 	float hitTimer = 0.0f;
 	float hitMaxTimer = 0.4f;
 	Vector2 hitPower;
 	Vector2 hitDirection;
 
-	Vector2 gravity = Vector2(0, -9.81f);
 	Vector2 velocity;
-	Vector2 externalVelocity;
+
+	float gravity = -20;
+	float gVelocity = 0;
+	float jumpPower = 500;
+	float jumpTimer = 0;
+	float jumpDuration = 0.2f;
+	Vector2 weight;
+
+	PLAYER_DASH_ACTION dashAction = PLAYER_DASH_ACTION_NONE;
+	Vector2 dashDisplacement;
+
+	float attackDash = 200;
+	float attackDashValue = 0;
+	float attackDashTimer = 0;
+	float attackDashDuration = 0.2f;
+
+	float dashPower = 500;
+	float dashValue = 0;
+	float dashTimer = 0;
+	float dashDuration = 0.2f;
+	float dashCooldownTimer = 0;
+	float dashCooldown = 0.5f;
+
 
 	Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT];
 	Animation animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
@@ -73,13 +91,14 @@ private:
 
 	void OnCollisionStay(Physics2D::Collider * collision) override;
 	void OnCollisionEnter(Physics2D::Collider * collision) override;
+	void OnCollisionExit(Physics2D::Collider * collision) override;
 
 	void RotateOn(float x);
 	void ReceiveInput();
 	void UpdateAnimation();
 	void OnPreRender();
-	void DecreaseDash(float value);
 	void Dash(float value);
+	void DashUp(float value);
 	void AttackInput();
 	void SetAttack();
 
