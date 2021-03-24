@@ -42,7 +42,7 @@ namespace UEngine
 					Color color{ 1,1,1,1 };
 					default_shader = ResourceManager->GetResource<DXShader>("default");
 					default_renderMesh = ResourceManager->GetResource<DXRenderMesh>("default");
-					default_colorBuffer = DXConstantBuffer::Instantiate(this, ResourceManager->GetCBufferPreset(typeid(Color).raw_name()));
+					default_colorBuffer = DXConstantBuffer::Instantiate("0", this, ResourceManager->GetCBufferPreset(typeid(Color).raw_name()));
 					default_colorBuffer->CopyData<Color>(&color, sizeof(color));
 					default_colorBuffer->Update(immediate.DeviceContext.Get());
 				}

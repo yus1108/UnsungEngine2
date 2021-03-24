@@ -8,10 +8,9 @@ namespace UEngine
 		class DXConstantBuffer final
 		{
 		private:
-			DXConstantBuffer() { UID = std::to_string(nextId++); }
+			DXConstantBuffer() = default;
 			~DXConstantBuffer() { if (!attached) delete data; };
 		private:
-			static long long nextId;
 			Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
 			void* data{ nullptr };
 			size_t Size{ 0 };
@@ -29,6 +28,7 @@ namespace UEngine
 
 			static DXConstantBuffer* Instantiate
 			(
+				std::string UID,
 				DXRenderer* const renderer, 
 				CONSTANT_BUFFER_DESC desc
 			);

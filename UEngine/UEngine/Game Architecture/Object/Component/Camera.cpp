@@ -29,6 +29,12 @@ void UEngine::Camera::OnDisable()
 
 void UEngine::Camera::Awake()
 {
+	cameraBuffer = DXRenderer::DXConstantBuffer::Instantiate(
+		GetGameObject()->GetScene()->ResourceManager.GetNextCBufferID(),
+		DXRenderer::Get(),
+		DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(CPU_CAMERA).raw_name())
+	);
+
     auto rendererDesc = DXRenderer::Get()->GetDescription();
 
     // View & Object Creation

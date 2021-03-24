@@ -32,13 +32,6 @@ namespace UEngine
 		SERIALIZED_FLOAT_INIT(nearZ, 0);
 		SERIALIZED_FLOAT_INIT(farZ, 0);
 
-		Camera() 
-			: cameraBuffer
-			(
-				DXRenderer::DXConstantBuffer::Instantiate(DXRenderer::Get(),
-				DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(CPU_CAMERA).raw_name()))
-			) {}
-
 		void SetMainCamera();
 		static Camera* const GetMainCamera() { return GameState::GetCurrentScene()->MainCamera; }
 		CPU_CAMERA GetCameraMatrix() { return CPU_CAMERA{ DirectX::XMMatrixTranspose(cpu_camera.view), DirectX::XMMatrixTranspose(cpu_camera.projection) }; }

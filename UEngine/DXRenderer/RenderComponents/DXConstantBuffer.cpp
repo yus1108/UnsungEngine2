@@ -6,15 +6,15 @@ namespace UEngine
 {
 	namespace DXRenderer
 	{
-		long long DXConstantBuffer::nextId = 0;
-
 		DXConstantBuffer* DXConstantBuffer::Instantiate
 		(
+			std::string UID,
 			DXRenderer* const renderer,
 			CONSTANT_BUFFER_DESC desc
 		)
 		{
 			DXConstantBuffer* instance = new DXConstantBuffer;
+			instance->UID = UID;
 			instance->StartSlots = desc.StartSlots;
 			instance->Flags = desc.Flag;
 			renderer->InitConstantBuffer(desc.Size, instance->constBuffer.GetAddressOf());

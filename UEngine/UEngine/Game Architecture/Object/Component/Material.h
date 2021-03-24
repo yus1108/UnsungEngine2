@@ -30,17 +30,6 @@ namespace UEngine
 		void LoadImageMaterial(std::wstring fileName, D3D11_SAMPLER_DESC desc);
 
 	public:
-		Material()
-			: colorBuffer(DXRenderer::DXConstantBuffer::Instantiate
-			(
-				DXRenderer::Get(),
-				DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(Color).raw_name())
-			)), spriteBuffer(DXRenderer::DXConstantBuffer::Instantiate
-			(
-				DXRenderer::Get(),
-				DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(UV).raw_name())
-			))
-		{}
 		~Material()
 		{
 			GetGameObject()->GetScene()->ResourceManager.RemoveResource<DXRenderer::DXConstantBuffer>(colorBuffer->UID);
