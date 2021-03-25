@@ -155,6 +155,9 @@
     <ClInclude Include="UEditor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AudioEffect\AudioEffect.vcxproj">
+      <Project>{6ba35c2e-bba9-4886-b62f-bc3af32428ed}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\SingletonManager\SingletonManager.vcxproj">
       <Project>{d117c2db-8e63-429e-9216-58392b31321a}</Project>
     </ProjectReference>

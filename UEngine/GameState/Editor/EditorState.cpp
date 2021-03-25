@@ -8,7 +8,7 @@
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool resize = false;
-POINT size;
+POINT window_size;
 
 UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int height)
 {
@@ -74,6 +74,9 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
     ImGui_ImplDX11_Init(renderer->GetDevice(), renderer->GetImmediateDeviceContext());
 
     UEngine::SingletonManager::Init();
+
+    audio.InitAudio();
+    audio.PlayAudio(0, L"Assets/BRPG_Assault_noGT_Loop.wav", AudioType::AudioType_Music);
 }
 
 UEngine::UEditor::EditorState::~EditorState()
@@ -83,6 +86,7 @@ UEngine::UEditor::EditorState::~EditorState()
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
     UEngine::SingletonManager::Release();
+    audio.StopAudio();
 }
 
 void UEngine::UEditor::EditorState::Load()
@@ -98,27 +102,19 @@ void UEngine::UEditor::EditorState::Load()
     {
         // basic load
         using namespace UEngine;
-      /*  GameScene* currentScene = new GameScene();
-        currentScene->name = "tempScene";
-        currentScene->Init(true);*/
-        {
-         /*   auto cameraObject = GameObject::Instantiate(currentScene, "camera");
-            auto camera = cameraObject->AddComponent<Camera>();
-            camera->viewWidth.value = 15;
-            camera->viewHeight.value = 30;
+        //GameScene* currentScene = new GameScene();
+        //currentScene->name = "tempScene";
+        //currentScene->Init(true);
+        //{
+        //    auto cameraObject = GameObject::Instantiate(currentScene, "camera");
+        //    auto camera = cameraObject->AddComponent<Camera>();
+        //    camera->viewWidth.value = 15;
+        //    camera->viewHeight.value = 30;
 
-            auto cameraObject2 = GameObject::Instantiate(currentScene, "camera");
-            auto camera2 = cameraObject2->AddComponent<Camera>();
-            cameraObject2->SetParent(cameraObject);
-            camera2->viewWidth.value = 15;
-            camera2->viewHeight.value = 30;
-
-            auto ball = GameObject::Instantiate(currentScene, "ball");
-            auto component = addscript(ball);
-            
-            ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
-            ball->AddComponent<Material>()->LoadImageMaterial(L"./picture.png");*/
-        }
+        //    auto ball = GameObject::Instantiate(currentScene, "ball");
+        //    ball->AddComponent<RenderComponent>()->Load("rectangle", "image");
+        //    ball->AddComponent<Material>()->LoadImageMaterial(L"./Assets/soccer_ball.png");
+        //}
         GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", true);
 
 
@@ -155,7 +151,7 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             {
                 delete GameState::GetCurrentScene()->debugRenderer;
             }
-            UEngine::DXRenderer::Get()->ResizeMainRenderTarget(size.x, size.y);
+            UEngine::DXRenderer::Get()->ResizeMainRenderTarget(window_size.x, window_size.y);
             if (GameState::GetCurrentScene()->debugRenderer)
             {
                 GameState::GetCurrentScene()->debugRenderer = new DebugRenderer();
@@ -173,11 +169,12 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             ImGui::NewFrame();
         }, [&]()
         {
-            //if (WinInput::Get()->GetKeyDown('1'))
-            //{
-            //    GameState::GetCurrentScene()->SaveScene();
-            //    return true;
-            //}
+            audio.UpdateAudio();
+            if (Input::GetKeyDown(VK_F10))
+            {
+                GameState::GetCurrentScene()->SaveScene();
+                return true;
+            }
             return false;
         }, [&]()
         {
@@ -271,8 +268,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         if (UEngine::SingletonManager::App == nullptr) return 0;
         resize = true;
-        size.x = (UINT)LOWORD(lParam);
-        size.y = (UINT)HIWORD(lParam);
+        window_size.x = (UINT)LOWORD(lParam);
+        window_size.y = (UINT)HIWORD(lParam);
     }
         return 0;
     case WM_SYSCOMMAND:

@@ -25,4 +25,6 @@
 #include "..//WinApplication/WinMemoryLeak.h"
 #include "../SingletonManager/SingletonManager.h"
 
+#include "../AudioEffect/AudioEffects.h"
+
 #include "Editor\EditorState.h"

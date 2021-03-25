@@ -13,63 +13,34 @@
                 <BOOL isThisMainCamera="1" />
                 <Vector3 name="cameraPosition" x="0" y="0" z="0" />
                 <Vector3 name="cameraRotation" x="0" y="0" z="0" />
-                <FLOAT viewWidth="200" />
-                <FLOAT viewHeight="200" />
+                <FLOAT viewWidth="15" />
+                <FLOAT viewHeight="30" />
                 <FLOAT nearZ="-1" />
                 <FLOAT farZ="10" />
             </Component>
         </Camera>
     </GameObject>
-    <GameObject name="boost" isActive="1" isStatic="0">
+    <GameObject name="ball" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="2.84122" y="-53.0252" z="0" />
+                <Vector3 name="localPosition" x="0" y="0" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
-                <Vector3 name="scale" x="32" y="80" z="1" />
+                <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
-        <Boost>
-            <Component enabled="1" />
-        </Boost>
-        <Material>
-            <Component enabled="1">
-                <STRING fileName="./Assets/Start.png" />
-                <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
-                <COLOR name="color" r="1" g="1" b="1" a="1" />
-                <UV name="uv" maxX="0.545455" maxY="1" minX="0.454545" minY="0.25" />
-            </Component>
-        </Material>
         <RenderComponent>
             <Component enabled="1">
                 <STRING renderMesh_name="rectangle" />
-                <STRING shader_name="sprite" />
+                <STRING shader_name="image" />
             </Component>
         </RenderComponent>
-    </GameObject>
-    <GameObject name="flight" isActive="1" isStatic="0">
-        <Transform>
-            <Component enabled="1">
-                <Vector3 name="localPosition" x="2.84122" y="-3.02517" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
-                <Vector3 name="scale" x="32" y="40" z="1" />
-            </Component>
-        </Transform>
-        <Flight>
-            <Component enabled="1" />
-        </Flight>
         <Material>
             <Component enabled="1">
-                <STRING fileName="./Assets/LeftRight.png" />
+                <STRING fileName="./Assets/soccer_ball.png" />
                 <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                 <COLOR name="color" r="1" g="1" b="1" a="1" />
-                <UV name="uv" maxX="0.571429" maxY="1" minX="0.428571" minY="0" />
+                <UV name="uv" maxX="1" maxY="1" minX="0" minY="0" />
             </Component>
         </Material>
-        <RenderComponent>
-            <Component enabled="1">
-                <STRING renderMesh_name="rectangle" />
-                <STRING shader_name="sprite" />
-            </Component>
-        </RenderComponent>
     </GameObject>
 </GameScene>
