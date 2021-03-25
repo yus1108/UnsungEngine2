@@ -10,10 +10,11 @@
 - Implemented basic 2D collision check functions
 - Implemented dynamic spatial partitioning and fixed time-rate update to optimize collision check
 - Implemented image texture loading using WICTextureLoader and DDSTextureLoader from DirectXTK
-- Added example games (air hockey, puzzle, run game, shooting game)
+- Added example games (air hockey, puzzle, run game, shooting game, currently developing DungeonSouls)
 - Integrated GUI library(ImGui) to make editor
 - Integrated User Custom Component Script system
 - Integrated Scene save and load using xml files and custom serializer and serializedType classes and using TinyXML library
+- Integrated Sound Engine written by my friend
 
 The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly try to change language standard.
 
@@ -29,6 +30,7 @@ Keys for all games are either wasd or arrow keys to move, and space for jump, '1
 
 ## Credit
 - RunGame art credit by o_robster
+- AudioEffects class credit by Georden Gregory
 
 ## Library License
 - DirectXTK (WICTextureLoader, DDSTextureLoader)<br/>Copyright (c) 2012-2021 Microsoft Corp
