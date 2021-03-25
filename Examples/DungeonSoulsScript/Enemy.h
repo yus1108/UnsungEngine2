@@ -11,8 +11,10 @@ protected:
 	bool hitRed = true;
 	float hitTimer = 0.0f;
 	float hitMaxTimer = 0.4f;
-	Vector2 hitPower;
 	Vector2 hitDirection;
+
+	Dash hitDashX{ 350.0f, 0.1f, 0.0f };
+	Dash hitDashY{ 100.0f, 0.05f, 0.0f };
 
 	Transform* transform = nullptr;
 	Material* material = nullptr;

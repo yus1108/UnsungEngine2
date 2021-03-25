@@ -32,7 +32,7 @@ namespace UEngine
 			void OnCollision(Collider* other);
 
 		public:
-			bool IsTrigger{ false };
+			SERIALIZED_BOOL(IsTrigger);
 			std::set<Collider*> others;
 			std::set<Collider*> collisions;
 

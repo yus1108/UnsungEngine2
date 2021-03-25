@@ -35,6 +35,7 @@ namespace UEngine
 		T* LoadResource(std::wstring resource_name);
 
 		void Init(bool isDebugMode);
+		void InitDebugMode(bool isDebugMode);
 		void Release();
 
 		void Update();

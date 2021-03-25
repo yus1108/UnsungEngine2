@@ -54,6 +54,11 @@ public:
 		Timer = Duration;
 		CooldownTimer = Cooldown;
 	}
+	void Stop()
+	{
+		Timer = 0;
+		float Value = 0;
+	}
 
 	float GetValue() { return Value; }
 	bool IsAvailable() { return CooldownTimer <= 0; }
@@ -69,21 +74,24 @@ private:
 	bool hitRed = true;
 	float hitTimer = 0.0f;
 	float hitMaxTimer = 0.4f;
-	Vector2 hitPower;
 	Vector2 hitDirection;
 
 	Vector2 velocity;
 
-	float gravity = -20;
+	float gravity = -30;
 	float gVelocity = 0;
 	Vector2 weight;
 
 	Vector2 dashDisplacement;
+	Vector2 hitDashDisplacement;
 
 	Dash dash;
 	Dash attackDash{ 200.0f, 0.2f, 0.0f };
 	Dash jumpDash{ 500.0f, 0.2f, 0.0f };
+	Dash hitDashX{ 400.0f, 0.1f, 0.0f };
+	Dash hitDashY{ 50.0f, 0.1f, 0.0f };
 
+	GameObject* tiles[40][23];
 
 	Animation player_animation_map[PLAYER_ANIMATION_STATE_COUNT];
 	Animation animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
@@ -100,6 +108,7 @@ private:
 	GameObject* bodyObj = nullptr;
 
 	GameObject* creation = nullptr;
+	bool deletionMode = false;
 
 public:
 	bool showCollision = false;
@@ -110,10 +119,10 @@ private:
 	void FixedUpdate() override;
 	void Update() override;
 	void LateUpdate() override;
+	void OnDestroy() override;
 
 	void OnCollisionStay(Physics2D::Collider * collision) override;
 	void OnCollisionEnter(Physics2D::Collider * collision) override;
-	void OnCollisionExit(Physics2D::Collider * collision) override;
 
 	void RotateOn(float x);
 	void ReceiveInput();

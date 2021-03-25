@@ -21,5 +21,8 @@ void FollowCamera::Update()
 	if (follow->GetMainCamera() == follow)
 	{
 		follow->GetTransform()->localPosition = playerTransform->localPosition.value;
+		follow->GetTransform()->localPosition.value.y += 64.0f;
+		if (follow->GetTransform()->localPosition.value.y < -176.0f)
+			follow->GetTransform()->localPosition.value.y = -176.0f;
 	}
 }

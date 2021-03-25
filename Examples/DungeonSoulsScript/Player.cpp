@@ -89,22 +89,16 @@ void Player::LateUpdate()
 	if (health->Dead)
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_DEAD]);
 
-	Vector2 hitVelocity = hitDirection * deltaTime;
-	hitVelocity.x *= hitPower.x;
-	hitVelocity.y *= hitPower.y;
-	hitPower = hitPower * 0.9f;
-	transform->localPosition.value = transform->localPosition.value + velocity + weight + dashDisplacement + hitVelocity;
-	Console::Clear();
+	transform->localPosition.value = 
+		transform->localPosition.value + 
+		velocity + weight + 
+		dashDisplacement + hitDashDisplacement;
+	/*Console::Clear();
 	Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
-	Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
-	Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
-	Console::WriteLine(string("Player gVelocity : ") + to_string(gVelocity));
-	Console::WriteLine(string("Player weight.y : ") + to_string(weight.y));
-	Console::WriteLine(string("Player jumpable : ") + (Jumpable ? "true" : "false"));
-	Console::WriteLine(string("Player dashDisplacement.x : ") + to_string(dashDisplacement.x));
-	Console::WriteLine(string(" : ") + to_string(GameState::GetCurrentFixedTimestep()));
+	Console::WriteLine(string("deltatime : ") + to_string(deltaTime));*/
 
-	//Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->GetHP()));
+	/*Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
+	Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->GetHP()));*/
 
 	material->uv = animation.Update();
 
@@ -112,6 +106,12 @@ void Player::LateUpdate()
 	if (creation != nullptr)
 	{
 		creation->GetTransform()->localPosition.value = mousePos;
+		creation->GetTransform()->localPosition.value.x =
+			static_cast<int>(roundf(creation->GetTransform()->localPosition.value.x)) / 32 * 32.0f + 
+			(mousePos.x > 0 ? 16.0f : -16.0f);
+		creation->GetTransform()->localPosition.value.y =
+			static_cast<int>(roundf(creation->GetTransform()->localPosition.value.y)) / 32 * 32.0f + 
+			(mousePos.y > 0 ? 16.0f : -16.0f);
 	}
 
 	if (health->Dead) return;
@@ -131,7 +131,7 @@ void Player::RotateOn(float x)
 
 void Player::ReceiveInput()
 {
-	if (!UEngine::Input::GetKeyDown(VK_LMENU) && UEngine::Input::GetKeyDown(VK_TAB))
+	if (!UEngine::Input::GetKey(VK_LMENU) && UEngine::Input::GetKeyDown(VK_TAB))
 	{
 		EditorMode = !EditorMode;
 	}
@@ -158,37 +158,111 @@ void Player::ReceiveInput()
 
 	if (!EditorMode)
 	{
+		if (creation) GetGameObject()->GetScene()->RemoveGameObject(&creation);
+		deletionMode = false;
 		AttackInput();
 	}
 	else
 	{
 		if (Input::GetKeyDown('3'))
 		{
-			creation = GameObject::Instantiate("tile");
-			creation->IsStatic = true;
-			creation->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-			creation->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tileset.png");
-			auto collider = creation->AddComponent<Physics2D::RectCollider>();
-			collider->SetCollider(32, 32);
-			collider->IsTrigger = true;
-			creation->GetTransform()->localPosition.value.x = 0;
-			creation->GetTransform()->localPosition.value.y = 0;
-			creation->GetTransform()->scale.value = Vector2{
-				32,
-				32
-			};
-			creation->GetComponent<Material>()->uv = UV
+			deletionMode = false;
+			if (!creation)
 			{
-				7.0f / 12.0f,
-				0.5f,
-				8.0f / 12.0f,
-				1.0f - 1.0f / 3.0f
-			};
+				creation = GameObject::Instantiate("tile");
+				creation->IsStatic = true;
+				creation->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+				creation->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tileset.png");
+				auto collider = creation->AddComponent<Physics2D::RectCollider>();
+				collider->SetCollider(32, 32);
+				collider->IsTrigger = true;
+				creation->GetTransform()->localPosition.value.x = 0;
+				creation->GetTransform()->localPosition.value.y = 0;
+				creation->GetTransform()->scale.value = Vector2{
+					32,
+					32
+				};
+				creation->GetComponent<Material>()->uv = UV
+				{
+					7.0f / 12.0f,
+					0.5f,
+					8.0f / 12.0f,
+					1.0f - 1.0f / 3.0f
+				};
+			}
+			else
+			{
+				GetGameObject()->GetScene()->RemoveGameObject(&creation);
+			}
+			
 		}
 		if (Input::GetKeyDown('4'))
 		{
 			GetGameObject()->GetScene()->RemoveGameObject(&creation);
+			deletionMode = !deletionMode;
 		}
+
+		if (Input::GetMouseDown(VK_LBUTTON))
+		{
+			if (creation != nullptr)
+			{
+				if (creation->name == "tile")
+				{
+					auto objs = GetGameObject()->GetScene()->GetGameObjects();
+					bool isTileExist = false;
+					for (auto i = objs.begin(); i != objs.end(); i++)
+					{
+						if (*i == creation) continue;
+						if ((*i)->name == "tile")
+						{
+							if (Math::Physics2D::IsColliding
+							(
+								creation->GetTransform()->localPosition.value,
+								(*i)->GetComponent<Physics2D::RectCollider>()->GetCollider()
+							))
+							{
+								Console::WriteLine("Duplicated");
+								isTileExist = true;
+								break;
+							}
+						}
+					}
+
+					if (!isTileExist)
+					{
+						creation->GetComponent<Physics2D::RectCollider>()->IsTrigger = false;
+						creation = nullptr;
+						Console::WriteLine("created");
+					}
+					
+				}
+			}
+			else if (deletionMode)
+			{
+				auto mousePos = Math::GetMousePosToWorld();
+				auto objs = GetGameObject()->GetScene()->GetGameObjects();
+				for (auto i = objs.begin(); i != objs.end(); i++)
+				{
+					if (*i == creation) continue;
+					if ((*i)->name == "tile")
+					{
+						if (Math::Physics2D::IsColliding
+						(
+							mousePos,
+							(*i)->GetComponent<Physics2D::RectCollider>()->GetCollider()
+						))
+						{
+							Console::WriteLine("Deleted");
+							GetGameObject()->GetScene()->RemoveGameObject(&(*i));
+							break;
+						}
+					}
+				}
+			}
+		}
+
+
+		
 	}
 
 	if (Jumpable &&
@@ -245,17 +319,50 @@ void Player::OnPreRender()
 {
 	if (showCollision)
 		GetGameObject()->GetScene()->partition2D->DebugRender(GetGameObject()->GetScene()->partition2D->head, GetComponent<Physics2D::CircleCollider>(), Color{ 1, 0, 0, 1 }, Color{ 0, 0, 1, 1 });
+	if (creation)
+	{
+		if (creation->name == "tile")
+		{
+			auto collider = creation->GetComponent<Physics2D::RectCollider>();
+			GetGameObject()->GetScene()->debugRenderer->Add_Rectangle(collider->GetCollider(), Color{ 0, 1, 1, 1 });
+		}
+	}
+	else if (deletionMode)
+	{
+		auto mousePos = Math::GetMousePosToWorld();
+		Math::Physics2D::AABB aabb;
+		aabb.left = mousePos.x - 16.0f;
+		aabb.bottom = mousePos.y - 16.0f;
+		aabb.right = mousePos.x + 16.0f;
+		aabb.top = mousePos.y + 16.0f;
+		GetGameObject()->GetScene()->debugRenderer->Add_Rectangle(aabb, Color{ 0, 1, 1, 1 });
+	}
 }
 
 void Player::OnCollisionEnter(Physics2D::Collider* collisions)
 {
 	if (collisions->GetGameObject()->name == "tile")
 	{
-		weight = Vector2();
-		gVelocity = 0;
-		if (!Jumpable &&
-			collisions->GetTransform()->localPosition.value.y < transform->localPosition.value.y)
-			Jumpable = true;
+		if (collisions->GetTransform()->localPosition.value.y < transform->localPosition.value.y)
+		{
+			if (!Jumpable)
+			{
+				Vector2 diff = collisions->GetTransform()->localPosition.value - transform->localPosition.value;
+				if (abs(diff.x) < abs(diff.y))
+				{
+					weight = Vector2();
+					gVelocity = 0;
+					Jumpable = true;
+				}
+			}
+		}
+		else
+		{
+			velocity = Vector2();
+			jumpDash.Stop();
+			dash.Stop();
+			attackDash.Stop();
+		}
 	}
 }
 
@@ -263,17 +370,22 @@ void Player::OnCollisionStay(Physics2D::Collider* collisions)
 {
 	if (collisions->GetGameObject()->name == "tile")
 	{
-		if (Jumpable)
+		if (collisions->GetTransform()->localPosition.value.y < transform->localPosition.value.y)
 		{
-			gVelocity = 0;
-			weight = Vector2();
+			Vector2 diff = collisions->GetTransform()->localPosition.value - transform->localPosition.value;
+			if (abs(diff.x) < abs(diff.y))
+			{
+				gVelocity = 0;
+				weight = Vector2();
+			}
+		}
+		else
+		{
+			velocity = Vector2();
+			dash.Stop();
+			attackDash.Stop();
 		}
 	}
-}
-
-void Player::OnCollisionExit(Physics2D::Collider* collisions)
-{
-
 }
 
 void Player::DashUpdate()
@@ -289,6 +401,11 @@ void Player::DashUpdate()
 		attackDash.Update(deltaTime, false);
 		dash.Update(deltaTime, false);
 	}
+	hitDashX.Update(deltaTime, false);
+	hitDashY.Update(deltaTime, false);
+
+	hitDashDisplacement.x = hitDashX.GetValue() * hitDirection.x;
+	hitDashDisplacement.y = hitDashY.GetValue() * hitDirection.y;
 
 	dashDisplacement.x = attackDash.GetValue() + dash.GetValue();
 	dashDisplacement.y = jumpDash.GetValue();
@@ -334,10 +451,14 @@ void Player::GetHit(Vector2 from)
 	hitDirection = (GetTransform()->localPosition.value - from).Normalize();
 	hitDirection.y = 0.5f;
 	hitDirection = hitDirection.Normalize();
-	hitPower.x = 500.0f;
-	hitPower.y = 300.0f;
+	hitDashX.Activate();
+	hitDashY.Activate();
 	hitTimer = hitMaxTimer;
 	material->color = Color{ 1,1,1,1 };
 	hitRed = true;
 }
 
+void Player::OnDestroy()
+{
+	GetGameObject()->GetScene()->RemoveGameObject(&creation);
+}

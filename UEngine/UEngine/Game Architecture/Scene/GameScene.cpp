@@ -4,14 +4,19 @@
 
 void UEngine::GameScene::Init(bool isDebugMode)
 {
+	InitDebugMode(isDebugMode);
+	ResourceManager.Init();
+	partition2D = new Physics2D::SpatialPartition2D();
+}
+
+void UEngine::GameScene::InitDebugMode(bool isDebugMode)
+{
 	this->isDebugMode = isDebugMode;
 	if (isDebugMode)
 	{
 		debugRenderer = new UEngine::DebugRenderer();
 		debugRenderer->Init(DXRenderer::Get()->GetDevice(), DXRenderer::Get()->GetImmediateDeviceContext());
 	}
-	ResourceManager.Init();
-	partition2D = new Physics2D::SpatialPartition2D();
 }
 
 void UEngine::GameScene::Release()

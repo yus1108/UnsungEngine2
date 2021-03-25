@@ -5,8 +5,16 @@
 
 void UEngine::Physics2D::CircleCollider::SetCollider(Vector2 center, float radius)
 {
+	localCenter = center;
+	localRadius = radius;
 	localCollider = CircleCoord{ center, radius };
 	localAABB = AABB{ center.x - radius, center.y + radius, center.x + radius, center.y + -radius };
+}
+
+void UEngine::Physics2D::CircleCollider::DeSerialize(TiXmlNode* node)
+{
+	Collider::DeSerialize(node);
+	SetCollider(localCenter.value, localRadius.value);
 }
 
 void UEngine::Physics2D::CircleCollider::Awake()
@@ -42,7 +50,7 @@ void UEngine::Physics2D::CircleCollider::RigidBodyUpdate()
 
 void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1, CircleCollider* circle2)
 {
-	if (circle1->IsTrigger || circle2->IsTrigger)
+	if (circle1->IsTrigger.value || circle2->IsTrigger.value)
 	{
 		if (circle1->others.find(circle2) == circle1->others.end())
 		{
@@ -82,7 +90,7 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1,
 
 void UEngine::Physics2D::CircleCollider::Calc_Vs_Rect(CircleCollider* circle, RectCollider* rect)
 {
-	if (circle->IsTrigger || rect->IsTrigger)
+	if (circle->IsTrigger.value || rect->IsTrigger.value)
 	{
 		if (circle->others.find(rect) == circle->others.end())
 		{

@@ -6,8 +6,22 @@ void UEngine::Physics2D::RectCollider::SetCollider(float x, float y)
 {
 	float halfX = x / 2.0f;
 	float halfY = y / 2.0f;
+	this->left = -halfX;
+	this->bottom = -halfY;
+	this->right = halfX;
+	this->top = halfY;
 	localCollider = AABB{ -halfX, halfY, halfX, -halfY };
 	localAABB = AABB{ -halfX, halfY, halfX, -halfY };
+}
+
+void UEngine::Physics2D::RectCollider::SetCollider(float left, float bottom, float right, float top)
+{
+	this->left = left;
+	this->bottom = bottom;
+	this->right = right;
+	this->top = top;
+	localCollider = AABB{ left, top, right, bottom };
+	localAABB = AABB{ left, top, right, bottom };
 }
 
 void UEngine::Physics2D::RectCollider::Awake()
@@ -19,6 +33,12 @@ void UEngine::Physics2D::RectCollider::FixedUpdate()
 {
 	worldCollider = MakeAABB(localAABB, GetTransform()->GetRTP());
 	Collider::FixedUpdate();
+}
+
+void UEngine::Physics2D::RectCollider::DeSerialize(TiXmlNode* node)
+{
+	Collider::DeSerialize(node);
+	SetCollider(left.value, bottom.value, right.value, top.value);
 }
 
 void UEngine::Physics2D::RectCollider::CalculateImpact(Collider* other)
@@ -44,7 +64,7 @@ void UEngine::Physics2D::RectCollider::RigidBodyUpdate()
 
 void UEngine::Physics2D::RectCollider::Calc_Vs_Circle(RectCollider* rect, CircleCollider* circle)
 {
-	if (circle->IsTrigger || rect->IsTrigger)
+	if (circle->IsTrigger.value || rect->IsTrigger.value)
 	{
 		if (circle->others.find(rect) == circle->others.end())
 		{
@@ -84,7 +104,7 @@ void UEngine::Physics2D::RectCollider::Calc_Vs_Circle(RectCollider* rect, Circle
 
 void UEngine::Physics2D::RectCollider::Calc_Vs_Rect(RectCollider* rect1, RectCollider* rect2)
 {
-	if (rect1->IsTrigger || rect2->IsTrigger)
+	if (rect1->IsTrigger.value || rect2->IsTrigger.value)
 	{
 		if (rect1->others.find(rect2) == rect1->others.end())
 		{

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Game.h"
 
+#define SCENELOAD 0
+
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool resize = false;
@@ -100,6 +102,7 @@ void Game::Load()
     
     // TODO: Place code here.
     {
+#if SCENELOAD
         // basic load
         using namespace UEngine;
         auto size = app->GetClientPixelSize();
@@ -225,8 +228,10 @@ void Game::Load()
                scriptCreation(attackCollider);
                currentScene->ResourceManager.ApplyChange();
         }
-        //GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", true);
-
+#else
+        GameScene* currentScene = GameScene::LoadScene("./tempScene.uscene", false);
+        currentScene->InitDebugMode(true);
+#endif
         
 
         GameState::Init(currentScene, true);
