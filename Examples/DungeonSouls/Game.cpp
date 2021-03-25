@@ -292,6 +292,11 @@ int Game::Run(double targetHz)
                 Console::Clear();
                 return true;
             }
+            if (Input::GetKeyDown(VK_F9))
+            {
+                Console::Clear();
+                return true;
+            }
             return false;
         }, [&]()
         {

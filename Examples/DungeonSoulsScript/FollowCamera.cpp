@@ -24,5 +24,11 @@ void FollowCamera::Update()
 		follow->GetTransform()->localPosition.value.y += 64.0f;
 		if (follow->GetTransform()->localPosition.value.y < -176.0f)
 			follow->GetTransform()->localPosition.value.y = -176.0f;
+		else if (follow->GetTransform()->localPosition.value.y > 170.0f)
+			follow->GetTransform()->localPosition.value.y = 170.0f;
+		if (follow->GetTransform()->localPosition.value.x > 320.0f)
+			follow->GetTransform()->localPosition.value.x = 320.0f;
+		else if (follow->GetTransform()->localPosition.value.x < -320.0f)
+			follow->GetTransform()->localPosition.value.x = -320.0f;
 	}
 }

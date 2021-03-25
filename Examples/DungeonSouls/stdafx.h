@@ -24,13 +24,13 @@
 #pragma comment(lib, "../../UEngine/Debug/ImGui.lib")
 
 #else
-#pragma comment(lib, "../../UEngine/Release/SingletonManager.lib")
-#pragma comment(lib, "../../UEngine/Release/Utility.lib")
-#pragma comment(lib, "../../UEngine/Release/WinApplication.lib")
-#pragma comment(lib, "../../UEngine/Release/DXRenderer.lib")
-#pragma comment(lib, "../../UEngine/Release/UEngine.lib")
-#pragma comment(lib, "../../UEngine/Release/XMLSerializer.lib")
-#pragma comment(lib, "../../UEngine/Release/ImGui.lib")
+#pragma comment(lib, "./Libraries/SingletonManager.lib")
+#pragma comment(lib, "./Libraries/Utility.lib")
+#pragma comment(lib, "./Libraries/WinApplication.lib")
+#pragma comment(lib, "./Libraries/DXRenderer.lib")
+#pragma comment(lib, "./Libraries/UEngine.lib")
+#pragma comment(lib, "./Libraries/XMLSerializer.lib")
+#pragma comment(lib, "./Libraries/ImGui.lib")
 
 #endif
 

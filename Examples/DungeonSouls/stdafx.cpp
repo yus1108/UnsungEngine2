@@ -12,7 +12,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     Game game(hInstance, 1280, 720);
     game.Load();
-    int result = game.Run(60);
+    int result = game.Run(200);
 
     return result;
 }

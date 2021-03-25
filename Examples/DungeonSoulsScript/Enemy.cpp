@@ -59,7 +59,6 @@ void Enemy::Update()
 	if (player->EditorMode) return;
 
 	deltaTime = Utility::UTime::Get()->DeltaTimeF();
-	velocity = velocity + gravity * deltaTime;
 
 	hitDashX.Update(deltaTime, false);
 	hitDashY.Update(deltaTime, false);
@@ -83,19 +82,25 @@ void Enemy::Update()
 				}
 				else
 				{
-					Vector2 moveVelocity =
-						Vector2(
-							playerCollider->GetCollider().center.x -
-							transform->localPosition.value.x, 0
-						).Normalize() * MoveSpeed * deltaTime;
-					velocity = velocity + moveVelocity;
-					RotateOn(moveVelocity.x);
+					if (velocity.y >= 0)
+					{
+						Vector2 moveVelocity =
+							Vector2(
+								playerCollider->GetCollider().center.x -
+								transform->localPosition.value.x, 0
+							).Normalize() * MoveSpeed * deltaTime;
+						velocity = velocity + moveVelocity;
+						RotateOn(moveVelocity.x);
+					}
 					playerFoundTimer -= deltaTime;
 				}
 			}
 			
 		}
 	}
+
+	velocity = velocity + gravity * deltaTime;
+
 }
 
 void Enemy::LateUpdate()

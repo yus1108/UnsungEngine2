@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Animation.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
@@ -24,12 +23,15 @@
     <ClCompile Include="Skeleton.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
-    <ClCompile Include="FollowCamera.cpp" />
+    <ClCompile Include="FollowCamera.cpp">
+      <Filter>Miscs</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="dllmain.h" />
-    <ClInclude Include="framework.h" />
     <ClInclude Include="Animation.h">
       <Filter>Animation</Filter>
     </ClInclude>
@@ -51,7 +53,18 @@
     <ClInclude Include="Skeleton.h">
       <Filter>Characters</Filter>
     </ClInclude>
-    <ClInclude Include="FollowCamera.h" />
+    <ClInclude Include="FollowCamera.h">
+      <Filter>Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dash.h">
+      <Filter>Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="dllmain.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Animation">
@@ -62,6 +75,12 @@
     </Filter>
     <Filter Include="Characters">
       <UniqueIdentifier>{38443957-abc6-4d25-986b-b1505d4882d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Miscs">
+      <UniqueIdentifier>{bc225f64-b428-46ec-8d4d-ad8a6a7b0547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{7a4280fc-7182-4407-bb8c-580eef6267ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

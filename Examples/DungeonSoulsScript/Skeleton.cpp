@@ -17,6 +17,7 @@ void Skeleton::Start()
 
 void Skeleton::Update()
 {
+	if (player == nullptr) return;
 	if (player->EditorMode) return;
 
 	Enemy::Update();
@@ -45,6 +46,7 @@ void Skeleton::Update()
 
 void Skeleton::LateUpdate()
 {
+	if (player == nullptr) return;
 	if (player->EditorMode) return;
 
 	Enemy::LateUpdate();
