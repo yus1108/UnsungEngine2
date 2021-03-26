@@ -62,7 +62,7 @@ namespace UEngine
 				}
 				else
 				{
-					currNode->colliders.emplace(collider);
+					currNode->colliders.emplace_back(collider);
 					for (auto child : currNode->children)
 						CheckCollision(child, collider);
 				}

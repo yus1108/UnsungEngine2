@@ -14,7 +14,7 @@ namespace UEngine
 				AABB aabb{ 0 };
 				SPACE_PARTITIONING_NODE* parent{ nullptr };
 				std::vector<SPACE_PARTITIONING_NODE*> children;
-				std::set<class Collider*> colliders;
+				std::vector<class Collider*> colliders;
 			};
 
 		private:
