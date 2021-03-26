@@ -8,7 +8,7 @@ namespace UEngine
 		using namespace Math::Physics2D;
 		class SpatialPartition2D
 		{
-		private:
+		public:
 			struct SPACE_PARTITIONING_NODE
 			{
 				AABB aabb{ 0 };
@@ -17,18 +17,21 @@ namespace UEngine
 				std::set<class Collider*> colliders;
 			};
 
-			std::list<SPACE_PARTITIONING_NODE*> nodeManager;
+		private:
+			std::vector<SPACE_PARTITIONING_NODE*> nodeManager;
+			size_t nodeCounter = 0;
 
 			void AddNode(SPACE_PARTITIONING_NODE* currNode, Collider* collider);
 			void MakeQuadGrid(SPACE_PARTITIONING_NODE* node);
 			AABB EnlargeGrid(AABB aabb1, AABB aabb2); // TODO: use compute shader to boost speed
+			SPACE_PARTITIONING_NODE* RequestNode();
 
 		public:
 			AABB headAABB{ FLT_MAX, -FLT_MAX, -FLT_MAX, FLT_MAX };
 			SPACE_PARTITIONING_NODE* head;
 
 			SpatialPartition2D() : head(nullptr) {}
-			~SpatialPartition2D() { Release(); }
+			~SpatialPartition2D();
 
 			COMPARE_AABB_SIZE_RESULT CompareAABBSize(AABB aabb1, AABB aabb2);
 

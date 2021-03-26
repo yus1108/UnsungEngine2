@@ -21,6 +21,7 @@ namespace UEngine
 
 		private:
 			void Awake() override;
+			void OnEnable() override;
 			void FixedUpdate() override;
 			void DeSerialize(TiXmlNode* node) override;
 

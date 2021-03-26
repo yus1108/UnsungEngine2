@@ -5,6 +5,13 @@ namespace UEngine
 {
 	namespace Physics2D
 	{
+		SpatialPartition2D::~SpatialPartition2D()
+		{
+			for (auto item : nodeManager)
+				delete item;
+			Release();
+		}
+
 		COMPARE_AABB_SIZE_RESULT SpatialPartition2D::CompareAABBSize(AABB aabb1, AABB aabb2)
 		{
 			auto width1 = abs(aabb1.right - aabb1.left);
@@ -26,9 +33,9 @@ namespace UEngine
 		{
 			if (head == nullptr)
 			{
-				head = new SPACE_PARTITIONING_NODE;
+				head = RequestNode();
 				head->aabb = headAABB;
-				nodeManager.emplace_back(head);
+				head->parent = nullptr;
 			}
 
 			AddNode(head, collider);
@@ -133,9 +140,7 @@ namespace UEngine
 
 		void SpatialPartition2D::Release()
 		{
-			for (auto item : nodeManager)
-				delete item;
-			nodeManager.clear();
+			nodeCounter = 0;
 			head = nullptr;
 			headAABB = AABB{ FLT_MAX, -FLT_MAX, -FLT_MAX, FLT_MAX };
 		}
@@ -173,16 +178,12 @@ namespace UEngine
 			arb.right = node->aabb.right;
 			arb.bottom = node->aabb.bottom;
 
-			node->children.reserve(4);
-			node->children.emplace_back(new SPACE_PARTITIONING_NODE);
-			node->children.emplace_back(new SPACE_PARTITIONING_NODE);
-			node->children.emplace_back(new SPACE_PARTITIONING_NODE);
-			node->children.emplace_back(new SPACE_PARTITIONING_NODE);
-
-			nodeManager.emplace_back(node->children[0]);
-			nodeManager.emplace_back(node->children[1]);
-			nodeManager.emplace_back(node->children[2]);
-			nodeManager.emplace_back(node->children[3]);
+			if (node->children.capacity() != 4)
+				node->children.reserve(4);
+			node->children.emplace_back(RequestNode());
+			node->children.emplace_back(RequestNode());
+			node->children.emplace_back(RequestNode());
+			node->children.emplace_back(RequestNode());
 
 			node->children[0]->aabb = alb;
 			node->children[1]->aabb = alt;
@@ -202,6 +203,18 @@ namespace UEngine
 			aabb1.bottom = min(aabb1.bottom, aabb2.bottom);
 			aabb1.top = max(aabb1.top, aabb2.top);
 			return aabb1;
+		}
+
+		SpatialPartition2D::SPACE_PARTITIONING_NODE* SpatialPartition2D::RequestNode()
+		{
+			if (nodeCounter == nodeManager.size())
+				nodeManager.emplace_back(new SPACE_PARTITIONING_NODE);
+			else
+			{
+				nodeManager[nodeCounter]->colliders.clear();
+				nodeManager[nodeCounter]->children.clear();
+			}
+			return nodeManager[nodeCounter++];
 		}
 	}
 }

@@ -19,23 +19,30 @@ void UEngine::Physics2D::CircleCollider::DeSerialize(TiXmlNode* node)
 
 void UEngine::Physics2D::CircleCollider::Awake()
 {
-	typeName = Type_Circle;
+	colliderType = ColliderType::Circle;
+}
+
+void UEngine::Physics2D::CircleCollider::OnEnable()
+{
+	worldCollider = MakeCircle(localCollider.center + GetTransform()->GetWorld().r[3], localCollider.radius);
+	Collider::OnEnable();
 }
 
 void UEngine::Physics2D::CircleCollider::FixedUpdate()
 {
-	worldCollider = MakeCircle(localCollider.center + GetTransform()->GetWorld().r[3], localCollider.radius);
+	if (!GetGameObject()->IsStatic)
+		worldCollider = MakeCircle(localCollider.center + GetTransform()->GetWorld().r[3], localCollider.radius);
 	Collider::FixedUpdate();
 }
 
 void UEngine::Physics2D::CircleCollider::CalculateImpact(Collider* other)
 {
 	// TODO: need to change to proper collider component
-	if (other->GetColliderType() == Type_Circle)
+	if (other->GetColliderType() == ColliderType::Circle)
 	{
 		Calc_Vs_Circle(this, static_cast<CircleCollider*>(other));
 	}
-	else if (other->GetColliderType() == Type_Rectangle)
+	else if (other->GetColliderType() == ColliderType::AABB)
 	{
 		Calc_Vs_Rect(this, static_cast<RectCollider*>(other));
 	}

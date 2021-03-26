@@ -1,5 +1,6 @@
 #pragma once
 #include "Game Architecture\Object\Component\Component.h"
+#include "CollisionType.h"
 
 namespace UEngine
 {
@@ -15,13 +16,14 @@ namespace UEngine
 			AABB GetWorldAABB() { return worldAABB; }
 
 		protected:
-			std::string typeName;
+			ColliderType colliderType;
 			AABB localAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
 			std::set<Collider*> prevCollisions;
 			std::set<Collider*> prevOthers;
 
 			Vector3 impact{ 0, 0, 0 };
 
+			void OnEnable() override;
 			void FixedUpdate() override;
 			void PhysicsUpdate() override;
 			void Update() override;
@@ -36,7 +38,7 @@ namespace UEngine
 			std::set<Collider*> others;
 			std::set<Collider*> collisions;
 
-			std::string GetColliderType() { return typeName; }
+			ColliderType GetColliderType() { return colliderType; }
 		};
 	}
 }

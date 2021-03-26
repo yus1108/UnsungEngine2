@@ -5,9 +5,15 @@ namespace UEngine
 {
     namespace Physics2D
     {
-        void Collider::FixedUpdate()
+        void Collider::OnEnable()
         {
             worldAABB = MakeAABB(localAABB, GetTransform()->GetRTP());
+        }
+
+        void Collider::FixedUpdate()
+        {
+            if (!GetGameObject()->IsStatic)
+                worldAABB = MakeAABB(localAABB, GetTransform()->GetRTP());
             prevOthers = others;
             others.clear();
             prevCollisions = collisions;
