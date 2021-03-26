@@ -92,7 +92,7 @@ UEngine::UEditor::EditorState::~EditorState()
 void UEngine::UEditor::EditorState::Load()
 {
     WinApplication::Get()->FreeDLL();
-    WinApplication::Get()->LoadDLL(L"../Debug/DllTest.dll");
+    WinApplication::Get()->LoadDLL(L"./DllTest.dll");
 
     typedef void(*ATTACH_SINGLETONS) (UEngine::SingletonManager::Singletons exportedSingletons);
     ATTACH_SINGLETONS attach_singletons = (ATTACH_SINGLETONS)WinApplication::Get()->FindFunction("ATTACH_SINGLETONS");
@@ -224,6 +224,12 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                 SingletonManager::State->startWindowPos.y = pos.y + IMGUI_TITLEBAR_PADDING_Y;
 
                 ImVec2 size = ImGui::GetWindowSize();
+                if (size.x < 200 & size.y < 200)
+                {
+                    size.x = 200;
+                    size.y = 200;
+                    ImGui::SetWindowSize(size);
+                }
                 size.x = size.x - IMGUI_BORDER_PADDING - IMGUI_BORDER_PADDING;
                 size.y = size.y - IMGUI_TITLEBAR_PADDING_Y - IMGUI_BORDER_PADDING * 2.0f;
                 SingletonManager::State->windowSize.x = size.x;

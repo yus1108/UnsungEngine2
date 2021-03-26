@@ -10,32 +10,23 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
-#include "../../UEngine/UEngine/UEngine.h"
-#include "../../UEngine/SingletonManager/SingletonManager.h"
+#include "./UEngine/UEngine.h"
+#include "./SingletonManager/SingletonManager.h"
+#include "./AudioEffect/AudioEffects.h"
 
-#ifdef _DEBUG
-#pragma comment(lib, "../../UEngine/Debug/SingletonManager.lib")
-#pragma comment(lib, "../../UEngine/Debug/Utility.lib")
-#pragma comment(lib, "../../UEngine/Debug/WinApplication.lib")
-#pragma comment(lib, "../../UEngine/Debug/DXRenderer.lib")
-#pragma comment(lib, "../../UEngine/Debug/UEngine.lib")
-#pragma comment(lib, "../../UEngine/Debug/XMLSerializer.lib")
-#pragma comment(lib, "../../UEngine/Debug/ImGui.lib")
-
-#else
-#pragma comment(lib, "./Libraries/SingletonManager.lib")
-#pragma comment(lib, "./Libraries/Utility.lib")
-#pragma comment(lib, "./Libraries/WinApplication.lib")
-#pragma comment(lib, "./Libraries/DXRenderer.lib")
-#pragma comment(lib, "./Libraries/UEngine.lib")
-#pragma comment(lib, "./Libraries/XMLSerializer.lib")
-#pragma comment(lib, "./Libraries/ImGui.lib")
-
-#endif
+#pragma comment(lib, "./SingletonManager.lib")
+#pragma comment(lib, "./Utility.lib")
+#pragma comment(lib, "./WinApplication.lib")
+#pragma comment(lib, "./DXRenderer.lib")
+#pragma comment(lib, "./UEngine.lib")
+#pragma comment(lib, "./XMLSerializer.lib")
+#pragma comment(lib, "./ImGui.lib")
+#pragma comment(lib, "./AudioEffect.lib")
 
 using namespace UEngine;
 using namespace std;
 
+#include "SoundManager.h"
 #include "Animation.h"
 #include "Dash.h"
 #include "Player.h"

@@ -454,7 +454,7 @@ UEngine::Math::Physics2D::CollisionResult UEngine::Math::Physics2D::FindCollidin
 
 	if (!result.isColliding) return result;
 
-	float distToMove = (circle->GetCollider().radius - distance) / 2.0f;
+	float distToMove = (circle->GetCollider().radius - distance) / 2.0f + 0.00001f;
 	result.isColliding = true;
 	result.distance1 = dir.Normalize() * -distToMove;
 	result.distance2 = dir.Normalize() * distToMove;

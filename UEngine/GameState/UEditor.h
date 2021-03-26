@@ -10,7 +10,7 @@
 #include <tchar.h>
 #include <iostream>
 
-#include "../ImGui/ImGui.h"
+#include "./ImGui/ImGui.h"
 
 //유니코드 사용
 #ifdef _UNICODE
@@ -21,10 +21,10 @@
 #define _tcout   cout
 #endif
 
-#include "../UEngine/UEngine.h"
-#include "..//WinApplication/WinMemoryLeak.h"
-#include "../SingletonManager/SingletonManager.h"
+#include "./UEngine/UEngine.h"
+#include ".//WinApplication/WinMemoryLeak.h"
+#include "./SingletonManager/SingletonManager.h"
 
-#include "../AudioEffect/AudioEffects.h"
+#include "./AudioEffect/AudioEffects.h"
 
 #include "Editor\EditorState.h"

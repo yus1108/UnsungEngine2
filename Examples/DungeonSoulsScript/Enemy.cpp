@@ -107,9 +107,9 @@ void Enemy::LateUpdate()
 {
 	if (player->EditorMode) return;
 
-	Vector2 hitVelocity = hitDirection * deltaTime;
-	hitVelocity.x = hitDashX.GetValue();
-	hitVelocity.y = hitDashY.GetValue();
+	Vector2 hitVelocity = hitDirection;
+	hitVelocity.x *= hitDashX.GetValue();
+	hitVelocity.y *= hitDashY.GetValue();
 
 	transform->localPosition.value = transform->localPosition.value + velocity + hitVelocity;
 }
@@ -143,6 +143,7 @@ void Enemy::OnTriggerExit(Physics2D::Collider* other)
 void Enemy::GetHit(Vector2 from)
 {
 	hitDirection = (GetTransform()->localPosition.value - from).Normalize();
+	Console::WriteLine(hitDirection.x);
 	hitDirection.y = 0.5f;
 	hitDirection = hitDirection.Normalize();
 	hitDashX.Activate();

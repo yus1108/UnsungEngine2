@@ -65,6 +65,9 @@
     <ClInclude Include="framework.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Miscs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Animation">

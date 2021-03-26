@@ -40,9 +40,9 @@ private:
 	Vector2 hitDashDisplacement;
 
 	Dash dash;
-	Dash attackDash{ 200.0f, 0.2f, 0.0f };
+	Dash attackDash{ 100.0f, 0.2f, 0.0f };
 	Dash jumpDash{ 500.0f, 0.2f, 0.0f };
-	Dash hitDashX{ 400.0f, 0.1f, 0.0f };
+	Dash hitDashX{ 200.0f, 0.2f, 0.0f };
 	Dash hitDashY{ 50.0f, 0.1f, 0.0f };
 
 	GameObject* tiles[40][23];

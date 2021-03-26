@@ -29,6 +29,10 @@ void Player::Start()
 
 	animation = player_animation_map[PLAYER_ANIMATION_STATE_IDLE];
 	animation.Play();
+	SoundManager::Get()->InitAudio();
+	SoundManager::Get()->PlayAudio(0, L"Assets/Tipple Chipper.wav", AudioType_Music);
+
+	GameState::Get()->MaxFixedTimestep = 0.02f;
 }
 
 void Player::FixedUpdate()
@@ -401,8 +405,6 @@ void Player::OnCollisionEnter(Physics2D::Collider* collisions)
 		}
 		velocity = Vector2();
 		jumpDash.Stop();
-		dash.Stop();
-		attackDash.Stop();
 	}
 }
 
@@ -428,8 +430,6 @@ void Player::OnCollisionStay(Physics2D::Collider* collisions)
 		}
 		
 		velocity = Vector2();
-		dash.Stop();
-		attackDash.Stop();
 	}
 }
 
@@ -506,6 +506,8 @@ void Player::GetHit(Vector2 from)
 void Player::OnDestroy()
 {
 	GetGameObject()->GetScene()->RemoveGameObject(&creation);
+	SoundManager::Get()->StopAudio();
+	SoundManager::Release();
 }
 
 void Player::CreateTile()

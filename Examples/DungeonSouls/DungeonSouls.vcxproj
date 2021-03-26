@@ -91,12 +91,15 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>$(SolutionDIr)..\UEngine\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>
       </EntryPointSymbol>
+      <ImportLibrary>$(TargetDir)</ImportLibrary>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\UEngine\$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,6 +113,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>$(SolutionDIr)..\UEngine\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,6 +122,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>
       </EntryPointSymbol>
+      <ImportLibrary>$(TargetDir)</ImportLibrary>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\UEngine\$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -129,12 +135,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>$(SolutionDIr)..\UEngine\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>
       </EntryPointSymbol>
+      <ImportLibrary>$(TargetDir)</ImportLibrary>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\UEngine\$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,6 +157,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>$(SolutionDIr)..\UEngine\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -156,6 +166,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>
       </EntryPointSymbol>
+      <ImportLibrary>$(TargetDir)</ImportLibrary>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\UEngine\$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -87,11 +87,7 @@ Game::~Game()
 void Game::Load()
 {
     WinApplication::Get()->FreeDLL();
-#ifdef _DEBUG
-    WinApplication::Get()->LoadDLL(L"../Debug/DungeonSoulsScript.dll");
-#else
-    WinApplication::Get()->LoadDLL(L"DungeonSoulsScript.dll");
-#endif
+    WinApplication::Get()->LoadDLL(L"./DungeonSoulsScript.dll");
 
     typedef void(*ATTACH_SINGLETONS) (UEngine::SingletonManager::Singletons exportedSingletons);
     ATTACH_SINGLETONS attach_singletons = (ATTACH_SINGLETONS)WinApplication::Get()->FindFunction("ATTACH_SINGLETONS");
