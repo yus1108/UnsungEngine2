@@ -133,6 +133,15 @@ void Enemy::LateUpdate()
 	hitVelocity.y *= hitDashY.GetValue();
 
 	transform->localPosition.value = transform->localPosition.value + velocity + hitVelocity;
+
+	if (transform->localPosition.value.y > 360.0f)
+		transform->localPosition.value.y = 360.0f;
+	else if (transform->localPosition.value.y < -337.0f)
+		transform->localPosition.value.y = -337.0f;
+	if (transform->localPosition.value.x > 630.0f)
+		transform->localPosition.value.x = 630.0f;
+	else if (transform->localPosition.value.x < -630.0f)
+		transform->localPosition.value.x = -630.0f;
 }
 
 void Enemy::OnTriggerEnter(Physics2D::Collider* other)
