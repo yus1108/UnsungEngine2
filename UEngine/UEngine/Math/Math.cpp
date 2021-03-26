@@ -122,17 +122,15 @@ UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(const std::vec
 
 UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(std::vector<PointCoord> points, Matrix worldMatrix)
 {
-	std::vector<Vector2> vertsTransformed;
-	vertsTransformed.reserve(points.size());
 	for (size_t i = 0; i < points.size(); i++)
-		vertsTransformed.push_back(points[i] * worldMatrix);
-	AABB aabb = AABB{ vertsTransformed[0].x, vertsTransformed[0].y, vertsTransformed[0].x, vertsTransformed[0].y };
+		points[i] = points[i] * worldMatrix;
+	AABB aabb = AABB{ points[0].x, points[0].y, points[0].x, points[0].y };
 	for (size_t i = 1; i < points.size(); i++)
 	{
-		if (vertsTransformed[i].x < aabb.left) aabb.left = vertsTransformed[i].x;
-		if (vertsTransformed[i].x > aabb.right) aabb.right = vertsTransformed[i].x;
-		if (vertsTransformed[i].y < aabb.bottom) aabb.bottom = vertsTransformed[i].y;
-		if (vertsTransformed[i].y > aabb.top) aabb.top = vertsTransformed[i].y;
+		if (points[i].x < aabb.left) aabb.left = points[i].x;
+		if (points[i].x > aabb.right) aabb.right = points[i].x;
+		if (points[i].y < aabb.bottom) aabb.bottom = points[i].y;
+		if (points[i].y > aabb.top) aabb.top = points[i].y;
 	}
 	return aabb;
 }
@@ -158,14 +156,25 @@ UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(Matrix worldMa
 
 UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(AABB local, Matrix worldMatrix)
 {
-	std::vector<PointCoord> points = std::vector<PointCoord>
+	PointCoord points[4] = 
 	{
 		PointCoord(local.left, local.bottom),
 		PointCoord(local.left, local.top),
 		PointCoord(local.right, local.top),
 		PointCoord(local.right, local.bottom)
 	};
-	return MakeAABB(points, worldMatrix);
+
+	for (size_t i = 0; i < 4; i++)
+		points[i] = points[i] * worldMatrix;
+	AABB aabb = AABB{ points[0].x, points[0].y, points[0].x, points[0].y };
+	for (size_t i = 1; i < 4; i++)
+	{
+		if (points[i].x < aabb.left) aabb.left = points[i].x;
+		if (points[i].x > aabb.right) aabb.right = points[i].x;
+		if (points[i].y < aabb.bottom) aabb.bottom = points[i].y;
+		if (points[i].y > aabb.top) aabb.top = points[i].y;
+	}
+	return aabb;
 }
 
 UEngine::Math::Physics2D::AABB UEngine::Math::Physics2D::MakeAABB(PointCoord point)
