@@ -35,8 +35,8 @@ namespace UEngine
                     if (others.find(prev) == others.end())
                     {
                         auto components = GetGameObject()->GetComponents();
-                        for (size_t i = 0; i < components.size(); i++)
-                            components[i]->OnTriggerExit(prev);
+                        for (size_t i = 0; i < components->size(); i++)
+                            (*components)[i]->OnTriggerExit(prev);
                     }
                 }
                 prevOthers.clear();
@@ -48,8 +48,8 @@ namespace UEngine
                     if (collisions.find(prev) == collisions.end())
                     {
                         auto components = GetGameObject()->GetComponents();
-                        for (size_t i = 0; i < components.size(); i++)
-                            components[i]->OnCollisionExit(prev);
+                        for (size_t i = 0; i < components->size(); i++)
+                            (*components)[i]->OnCollisionExit(prev);
                     }
                 }
                 prevCollisions.clear();
@@ -61,14 +61,14 @@ namespace UEngine
             if (prevOthers.find(other) == prevOthers.end())
             {
                 auto components = GetGameObject()->GetComponents();
-                for (size_t i = 0; i < components.size(); i++)
-                    components[i]->OnTriggerEnter(other);
+                for (size_t i = 0; i < components->size(); i++)
+                    (*components)[i]->OnTriggerEnter(other);
             }
             else
             {
                 auto components = GetGameObject()->GetComponents();
-                for (size_t i = 0; i < components.size(); i++)
-                    components[i]->OnTriggerStay(other);
+                for (size_t i = 0; i < components->size(); i++)
+                    (*components)[i]->OnTriggerStay(other);
             }
 
             others.emplace(other);
@@ -79,14 +79,14 @@ namespace UEngine
             if (prevCollisions.find(other) == prevCollisions.end())
             {
                 auto components = GetGameObject()->GetComponents();
-                for (size_t i = 0; i < components.size(); i++)
-                    components[i]->OnCollisionEnter(other);
+                for (size_t i = 0; i < components->size(); i++)
+                    (*components)[i]->OnCollisionEnter(other);
             }
             else
             {
                 auto components = GetGameObject()->GetComponents();
-                for (size_t i = 0; i < components.size(); i++)
-                    components[i]->OnCollisionStay(other);
+                for (size_t i = 0; i < components->size(); i++)
+                    (*components)[i]->OnCollisionStay(other);
             }
 
             collisions.emplace(other);

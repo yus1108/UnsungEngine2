@@ -116,7 +116,7 @@ namespace UEngine
 
             ImGui::Separator();
 
-            for (auto component : gameObject->GetComponents())
+            for (auto component : *gameObject->GetComponents())
             {
                 if (component->typeName == ".PAVEditorScript@UEngine@@") continue;
                 auto typeName = component->typeName.substr(4, component->typeName.find_first_of('@') - 4);

@@ -4,6 +4,7 @@
 #include <queue>
 #include <map>
 #include <set>
+#include <unordered_set>
 #include <array>
 
 #include "../Utility/UtilityDefinitions.h"

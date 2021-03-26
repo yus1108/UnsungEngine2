@@ -15,7 +15,7 @@ void XMLSceneParser::SaveScene(std::string name, bool isDebugMode, std::list<UEn
 	for (auto gameObject : gameObjects)
 	{
 		if (gameObject->GetParent() != nullptr) continue;
-		SaveGameObject(scene, gameObject->name, gameObject->GetActive(), gameObject->IsStatic, gameObject->GetChildren(), gameObject->GetComponents());
+		SaveGameObject(scene, gameObject->name, gameObject->GetActive(), gameObject->IsStatic, gameObject->GetChildren(), *gameObject->GetComponents());
 	}
 	doc.SaveFile(this->name.c_str());
 }
@@ -210,6 +210,6 @@ void XMLSceneParser::SaveGameObject
 		}
 	}
 	for (auto child : children)
-		SaveGameObject(gameObject, child->name, child->GetActive(), child->IsStatic, child->GetChildren(), child->GetComponents());
+		SaveGameObject(gameObject, child->name, child->GetActive(), child->IsStatic, child->GetChildren(), *child->GetComponents());
 	node->LinkEndChild(gameObject);
 }

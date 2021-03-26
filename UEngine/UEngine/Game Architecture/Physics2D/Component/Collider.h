@@ -18,8 +18,8 @@ namespace UEngine
 		protected:
 			ColliderType colliderType;
 			AABB localAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
-			std::set<Collider*> prevCollisions;
-			std::set<Collider*> prevOthers;
+			std::unordered_set<Collider*> prevCollisions;
+			std::unordered_set<Collider*> prevOthers;
 
 			Vector3 impact{ 0, 0, 0 };
 
@@ -35,8 +35,8 @@ namespace UEngine
 
 		public:
 			SERIALIZED_BOOL(IsTrigger);
-			std::set<Collider*> others;
-			std::set<Collider*> collisions;
+			std::unordered_set<Collider*> others;
+			std::unordered_set<Collider*> collisions;
 
 			ColliderType GetColliderType() { return colliderType; }
 		};

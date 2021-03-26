@@ -63,7 +63,7 @@ namespace UEngine
 		template <typename T>
 		T* const GetComponent();
 
-		const std::vector<class Component*> GetComponents() { return components; }
+		const std::vector<class Component*>* const GetComponents() { return &components; }
 
 		template <typename T>
 		T* AddComponent();
