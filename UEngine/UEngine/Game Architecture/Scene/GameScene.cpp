@@ -23,8 +23,6 @@ void UEngine::GameScene::Release()
 {
 	for (auto obj : gameObjects)
 		GameObject::Release(&obj);
-	for (auto obj : deleteList)
-		GameObject::Release(&obj);
 	for (auto obj : creationList)
 		GameObject::Release(&obj);
 	delete partition2D;
@@ -72,6 +70,9 @@ void UEngine::GameScene::PostRender()
 
 void UEngine::GameScene::Sync()
 {
+	for (auto obj : creationList)
+		gameObjects.emplace_back(obj);
+	creationList.clear();
 	for (auto obj : gameObjects)
 		obj->Sync();
 

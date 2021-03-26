@@ -278,6 +278,7 @@ void Player::ReceiveInput()
 				{
 					if ((creation->name == "tile"))
 					{
+						creation->IsStatic = true;
 						creation->GetComponent<Physics2D::RectCollider>()->IsTrigger = false;
 						CreateTile();
 					}
@@ -542,7 +543,6 @@ void Player::OnDestroy()
 void Player::CreateTile()
 {
 	creation = GameObject::Instantiate("tile");
-	creation->IsStatic = true;
 	creation->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
 	creation->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tileset.png");
 	auto collider = creation->AddComponent<Physics2D::RectCollider>();

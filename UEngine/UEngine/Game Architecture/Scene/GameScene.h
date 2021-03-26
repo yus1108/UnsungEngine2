@@ -9,7 +9,7 @@ namespace UEngine
 	private:
 		bool isDebugMode = false;
 
-		std::list<class GameObject*> gameObjects, deleteList, creationList;
+		std::list<class GameObject*> gameObjects, creationList;
 
 		std::vector<GameView> gpu_view;
 
@@ -44,7 +44,7 @@ namespace UEngine
 		const std::list<class GameObject*> GetGameObjects() { return gameObjects; }
 		const std::vector<GameView>& GetGpuViews() { return gpu_view; }
 
-		void AddGameObject(GameObject* obj) { gameObjects.emplace_back(obj); }
+		void AddGameObject(GameObject* obj) { creationList.emplace_back(obj); }
 		void RemoveGameObject(GameObject** obj);
 		void RemoveGameObject(std::string name);
 
