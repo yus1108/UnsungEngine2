@@ -100,17 +100,17 @@ void UEngine::RenderComponent::LoadCircle(UINT slice)
 	Load("circle" + slice, "color");*/
 }
 
-void UEngine::RenderComponent::AddConstantBuffer(std::string type_raw_name, DXRenderer::DXConstantBuffer* buffer)
+void UEngine::RenderComponent::AddConstantBuffer(DXRenderer::DXConstantBuffer* buffer)
 {
-	renderObject->constantBuffers[type_raw_name] = buffer;
+	renderObject->constantBuffers.emplace_back(buffer);
 }
 
 void UEngine::RenderComponent::AddImageTexture(DXRenderer::DXTexture* imageTexture)
 {
-	renderObject->textures[0] = imageTexture;
+	renderObject->imageTextures = imageTexture;
 }
 
 void UEngine::RenderComponent::AddImageSampler(DXRenderer::DXSamplerState* imageSampler)
 {
-	renderObject->samplerState[0] = imageSampler;
+	renderObject->imageSamplerState = imageSampler;
 }

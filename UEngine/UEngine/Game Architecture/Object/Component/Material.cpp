@@ -31,8 +31,8 @@ void UEngine::Material::Update()
 	{
 		renderObject = renderComponent->GetRenderObject();
 		if (renderObject == nullptr) return;
-		renderComponent->AddConstantBuffer(typeid(Color).raw_name(), colorBuffer);
-		renderComponent->AddConstantBuffer(typeid(UV).raw_name(), spriteBuffer);
+		renderComponent->AddConstantBuffer(colorBuffer);
+		renderComponent->AddConstantBuffer(spriteBuffer);
 		if (imageTexture) renderComponent->AddImageTexture(imageTexture);
 		if (imageSampler) renderComponent->AddImageSampler(imageSampler);
 	}
@@ -52,8 +52,7 @@ void UEngine::Material::OnDestroy()
 	{
 		renderObject = renderComponent->GetRenderObject();
 		if (renderObject == nullptr) return;
-		renderComponent->AddConstantBuffer(typeid(Color).raw_name(), nullptr);
-		renderComponent->AddConstantBuffer(typeid(UV).raw_name(), nullptr);
+		renderComponent->ClearConstantBuffers();
 		if (imageTexture) renderComponent->AddImageTexture(nullptr);
 		if (imageSampler) renderComponent->AddImageSampler(nullptr);
 	}

@@ -37,7 +37,7 @@ void UEngine::Transform::Update()
 	{
 		renderObject = renderComponent->GetRenderObject();
 		if (renderObject == nullptr) return;
-		renderComponent->AddConstantBuffer(typeid(this).raw_name(), worldBuffer);
+		renderComponent->AddConstantBuffer(worldBuffer);
 	}
 }
 

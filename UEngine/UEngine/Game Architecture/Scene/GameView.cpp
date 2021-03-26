@@ -10,12 +10,10 @@ void UEngine::GameView::Render(bool isDebugMode, bool isMainView)
 	{
 		if (!renderObject->isRenderable)
 			continue;
-		for (auto cbufferMap : renderObject->constantBuffers)
-			cbufferMap.second->Set(view->GetDeviceContext());
-		for (auto textureMap : renderObject->textures)
-			textureMap.second->Set(view->GetDeviceContext(), textureMap.first);
-		for (auto samplerMap : renderObject->samplerState)
-			samplerMap.second->Set(view->GetDeviceContext(), samplerMap.first);
+		for (size_t i = 0; i < renderObject->constantBuffers.size(); i++)
+			renderObject->constantBuffers[i]->Set(view->GetDeviceContext());
+		if (renderObject->imageTextures) renderObject->imageTextures->Set(view->GetDeviceContext(), 0);
+		if (renderObject->imageSamplerState) renderObject->imageSamplerState->Set(view->GetDeviceContext(), 0);
 		renderObject->shader->Set(view->GetDeviceContext());
 		renderObject->renderMesh->Set(view->GetDeviceContext());
 		renderObject->renderMesh->Draw(view->GetDeviceContext());

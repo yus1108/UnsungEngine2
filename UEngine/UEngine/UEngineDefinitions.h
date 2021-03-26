@@ -8,9 +8,9 @@ namespace UEngine
 		bool isRenderable{ false };
 		UEngine::DXRenderer::DXShader* shader{ nullptr };
 		UEngine::DXRenderer::DXRenderMesh* renderMesh{ nullptr };
-		std::map<std::string, UEngine::DXRenderer::DXConstantBuffer*> constantBuffers;
-		std::map<UINT, UEngine::DXRenderer::DXTexture*> textures;
-		std::map<UINT, UEngine::DXRenderer::DXSamplerState*> samplerState;
+		std::vector<UEngine::DXRenderer::DXConstantBuffer*> constantBuffers;
+		UEngine::DXRenderer::DXTexture* imageTextures = nullptr;
+		UEngine::DXRenderer::DXSamplerState* imageSamplerState = nullptr;
 	};
 
 	struct DebugRenderPoint

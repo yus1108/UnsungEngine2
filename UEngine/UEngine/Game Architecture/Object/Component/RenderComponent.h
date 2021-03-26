@@ -22,7 +22,8 @@ namespace UEngine
 		void LoadTriangle();
 		void LoadRectangle();
 		void LoadCircle(UINT slice = 360);
-		void AddConstantBuffer(std::string type_raw_name, DXRenderer::DXConstantBuffer* buffer);
+		void AddConstantBuffer(DXRenderer::DXConstantBuffer* buffer);
+		void ClearConstantBuffers() { renderObject->constantBuffers.clear(); }
 		void AddImageTexture(DXRenderer::DXTexture* imageTexture);
 		void AddImageSampler(DXRenderer::DXSamplerState* imageSampler);
 		const RenderObject* const GetRenderObject() { return renderObject; }
