@@ -109,7 +109,7 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.627404" maxY="0.0769231" minX="0.550481" minY="0" />
+                    <UV name="uv" maxX="0.473558" maxY="0.0769231" minX="0.396635" minY="0" />
                 </Component>
             </Material>
         </GameObject>
@@ -2335,7 +2335,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-430.206" y="-208.098" z="0" />
+                <Vector3 name="localPosition" x="-430.206" y="-207.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -2410,7 +2410,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="216.215" y="303.902" z="0" />
+                <Vector3 name="localPosition" x="216.215" y="304.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5109,7 +5109,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-206.206" y="-336.098" z="0" />
+                <Vector3 name="localPosition" x="-206.206" y="-335.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5184,7 +5184,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="78.2068" y="-336.098" z="0" />
+                <Vector3 name="localPosition" x="78.2068" y="-335.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5259,7 +5259,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="408.215" y="-336.098" z="0" />
+                <Vector3 name="localPosition" x="408.215" y="-335.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5334,7 +5334,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-71.7842" y="-240.098" z="0" />
+                <Vector3 name="localPosition" x="-71.7842" y="-239.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5409,7 +5409,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="561.788" y="-144.098" z="0" />
+                <Vector3 name="localPosition" x="561.788" y="-143.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5484,7 +5484,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="206.206" y="-16.0981" z="0" />
+                <Vector3 name="localPosition" x="206.206" y="-15.9019" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5559,7 +5559,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="583.781" y="79.9019" z="0" />
+                <Vector3 name="localPosition" x="583.781" y="80.0981" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5634,7 +5634,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-423.785" y="111.902" z="0" />
+                <Vector3 name="localPosition" x="-423.785" y="112.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5709,7 +5709,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-536.219" y="303.902" z="0" />
+                <Vector3 name="localPosition" x="-536.219" y="304.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5784,7 +5784,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-526.212" y="-16.0981" z="0" />
+                <Vector3 name="localPosition" x="-526.212" y="-15.9019" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5923,7 +5923,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="111.901" y="111.902" z="0" />
+                <Vector3 name="localPosition" x="111.901" y="112.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5998,7 +5998,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="143.9" y="-144.098" z="0" />
+                <Vector3 name="localPosition" x="143.9" y="-143.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>

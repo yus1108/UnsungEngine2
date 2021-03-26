@@ -280,21 +280,7 @@ int Game::Run(double targetHz)
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
             //Console::Clear();
-        }, [&]()
-        {
-            if (Input::GetKeyDown(VK_F10))
-            {
-                GameState::GetCurrentScene()->SaveScene();
-                Console::Clear();
-                return true;
-            }
-            if (Input::GetKeyDown(VK_F9))
-            {
-                Console::Clear();
-                return true;
-            }
-            return false;
-        }, [&]()
+        }, nullptr, [&]()
         {
             bool consoleFocused = false;
             Console::Render(&consoleFocused);

@@ -189,6 +189,20 @@ void Player::ReceiveInput()
 	}
 	else
 	{
+		if (Input::GetKeyDown(VK_F10))
+		{
+			if (creation) GetGameObject()->GetScene()->RemoveGameObject(&creation);
+			GameState::GetCurrentScene()->SaveScene();
+			Console::Clear();
+			GameState::Terminate();
+		}
+		if (Input::GetKeyDown(VK_F9))
+		{
+			if (creation) GetGameObject()->GetScene()->RemoveGameObject(&creation);
+			Console::Clear();
+			GameState::Terminate();
+		}
+
 		if (Input::GetKeyDown('3'))
 		{
 			deletionMode = false;

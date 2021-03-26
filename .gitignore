@@ -351,3 +351,4 @@ MigrationBackup/
 *imgui.ini
 /Examples/DungeonSouls/DungeonSoulsScript.dll
 /UEngine/GameState/DllTest.dll
+/Examples/DungeonSouls/DungeonSoulsScript.dll.temp.dll

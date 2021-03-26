@@ -48,6 +48,8 @@ namespace UEngine
 		static bool IsTerminate() { return instance->isTerminate; }
 		static bool IsFixedUpdate();
 
+		static void Terminate() { instance->isTerminate = true; }
+
 		static float GetCurrentFixedTimestep() { return UEngine::Math::Clamp(instance->deltaTime, instance->FixedTimestep, instance->MaxFixedTimestep); }
 		static float GetDeltaTime() { return instance->deltaTime; }
 
