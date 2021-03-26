@@ -13,6 +13,6 @@ public:
 		, yIndex(yIndex)
 	{}
 
-	float ReceiveInput(Animation& animation, Animation NextCombo, float dashValue);
+	float ReceiveInput(Animation& animation, Animation NextCombo, int yIndex);
 };
 

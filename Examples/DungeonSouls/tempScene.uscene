@@ -66,7 +66,7 @@
     <GameObject name="player" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-556.869" y="-336.102" z="0" />
+                <Vector3 name="localPosition" x="-521.753" y="-336.102" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -109,7 +109,7 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.242788" maxY="0.0769231" minX="0.165865" minY="0" />
+                    <UV name="uv" maxX="0.627404" maxY="0.0769231" minX="0.550481" minY="0" />
                 </Component>
             </Material>
         </GameObject>
@@ -2335,7 +2335,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-464" y="-208.098" z="0" />
+                <Vector3 name="localPosition" x="-430.206" y="-208.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -2378,7 +2378,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -2410,7 +2410,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="16" y="111.902" z="0" />
+                <Vector3 name="localPosition" x="216.215" y="303.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -2453,82 +2453,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
-                </Component>
-            </Material>
-            <Health>
-                <Component enabled="1" />
-            </Health>
-        </GameObject>
-        <GameObject name="enemyAttack" isActive="1" isStatic="0">
-            <Transform>
-                <Component enabled="1">
-                    <Vector3 name="localPosition" x="8" y="0" z="0" />
-                    <Vector3 name="localRotation" x="0" y="0" z="0" />
-                    <Vector3 name="scale" x="1" y="1" z="1" />
-                </Component>
-            </Transform>
-            <RectCollider>
-                <Component enabled="1">
-                    <BOOL IsTrigger="1" />
-                    <FLOAT left="-8" />
-                    <FLOAT top="16" />
-                    <FLOAT right="8" />
-                    <FLOAT bottom="-16" />
-                </Component>
-            </RectCollider>
-            <Weapon>
-                <Component enabled="1" />
-            </Weapon>
-        </GameObject>
-    </GameObject>
-    <GameObject name="enemy" isActive="1" isStatic="0">
-        <Transform>
-            <Component enabled="1">
-                <Vector3 name="localPosition" x="240" y="303.902" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
-                <Vector3 name="scale" x="1" y="1" z="1" />
-            </Component>
-        </Transform>
-        <CircleCollider>
-            <Component enabled="1">
-                <BOOL IsTrigger="1" />
-                <Vector3 name="localCenter" x="0" y="0" z="0" />
-                <FLOAT localRadius="16" />
-            </Component>
-        </CircleCollider>
-        <Skeleton>
-            <Component enabled="1" />
-        </Skeleton>
-        <GameObject name="enemyBody" isActive="1" isStatic="0">
-            <Transform>
-                <Component enabled="1">
-                    <Vector3 name="localPosition" x="0" y="0" z="0" />
-                    <Vector3 name="localRotation" x="0" y="0" z="0" />
-                    <Vector3 name="scale" x="32" y="32" z="0" />
-                </Component>
-            </Transform>
-            <RenderComponent>
-                <Component enabled="1">
-                    <STRING renderMesh_name="rectangle" />
-                    <STRING shader_name="sprite" />
-                </Component>
-            </RenderComponent>
-            <RectCollider>
-                <Component enabled="1">
-                    <BOOL IsTrigger="1" />
-                    <FLOAT left="-8" />
-                    <FLOAT top="16" />
-                    <FLOAT right="8" />
-                    <FLOAT bottom="-16" />
-                </Component>
-            </RectCollider>
-            <Material>
-                <Component enabled="1">
-                    <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
-                    <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
-                    <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5184,7 +5109,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-240" y="-336.098" z="0" />
+                <Vector3 name="localPosition" x="-206.206" y="-336.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5227,7 +5152,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5259,8 +5184,8 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="112" y="-336.098" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="localPosition" x="78.2068" y="-336.098" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
@@ -5302,7 +5227,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5334,7 +5259,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="432" y="-336.098" z="0" />
+                <Vector3 name="localPosition" x="408.215" y="-336.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5377,7 +5302,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5409,7 +5334,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="208" y="-144.098" z="0" />
+                <Vector3 name="localPosition" x="-71.7842" y="-240.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5452,7 +5377,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5484,7 +5409,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-48" y="-240.098" z="0" />
+                <Vector3 name="localPosition" x="561.788" y="-144.098" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5527,7 +5452,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5559,8 +5484,8 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="528" y="-144.098" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="localPosition" x="206.206" y="-16.0981" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
@@ -5602,7 +5527,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5634,8 +5559,8 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="240" y="-16.0981" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="localPosition" x="583.781" y="79.9019" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
@@ -5677,7 +5602,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5709,7 +5634,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="560" y="79.9019" z="0" />
+                <Vector3 name="localPosition" x="-423.785" y="111.902" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5752,7 +5677,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5784,8 +5709,8 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-400" y="111.902" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="localPosition" x="-536.219" y="303.902" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
@@ -5827,7 +5752,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -5859,7 +5784,7 @@
     <GameObject name="enemy" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-560" y="303.902" z="0" />
+                <Vector3 name="localPosition" x="-526.212" y="-16.0981" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -5902,82 +5827,7 @@
                     <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
-                </Component>
-            </Material>
-            <Health>
-                <Component enabled="1" />
-            </Health>
-        </GameObject>
-        <GameObject name="enemyAttack" isActive="1" isStatic="0">
-            <Transform>
-                <Component enabled="1">
-                    <Vector3 name="localPosition" x="8" y="0" z="0" />
-                    <Vector3 name="localRotation" x="0" y="0" z="0" />
-                    <Vector3 name="scale" x="1" y="1" z="1" />
-                </Component>
-            </Transform>
-            <RectCollider>
-                <Component enabled="1">
-                    <BOOL IsTrigger="1" />
-                    <FLOAT left="-8" />
-                    <FLOAT top="16" />
-                    <FLOAT right="8" />
-                    <FLOAT bottom="-16" />
-                </Component>
-            </RectCollider>
-            <Weapon>
-                <Component enabled="1" />
-            </Weapon>
-        </GameObject>
-    </GameObject>
-    <GameObject name="enemy" isActive="1" isStatic="0">
-        <Transform>
-            <Component enabled="1">
-                <Vector3 name="localPosition" x="-560" y="-16.0981" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
-                <Vector3 name="scale" x="1" y="1" z="1" />
-            </Component>
-        </Transform>
-        <CircleCollider>
-            <Component enabled="1">
-                <BOOL IsTrigger="1" />
-                <Vector3 name="localCenter" x="0" y="0" z="0" />
-                <FLOAT localRadius="16" />
-            </Component>
-        </CircleCollider>
-        <Skeleton>
-            <Component enabled="1" />
-        </Skeleton>
-        <GameObject name="enemyBody" isActive="1" isStatic="0">
-            <Transform>
-                <Component enabled="1">
-                    <Vector3 name="localPosition" x="0" y="0" z="0" />
-                    <Vector3 name="localRotation" x="0" y="0" z="0" />
-                    <Vector3 name="scale" x="32" y="32" z="0" />
-                </Component>
-            </Transform>
-            <RenderComponent>
-                <Component enabled="1">
-                    <STRING renderMesh_name="rectangle" />
-                    <STRING shader_name="sprite" />
-                </Component>
-            </RenderComponent>
-            <RectCollider>
-                <Component enabled="1">
-                    <BOOL IsTrigger="1" />
-                    <FLOAT left="-8" />
-                    <FLOAT top="16" />
-                    <FLOAT right="8" />
-                    <FLOAT bottom="-16" />
-                </Component>
-            </RectCollider>
-            <Material>
-                <Component enabled="1">
-                    <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
-                    <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
-                    <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1" maxY="0.1" minX="0" minY="0" />
+                    <UV name="uv" maxX="0.3" maxY="0.2" minX="0.2" minY="0.1" />
                 </Component>
             </Material>
             <Health>
@@ -6069,5 +5919,155 @@
                 <FLOAT bottom="-16" />
             </Component>
         </RectCollider>
+    </GameObject>
+    <GameObject name="enemy" isActive="1" isStatic="0">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="111.901" y="111.902" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
+                <Vector3 name="scale" x="1" y="1" z="1" />
+            </Component>
+        </Transform>
+        <CircleCollider>
+            <Component enabled="1">
+                <BOOL IsTrigger="1" />
+                <Vector3 name="localCenter" x="0" y="0" z="0" />
+                <FLOAT localRadius="16" />
+            </Component>
+        </CircleCollider>
+        <Skeleton>
+            <Component enabled="1" />
+        </Skeleton>
+        <GameObject name="enemyBody" isActive="1" isStatic="0">
+            <Transform>
+                <Component enabled="1">
+                    <Vector3 name="localPosition" x="0" y="0" z="0" />
+                    <Vector3 name="localRotation" x="0" y="0" z="0" />
+                    <Vector3 name="scale" x="32" y="32" z="0" />
+                </Component>
+            </Transform>
+            <RenderComponent>
+                <Component enabled="1">
+                    <STRING renderMesh_name="rectangle" />
+                    <STRING shader_name="sprite" />
+                </Component>
+            </RenderComponent>
+            <RectCollider>
+                <Component enabled="1">
+                    <BOOL IsTrigger="1" />
+                    <FLOAT left="-8" />
+                    <FLOAT top="16" />
+                    <FLOAT right="8" />
+                    <FLOAT bottom="-16" />
+                </Component>
+            </RectCollider>
+            <Material>
+                <Component enabled="1">
+                    <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
+                    <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                    <COLOR name="color" r="1" g="1" b="1" a="1" />
+                    <UV name="uv" maxX="0.4" maxY="0.1" minX="0.3" minY="0" />
+                </Component>
+            </Material>
+            <Health>
+                <Component enabled="1" />
+            </Health>
+        </GameObject>
+        <GameObject name="enemyAttack" isActive="1" isStatic="0">
+            <Transform>
+                <Component enabled="1">
+                    <Vector3 name="localPosition" x="8" y="0" z="0" />
+                    <Vector3 name="localRotation" x="0" y="0" z="0" />
+                    <Vector3 name="scale" x="1" y="1" z="1" />
+                </Component>
+            </Transform>
+            <RectCollider>
+                <Component enabled="1">
+                    <BOOL IsTrigger="1" />
+                    <FLOAT left="-8" />
+                    <FLOAT top="16" />
+                    <FLOAT right="8" />
+                    <FLOAT bottom="-16" />
+                </Component>
+            </RectCollider>
+            <Weapon>
+                <Component enabled="1" />
+            </Weapon>
+        </GameObject>
+    </GameObject>
+    <GameObject name="enemy" isActive="1" isStatic="0">
+        <Transform>
+            <Component enabled="1">
+                <Vector3 name="localPosition" x="143.9" y="-144.098" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
+                <Vector3 name="scale" x="1" y="1" z="1" />
+            </Component>
+        </Transform>
+        <CircleCollider>
+            <Component enabled="1">
+                <BOOL IsTrigger="1" />
+                <Vector3 name="localCenter" x="0" y="0" z="0" />
+                <FLOAT localRadius="16" />
+            </Component>
+        </CircleCollider>
+        <Skeleton>
+            <Component enabled="1" />
+        </Skeleton>
+        <GameObject name="enemyBody" isActive="1" isStatic="0">
+            <Transform>
+                <Component enabled="1">
+                    <Vector3 name="localPosition" x="0" y="0" z="0" />
+                    <Vector3 name="localRotation" x="0" y="0" z="0" />
+                    <Vector3 name="scale" x="32" y="32" z="0" />
+                </Component>
+            </Transform>
+            <RenderComponent>
+                <Component enabled="1">
+                    <STRING renderMesh_name="rectangle" />
+                    <STRING shader_name="sprite" />
+                </Component>
+            </RenderComponent>
+            <RectCollider>
+                <Component enabled="1">
+                    <BOOL IsTrigger="1" />
+                    <FLOAT left="-8" />
+                    <FLOAT top="16" />
+                    <FLOAT right="8" />
+                    <FLOAT bottom="-16" />
+                </Component>
+            </RectCollider>
+            <Material>
+                <Component enabled="1">
+                    <STRING fileName="./Assets/SkeletalWarrior_Sprites.png" />
+                    <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
+                    <COLOR name="color" r="1" g="1" b="1" a="1" />
+                    <UV name="uv" maxX="0.4" maxY="0.1" minX="0.3" minY="0" />
+                </Component>
+            </Material>
+            <Health>
+                <Component enabled="1" />
+            </Health>
+        </GameObject>
+        <GameObject name="enemyAttack" isActive="1" isStatic="0">
+            <Transform>
+                <Component enabled="1">
+                    <Vector3 name="localPosition" x="8" y="0" z="0" />
+                    <Vector3 name="localRotation" x="0" y="0" z="0" />
+                    <Vector3 name="scale" x="1" y="1" z="1" />
+                </Component>
+            </Transform>
+            <RectCollider>
+                <Component enabled="1">
+                    <BOOL IsTrigger="1" />
+                    <FLOAT left="-8" />
+                    <FLOAT top="16" />
+                    <FLOAT right="8" />
+                    <FLOAT bottom="-16" />
+                </Component>
+            </RectCollider>
+            <Weapon>
+                <Component enabled="1" />
+            </Weapon>
+        </GameObject>
     </GameObject>
 </GameScene>

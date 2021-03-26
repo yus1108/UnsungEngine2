@@ -79,6 +79,7 @@ void Enemy::Update()
 				{
 					attackCooldown = AttackDelay;
 					weapon->Attack();
+					SoundManager::Get()->PlayAudio(4, L"Assets/sword sound.wav", AudioType_Effects);
 				}
 				else
 				{
@@ -96,6 +97,26 @@ void Enemy::Update()
 				}
 			}
 			
+		}
+		else if (idleWanderingTimer > WanderingWait)
+		{
+			if (velocity.y >= 0)
+			{
+				Vector2 moveVelocity =
+					Vector2(wanderingDir, 0).Normalize() * MoveSpeed * deltaTime;
+				velocity = velocity + moveVelocity;
+				RotateOn(moveVelocity.x);
+			}
+			idleWanderingTimer -= deltaTime;
+		}
+		else if (idleWanderingTimer > 0)
+		{
+			idleWanderingTimer	-= deltaTime;
+		}
+		else
+		{
+			wanderingDir = Math::RndFloat(-1.0f, 1.0f);
+			idleWanderingTimer = WanderingDuration;
 		}
 	}
 
@@ -143,7 +164,6 @@ void Enemy::OnTriggerExit(Physics2D::Collider* other)
 void Enemy::GetHit(Vector2 from)
 {
 	hitDirection = (GetTransform()->localPosition.value - from).Normalize();
-	Console::WriteLine(hitDirection.x);
 	hitDirection.y = 0.5f;
 	hitDirection = hitDirection.Normalize();
 	hitDashX.Activate();

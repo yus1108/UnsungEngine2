@@ -22,6 +22,9 @@ protected:
 	class Weapon* weapon = nullptr;
 	Physics2D::CircleCollider* collider = nullptr;
 
+	float idleWanderingTimer = 0;
+	float wanderingDir = 0;
+
 	bool attackable = false;
 	float attackTimer = 0;
 	float attackCooldown = 0;
@@ -50,9 +53,11 @@ public:
 	Vector2 gravity = Vector2(0, -9.81f);
 
 	float AttackTime = 0.15f;
-	float MoveSpeed = 32.0f;
+	float MoveSpeed = 16.0f;
 	float PlayerFoundDuration = 5.0f;
 	float AttackDelay = 1.0f;
+	float WanderingDuration = 2.0f;
+	float WanderingWait = 1.0f;
 
 	virtual void GetHit(Vector2 from);
 };

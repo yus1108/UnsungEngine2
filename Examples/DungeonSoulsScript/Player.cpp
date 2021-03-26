@@ -106,12 +106,10 @@ void Player::LateUpdate()
 		transform->localPosition.value.x = 630.0f;
 	else if (transform->localPosition.value.x < -630.0f)
 		transform->localPosition.value.x = -630.0f;
-	/*Console::Clear();
-	Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
-	Console::WriteLine(string("deltatime : ") + to_string(deltaTime));*/
-
-	/*Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
-	Console::WriteLine(string("Monster : ") + to_string(FindObjectWithName("enemyBody")->GetComponent<Health>()->GetHP()));*/
+	//Console::Clear();
+	//Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
+	//Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
+	//Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
 
 	material->uv = animation.Update();
 
@@ -306,6 +304,7 @@ void Player::ReceiveInput()
 		Jumpable = false;
 		jumpDash.Activate();
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_JUMP]);
+		SoundManager::Get()->PlayAudio(3, L"Assets/Mario_Jumping-Mike_Koenig-989896458.wav", AudioType_Effects);
 		return;
 	}
 
@@ -318,6 +317,7 @@ void Player::ReceiveInput()
 
 		dash.Activate();
 		animation.Change(player_animation_map[PLAYER_ANIMATION_STATE_ROLL]);
+		SoundManager::Get()->PlayAudio(2, L"Assets/whoosh (phaser).wav", AudioType_Effects);
 		return;
 	}
 }
@@ -463,13 +463,13 @@ void Player::AttackInput()
 	{
 		if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], 1);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2], PLAYER_ANIMATION_STATE_ATTACK1);
 		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK2])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], 1);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3], PLAYER_ANIMATION_STATE_ATTACK2);
 		else if (animation == player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
 			attackValue = static_cast<Attack>(player_animation_map[PLAYER_ANIMATION_STATE_ATTACK3])
-			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], 1);
+			.ReceiveInput(animation, player_animation_map[PLAYER_ANIMATION_STATE_ATTACK1], PLAYER_ANIMATION_STATE_ATTACK3);
 		else
 		{
 			attackValue = 1;
@@ -482,6 +482,7 @@ void Player::AttackInput()
 	{
 		Movable = false;
 		attackDash.Activate();
+		SoundManager::Get()->PlayAudio(1, L"Assets/sword sound.wav", AudioType_Effects);
 		SetAttack();
 	}
 }
