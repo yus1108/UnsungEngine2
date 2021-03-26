@@ -231,6 +231,7 @@ HRESULT AudioEffects::PlayAudio(UINT SourceVoice, std::wstring strFileName, UINT
 
 
 	pAudioVoices[SourceVoice].Channel = audioType;
+	pAudioVoices[SourceVoice].isStop = false;
 
 	UpdateAudio();
 
@@ -240,6 +241,7 @@ HRESULT AudioEffects::PlayAudio(UINT SourceVoice, std::wstring strFileName, UINT
 bool AudioEffects::GetIsStop(UINT SourceVoice) {
 	if (pAudioVoices.size() > SourceVoice)
 	{
+		if (pAudioVoices[SourceVoice].isStop) return true;
 		if (pAudioVoices[SourceVoice].pAudioVoice) {
 			AudioEffects::AudioChannels tempChan = pAudioVoices[SourceVoice];
 			XAUDIO2_VOICE_STATE state;
@@ -272,8 +274,7 @@ HRESULT AudioEffects::StopAudio() {
 
 	for (size_t i = 0; i < pAudioVoices.size(); i++)
 	{
-		if (pAudioVoices[i].pAudioVoice)
-			pAudioVoices[i].pAudioVoice->Stop(0);
+		StopAudio(i);
 	}
 
 	return S_OK;
@@ -285,6 +286,7 @@ HRESULT AudioEffects::StopAudio(UINT SourceVoice) {
 		if (pAudioVoices[SourceVoice].pAudioVoice)
 		{
 			pAudioVoices[SourceVoice].pAudioVoice->Stop(0);
+			pAudioVoices[SourceVoice].isStop = true;
 		}
 			
 	}

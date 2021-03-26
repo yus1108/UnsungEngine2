@@ -500,13 +500,17 @@ const UEngine::Vector2 UEngine::Math::GetMousePosToWorld()
 	// mouse ndc position to world position = mousePos * Projection^-1 * View^-1
 	auto mousePos = Input::GetMousePos();
 	
-	auto cpu_camera = Camera::GetMainCamera()->GetCameraMatrix();
-	Vector2 vMousePos = mousePos;
-	auto pDet = XMMatrixDeterminant(cpu_camera.projection);
-	auto vDet = XMMatrixDeterminant(cpu_camera.view);
-	vMousePos = vMousePos * XMMatrixInverse(&pDet, cpu_camera.projection);
-	vMousePos = vMousePos * XMMatrixInverse(&vDet, cpu_camera.view);
-	return vMousePos;
+	if (Camera::GetMainCamera())
+	{
+		auto cpu_camera = Camera::GetMainCamera()->GetCameraMatrix();
+		Vector2 vMousePos = mousePos;
+		auto pDet = XMMatrixDeterminant(cpu_camera.projection);
+		auto vDet = XMMatrixDeterminant(cpu_camera.view);
+		vMousePos = vMousePos * XMMatrixInverse(&pDet, cpu_camera.projection);
+		vMousePos = vMousePos * XMMatrixInverse(&vDet, cpu_camera.view);
+		return vMousePos;
+	}
+	else return Vector2();
 }
 
 const float UEngine::Math::Clamp(float value, float min, float max)

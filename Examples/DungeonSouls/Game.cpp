@@ -55,7 +55,7 @@ Game::Game(HINSTANCE hInstance, int width, int height)
         rendererDesc.EnableBlendState = true;
         rendererDesc.EnableDepthStencil = false;
         rendererDesc.EnableMultisampling = true;
-        rendererDesc.MultisampleDesc = { 1, 0 };
+        rendererDesc.MultisampleDesc = { 4, 0 };
         rendererDesc.CullMode = D3D11_CULL_NONE;
         renderer->Init(app->GetHandler(), &rendererDesc);
     }

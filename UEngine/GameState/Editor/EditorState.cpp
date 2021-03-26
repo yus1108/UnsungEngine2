@@ -43,7 +43,7 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
         desc.WindowSize = { width, height };
         desc.Wcex = &Wcex;
 
-        app->Create(desc, 0);
+        app->Create(desc, 4);
     }
 
     screenSize = app->GetClientPixelSize();
@@ -169,7 +169,6 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
             ImGui::NewFrame();
         }, [&]()
         {
-            audio.UpdateAudio();
             if (Input::GetKeyDown(VK_F10))
             {
                 GameState::GetCurrentScene()->SaveScene();

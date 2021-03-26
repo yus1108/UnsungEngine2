@@ -5,6 +5,7 @@ void Health::GetHit(Vector2 from, float damage)
 {
 	auto enemy = GetGameObject()->GetParent()->GetComponent<Skeleton>();
 	HP -= damage * 0.01f;
+	SoundManager::Get()->PlayAudio(5, L"Assets/SPLAT Crush 01.wav", AudioType_Effects);
 	if (HP <= 0)
 	{
 		Dead = true;

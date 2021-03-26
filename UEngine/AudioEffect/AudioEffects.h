@@ -26,6 +26,7 @@ private:
 	{
 		IXAudio2SourceVoice* pAudioVoice;
 		UINT Channel;
+		bool isStop;
 	};
 
 	WAVEFORMATEXTENSIBLE wfx = { 0 };
@@ -44,8 +45,9 @@ private:
 	vector<AudioChannels> pAudioVoices;
 
 	HRESULT LoadAudio(std::wstring strFileName, UINT audioType);
-	bool GetIsStop(UINT SourceVoice);
 	void DestroyVoice(UINT SourceVoice);
+	HRESULT StartAudio(IXAudio2SourceVoice* pSourceVoice, std::wstring strFileName);
+	HRESULT UpdateAudio();
 public:
 	bitset<2> Dropdownsettings;
 	vector<float> AudioVolume;
@@ -61,10 +63,9 @@ public:
 
 	HRESULT InitAudio();
 	HRESULT PlayAudio(UINT pSourceVoice, std::wstring strFileName, UINT audioType = 0);
-	HRESULT StartAudio(IXAudio2SourceVoice* pSourceVoice, std::wstring strFileName);
 	HRESULT StopAudio(UINT SourceVoice);
 	HRESULT StopAudio();
-	HRESULT UpdateAudio();
+	bool GetIsStop(UINT SourceVoice);
 
 };
 

@@ -9,10 +9,6 @@ namespace UEngine
 	private:
 		bool isDebugMode = false;
 
-		int renderSyncCount = 0;
-		std::mutex renderMutex;
-		std::condition_variable renderCondition;
-
 		std::list<class GameObject*> gameObjects, deleteList, creationList;
 
 		std::vector<GameView> gpu_view;

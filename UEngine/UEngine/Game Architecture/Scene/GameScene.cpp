@@ -21,9 +21,6 @@ void UEngine::GameScene::InitDebugMode(bool isDebugMode)
 
 void UEngine::GameScene::Release()
 {
-	std::unique_lock<std::mutex> lock(renderMutex);
-	renderCondition.wait(lock, [this]() { return renderSyncCount == 0; });
-
 	for (auto obj : gameObjects)
 		GameObject::Release(&obj);
 	for (auto obj : deleteList)
@@ -61,25 +58,7 @@ void UEngine::GameScene::Update()
 void UEngine::GameScene::Render(ID3D11DeviceContext* deviceContext)
 {
 	for (auto view : gpu_view)
-	{
-		WinApplication::Get()->threadPool.AddTask([&, view]()
-		{
-			std::unique_lock<std::mutex> lock(renderMutex);
-			renderSyncCount++;
-			lock.unlock();
-
-			auto copeidView = view;
-			copeidView.Render(isDebugMode, view.IsMain);
-
-			lock.lock();
-			int count = --renderSyncCount;
-			if (count == 0) renderCondition.notify_one();
-			lock.unlock();
-		});
-	}
-
-	std::unique_lock<std::mutex> lock(renderMutex);
-	renderCondition.wait(lock, [this]() { return renderSyncCount == 0; });
+		view.Render(isDebugMode, view.IsMain);
 
 	for (auto view : gpu_view)
 		view.PostRender();
