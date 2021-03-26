@@ -23,7 +23,6 @@
 #include "./WinApplication/WinConsole.h"
 #include "./WinApplication/WinMemoryLeak.h"
 
-#ifdef _DEBUG
 #pragma comment(lib, "./SingletonManager.lib")
 #pragma comment(lib, "./Utility.lib")
 #pragma comment(lib, "./WinApplication.lib")
@@ -31,7 +30,6 @@
 #pragma comment(lib, "./UEngine.lib")
 #pragma comment(lib, "./XMLSerializer.lib")
 #pragma comment(lib, "./ImGui.lib")
-#endif
 
 using namespace UEngine;
 
