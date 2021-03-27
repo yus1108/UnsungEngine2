@@ -9,6 +9,13 @@ namespace UEngine
 		WARNING,
 		ERROR_LOG
 	};
+
+	struct Message
+	{
+		LOG_TYPE logType;
+		std::string message;
+	};
+
 	class Console
 	{
 	public:
@@ -26,13 +33,14 @@ namespace UEngine
 
 #pragma endregion
 	private:
-		std::vector<std::pair<LOG_TYPE, std::string>> logs;
+		std::vector<Message> logs;
+		std::vector<Message> gpu_logs;
 		unsigned warningCounter = 0;
 		unsigned errorCounter = 0;
 		bool gotoEnd = false;
 
 	public:
-		static void Write(std::pair<LOG_TYPE, std::string> log);
+		static void Write(Message log);
 		static void Write(std::string log);
 		static void WriteLine(std::string log);
 		static void WriteLine(float log);
@@ -41,6 +49,7 @@ namespace UEngine
 		static void WriteError(std::string log);
 		static void WriteErrorLine(std::string log);
 		static void Clear();
+		static void Sync();
 		static void Render(bool* isFocused = nullptr);
 	};
 }

@@ -124,6 +124,9 @@ void Player::LateUpdate()
 	Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
 	Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
 	Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
+	Console::WriteLine(GetGameObject()->GetScene()->partition2D->maxColliderPerNode);
+	Console::WriteLine(GetGameObject()->GetScene()->partition2D->nodeCounter);
+	Console::WriteLine(GetGameObject()->GetScene()->GetGameObjectsSize());
 
 	material->uv = animation.Update();
 

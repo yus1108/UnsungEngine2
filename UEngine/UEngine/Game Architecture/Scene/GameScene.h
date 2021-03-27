@@ -42,6 +42,7 @@ namespace UEngine
 		bool IsDebugMode() { return isDebugMode; }
 		GameObject* const GetGameObject(std::string name);
 		const std::list<class GameObject*> GetGameObjects() { return gameObjects; }
+		const size_t GetGameObjectsSize() { return gameObjects.size(); }
 		const std::vector<GameView>& GetGpuViews() { return gpu_view; }
 
 		void AddGameObject(GameObject* obj) { creationList.emplace_back(obj); }

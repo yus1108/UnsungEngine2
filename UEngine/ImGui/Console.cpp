@@ -8,10 +8,10 @@ namespace UEngine
 
     void Console::Write(std::string log)
     {
-        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::LOG, log));
+		Write({ LOG_TYPE::LOG, log });
     }
 
-    void Console::Write(std::pair<LOG_TYPE, std::string> log)
+    void Console::Write(Message log)
     {
         instance->logs.push_back(log);
         instance->gotoEnd = true;
@@ -19,7 +19,7 @@ namespace UEngine
 
     void Console::WriteLine(std::string log)
     {
-        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::LOG, log + "\n"));
+        Write({ LOG_TYPE::LOG, log + "\n" });
     }
 
     void Console::WriteLine(float log)
@@ -29,25 +29,25 @@ namespace UEngine
 
     void Console::WriteWarning(std::string log)
     {
-        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::WARNING, log));
+        Write({ LOG_TYPE::WARNING, log });
         instance->warningCounter++;
     }
 
     void Console::WriteWarningLine(std::string log)
     {
-        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::WARNING, log + "\n"));
+        Write({ LOG_TYPE::WARNING, log + "\n" });
         instance->warningCounter++;
     }
 
     void Console::WriteError(std::string log)
     {
-        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::ERROR_LOG, log));
+        Write({ LOG_TYPE::ERROR_LOG, log });
         instance->errorCounter++;
     }
 
     void Console::WriteErrorLine(std::string log)
     {
-        Write(std::pair<LOG_TYPE, std::string>(LOG_TYPE::ERROR_LOG, log + "\n"));
+        Write({ LOG_TYPE::ERROR_LOG, log + "\n" });
         instance->errorCounter++;
     }
 
@@ -59,6 +59,11 @@ namespace UEngine
         instance->logs.clear();
     }
 
+    void Console::Sync()
+    {
+        instance->gpu_logs = instance->logs;
+    }
+
     void Console::Render(bool* isFocused)
     {
         ImGui::Begin("Console");
@@ -67,18 +72,18 @@ namespace UEngine
         float fps = ImGui::GetIO().Framerate;
         ImGui::Text((std::string("FPS : ") + std::to_string(fps)).c_str());
         ImGui::Separator();
-        for (size_t i = 0; i < instance->logs.size(); i++)
+        for (size_t i = 0; i < instance->gpu_logs.size(); i++)
         {
-            switch (instance->logs[i].first)
+            switch (instance->gpu_logs[i].logType)
             {
             case UEngine::LOG_TYPE::LOG:
-                ImGui::Text(instance->logs[i].second.c_str());
+                ImGui::Text(instance->gpu_logs[i].message.c_str());
                 break;
             case UEngine::LOG_TYPE::WARNING:
-                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), (std::string("[WARNING] ") + instance->logs[i].second).c_str());
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), (std::string("[WARNING] ") + instance->gpu_logs[i].message).c_str());
                 break;
             case UEngine::LOG_TYPE::ERROR_LOG:
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), (std::string("[ERROR] ") + instance->logs[i].second).c_str());
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), (std::string("[ERROR] ") + instance->gpu_logs[i].message).c_str());
                 break;
             }
         }

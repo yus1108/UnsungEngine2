@@ -279,7 +279,7 @@ int Game::Run(double targetHz)
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
-            //Console::Clear();
+            Console::Sync();
         }, nullptr, [&]()
         {
             bool consoleFocused = false;

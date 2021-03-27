@@ -19,7 +19,6 @@ namespace UEngine
 
 		private:
 			std::vector<SPACE_PARTITIONING_NODE*> nodeManager;
-			size_t nodeCounter = 0;
 
 			void AddNode(SPACE_PARTITIONING_NODE* currNode, Collider* collider);
 			void MakeQuadGrid(SPACE_PARTITIONING_NODE* node);
@@ -27,6 +26,8 @@ namespace UEngine
 			SPACE_PARTITIONING_NODE* RequestNode();
 
 		public:
+			size_t nodeCounter = 0;
+			size_t maxColliderPerNode = 0;
 			AABB headAABB{ FLT_MAX, -FLT_MAX, -FLT_MAX, FLT_MAX };
 			SPACE_PARTITIONING_NODE* head;
 

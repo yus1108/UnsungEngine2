@@ -36,6 +36,7 @@ namespace UEngine
 				head = RequestNode();
 				head->aabb = headAABB;
 				head->parent = nullptr;
+				maxColliderPerNode = 0;
 			}
 
 			AddNode(head, collider);
@@ -63,6 +64,8 @@ namespace UEngine
 				else
 				{
 					currNode->colliders.emplace_back(collider);
+					if (currNode->colliders.size() > maxColliderPerNode)
+						maxColliderPerNode = currNode->colliders.size();
 					for (auto child : currNode->children)
 						CheckCollision(child, collider);
 				}
@@ -74,6 +77,8 @@ namespace UEngine
 		{
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
+				if (currNode->colliders.size() > maxColliderPerNode)
+					maxColliderPerNode = currNode->colliders.size();
 				for (auto other : currNode->colliders)
 				{
 					if (other->GetGameObject() != collider->GetGameObject())
