@@ -18,10 +18,12 @@ namespace UEngine
 		protected:
 			ColliderType colliderType;
 			AABB localAABB{ -0.5f , 0.5f, 0.5f, -0.5f };
-			std::unordered_set<Collider*>* prevCollisions;
-			std::unordered_set<Collider*>* prevOthers;
+			std::vector<Collider*>* prevCollisions;
+			std::vector<Collider*>* prevOthers;
 
 			Vector3 impact{ 0, 0, 0 };
+
+			static bool VectorFind(std::vector<Collider*>* vColliders, Collider* collider);
 
 			void Start() override;
 			void OnDestroy() override;
@@ -37,8 +39,8 @@ namespace UEngine
 
 		public:
 			SERIALIZED_BOOL(IsTrigger);
-			std::unordered_set<Collider*>* others;
-			std::unordered_set<Collider*>* collisions;
+			std::vector<Collider*>* others;
+			std::vector<Collider*>* collisions;
 
 			ColliderType GetColliderType() { return colliderType; }
 		};

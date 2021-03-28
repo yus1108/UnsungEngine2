@@ -59,7 +59,7 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1,
 {
 	if (circle1->IsTrigger.value || circle2->IsTrigger.value)
 	{
-		if (circle1->others->find(circle2) == circle1->others->end())
+		if (VectorFind(circle1->others, circle2) == false)
 		{
 			if (Math::Physics2D::IsColliding(circle1->GetCollider(), circle2->GetCollider()))
 			{
@@ -70,7 +70,7 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Circle(CircleCollider* circle1,
 	}
 	else
 	{
-		if (circle1->collisions->find(circle2) == circle1->collisions->end())
+		if (VectorFind(circle1->collisions, circle2) == false)
 		{
 			auto result = FindColliding(circle1, circle2);
 			if (result.isColliding)
@@ -99,7 +99,7 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Rect(CircleCollider* circle, Re
 {
 	if (circle->IsTrigger.value || rect->IsTrigger.value)
 	{
-		if (circle->others->find(rect) == circle->others->end())
+		if (VectorFind(circle->others, rect) == false)
 		{
 			if (Math::Physics2D::IsColliding(rect->GetCollider(), circle->GetCollider()))
 			{
@@ -110,7 +110,7 @@ void UEngine::Physics2D::CircleCollider::Calc_Vs_Rect(CircleCollider* circle, Re
 	}
 	else
 	{
-		if (circle->collisions->find(rect) == circle->collisions->end())
+		if (VectorFind(circle->collisions, rect) == false)
 		{
 			auto result = FindColliding(rect, circle);
 			if (result.isColliding)

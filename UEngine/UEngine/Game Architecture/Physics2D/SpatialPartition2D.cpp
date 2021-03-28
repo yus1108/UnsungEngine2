@@ -14,10 +14,15 @@ namespace UEngine
 
 		COMPARE_AABB_SIZE_RESULT SpatialPartition2D::CompareAABBSize(AABB aabb1, AABB aabb2)
 		{
-			auto width1 = abs(aabb1.right - aabb1.left);
-			auto height1 = abs(aabb1.top - aabb1.bottom);
-			auto width2 = abs(aabb2.right - aabb2.left);
-			auto height2 = abs(aabb2.top - aabb2.bottom);
+			auto width1 = aabb1.right - aabb1.left;
+			auto height1 = aabb1.top - aabb1.bottom;
+			auto width2 = aabb2.right - aabb2.left;
+			auto height2 = aabb2.top - aabb2.bottom;
+
+			width1 = width1 < 0 ? width1 * -1.0f : width1;
+			height1 = height1 < 0 ? height1 * -1.0f : height1;
+			width2 = width2 < 0 ? width2 * -1.0f : width2;
+			height2 = height2 < 0 ? height2 * -1.0f : height2;
 
 			if (width1 > width2 && height1 > height2)
 				return COMPARE_AABB_SIZE_RESULT_BIGGER;
@@ -46,28 +51,28 @@ namespace UEngine
 		{
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				for (auto other : currNode->colliders)
+				for (size_t i = 0; i < currNode->colliders.size(); i++)
 				{
-					if (other->GetGameObject() != collider->GetGameObject())
+					if (currNode->colliders[i]->GetGameObject() != collider->GetGameObject())
 					{
 						// TODO: need to change to proper collider component
-						collider->CalculateImpact(other);
+						collider->CalculateImpact(currNode->colliders[i]);
 					}
 				}
 				auto result = CompareAABBSize(currNode->aabb, collider->GetWorldAABB());
 				if (result == COMPARE_AABB_SIZE_RESULT_BIGGER)
 				{
 					if (currNode->children.size() == 0) { MakeQuadGrid(currNode); }
-					for (auto child : currNode->children)
-						AddNode(child, collider);
+					for (size_t i = 0; i < currNode->children.size(); i++)
+						AddNode(currNode->children[i], collider);
 				}
 				else
 				{
-					currNode->colliders.emplace_back(collider);
+					currNode->colliders.push_back(collider);
 					if (currNode->colliders.size() > maxColliderPerNode)
 						maxColliderPerNode = currNode->colliders.size();
-					for (auto child : currNode->children)
-						CheckCollision(child, collider);
+					for (size_t i = 0; i < currNode->children.size(); i++)
+						CheckCollision(currNode->children[i], collider);
 				}
 
 			}
@@ -79,16 +84,16 @@ namespace UEngine
 			{
 				if (currNode->colliders.size() > maxColliderPerNode)
 					maxColliderPerNode = currNode->colliders.size();
-				for (auto other : currNode->colliders)
+				for (size_t i = 0; i < currNode->colliders.size(); i++)
 				{
-					if (other->GetGameObject() != collider->GetGameObject())
+					if (currNode->colliders[i]->GetGameObject() != collider->GetGameObject())
 					{
 						// TODO: need to change to proper collider component
-						collider->CalculateImpact(other);
+						collider->CalculateImpact(currNode->colliders[i]);
 					}
 				}
-				for (auto child : currNode->children)
-					CheckCollision(child, collider);
+				for (size_t i = 0; i < currNode->children.size(); i++)
+					CheckCollision(currNode->children[i], collider);
 			}
 		}
 
@@ -105,15 +110,16 @@ namespace UEngine
 			{
 				// TODO: spatial partitioning need to know debugrenderer in the same scene
 				GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(currNode->aabb, nodeColor);
-				for (auto otherCollider : currNode->colliders)
+				for (size_t i = 0; i < currNode->colliders.size(); i++)
 				{
-					if (otherCollider->typeName == ".PAVCircleCollider@Physics2D@UEngine@@")
-						GameState::GetCurrentScene()->debugRenderer->Add_Circle(static_cast<CircleCollider*>(otherCollider)->GetCollider(), colliderColor);
+					if (currNode->colliders[i]->typeName == ".PAVCircleCollider@Physics2D@UEngine@@")
+						GameState::GetCurrentScene()->debugRenderer->Add_Circle(static_cast<CircleCollider*>(currNode->colliders[i])->GetCollider(), colliderColor);
 					else
-						GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(otherCollider->GetWorldAABB(), colliderColor);
+						GameState::GetCurrentScene()->debugRenderer->Add_Rectangle(currNode->colliders[i]->GetWorldAABB(), colliderColor);
 				}
-				for (auto child : currNode->children)
-					DebugRender(child, collider, nodeColor, colliderColor);
+			
+				for (size_t i = 0; i < currNode->children.size(); i++)
+					DebugRender(currNode->children[i], collider, nodeColor, colliderColor);
 			}
 		}
 
@@ -127,19 +133,19 @@ namespace UEngine
 			if (currNode == nullptr) return;
 			if (IsColliding(currNode->aabb, collider->GetWorldAABB()))
 			{
-				for (auto otherCollider : currNode->colliders)
+				for (size_t i = 0; i < currNode->colliders.size(); i++)
 				{
 					GameState::GetCurrentScene()->debugRenderer->Add_line
 					(
 						{
-							otherCollider->GetTransform()->localPosition.value,
+							currNode->colliders[i]->GetTransform()->localPosition.value,
 							collider->GetTransform()->localPosition.value
 						},
 						color
 					);
 				}
-				for (auto child : currNode->children)
-					DebugRender(child, collider, color);
+				for (size_t i = 0; i < currNode->children.size(); i++)
+					DebugRender(currNode->children[i], collider, color);
 			}
 		}
 
@@ -157,10 +163,13 @@ namespace UEngine
 
 		void SpatialPartition2D::MakeQuadGrid(SpatialPartition2D::SPACE_PARTITIONING_NODE* node)
 		{
-			auto width = abs(node->aabb.right - node->aabb.left);
-			auto height = abs(node->aabb.top - node->aabb.bottom);
+			auto width = node->aabb.right - node->aabb.left;
+			auto height = node->aabb.top - node->aabb.bottom;
 			auto midX = node->aabb.left + width / 2.0f;
 			auto midY = node->aabb.bottom + height / 2.0f;
+
+			width = width < 0 ? width * -1.0f : width;
+			height = height < 0 ? height * -1.0f : height;
 
 			AABB alb, alt, art, arb;
 			alb.left = node->aabb.left;
@@ -185,10 +194,10 @@ namespace UEngine
 
 			if (node->children.capacity() != 4)
 				node->children.reserve(4);
-			node->children.emplace_back(RequestNode());
-			node->children.emplace_back(RequestNode());
-			node->children.emplace_back(RequestNode());
-			node->children.emplace_back(RequestNode());
+			node->children.push_back(RequestNode());
+			node->children.push_back(RequestNode());
+			node->children.push_back(RequestNode());
+			node->children.push_back(RequestNode());
 
 			node->children[0]->aabb = alb;
 			node->children[1]->aabb = alt;

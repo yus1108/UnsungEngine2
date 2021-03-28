@@ -10,6 +10,9 @@
     <Filter Include="Time">
       <UniqueIdentifier>{2b619297-a5ab-4ec2-8a8d-0e0dbd56c03f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Containers">
+      <UniqueIdentifier>{cdca091d-ae7e-4ee7-b40f-3879261bcfd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Math\Vector3.h">
@@ -28,6 +31,9 @@
       <Filter>Time</Filter>
     </ClInclude>
     <ClInclude Include="UtilityDefinitions.h" />
+    <ClInclude Include="Containers\UVector.h">
+      <Filter>Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Math\Vector3.cpp">

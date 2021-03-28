@@ -3,9 +3,11 @@
 
 namespace UEngine
 {
+	class Camera;
 	class GameScene
 	{
 		friend class RenderComponent;
+		friend class Camera;
 	private:
 		bool isDebugMode = false;
 
@@ -18,10 +20,8 @@ namespace UEngine
 
 		std::string name;
 
-		class Camera* MainCamera{ nullptr };
+		Camera* MainCamera{ nullptr };
 		GameView* MainView{ nullptr };
-
-		std::vector<GameView> cpu_view;
 
 		UEngine::DXRenderer::DXResourceManager ResourceManager;
 		DebugRenderer *debugRenderer = nullptr;

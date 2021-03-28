@@ -76,10 +76,9 @@ void UEngine::GameScene::Sync()
 	for (auto obj : gameObjects)
 		obj->Sync();
 
-	gpu_view = cpu_view;
-	cpu_view.clear();
 	ResourceManager.ApplyChange();
 
+	gpu_view.clear();
 	for (auto obj : gameObjects)
 		obj->OnPreRender();
 

@@ -5,12 +5,24 @@ namespace UEngine
 {
     namespace Physics2D
     {
+        bool Collider::VectorFind(std::vector<Collider*>* vColliders, Collider* collider)
+        {
+            for (size_t i = 0; i < vColliders->size(); i++)
+            {
+                if (collider == (*vColliders)[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         void Collider::Start()
         {
-            others = new std::unordered_set<Collider*>();
-            prevOthers = new std::unordered_set<Collider*>();
-            collisions = new std::unordered_set<Collider*>();
-            prevCollisions = new std::unordered_set<Collider*>();
+            others = new std::vector<Collider*>();
+            prevOthers = new std::vector<Collider*>();
+            collisions = new std::vector<Collider*>();
+            prevCollisions = new std::vector<Collider*>();
         }
         void Collider::OnDestroy()
         {
@@ -53,7 +65,7 @@ namespace UEngine
             {
                 for (auto prev : *prevOthers)
                 {
-                    if (others->find(prev) == others->end())
+                    if (VectorFind(others, prev) == false)
                     {
                         auto components = GetGameObject()->GetComponents();
                         for (size_t i = 0; i < components->size(); i++)
@@ -66,7 +78,7 @@ namespace UEngine
             {
                 for (auto prev : *prevCollisions)
                 {
-                    if (collisions->find(prev) == collisions->end())
+                    if (VectorFind(collisions, prev) == false)
                     {
                         auto components = GetGameObject()->GetComponents();
                         for (size_t i = 0; i < components->size(); i++)
@@ -79,7 +91,7 @@ namespace UEngine
 
         void Collider::OnTrigger(Collider* other)
         {
-            if (prevOthers->find(other) == prevOthers->end())
+            if (VectorFind(prevOthers, other) == false)
             {
                 auto components = GetGameObject()->GetComponents();
                 for (size_t i = 0; i < components->size(); i++)
@@ -91,13 +103,12 @@ namespace UEngine
                 for (size_t i = 0; i < components->size(); i++)
                     (*components)[i]->OnTriggerStay(other);
             }
-
-            others->emplace(other);
+            others->emplace_back(other);
         }
 
         void Collider::OnCollision(Collider* other)
         {
-            if (prevCollisions->find(other) == prevCollisions->end())
+            if (VectorFind(prevCollisions, other) == false)
             {
                 auto components = GetGameObject()->GetComponents();
                 for (size_t i = 0; i < components->size(); i++)
@@ -110,7 +121,7 @@ namespace UEngine
                     (*components)[i]->OnCollisionStay(other);
             }
 
-            collisions->emplace(other);
+            collisions->emplace_back(other);
         }
     }
 }

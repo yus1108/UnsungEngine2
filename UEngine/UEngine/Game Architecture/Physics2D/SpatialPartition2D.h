@@ -1,4 +1,5 @@
 #pragma once
+#include "../Utility/Containers/UVector.h"
 
 namespace UEngine
 {
@@ -13,8 +14,8 @@ namespace UEngine
 			{
 				AABB aabb{ 0 };
 				SPACE_PARTITIONING_NODE* parent{ nullptr };
-				std::vector<SPACE_PARTITIONING_NODE*> children;
-				std::vector<class Collider*> colliders;
+				Utility::UVector<SPACE_PARTITIONING_NODE*> children;
+				Utility::UVector<class Collider*> colliders;
 			};
 
 		private:
