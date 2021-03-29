@@ -29,6 +29,8 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -68,6 +70,8 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Miscs</Filter>
     </ClInclude>
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="Projectile.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Animation">

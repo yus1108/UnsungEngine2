@@ -88,6 +88,7 @@ private:
 
 	void CreateTile();
 	void CreateSkeleton();
+	void CreateBoss();
 
 public:
 	void GetHit(Vector2 from);

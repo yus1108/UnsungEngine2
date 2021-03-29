@@ -25,9 +25,7 @@ protected:
 	float idleWanderingTimer = 0;
 	float wanderingDir = 0;
 
-	bool attackable = false;
 	float attackTimer = 0;
-	float attackCooldown = 0;
 	float playerFoundTimer = 0;
 	Player* player = nullptr;
 	Physics2D::CircleCollider* playerCollider = nullptr;
@@ -50,6 +48,8 @@ protected:
 	virtual void RotateOn(float x);
 
 public:
+	bool attackable = false;
+	float attackCooldown = 0;
 	Vector2 gravity = Vector2(0, -9.81f);
 
 	float AttackTime = 0.15f;

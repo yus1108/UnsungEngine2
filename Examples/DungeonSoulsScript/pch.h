@@ -34,5 +34,7 @@ using namespace std;
 #include "Weapon.h"
 #include "Health.h"
 #include "Skeleton.h"
+#include "Boss.h"
+#include "Projectile.h"
 
 #endif //PCH_H

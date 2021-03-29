@@ -41,7 +41,7 @@ Game::Game(HINSTANCE hInstance, int width, int height)
         desc.WindowSize = { width, height };
         desc.Wcex = &Wcex;
 
-        app->Create(desc, 4);
+        app->Create(desc, 0);
     }
 
     screenSize = app->GetClientPixelSize();

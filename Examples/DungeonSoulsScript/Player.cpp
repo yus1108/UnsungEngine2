@@ -120,13 +120,10 @@ void Player::LateUpdate()
 		transform->localPosition.value.x = 630.0f;
 	else if (transform->localPosition.value.x < -630.0f)
 		transform->localPosition.value.x = -630.0f;
-	Console::Clear();
-	Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
-	Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
-	Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
-	Console::WriteLine(GetGameObject()->GetScene()->partition2D->maxColliderPerNode);
-	Console::WriteLine(GetGameObject()->GetScene()->partition2D->nodeCounter);
-	Console::WriteLine(GetGameObject()->GetScene()->GetGameObjectsSize());
+	//Console::Clear();
+	//Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
+	//Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
+	//Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
 
 	material->uv = animation.Update();
 
@@ -218,6 +215,7 @@ void Player::ReceiveInput()
 				auto name = creation->name;
 				GetGameObject()->GetScene()->RemoveGameObject(&creation);
 				if (name == "enemy") CreateTile();
+				else if (name == "boss") CreateTile();
 			}
 			
 		}
@@ -233,6 +231,23 @@ void Player::ReceiveInput()
 				auto name = creation->name;
 				GetGameObject()->GetScene()->RemoveGameObject(&creation);
 				if (name == "tile") CreateSkeleton();
+				else if (name == "boss") CreateSkeleton();
+			}
+
+		}
+		else if (Input::GetKeyDown('5'))
+		{
+			deletionMode = false;
+			if (!creation)
+			{
+				CreateBoss();
+			}
+			else
+			{
+				auto name = creation->name;
+				GetGameObject()->GetScene()->RemoveGameObject(&creation);
+				if (name == "tile") CreateBoss();
+				else if (name == "enemy") CreateBoss();
 			}
 
 		}
@@ -275,6 +290,18 @@ void Player::ReceiveInput()
 							break;
 						}
 					}
+					else if ((*i)->name == "boss")
+					{
+						if (Math::Physics2D::IsColliding
+						(
+							creation->GetTransform()->localPosition.value,
+							(*i)->GetComponent<Physics2D::CircleCollider>()->GetCollider()
+						))
+						{
+							isTileExist = true;
+							break;
+						}
+					}
 				}
 
 				if (!isTileExist)
@@ -288,6 +315,10 @@ void Player::ReceiveInput()
 					if ((creation->name == "enemy"))
 					{
 						CreateSkeleton();
+					}
+					if ((creation->name == "boss"))
+					{
+						CreateBoss();
 					}
 				}
 					
@@ -312,6 +343,18 @@ void Player::ReceiveInput()
 						}
 					}
 					else if ((*i)->name == "enemy")
+					{
+						if (Math::Physics2D::IsColliding
+						(
+							mousePos,
+							(*i)->GetComponent<Physics2D::CircleCollider>()->GetCollider()
+						))
+						{
+							GetGameObject()->GetScene()->RemoveGameObject(&(*i));
+							break;
+						}
+					}
+					else if ((*i)->name == "boss")
 					{
 						if (Math::Physics2D::IsColliding
 						(
@@ -591,6 +634,37 @@ void Player::CreateSkeleton()
 	auto enemyAttack = GameObject::Instantiate("enemyAttack");
 	auto eAttack = enemyAttack->AddComponent<UEngine::Physics2D::RectCollider>();
 	eAttack->SetCollider(16, 32);
+	eAttack->IsTrigger = true;
+	enemyAttack->GetTransform()->localPosition.value.x = 8;
+	enemyAttack->AddComponent<Weapon>();
+	enemyAttack->SetParent(creation);
+}
+
+void Player::CreateBoss()
+{
+	creation = GameObject::Instantiate("boss");
+	auto enemyCollider = creation->AddComponent<UEngine::Physics2D::CircleCollider>();
+	enemyCollider->SetCollider({ 0, 0 }, 20);
+	enemyCollider->IsTrigger = true;
+	creation->AddComponent<Boss>();
+
+	auto enemyBody = GameObject::Instantiate("enemyBody");
+	enemyBody->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+	auto enemyBodyCollider = enemyBody->AddComponent<UEngine::Physics2D::RectCollider>();
+	enemyBodyCollider->SetCollider(48, 96);
+	enemyBodyCollider->IsTrigger = true;
+	auto enemyMaterial = enemyBody->AddComponent<Material>();
+	enemyMaterial->LoadImageMaterial(L"./Assets/Minotaur - Sprite Sheet.png");
+	enemyMaterial->uv.value = UV{ 0, 0, 96.0f / 960.0f, 1.0f / 20.0f };
+	enemyBody->GetTransform()->scale = Vector2(96, 96);
+	enemyBody->GetTransform()->localPosition.value.y = -4.0f;
+	enemyBody->GetTransform()->localPosition.value.x = 4.0f;
+	enemyBody->SetParent(creation);
+	enemyBody->AddComponent<Health>();
+
+	auto enemyAttack = GameObject::Instantiate("enemyAttack");
+	auto eAttack = enemyAttack->AddComponent<UEngine::Physics2D::RectCollider>();
+	eAttack->SetCollider(48, 96);
 	eAttack->IsTrigger = true;
 	enemyAttack->GetTransform()->localPosition.value.x = 8;
 	enemyAttack->AddComponent<Weapon>();

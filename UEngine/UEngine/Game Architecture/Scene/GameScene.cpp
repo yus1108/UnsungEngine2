@@ -78,13 +78,13 @@ void UEngine::GameScene::Sync()
 
 	ResourceManager.ApplyChange();
 
-	gpu_view.clear();
-	for (auto obj : gameObjects)
-		obj->OnPreRender();
-
 	if (isDebugMode && this == GameState::GetCurrentScene() && MainView) debugRenderer->Flush(MainView->cameraBuffer);
 	for (auto obj : gameObjects)
 		obj->Initialize();
+
+	gpu_view.clear();
+	for (auto obj : gameObjects)
+		obj->OnPreRender();
 }
 
 UEngine::GameObject* const UEngine::GameScene::GetGameObject(std::string name)

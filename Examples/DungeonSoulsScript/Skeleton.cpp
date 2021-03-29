@@ -11,7 +11,7 @@ void Skeleton::Start()
 	skeleton_animation_map[SKELETON_ANIMATION_STATE_DAMAGED] = Animation(false, 0.1f, { 0, 3 }, { 5, 3 }, { 32.0f, 32.0f }, { 320.0f, 320.0f }, { 0, 0 });
 	skeleton_animation_map[SKELETON_ANIMATION_STATE_DEAD] = Animation(false, 0.1f, { 0, 4 }, { 10, 4 }, { 32.0f, 32.0f }, { 320.0f, 320.0f }, { 0, 0 });
 
-	animation = skeleton_animation_map[PLAYER_ANIMATION_STATE_IDLE];
+	animation = skeleton_animation_map[SKELETON_ANIMATION_STATE_IDLE];
 	animation.Play();
 }
 
@@ -37,9 +37,9 @@ void Skeleton::Update()
 		if (movable)
 		{
 			if (velocity.x == 0)
-				animation.Change(skeleton_animation_map[PLAYER_ANIMATION_STATE_IDLE]);
+				animation.Change(skeleton_animation_map[SKELETON_ANIMATION_STATE_IDLE]);
 			else
-				animation.Change(skeleton_animation_map[PLAYER_ANIMATION_STATE_MOVE]);
+				animation.Change(skeleton_animation_map[SKELETON_ANIMATION_STATE_MOVE]);
 		}
 	}
 }

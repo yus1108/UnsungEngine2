@@ -19,10 +19,18 @@ void Health::GetHit(Vector2 from, float damage)
 		}
 		else
 		{
-			auto player = GetGameObject()->GetParent()->GetComponent<Player>();
-			if (player != nullptr)
+			auto boss = GetGameObject()->GetParent()->GetComponent<Boss>();
+			if (boss != nullptr)
 			{
-				player->GetHit(from);
+				boss->GetHit(from);
+			}
+			else
+			{
+				auto player = GetGameObject()->GetParent()->GetComponent<Player>();
+				if (player != nullptr)
+				{
+					player->GetHit(from);
+				}
 			}
 		}
 	}
