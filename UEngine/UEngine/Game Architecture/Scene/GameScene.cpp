@@ -72,6 +72,19 @@ void UEngine::GameScene::Sync()
 {
 	for (auto obj : creationList)
 		gameObjects.emplace_back(obj);
+	for (auto diter = deletionList.begin(); diter != deletionList.end(); diter++)
+	{
+		for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++)
+		{
+			if (*iter == *diter)
+			{
+				GameObject::Release(&(*iter));
+				gameObjects.erase(iter);
+				break;
+			}
+		}
+	}
+	deletionList.clear();
 	creationList.clear();
 	for (auto obj : gameObjects)
 		obj->Sync();
@@ -96,15 +109,8 @@ UEngine::GameObject* const UEngine::GameScene::GetGameObject(std::string name)
 
 void UEngine::GameScene::RemoveGameObject(GameObject** obj)
 {
-	for (auto iter = gameObjects.begin(); iter != gameObjects.end(); iter++)
-	{
-		if (*iter == *obj)
-		{
-			GameObject::Release(obj);
-			gameObjects.erase(iter);
-			return;
-		}
-	}
+	deletionList.emplace_back(*obj);
+	*obj = nullptr;
 }
 
 void UEngine::GameScene::RemoveGameObject(std::string name)
@@ -113,8 +119,7 @@ void UEngine::GameScene::RemoveGameObject(std::string name)
 	{
 		if ((*iter)->name == name)
 		{
-			gameObjects.erase(iter);
-			delete* iter;
+			deletionList.emplace_back(*iter);
 			return;
 		}
 	}

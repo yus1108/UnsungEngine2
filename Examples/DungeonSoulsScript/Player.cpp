@@ -120,10 +120,10 @@ void Player::LateUpdate()
 		transform->localPosition.value.x = 630.0f;
 	else if (transform->localPosition.value.x < -630.0f)
 		transform->localPosition.value.x = -630.0f;
-	//Console::Clear();
-	//Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
-	//Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
-	//Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
+	Console::Clear();
+	Console::WriteLine(string("framepersecond : ") + to_string(Utility::UTime::Get()->FramePerSecond()));
+	Console::WriteLine(string("deltatime : ") + to_string(deltaTime));
+	Console::WriteLine(string("Player : ") + to_string(health->GetHP()));
 
 	material->uv = animation.Update();
 

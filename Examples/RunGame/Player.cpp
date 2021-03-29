@@ -40,7 +40,7 @@ void Player::Update()
 	}
 	hitCounter -= Utility::UTime::Get()->DeltaTimeF();
 	
-	if (collider->collisions.size() > 0)
+	if (collider->collisions->size() > 0)
 	{
 		ableToJump = true;
 		if (weight < 0)

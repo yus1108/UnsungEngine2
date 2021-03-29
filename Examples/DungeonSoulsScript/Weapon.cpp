@@ -19,7 +19,6 @@ void Weapon::OnTriggerEnter(Physics2D::Collider* other)
 			{
 				if (colliders.find(other) == colliders.end())
 				{
-					Console::WriteLine("attack");
 					health->GetHit(GetTransform()->GetParent()->localPosition.value, damage);
 					colliders.insert(other);
 				}

@@ -24,7 +24,7 @@ void Boss::BossUpdate()
 			{
 				if (attackable)
 				{
-					attackType = 2;
+					attackType = Math::RndInt(0, 3);
 					if (attackType == 0)
 					{
 						attackCooldown = AttackDelay;
@@ -55,7 +55,7 @@ void Boss::BossUpdate()
 					}
 					else
 					{
-						attackType = 2;
+						attackType = Math::RndInt(0, 3);
 						moveTimer = moveDuration;
 					}
 					if (attackType == 0)
@@ -302,8 +302,7 @@ void Boss::GetHit(Vector2 from)
 
 void Boss::CreateBarrel()
 {
-	Console::WriteLine("create");
-	auto creation = GameObject::Instantiate("barrel");
+	/*auto creation = GameObject::Instantiate("barrel");
 	auto enemyCollider = creation->AddComponent<UEngine::Physics2D::CircleCollider>();
 	enemyCollider->SetCollider({ 0, 0 }, 16);
 	enemyCollider->IsTrigger = true;
@@ -315,5 +314,5 @@ void Boss::CreateBarrel()
 	projectile->velocity = Vector2(0, -1);
 	projectile->parent = health->GetGameObject();
 	creation->GetTransform()->scale = Vector2(32, 32);
-	creation->GetTransform()->localPosition.value.y = 200;
+	creation->GetTransform()->localPosition.value.y = 200;*/
 }

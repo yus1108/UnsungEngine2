@@ -11,7 +11,7 @@ namespace UEngine
 	private:
 		bool isDebugMode = false;
 
-		std::list<class GameObject*> gameObjects, creationList;
+		std::list<class GameObject*> gameObjects, creationList, deletionList;
 
 		std::vector<GameView> gpu_view;
 
