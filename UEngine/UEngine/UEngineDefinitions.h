@@ -83,6 +83,11 @@ namespace UEngine
 				float right;
 				float bottom;
 			};
+			struct OBB
+			{
+				Vector2 localVertices[4];
+				Matrix worldMatrix;
+			};
 			struct CircleCoord
 			{
 				Vector2 center;

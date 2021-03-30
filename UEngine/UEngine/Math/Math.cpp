@@ -269,6 +269,17 @@ bool UEngine::Math::Physics2D::IsColliding(PointCoord point, AABB aabb)
 	return false;
 }
 
+bool UEngine::Math::Physics2D::IsColliding(PointCoord point, OBB obb)
+{
+	auto determinant = DirectX::XMMatrixDeterminant(obb.worldMatrix);
+	Matrix inverseMatrix = DirectX::XMMatrixInverse(&determinant, obb.worldMatrix);
+	point = point * inverseMatrix;
+	if (obb.localVertices[0].x <= point.x && point.x <= obb.localVertices[3].x &&
+		obb.localVertices[0].y <= point.y && point.y <= obb.localVertices[3].y)
+		return true;
+	return false;
+}
+
 bool UEngine::Math::Physics2D::IsColliding(PointCoord point, CircleCoord circle)
 {
 	float distance = (point - circle.center).Magnitude();
@@ -304,6 +315,23 @@ bool UEngine::Math::Physics2D::IsColliding(LineCoords line, AABB aabb)
 	if (IsIntersecting(line, LineCoords{ points[2], points[3] })) return true;
 	if (IsIntersecting(line, LineCoords{ points[3], points[0] })) return true;
 	
+	return false;
+}
+
+bool UEngine::Math::Physics2D::IsColliding(LineCoords line, OBB obb)
+{
+	auto determinant = DirectX::XMMatrixDeterminant(obb.worldMatrix);
+	Matrix inverseMatrix = DirectX::XMMatrixInverse(&determinant, obb.worldMatrix);
+	line[0] = line[0] * inverseMatrix;
+	line[1] = line[1] * inverseMatrix;
+
+	if (IsColliding(line[0], obb)) return true;
+	if (IsColliding(line[1], obb)) return true;
+
+	if (IsIntersecting(line, LineCoords{ obb.localVertices[0], obb.localVertices[1] })) return true;
+	if (IsIntersecting(line, LineCoords{ obb.localVertices[1], obb.localVertices[2] })) return true;
+	if (IsIntersecting(line, LineCoords{ obb.localVertices[2], obb.localVertices[3] })) return true;
+	if (IsIntersecting(line, LineCoords{ obb.localVertices[3], obb.localVertices[0] })) return true;
 	return false;
 }
 
@@ -350,9 +378,36 @@ bool UEngine::Math::Physics2D::IsColliding(TriangleCoords triangle, AABB aabb)
 		LineCoords{triangle[1], triangle[2]},
 		LineCoords{triangle[2], triangle[0]}
 	};
+	PointCoord center = (triangle[0] + triangle[1] + triangle[2]) * (1 / 3.0f);
+
+	if (IsColliding(center, aabb)) return true;
 	if (IsColliding(lines[0], aabb)) return true;
 	if (IsColliding(lines[1], aabb)) return true;
 	if (IsColliding(lines[2], aabb)) return true;
+	return false;
+}
+
+bool UEngine::Math::Physics2D::IsColliding(TriangleCoords triangle, OBB obb)
+{
+	auto determinant = DirectX::XMMatrixDeterminant(obb.worldMatrix);
+	Matrix inverseMatrix = DirectX::XMMatrixInverse(&determinant, obb.worldMatrix);
+	triangle[0] = triangle[0] * inverseMatrix;
+	triangle[1] = triangle[1] * inverseMatrix;
+	triangle[2] = triangle[2] * inverseMatrix;
+
+	LineCoords lines[] =
+	{
+		LineCoords{triangle[0], triangle[1]},
+		LineCoords{triangle[1], triangle[2]},
+		LineCoords{triangle[2], triangle[0]}
+	};
+	PointCoord center = (triangle[0] + triangle[1] + triangle[2]) * (1 / 3.0f);
+
+	if (IsColliding(center, obb)) return true;
+	if (IsColliding(lines[0], obb)) return true;
+	if (IsColliding(lines[1], obb)) return true;
+	if (IsColliding(lines[2], obb)) return true;
+
 	return false;
 }
 
@@ -378,12 +433,128 @@ bool UEngine::Math::Physics2D::IsColliding(AABB aabb1, AABB aabb2)
 	return true;
 }
 
+bool UEngine::Math::Physics2D::IsColliding(AABB aabb, OBB obb)
+{
+	OBB obb1;
+	obb1.localVertices[0] = Vector2(aabb.left, aabb.bottom);
+	obb1.localVertices[1] = Vector2(aabb.left, aabb.top);
+	obb1.localVertices[2] = Vector2(aabb.right, aabb.top);
+	obb1.localVertices[3] = Vector2(aabb.right, aabb.bottom);
+	obb1.worldMatrix = DirectX::XMMatrixIdentity();
+
+	return IsColliding(obb1, obb);
+}
+
 bool UEngine::Math::Physics2D::IsColliding(AABB aabb, CircleCoord circle)
 {
 	if (IsColliding(circle.center, aabb)) return true;
 	Vector2 closestPoint;
 	closestPoint.x = Clamp(circle.center.x, aabb.left, aabb.right);
 	closestPoint.y = Clamp(circle.center.y, aabb.bottom, aabb.top);
+	float distance = (circle.center - closestPoint).Magnitude();
+	return distance <= circle.radius;
+}
+
+bool UEngine::Math::Physics2D::IsColliding(OBB obb1, OBB obb2)
+{
+	using namespace DirectX;
+	Vector2 vertices1[4], vertices2[4];
+	Vector2 xaxis, yaxis;
+	float dist1, dist2;
+	float min1, min2, max1, max2;
+	// xaxis
+	min1 = min2 = FLT_MAX;
+	max1 = max2 = -FLT_MAX;
+
+	xaxis = XMVector3Normalize(obb1.worldMatrix.r[0]);
+	yaxis = XMVector3Normalize(obb1.worldMatrix.r[1]);
+	for (int i = 0; i < 4; i++)
+	{
+		vertices1[i] = obb1.localVertices[i] * obb1.worldMatrix;
+		vertices2[i] = obb2.localVertices[i] * obb2.worldMatrix;
+
+		dist1 = xaxis * vertices1[i];
+		dist2 = xaxis * vertices2[i];
+
+		min1 = min1 > dist1 ? dist1 : min1;
+		max1 = max1 < dist1 ? dist1 : max1;
+		min2 = min2 > dist2 ? dist2 : min2;
+		max2 = max2 < dist2 ? dist2 : max2;
+	}
+	float center1 = (max1 + min1) / 2.0f;
+	float center2 = (max2 + min2) / 2.0f;
+	if ((max2 - center2) + (max1 - center1) < abs(center2 - center1))
+		return false;
+
+	// yaxis
+	min1 = max1 = yaxis * vertices1[0];
+	min2 = max2 = yaxis * vertices2[0];
+	for (int i = 1; i < 4; i++)
+	{
+		dist1 = yaxis * vertices1[i];
+		dist2 = yaxis * vertices2[i];
+
+		min1 = min1 > dist1 ? dist1 : min1;
+		max1 = max1 < dist1 ? dist1 : max1;
+		min2 = min2 > dist2 ? dist2 : min2;
+		max2 = max2 < dist2 ? dist2 : max2;
+	}
+	center1 = (max1 + min1) / 2.0f;
+	center2 = (max2 + min2) / 2.0f;
+	if ((max2 - center2) + (max1 - center1) < abs(center2 - center1))
+		return false;
+
+	xaxis = XMVector3Normalize(obb2.worldMatrix.r[0]);
+	yaxis = XMVector3Normalize(obb2.worldMatrix.r[1]);
+	// xaxis
+	min1 = max1 = xaxis * vertices1[0];
+	min2 = max2 = xaxis * vertices2[0];
+	for (int i = 1; i < 4; i++)
+	{
+		dist1 = xaxis * vertices1[i];
+		dist2 = xaxis * vertices2[i];
+
+		min1 = min1 > dist1 ? dist1 : min1;
+		max1 = max1 < dist1 ? dist1 : max1;
+		min2 = min2 > dist2 ? dist2 : min2;
+		max2 = max2 < dist2 ? dist2 : max2;
+	}
+	center1 = (max1 + min1) / 2.0f;
+	center2 = (max2 + min2) / 2.0f;
+	if ((max2 - center2) + (max1 - center1) < abs(center2 - center1))
+		return false;
+
+	// yaxis
+	min1 = max1 = yaxis * vertices1[0];
+	min2 = max2 = yaxis * vertices2[0];
+	for (int i = 1; i < 4; i++)
+	{
+		dist1 = yaxis * vertices1[i];
+		dist2 = yaxis * vertices2[i];
+
+		min1 = min1 > dist1 ? dist1 : min1;
+		max1 = max1 < dist1 ? dist1 : max1;
+		min2 = min2 > dist2 ? dist2 : min2;
+		max2 = max2 < dist2 ? dist2 : max2;
+	}
+	center1 = (max1 + min1) / 2.0f;
+	center2 = (max2 + min2) / 2.0f;
+	if ((max2 - center2) + (max1 - center1) < abs(center2 - center1))
+		return false;
+
+	return true;
+}
+
+bool UEngine::Math::Physics2D::IsColliding(OBB obb, CircleCoord circle)
+{
+	auto determinant = DirectX::XMMatrixDeterminant(obb.worldMatrix);
+	Matrix inverseMatrix = DirectX::XMMatrixInverse(&determinant, obb.worldMatrix);
+	circle.center = circle.center * inverseMatrix;
+
+	if (IsColliding(circle.center, obb)) return true;
+	Vector2 closestPoint;
+	closestPoint.x = Clamp(circle.center.x, obb.localVertices[0].x, obb.localVertices[3].x);
+	closestPoint.y = Clamp(circle.center.y, obb.localVertices[0].y, obb.localVertices[3].y);
 	float distance = (circle.center - closestPoint).Magnitude();
 	return distance <= circle.radius;
 }
