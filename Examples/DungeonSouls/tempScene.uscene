@@ -66,7 +66,7 @@
     <GameObject name="player" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-267.01" y="-336.1" z="0" />
+                <Vector3 name="localPosition" x="-344.963" y="-336.1" z="0" />
                 <Vector3 name="localRotation" x="0" y="0" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
@@ -109,7 +109,7 @@
                     <STRING fileName="./Assets/Adventurer Sprite Sheet v1.3.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.396635" maxY="0.0769231" minX="0.319712" minY="0" />
+                    <UV name="uv" maxX="0.319712" maxY="0.0769231" minX="0.242788" minY="0" />
                 </Component>
             </Material>
         </GameObject>
@@ -131,7 +131,10 @@
                 </Component>
             </RectCollider>
             <Health>
-                <Component enabled="1" />
+                <Component enabled="1">
+                    <FLOAT HP="1" />
+                    <FLOAT showHP="100" />
+                </Component>
             </Health>
         </GameObject>
         <GameObject name="attackCollider" isActive="1" isStatic="0">
@@ -1439,8 +1442,8 @@
     <GameObject name="boss" isActive="1" isStatic="0">
         <Transform>
             <Component enabled="1">
-                <Vector3 name="localPosition" x="-97.8564" y="-332" z="0" />
-                <Vector3 name="localRotation" x="0" y="0" z="0" />
+                <Vector3 name="localPosition" x="-133.521" y="-332" z="0" />
+                <Vector3 name="localRotation" x="0" y="-3.14159" z="0" />
                 <Vector3 name="scale" x="1" y="1" z="1" />
             </Component>
         </Transform>
@@ -1482,11 +1485,14 @@
                     <STRING fileName="./Assets/Minotaur - Sprite Sheet.png" />
                     <STRING samplerName="3&#x0A;3&#x0A;3&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;0.000000&#x0A;1&#x0A;21&#x0A;1&#x0A;340282346638528859811704183484516925440.000000&#x0A;-340282346638528859811704183484516925440.000000&#x0A;0.000000&#x0A;" />
                     <COLOR name="color" r="1" g="1" b="1" a="1" />
-                    <UV name="uv" maxX="0.1875" maxY="0.05" minX="0.09375" minY="0" />
+                    <UV name="uv" maxX="0.65625" maxY="0.1" minX="0.5625" minY="0.05" />
                 </Component>
             </Material>
             <Health>
-                <Component enabled="1" />
+                <Component enabled="1">
+                    <FLOAT HP="10" />
+                    <FLOAT showHP="10" />
+                </Component>
             </Health>
         </GameObject>
         <GameObject name="enemyAttack" isActive="1" isStatic="0">
