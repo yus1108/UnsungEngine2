@@ -70,6 +70,8 @@ void UEngine::GameScene::PostRender()
 
 void UEngine::GameScene::Sync()
 {
+	if (isDebugMode && this == GameState::GetCurrentScene() && MainView) debugRenderer->Flush(MainView->cameraBuffer);
+
 	for (auto obj : creationList)
 		gameObjects.emplace_back(obj);
 	for (auto diter = deletionList.begin(); diter != deletionList.end(); diter++)
@@ -86,14 +88,14 @@ void UEngine::GameScene::Sync()
 	}
 	deletionList.clear();
 	creationList.clear();
-	for (auto obj : gameObjects)
-		obj->Sync();
 
 	ResourceManager.ApplyChange();
 
-	if (isDebugMode && this == GameState::GetCurrentScene() && MainView) debugRenderer->Flush(MainView->cameraBuffer);
 	for (auto obj : gameObjects)
 		obj->Initialize();
+
+	for (auto obj : gameObjects)
+		obj->Sync();
 
 	gpu_view.clear();
 	for (auto obj : gameObjects)
