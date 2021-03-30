@@ -24,7 +24,9 @@ void Boss::BossUpdate()
 			{
 				if (attackable)
 				{
+					projectile = nullptr;
 					attackType = Math::RndInt(0, 3);
+					//attackType = 2;
 					if (attackType == 0)
 					{
 						attackCooldown = AttackDelay;
@@ -34,11 +36,13 @@ void Boss::BossUpdate()
 					}
 					else if (attackType == 1)
 					{
+						localRange = localSight;
 						attackCooldown = 2.0f;
 
 					}
 					else if (attackType == 2)
 					{
+						localRange = localSight;
 						attackCooldown = 3.0f;
 					}
 					else if (attackType == 3)
@@ -49,6 +53,7 @@ void Boss::BossUpdate()
 				}
 				else
 				{
+					projectile = nullptr;
 					if (moveTimer > 0)
 					{
 						moveTimer -= deltaTime;
@@ -56,6 +61,7 @@ void Boss::BossUpdate()
 					else
 					{
 						attackType = Math::RndInt(0, 3);
+						//attackType = 2;
 						moveTimer = moveDuration;
 					}
 					if (attackType == 0)
@@ -75,11 +81,13 @@ void Boss::BossUpdate()
 					}
 					else if (attackType == 1)
 					{
+						localRange = localSight;
 						attackCooldown = 2.0f;
 						moveTimer = 0;
 					}
 					else if (attackType == 2)
 					{
+						localRange = localSight;
 						attackCooldown = 3.0f;
 						moveTimer = 0;
 					}
@@ -159,8 +167,14 @@ void Boss::FixedUpdate()
 					weapon->Set();
 					attackTimer = AttackTime;
 				}
+				else if (animation == boss_animation_map[BOSS_ANIMATION_STATE_ATTACK2])
+				{
+					CreateShooter();
+					attackTimer = AttackTime;
+				}
 				else if (animation == boss_animation_map[BOSS_ANIMATION_STATE_ATTACK3])
 				{
+					CreateBarrel();
 					attackTimer = AttackTime;
 				}
 			}
@@ -240,7 +254,6 @@ void Boss::Update()
 		{
 			if (attackCooldown < 0.6f)
 			{
-				CreateBarrel();
 				animation.Change(boss_animation_map[BOSS_ANIMATION_STATE_ATTACK3]);
 			}
 			else
@@ -302,17 +315,40 @@ void Boss::GetHit(Vector2 from)
 
 void Boss::CreateBarrel()
 {
-	/*auto creation = GameObject::Instantiate("barrel");
-	auto enemyCollider = creation->AddComponent<UEngine::Physics2D::CircleCollider>();
+	if (projectile) return;
+
+	projectile = GameObject::Instantiate("barrel");
+	projectile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+	auto enemyMaterial = projectile->AddComponent<Material>();
+	enemyMaterial->LoadImageMaterial(L"./Assets/Destructible Objects Sprite Sheet.png");
+	enemyMaterial->uv.value = UV{ 0, 1.0f / 12.0f, 1.0f / 7.0f, 2.0f / 12.0f };
+	auto projectileComponent = projectile->AddComponent<Projectile>();
+	projectileComponent->velocity = Vector2(0, -200);
+	projectileComponent->parent = health->GetGameObject();
+	projectile->GetTransform()->scale = Vector2(32, 32);
+	projectile->GetTransform()->localPosition.value = player->GetTransform()->localPosition.value;
+	projectile->GetTransform()->localPosition.value.y += 100.0f;
+	auto enemyCollider = projectile->AddComponent<UEngine::Physics2D::CircleCollider>();
 	enemyCollider->SetCollider({ 0, 0 }, 16);
 	enemyCollider->IsTrigger = true;
-	creation->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
-	auto enemyMaterial = creation->AddComponent<Material>();
+}
+
+void Boss::CreateShooter()
+{
+	if (projectile) return;
+
+	projectile = GameObject::Instantiate("barrel");
+	projectile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
+	auto enemyMaterial = projectile->AddComponent<Material>();
 	enemyMaterial->LoadImageMaterial(L"./Assets/Destructible Objects Sprite Sheet.png");
-	enemyMaterial->uv.value = UV{ 0, 1.0f / 7.0f, 1.0f / 7.0f, 2.0f / 7.0f };
-	auto projectile = creation->AddComponent<Projectile>();
-	projectile->velocity = Vector2(0, -1);
-	projectile->parent = health->GetGameObject();
-	creation->GetTransform()->scale = Vector2(32, 32);
-	creation->GetTransform()->localPosition.value.y = 200;*/
+	enemyMaterial->uv.value = UV{ 0, 1.0f / 12.0f, 1.0f / 7.0f, 2.0f / 12.0f };
+	auto projectileComponent = projectile->AddComponent<Projectile>();
+	float xDir = player->GetTransform()->localPosition.value.x - transform->localPosition.value.x;
+	projectileComponent->velocity = Vector2(xDir, 0).Normalize() * 200.0f;
+	projectileComponent->parent = health->GetGameObject();
+	projectile->GetTransform()->scale = Vector2(32, 32);
+	projectile->GetTransform()->localPosition.value = transform->localPosition.value;
+	auto enemyCollider = projectile->AddComponent<UEngine::Physics2D::CircleCollider>();
+	enemyCollider->SetCollider({ 0, 0 }, 16);
+	enemyCollider->IsTrigger = true;
 }

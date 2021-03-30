@@ -21,6 +21,7 @@ UENGINE_CLASS_INHERIT(Boss, Enemy)
 	Animation boss_animation_map[BOSS_ANIMATION_STATE_COUNT];
 	Animation animation = boss_animation_map[BOSS_ANIMATION_STATE_IDLE];
 	float moveDuration = 1.0f;
+	GameObject* projectile = nullptr;
 
 	void BossUpdate();
 
@@ -30,6 +31,7 @@ UENGINE_CLASS_INHERIT(Boss, Enemy)
 	virtual void LateUpdate() override;
 
 	void CreateBarrel();
+	void CreateShooter();
 public:
 	int attackType = 0;
 	float moveTimer = 0;

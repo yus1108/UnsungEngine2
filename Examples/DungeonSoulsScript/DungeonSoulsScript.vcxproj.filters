@@ -29,9 +29,11 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Boss.cpp">
       <Filter>Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Combat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +74,11 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Miscs</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Boss.h">
       <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

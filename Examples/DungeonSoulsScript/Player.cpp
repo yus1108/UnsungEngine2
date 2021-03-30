@@ -660,7 +660,8 @@ void Player::CreateBoss()
 	enemyBody->GetTransform()->localPosition.value.y = -4.0f;
 	enemyBody->GetTransform()->localPosition.value.x = 4.0f;
 	enemyBody->SetParent(creation);
-	enemyBody->AddComponent<Health>();
+	auto health = enemyBody->AddComponent<Health>();
+	health->SetHP(10.0f);
 
 	auto enemyAttack = GameObject::Instantiate("enemyAttack");
 	auto eAttack = enemyAttack->AddComponent<UEngine::Physics2D::RectCollider>();
