@@ -56,7 +56,14 @@ void UEngine::GameScene::Update()
 void UEngine::GameScene::Render(ID3D11DeviceContext* deviceContext)
 {
 	for (auto view : gpu_view)
-		view.Render(isDebugMode, view.IsMain);
+	{
+		auto fRender = sceneSync.CreateSyncTask([view, this]()
+		{
+			static_cast<GameView>(view).Render(isDebugMode, view.IsMain);
+		});
+		WinApplication::Get()->threadPool.AddTask(fRender);
+	}
+	sceneSync.Join();
 
 	for (auto view : gpu_view)
 		view.PostRender();

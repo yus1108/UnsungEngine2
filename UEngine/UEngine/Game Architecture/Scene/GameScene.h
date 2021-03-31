@@ -14,6 +14,7 @@ namespace UEngine
 		std::list<class GameObject*> gameObjects, creationList, deletionList;
 
 		std::vector<GameView> gpu_view;
+		Utility::Sync::UThreadSync sceneSync;
 
 	public:
 		~GameScene() { Release(); }
