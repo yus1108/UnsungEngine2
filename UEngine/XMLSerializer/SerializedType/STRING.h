@@ -29,6 +29,7 @@ namespace UEngine
 			STRING(Serializer* serializer, std::string name) : SerializedType(serializer, name) {}
 			STRING(Serializer* serializer, std::string name, std::string value) : SerializedType(serializer, name) { this->value = value; }
 			std::string value;
+			int length;
 
 			// copy assignment
 			STRING& operator=(const std::string& other)

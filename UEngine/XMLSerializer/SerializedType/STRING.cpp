@@ -16,7 +16,7 @@ void UEngine::TYPE::STRING::DeSerialize(TiXmlNode* node)
 void UEngine::TYPE::STRING::OnEditRender()
 {
 	ImGui::PushID(&this->name);
-	ImGui::Text((value + " : " + name).c_str());
+	ImGui::Text(this->value.c_str());
 	ImGui::PopID();
 }
 

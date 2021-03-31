@@ -66,16 +66,15 @@ void UEngine::GameState::Update(std::function<void()> OnSync, std::function<bool
 		{
 			DXRenderer::Get()->Draw(DXRenderer::Get()->GetContext(), instance->currentScene->MainView->view->GetAddressOfViewResource());
 		}
-
-		if (OnRender) OnRender();
-		DXRenderer::Get()->End(nullptr);
 	});
 
-	if (OnUpdate) instance->isTerminate = OnUpdate();
-	
-	instance->currentScene->Update();
+    if (OnUpdate) instance->isTerminate = OnUpdate();
+    instance->currentScene->Update();
+    
 	WinApplication::Get()->threadPool.Join();
 
+    if (OnRender) OnRender();
+    DXRenderer::Get()->End(nullptr);
 
 	instance->currentScene->PostRender();
 }
