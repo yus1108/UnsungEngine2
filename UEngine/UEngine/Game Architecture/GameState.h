@@ -27,7 +27,7 @@ namespace UEngine
 	public:
 		bool isFocused{ true };
 		bool noUpdate{ false };
-		std::mutex noRenderMutex;
+		Utility::Sync::UThreadSync stateSync;
 		Vector2 startWindowPos{ 0, 0 };
 		Vector2 windowSize{ 0, 0 };
 

@@ -89,7 +89,6 @@ namespace UEngine
     void WinApplication::Close()
     {
         FreeDLL();
-        threadPool.Join();
         //UnregisterClass(isDefaultDesc ? _T("WIN_APPLICATION") : appDesc.Wcex->lpszClassName, appDesc.HInstance);
         //PostQuitMessage(0);
     }

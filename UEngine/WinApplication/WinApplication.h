@@ -35,7 +35,7 @@ namespace UEngine
 #pragma endregion
 
 	public:
-		Utility::Sync::UThreadPool threadPool;
+		Utility::UThreadPool threadPool;
 
 		void Create(HINSTANCE hInstance, size_t numThreads = 0);
 		void Create(const WINDOWS_APPLICATION_DESC& desc, size_t numThreads = 0);

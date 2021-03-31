@@ -40,6 +40,7 @@ void UEngine::Utility::UThreadPool::WorkerThread()
 
 void UEngine::Utility::UThreadPool::AddTask(std::function<void()> task)
 {
+	if (task == nullptr) return;
 	if (numThreads == 0)
 	{
 		task();
@@ -59,22 +60,16 @@ void UEngine::Utility::UThreadPool::AddTask(std::function<void()> task)
 	condition_variable.notify_one();
 }
 
-void UEngine::Utility::Sync::UThreadPool::AddSyncTask(std::function<void()> task)
+std::function<void()> UEngine::Utility::Sync::UThreadSync::CreateSyncTask(std::function<void()> task)
 {
-	if (numThreads == 0)
-	{
-		task();
-		return;
-	}
+	if (task == nullptr) return nullptr;
 
 	std::unique_lock<std::mutex> lock(mutex);
 	count++;
 	lock.unlock();
 
-	this->AddTask([this, task]()
-	{ 
-		if (task == nullptr) return;
-
+	return [this, task]()
+	{
 		task();
 
 		std::unique_lock<std::mutex> lock(mutex);
@@ -82,12 +77,11 @@ void UEngine::Utility::Sync::UThreadPool::AddSyncTask(std::function<void()> task
 		lock.unlock();
 
 		if (count == 0) condition_variable.notify_one();
-	});
+	};
 }
 
-void UEngine::Utility::Sync::UThreadPool::Join()
+void UEngine::Utility::Sync::UThreadSync::Join()
 {
-	if (numThreads == 0) return;
 	std::unique_lock<std::mutex> lock(mutex);
 	condition_variable.wait(lock, [this]() { return count == 0; });
 }

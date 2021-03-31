@@ -51,27 +51,27 @@ void UEngine::GameState::AddScene(GameScene* scene, bool setCurrentScene)
 
 void UEngine::GameState::Update(std::function<void()> OnSync, std::function<bool()> OnUpdate, std::function<void()> OnRender)
 {
-	std::lock_guard<std::mutex> lock(instance->noRenderMutex);
 	instance->deltaTime = Utility::UTime::Get()->DeltaTimeF();
 	instance->fixedUpdateTimer += instance->deltaTime;
 
 	if (OnSync) OnSync();
 	instance->currentScene->Sync();
 
-    WinApplication::Get()->threadPool.AddSyncTask([&]()
-	{
+    auto fRender = instance->stateSync.CreateSyncTask([&]()
+    {
         instance->currentScene->Render(DXRenderer::Get()->GetImmediateDeviceContext());
         DXRenderer::Get()->Begin(DXRenderer::Get()->GetContext());
-		if (instance->drawOnBackBuffer)
-		{
-			DXRenderer::Get()->Draw(DXRenderer::Get()->GetContext(), instance->currentScene->MainView->view->GetAddressOfViewResource());
-		}
-	});
+        if (instance->drawOnBackBuffer)
+        {
+            DXRenderer::Get()->Draw(DXRenderer::Get()->GetContext(), instance->currentScene->MainView->view->GetAddressOfViewResource());
+        }
+    });
+    WinApplication::Get()->threadPool.AddTask(fRender);
 
     if (OnUpdate) instance->isTerminate = OnUpdate();
     instance->currentScene->Update();
     
-	WinApplication::Get()->threadPool.Join();
+    instance->stateSync.Join();
 
     if (OnRender) OnRender();
     DXRenderer::Get()->End(nullptr);
