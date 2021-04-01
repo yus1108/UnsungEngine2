@@ -45,6 +45,7 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
 
         app->Create(desc, 4);
     }
+    app->ConfineCursor();
 
     screenSize = app->GetClientPixelSize();
 
@@ -157,7 +158,8 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                 GameState::GetCurrentScene()->debugRenderer = new DebugRenderer();
                 GameState::GetCurrentScene()->debugRenderer->Init(DXRenderer::Get()->GetDevice(), DXRenderer::Get()->GetImmediateDeviceContext());
             }
-           
+            UEngine::SingletonManager::App->ConfineCursor();
+
             resize = false;
         }
         if (SingletonManager::State->noUpdate) return;

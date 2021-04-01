@@ -55,6 +55,7 @@ namespace UEngine
 		const POINT GetClientPixelSize() const;
 
 		void SetWindowSize(int x, int y, int width, int height);
+		void ConfineCursor();
 
 	private:
 		//define something for Windows (32-bit and 64-bit, this part is common)

@@ -189,6 +189,13 @@ namespace UEngine
             SWP_NOZORDER | SWP_NOMOVE);
     }
 
+    void WinApplication::ConfineCursor()
+    {
+        RECT r;
+        GetWindowRect(hWnd, &r);
+        ClipCursor(&r);
+    }
+
     LRESULT CALLBACK WinApplication::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         switch (message)
