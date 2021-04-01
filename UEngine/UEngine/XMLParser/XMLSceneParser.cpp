@@ -12,6 +12,8 @@ void XMLSceneParser::SaveScene(std::string name, bool isDebugMode, std::list<UEn
 
 	this->name = name + ".uscene";
 	scene->SetAttribute("name", name.c_str());
+
+	gameObjects.erase(gameObjects.begin());
 	for (auto gameObject : gameObjects)
 	{
 		if (gameObject->GetParent() != nullptr) continue;
@@ -32,6 +34,13 @@ UEngine::GameScene* XMLSceneParser::LoadScene(std::string name, bool editorMode)
 
 	currentScene->Init(editorMode);
 	currentScene->name = node->ToElement()->Attribute("name");
+
+	auto editorObj = UEngine::GameObject::Instantiate(currentScene, "editorCamera");
+	if (editorMode) editorObj->AddComponent<UEngine::EditorScript>();
+	auto editorCamera = editorObj->AddComponent<UEngine::Camera>();
+	editorCamera->viewWidth.value = 1280;
+	editorCamera->viewHeight.value = 720;
+	currentScene->EditorCamera = editorCamera;
 
 	LoadGameObject(node, currentScene);
 

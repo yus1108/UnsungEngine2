@@ -33,6 +33,7 @@ namespace UEngine
 		SERIALIZED_FLOAT_INIT(farZ, 0);
 
 		void SetMainCamera();
+		GameView* GetView() { return &gameView; }
 		static Camera* const GetMainCamera() { return GameState::GetCurrentScene()->MainCamera; }
 		CPU_CAMERA GetCameraMatrix() { return CPU_CAMERA{ DirectX::XMMatrixTranspose(cpu_camera.view), DirectX::XMMatrixTranspose(cpu_camera.projection) }; }
 	};

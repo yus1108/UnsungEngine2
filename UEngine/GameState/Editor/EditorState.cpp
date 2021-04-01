@@ -45,7 +45,6 @@ UEngine::UEditor::EditorState::EditorState(HINSTANCE hInstance, int width, int h
 
         app->Create(desc, 4);
     }
-    app->ConfineCursor();
 
     screenSize = app->GetClientPixelSize();
 
@@ -102,13 +101,20 @@ void UEngine::UEditor::EditorState::Load()
     // TODO: Place code here.
     {
         // basic load
-        using namespace UEngine;
+        //using namespace UEngine;
         //GameScene* currentScene = new GameScene();
         //currentScene->name = "tempScene";
         //currentScene->Init(true);
         //{
+        //    auto editorObj = GameObject::Instantiate(currentScene, "editorCamera");
+        //    auto editorCamera = editorObj->AddComponent<Camera>();
+        //    editorCamera->viewWidth.value = 15;
+        //    editorCamera->viewHeight.value = 30;
+        //    currentScene->EditorCamera = editorCamera;
+
         //    auto cameraObject = GameObject::Instantiate(currentScene, "camera");
         //    auto camera = cameraObject->AddComponent<Camera>();
+        //    camera->SetMainCamera();
         //    camera->viewWidth.value = 15;
         //    camera->viewHeight.value = 30;
 
@@ -158,7 +164,6 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                 GameState::GetCurrentScene()->debugRenderer = new DebugRenderer();
                 GameState::GetCurrentScene()->debugRenderer->Init(DXRenderer::Get()->GetDevice(), DXRenderer::Get()->GetImmediateDeviceContext());
             }
-            UEngine::SingletonManager::App->ConfineCursor();
 
             resize = false;
         }
@@ -243,7 +248,7 @@ int UEngine::UEditor::EditorState::Run(double targetHz)
                 SingletonManager::State->windowSize.y = p1.y - p0.y;
                 ImDrawList* draw_list = ImGui::GetWindowDrawList();
                 draw_list->AddRectFilled(p0, p1, IM_COL32(0, 0, 0, 255));
-                draw_list->AddImage(GameState::GetCurrentScene()->MainView->view->GetViewResource(), p0, p1);
+                draw_list->AddImage(GameState::GetCurrentScene()->EditorCamera->GetView()->view->GetViewResource(), p0, p1);
                 ImGui::EndGroup();
                 ImGui::End();
             }

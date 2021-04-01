@@ -21,6 +21,7 @@ namespace UEngine
 
 		std::string name;
 
+		Camera* EditorCamera{ nullptr };
 		Camera* MainCamera{ nullptr };
 		GameView* MainView{ nullptr };
 

@@ -7,13 +7,13 @@ void UEngine::Material::Awake()
 	(
 		GetGameObject()->GetScene()->ResourceManager.GetNextCBufferID(),
 		DXRenderer::Get(),
-		DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(Color).raw_name())
+		GetGameObject()->GetScene()->ResourceManager.GetCBufferPreset(typeid(Color).raw_name())
 	);
 	spriteBuffer = DXRenderer::DXConstantBuffer::Instantiate
 	(
 		GetGameObject()->GetScene()->ResourceManager.GetNextCBufferID(),
 		DXRenderer::Get(),
-		DXRenderer::Get()->ResourceManager->GetCBufferPreset(typeid(UV).raw_name())
+		GetGameObject()->GetScene()->ResourceManager.GetCBufferPreset(typeid(UV).raw_name())
 	);
 
 	uv = UV{ 0, 0, 1, 1 };

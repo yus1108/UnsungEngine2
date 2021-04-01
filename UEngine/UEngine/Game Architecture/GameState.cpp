@@ -171,6 +171,7 @@ void UEngine::GameState::ShowHierarchy()
             instance->HierarchyPopup(sceneMap.second, { nullptr });
             for (auto gameObject : sceneMap.second->GetGameObjects())
             {
+                if (gameObject == *sceneMap.second->GetGameObjects().begin()) continue;
                 if (gameObject->GetParent() == nullptr)
                 {
                     instance->RenderHierarchy(&gameObject);
