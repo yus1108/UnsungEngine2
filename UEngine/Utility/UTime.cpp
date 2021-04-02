@@ -33,7 +33,7 @@ namespace UEngine
 
 			elapsedSignal++;
 			double sinceLast = totalTime - lastSecond;
-			if (sinceLast >= 0.1)
+			if (sinceLast > 0)
 			{
 				framePerSecond = (double)elapsedSignal / sinceLast;
 				lastSecond = totalTime;
