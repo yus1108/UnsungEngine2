@@ -9,6 +9,6 @@ public:
 	bool Dead = false;
 	void GetHit(Vector2 from, float damage);
 	float GetHP() { return HP.value * showHP.value; }
-	void SetHP(float hp) { showHP.value = 100.0f / hp; HP.value = hp; }
+	void SetHP(float hp) { HP.value = hp; }
 };
 

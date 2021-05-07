@@ -5,6 +5,21 @@ namespace UEngine
 {
     namespace Physics2D
     {
+        Collider::Collider()
+        {
+            others = new std::vector<Collider*>();
+            prevOthers = new std::vector<Collider*>();
+            collisions = new std::vector<Collider*>();
+            prevCollisions = new std::vector<Collider*>();
+        }
+        Collider::~Collider()
+        {
+            delete others;
+            delete prevOthers;
+            delete collisions;
+            delete prevCollisions;
+        }
+
         bool Collider::VectorFind(std::vector<Collider*>* vColliders, Collider* collider)
         {
             for (size_t i = 0; i < vColliders->size(); i++)
@@ -17,20 +32,6 @@ namespace UEngine
             return false;
         }
 
-        void Collider::Start()
-        {
-            others = new std::vector<Collider*>();
-            prevOthers = new std::vector<Collider*>();
-            collisions = new std::vector<Collider*>();
-            prevCollisions = new std::vector<Collider*>();
-        }
-        void Collider::OnDestroy()
-        {
-            delete others;
-            delete prevOthers;
-            delete collisions;
-            delete prevCollisions;
-        }
         void Collider::OnEnable()
         {
             worldAABB = MakeAABB(localAABB, GetTransform()->GetRTP());

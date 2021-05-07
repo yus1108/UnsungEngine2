@@ -23,10 +23,11 @@ namespace UEngine
 
 			Vector3 impact{ 0, 0, 0 };
 
+			Collider();
+			virtual ~Collider();
+
 			static bool VectorFind(std::vector<Collider*>* vColliders, Collider* collider);
 
-			void Start() override;
-			void OnDestroy() override;
 			void OnEnable() override;
 			void FixedUpdate() override;
 			void PhysicsUpdate() override;

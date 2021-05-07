@@ -32,6 +32,7 @@ void Player::Start()
 	SoundManager::Get()->InitAudio();
 	SoundManager::Get()->PlayAudio(0, L"Assets/Tipple Chipper.wav", AudioType_Music);
 
+	health->SetHP(2);
 	GameState::Get()->MaxFixedTimestep = 0.02f;
 }
 
