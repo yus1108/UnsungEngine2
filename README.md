@@ -1,6 +1,6 @@
 # UnsungEngine2
 
-### UE2 (UnsungEngine2) is the improved version of UnsungEngine, which I made 3 years ago.
+### UE2 (UnsungEngine2) is the improved version of UnsungEngine.
 - C++ based program
 - Component based engine like Unity
 - Designed in multi-threaded architecture to maximize frame rate as rendering and updating happen simultaneously.
