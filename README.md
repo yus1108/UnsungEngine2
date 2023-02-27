@@ -20,10 +20,10 @@ The engine is built in ISO C++ 17 Standatd. If the engine doesn't work properly 
 
 ### How To Run Example Games
 1. Go to UEngine folder and open UEngins.sln
-2. Build UEngine library
+2. Set UEngine as a startup project and build the library
 3. Go back to previous folder, and go to Examples folder
 4. Open Examples.sln
-5. Build the game you want to play
+5. Set the game you want to play as startup project and build the game.
 
 Keys for all games are either wasd or arrow keys to move, and space for jump, '1' for resetting games
 <br />For puzzle game, '2' and '3' are disable/enable image of the puzzle you are moving
