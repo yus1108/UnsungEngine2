@@ -56,13 +56,12 @@ void Scene::Load()
 
             for (size_t i = 0; i < 13; i++)
             {
-                int index = i;
                 auto tile = GameObject::Instantiate(currentScene, "tile");
                 tile->AddComponent<RenderComponent>()->Load("rectangle", "sprite");
                 tile->AddComponent<Material>()->LoadImageMaterial(L"./Assets/tiles and background_foreground/tileset.png");
                 auto tileScript = tile->AddComponent<Tile>();
                 tile->AddComponent<Physics2D::RectCollider>()->SetCollider(100, 100);
-                tileScript->fixedPosition.x = -550.0f + index * 100;
+                tileScript->fixedPosition.x = -550.0f + i * 100;
                 tileScript->fixedPosition.y = -250.0f;
                 tile->GetTransform()->scale.value = Vector2{
                     100,

@@ -274,7 +274,7 @@ HRESULT AudioEffects::StopAudio() {
 
 	for (size_t i = 0; i < pAudioVoices.size(); i++)
 	{
-		StopAudio(i);
+		StopAudio(static_cast<UINT>(i));
 	}
 
 	return S_OK;
